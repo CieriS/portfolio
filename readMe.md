@@ -13,6 +13,9 @@ Code has been written using a modular and scalable approach, with separate files
 - JavaScript ES6
 - php
 - SQL
+- Bootstrap 5.3.0
+- Tailwind CSS 3.3.5
+
 
 ---
 
