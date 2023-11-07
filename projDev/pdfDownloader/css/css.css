@@ -1,0 +1,47 @@
+:root{
+    --primary-color: #bd8f97; /* background color */
+    --secondary-color: rgb(37, 37, 37);  /* secondary container color */
+    --tertiary-color: rgb(186, 185, 177);  /* header & footer container color */
+    --text-color: rgb(218, 218, 218);  /* principal color */
+    --primeText-color: rgb(249, 193, 152);  /* important text color */
+    --index--2: -2;
+    --index--1: -1;
+    --index-0: 0;
+    --index-1: 1;
+    --index-2: 2;
+}
+
+body{
+    background-color: none;
+    background-image: none;
+    color: var(--text-color);
+}
+
+header,footer{
+    display: flex;
+    justify-content: center;
+    z-index: var(--index-0);
+    background-color: var(--tertiary-color);
+    border-radius: 1000px/20px 0;
+}
+
+body main .evenCont, body main .oddCont{ /* main containers */
+    z-index: var(--index--1);
+    border-radius: 1000px/50px 0;
+}
+
+body main .evenCont{ /* Container nel main n° pari */
+    background-color: var(--primary-color);
+}
+
+body main .oddCont{ /* Container nel main n° dispari */
+    background-color: var(--secondary-color);
+}
+
+body main div{
+    padding: 100px 0;
+}
+
+.principalColorPage{
+    color: var(--text-color);
+}

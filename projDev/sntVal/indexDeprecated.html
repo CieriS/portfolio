@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/heart.png">    <!-- favicon -->
+    <link rel="stylesheet" href="css/beatingHeart.css" type="text/css">    <!-- css for beating heart -->
+    <link rel="stylesheet" href="css/heartPositioning.css" type="text/css">    <!-- css positioning for beating heart -->
+    <link rel="stylesheet" href="css/letter.css" type="text/css">    <!-- css positioning for beating heart -->
+    <title>x Sara&#128140;</title>
+    <script>
+        function hideText(){
+            const testo = document.querySelector('#testo');
+
+            if(testo){
+                testo.style.display = 'none';
+            } setTimeoutO(() => {
+                testo.style.display = 'block';
+            },  2000);
+        }
+
+        var stile = "top=10, left=10, width=250, height=200, status=no, menubar=no, fullscreen=no, toolbar=no scrollbars=no";
+        function openPopUp() {
+            window.open("https://www.nicolabovolato.it/it/blog/tutorial-c/liste/", stile);
+        }
+
+        function blocco_mousedx() {
+            return(false); 
+        }
+        document.oncontextmenu = blocco_mousedx;
+
+        document.onkeydown = function(blocco_tasti){
+            if(event.keyCode == 123) { 
+                return false; 
+            }
+            if(blocco_tasti.ctrlKey && blocco_tasti.shiftKey && blocco_tasti.keyCode == 'I'.charCodeAt(0)) { 
+                return false; 
+            }
+            if(blocco_tasti.ctrlKey && blocco_tasti.shiftKey && blocco_tasti.keyCode == 'C'.charCodeAt(0)) { 
+                return false; 
+            }
+            if(blocco_tasti.ctrlKey && blocco_tasti.shiftKey && blocco_tasti.keyCode == 'J'.charCodeAt(0)) { 
+                return false; 
+            }
+            if(blocco_tasti.ctrlKey && blocco_tasti.keyCode == 'U'.charCodeAt(0)) { 
+                return false; 
+            } 
+        }
+
+    </script>
+</head>
+<body>
+    
+    <div id="header"> x Sara &#10084;&#65039; </div>
+
+    <div class="flexHeart">
+        <div class="heart topLeft"><!-- beatingHeart --></div>
+        <div class="heart2 topRight"><!-- beatingHeart --></div>
+    </div>
+    
+    <div style="position:absolute;z-index:100;">
+        <button onclick="openPopUp()" style="border-radius: 50%;width: 25px;height: 25px;"></button>
+    </div>
+
+    <div class="base">
+        <div class="letter">
+        </div>
+            <div class="cover cover-left"></div>
+            <div class="cover cover-right"></div>
+            <div class="paper" id="testo">
+                <p class="dear">
+                    <span>Cara Sara,</span>
+                </p>
+                <p class="bod">
+                    <span>Magari questa lettera non te la sta leggendo Maria De Filippi, ma puoi sempre immaginarla letta con la sua voce come a "c'è posta per te"...Ti voglio ringraziare per questi splendidi mesi passati insieme, Buon San Valentino <3</span>
+                </p>
+                <p class="ps">
+                    <span>( sin( <sup>&#945;&pi;</sup>&frasl;<sub>10</sub> ) + x )<sup>2</sup> + ( cos( <sup>&#945;&pi;</sup>&frasl;<sub>10</sub> ) + y )<sup>2</sup> = 0.7 |x| y + 1 </span>
+                    <br/><!-- heart equation -->
+                </p> 
+                <div class="saluti">
+                    <span>ti voglio bene, <br/>Samuele &#10084;&#65039;</span>
+                </div>
+            </div>
+    </div>
+
+</body>
+</html>

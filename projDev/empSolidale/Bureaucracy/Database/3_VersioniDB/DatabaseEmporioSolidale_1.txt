@@ -1,0 +1,251 @@
+CREATE DATABASE EmporioSolidale;
+
+USE EmporioSolidale;
+
+
+
+CREATE TABLE Richiedente(
+
+    Cod_Fiscale CHAR(16) NOT NULL,
+    Cognome VARCHAR(30) NOT NULL,
+    Nome VARCHAR(30) NOT NULL,
+    LuogoNascita VARCHAR(30) NOT NULL,
+    DataNascita DATE NOT NULL,
+    Cittadinanza VARCHAR(15) NOT NULL,
+    InItaliaDallAnno YEAR(4) NULL,
+    Residenza VARCHAR(30) NOT NULL,
+    Via VARCHAR(30) NOT NULL,
+    TipoAlloggio VARCHAR(18) NOT NULL,
+    DocumentoIdent CHAR(9) NOT NULL,
+    DocumentoImmig CHAR(100) NULL,
+    Telefono CHAR(10) NOT NULL,
+    Mail VARCHAR(30) NOT NULL,
+    ServiziSociali VARCHAR(15) NOT NULL,
+    ComeHaConosciutoEmporio VARCHAR(30) NULL,
+    TipoDomanda VARCHAR(20) NOT NULL,
+    PRIMARY KEY(Cod_Fiscale)
+);
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, DataOraRilascioTessera) 
+VALUES 
+('".$CodiceFiscale."','".$CognomeRichiedente."','".$NomeRichiedente."','".$LuogoNascitaRichiedente."','".$DataNascitaRichiedente."','".$Cittadinanza."','".$InItaliaDallAnno."','".$Residenza."','".$Via."','".$Alloggio."','".$DocumentoDIdentita."','".$DocumentoDImmigrazione."','".$Telefono."','".$Mail."','".$ServiziSociali."','".$ComeHaConosciutoEmporio."','".$TipoDiDomanda."');
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda) VALUES 
+('HHHHHHHHHHHHHHHH','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova');
+INSERT INTO Punteggio 
+VALUES 
+('HHHHHHHHHHHHHHHH',3000,140,300,200,5,-10,500);
+INSERT INTO TesseraRilasciata VALUES 
+('lskdjwndme','HHHHHHHHHHHHHHHH',CURDATE());
+insert into NucleoFamiliare
+values 
+('HHHHHHHHHHHHHHHH',5,2000);
+
+
+
+CREATE TABLE TesseraRilasciata(
+
+    CodiceTessera CHAR(10) NOT NULL,
+    CodFamiglia CHAR(16) NOT NULL,
+    DataOraRilascioTessera DATETIME NULL,
+    PRIMARY KEY(CodiceTessera),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE 
+);
+INSERT INTO TesseraRilasciata VALUES 
+('".$CodiceTessera."','".$CodiceFiscale."',CURDATE());
+
+DELETE 
+
+
+
+CREATE TABLE Punteggio(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    PunteggioISEE INT DEFAULT 0 NULL,
+    PunteggioPresenzaMinori INT DEFAULT 0 NULL,
+    PunteggioDisoccupazione INT DEFAULT 0 NULL,
+    PunteggioInvalidi INT DEFAULT 0 NULL,
+    PunteggioSituazioneDebitoria INT DEFAULT 0 NULL,
+    PunteggioBenefit INT DEFAULT 0 NULL,
+    PunteggioTotale INT DEFAULT 0 NULL,
+    PRIMARY KEY(CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+INSERT INTO Punteggio 
+VALUES 
+('".$CodiceFiscale."','".$PunteggioISEE."','".$PunteggioPresenzaMinori."','".$PunteggioDisoccupazione."','".$PunteggioInvalidi."','".$PunteggioSituazioneDebitoria."','".$PunteggioBenefit."','".$PunteggioTotale."');
+
+
+CREATE TABLE DispCollaborative(
+
+    CodFamiglia CHAR(16) NOT NULL,    
+    AmbitoFormativo TINYTEXT NULL,
+    AmbitoLavorativo TINYTEXT NULL,
+    AmbitoSociale TINYTEXT NULL,
+    PRIMARY KEY(CodFamiglia)
+);
+
+
+
+CREATE TABLE SituazioneSocioSanitaria(
+
+    CodFamiglia CHAR(16) NOT NULL, 
+    N INT AUTO_INCREMENT NOT NULL,
+    Evento VARCHAR(35) NULL,
+    Anno YEAR(4) NULL,
+    DocAll VARCHAR(30) NULL,
+    PRIMARY KEY(N)   
+);
+
+
+
+CREATE TABLE NucleoFamiliare(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    nMembri INT NOT NULL,
+    ISEE INT NOT NULL,
+    PRIMARY KEY(CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(CodFamiglia) REFERENCES DispCollaborative(CodFamiglia) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE PatrAtt(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT AUTO_INCREMENT NOT NULL,
+    Elemento VARCHAR(35) NULL,
+    Valore DECIMAL(8,2) NULL,
+    PRIMARY KEY(N),
+    FOREIGN KEY(CodFamiglia) REFERENCES NucleoFamiliare(CodFamiglia) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE PatrPass(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT AUTO_INCREMENT NOT NULL,
+    Elemento VARCHAR(35) NULL,
+    Valore DECIMAL(8,2) NULL,
+    Scadenza DATE NOT NULL,
+    PRIMARY KEY(N),
+    FOREIGN KEY(CodFamiglia) REFERENCES NucleoFamiliare(CodFamiglia) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE Entrate(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT AUTO_INCREMENT NOT NULL,
+    Elemento VARCHAR(35) NULL,
+    Valore DECIMAL(8,2) NULL,
+    Scadenza DATE NOT NULL,
+    PRIMARY KEY(N),
+    FOREIGN KEY(CodFamiglia) REFERENCES NucleoFamiliare(CodFamiglia) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE Uscite(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT AUTO_INCREMENT NOT NULL,
+    Elemento VARCHAR(35) NULL,
+    Valore DECIMAL(8,2) NULL,
+    Scadenza DATE NOT NULL,
+    PRIMARY KEY(N),
+    FOREIGN KEY(CodFamiglia) REFERENCES NucleoFamiliare(CodFamiglia) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE Membri(
+
+    nMembro INT AUTO_INCREMENT NOT NULL,
+    NomeCognome VARCHAR(60) NOT NULL,
+    LuogoNascita VARCHAR(30) NOT NULL,
+    DataNascita DATE NOT NULL,
+    Parentela  VARCHAR(10) NOT NULL,
+    Occupazione  VARCHAR(20) NOT NULL,
+    TitoloDiStudio VARCHAR(20) NOT NULL,
+    Competenze VARCHAR(50) NOT NULL,
+    ConoscenzaLingua VARCHAR(30) NULL,
+    Patente VARCHAR(5) NULL,
+    AttualeAtt VARCHAR(15) NULL,
+    Presso VARCHAR(15) NULL,
+    Termine VARCHAR(15) NULL,
+    SenzaLavoroDa VARCHAR(15) NULL,
+    CodFamiglia CHAR(16) NOT NULL,
+    PRIMARY KEY(nMembro),
+    FOREIGN KEY(CodFamiglia) REFERENCES NucleoFamiliare(CodFamiglia) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+
+
+CREATE TABLE Administrator(
+
+    Username VARCHAR(15) NOT NULL,
+    Password CHAR(32) NOT NULL,
+    PRIMARY KEY(Username)
+);
+INSERT INTO Administrator VALUES 
+('EmporioSolidale',md5('IlSole'));
+
+
+
+
+CREATE TABLE IndicatoriISEE(
+
+    ISEEmin INT NOT NULL,
+    ISEEmax INT NOT NULL,
+    Punteggio INT NOT NULL,
+    PRIMARY KEY(Punteggio)
+);
+
+INSERT INTO IndicatoriISEE (ISEEmin, ISEEmax, Punteggio) 
+    VALUES 
+    (0,1500,100),
+    (1501,3000,80),
+    (3001,4500,60),
+    (4501,6000,40),
+    (6001,7500,20);
+
+
+
+CREATE TABLE PunteggioMensile(
+
+    nComponenti INT NOT NULL,
+    ValoreEuro DECIMAL(5,2) NOT NULL,
+    ValorePunti INT NOT NULL,
+    PRIMARY KEY(nComponenti)
+);
+
+INSERT INTO PunteggioMensile  
+    VALUES 
+    (1,150,300),
+    (2,200,400),
+    (3,250,500),
+    (4,300,600);
+
+
+/* SELECT DI TUTTO */
+SELECT * 
+FROM TesseraRilasciata AS TR INNER JOIN Richiedente AS R INNER JOIN Punteggio AS P INNER JOIN NucleoFamiliare AS NF INNER JOIN Membri AS M INNER JOIN SituazioneSocioSanitaria AS SSS INNER JOIN DispCollaborative AS DC INNER JOIN PatrAtt AS PA INNER JOIN PatrPass AS PP INNER JOIN Entrate AS INNER JOIN Entrate E INNER JOIN Uscite AS U 
+ON TR.Codice = R.Cod_Fiscale AND P.CodFamiglia = R.Cod_Fiscale AND R.Cod_Fiscale = NF.CodFamiglia AND 
+ORDER BY PunteggioTotale 
+
+/* Graduatoria */
+
+SELECT R.Cod_Fiscale, R.Cognome, R.Nome, NF.nMembri, R.Telefono, R.Mail, P.PunteggioISEE, P.PunteggioPresenzaMinori, P.PunteggioDisoccupazione, P.PunteggioInvalidi, P.PunteggioSituazioneDebitoria, P.PunteggioBenefit, P.PunteggioTotale, R.DataOraRilascioTessera, R.RilascioTessera 
+FROM Punteggio AS P INNER JOIN Richiedente AS R INNER JOIN NucleoFamiliare AS NF 
+ON P.CodFamiglia = R.Cod_Fiscale AND R.Cod_Fiscale = NF.CodFamiglia 
+WHERE R.RilascioTessera LIKE "Si" 
+ORDER BY PunteggioTotale DESC;
+
+
+INSERT INTO 

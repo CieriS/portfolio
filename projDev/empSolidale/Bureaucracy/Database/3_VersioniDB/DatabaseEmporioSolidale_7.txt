@@ -1,0 +1,836 @@
+CREATE DATABASE EmporioSolidale;
+
+USE EmporioSolidale;
+
+CREATE TABLE IF NOT EXISTS Richiedente(
+
+    Cod_Fiscale CHAR(16) NOT NULL,
+    Cognome VARCHAR(30) NOT NULL,
+    Nome VARCHAR(30) NOT NULL,
+    LuogoNascita VARCHAR(30) NOT NULL,
+    DataNascita DATE NOT NULL,
+    Cittadinanza VARCHAR(15) NOT NULL,
+    InItaliaDallAnno YEAR,
+    Residenza VARCHAR(30) NOT NULL,
+    Via VARCHAR(30) NOT NULL,
+    TipoAlloggio VARCHAR(18) NOT NULL,
+    DocumentoIdent CHAR(9) NULL,
+    DocumentoImmig CHAR(10) NULL,
+    Telefono VARCHAR(15) NOT NULL,
+    Mail VARCHAR(50) NOT NULL,
+    ServiziSociali VARCHAR(15) NOT NULL,
+    ComeHaConosciutoEmporio VARCHAR(30) NULL,
+    nMembri INT(2) NOT NULL,
+    DataOraRitiroTessera DATE DEFAULT NULL,
+    DataOraStalloTessera DATE DEFAULT NULL,
+    ISEE INT NOT NULL,
+    PRIMARY KEY(Cod_Fiscale)
+);
+
+
+CREATE TABLE IF NOT EXISTS Tessera(
+
+    Codice CHAR(12) NOT NULL,
+    PRIMARY KEY(Codice)
+);
+INSERT INTO Tessera (Codice) VALUES 
+('LK47YHPO12OK'),
+('YY36HJER44JS'),
+('DF34QWER76QY'),
+('HJ15LKLK45KQ'),
+('BP18SASA00RE'),
+('PL16SUSU89NU'),
+('KO19POPO99VU'),
+('SS22FHWS66LO'),
+('JJ36YPLE32IT'),
+('GH56YFGR04PR'),
+('EK00YGHW44UL');
+
+
+CREATE TABLE IF NOT EXISTS TesseraRilasciata(
+
+    CodiceTessera CHAR(12) NOT NULL,
+    CodFamiglia CHAR(16) NOT NULL,
+    DataOraRilascioTessera DATE DEFAULT NULL,
+    DataOraScadenzaTessera DATE DEFAULT NULL,
+    PRIMARY KEY(CodiceTessera, CodFamiglia),
+    FOREIGN KEY(CodiceTessera) REFERENCES Tessera(Codice) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE IF NOT EXISTS StoricoTessere(
+
+    OrdineCronologico INT AUTO_INCREMENT NOT NULL,
+    CodiceTessera CHAR(12) NOT NULL,
+    CodFamiglia CHAR(16) NOT NULL,
+    DataRilascio DATE NOT NULL,
+    DataRitiro DATE DEFAULT NULL,
+    PRIMARY KEY( OrdineCronologico, CodiceTessera, CodFamiglia ),
+    FOREIGN KEY(CodiceTessera) REFERENCES Tessera(Codice) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+
+CREATE TABLE IF NOT EXISTS Punteggio(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    PunteggioISEE INT DEFAULT 0 NULL,
+    PunteggioPresenzaMinori INT DEFAULT 0 NULL,
+    PunteggioDisoccupazione INT DEFAULT 0 NULL,
+    PunteggioInvalidi INT DEFAULT 0 NULL,
+    PunteggioSituazioneDebitoria INT DEFAULT 0 NULL,
+    PunteggioBenefit INT DEFAULT 0 NULL,
+    PunteggioTotale INT DEFAULT 0 NULL,
+    PRIMARY KEY(CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS DispCollaborative(
+
+    CodFamiglia CHAR(16) NOT NULL,    
+    AmbitoFormativo TINYTEXT NULL,
+    AmbitoLavorativo TINYTEXT NULL,
+    AmbitoSociale TINYTEXT NULL,
+    ValutazioneCommissione TINYTEXT NULL, 
+    PRIMARY KEY(CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE IF NOT EXISTS SituazioneSocioSanitaria(
+
+    CodFamiglia CHAR(16) NOT NULL, 
+    N INT NOT NULL,
+    Evento VARCHAR(60) NOT NULL,
+    Anno YEAR NULL,
+    DocAll VARCHAR(30) NULL,
+    PRIMARY KEY(N, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE 
+);
+
+
+
+
+CREATE TABLE IF NOT EXISTS PatrAtt(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT NOT NULL,
+    Elemento VARCHAR(60) NOT NULL,
+    Valore DECIMAL(8,2) NULL,
+    PRIMARY KEY(N, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE IF NOT EXISTS PatrPass(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT NOT NULL,
+    Elemento VARCHAR(60) NOT NULL,
+    Valore DECIMAL(8,2) NULL,
+    Scadenza DATE NULL,
+    PRIMARY KEY(N, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE IF NOT EXISTS Entrate(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT NOT NULL,
+    Elemento VARCHAR(60) NOT NULL,
+    Valore DECIMAL(8,2) NULL,
+    Scadenza DATE NULL,
+    PRIMARY KEY(N, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE IF NOT EXISTS Uscite(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT NOT NULL,
+    Elemento VARCHAR(60) NOT NULL,
+    Valore DECIMAL(8,2) NULL,
+    Scadenza DATE NULL,
+    PRIMARY KEY(N, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE IF NOT EXISTS Membri(
+
+    nMembro INT(2) NOT NULL,
+    NomeCognome VARCHAR(60) NULL,
+    LuogoNascita VARCHAR(30) NULL,
+    DataNascita DATE NULL,
+    Parentela  VARCHAR(15) NOT NULL,
+    Occupazione  VARCHAR(20) NULL,
+    TitoloDiStudio VARCHAR(20) NULL,
+    Competenze VARCHAR(20) NULL,
+    ConoscenzaLingua VARCHAR(30) NULL,
+    Patente VARCHAR(4) NULL,
+    AttualeAtt VARCHAR(15) NULL,
+    Presso VARCHAR(15) NULL,
+    Termine DATE NULL,
+    SenzaLavoroDa DATE NULL,
+    CodFamiglia CHAR(16) NOT NULL,
+    PRIMARY KEY(nMembro, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE IF NOT EXISTS Competenze(
+
+    Nome VARCHAR(30) NOT NULL,
+    Descrizione TINYTEXT,
+    Presso VARCHAR(30),
+    PRIMARY KEY ( Nome )
+);
+
+
+
+CREATE TABLE IF NOT EXISTS SkillsMembri(
+
+    nMembro INT(2) NOT NULL,
+    CodFamiglia CHAR(16) NOT NULL,
+    Nome VARCHAR(30) NOT NULL,
+    PRIMARY KEY ( nMembro, CodFamiglia, Nome ),
+    FOREIGN KEY ( nMembro ) REFERENCES Membri(nMembro) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY ( CodFamiglia ) REFERENCES Membri(CodFamiglia) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY ( Nome ) REFERENCES Competenze(Nome) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS Administrator(
+
+    Username VARCHAR(15) NOT NULL,
+    Password CHAR(32) NOT NULL,
+    Cookie VARCHAR(50),
+    PRIMARY KEY(Username)
+);
+INSERT INTO Administrator (Username, Password) VALUES 
+('emporiosolidale',md5('IlSole'));
+
+
+
+
+CREATE TABLE IF NOT EXISTS IndicatoriISEE(
+
+    N INT AUTO_INCREMENT NOT NULL,
+    ISEEmin INT NOT NULL,
+    ISEEmax INT NOT NULL,
+    Punteggio INT NOT NULL,
+    PRIMARY KEY(N)
+);
+
+INSERT INTO IndicatoriISEE (ISEEmin, ISEEmax, Punteggio) 
+    VALUES 
+    (0,1500,100),
+    (1501,3000,80),
+    (3001,4500,60),
+    (4501,6000,40),
+    (6001,7500,20);
+
+
+
+CREATE TABLE IF NOT EXISTS PunteggioMensile(
+
+    N INT AUTO_INCREMENT NOT NULL,
+    nComponenti INT NOT NULL,
+    ValoreEuro DECIMAL(5,2) NOT NULL,
+    ValorePunti INT NOT NULL,
+    PRIMARY KEY(N)
+);
+
+INSERT INTO PunteggioMensile (nComponenti, ValoreEuro, ValorePunti) 
+    VALUES 
+    (1,150,300),
+    (2,200,400),
+    (3,250,500),
+    (4,300,600);
+
+
+
+CREATE TABLE IF NOT EXISTS Stallo(
+    nMesiStallo INT NOT NULL,
+    PRIMARY KEY(nMesiStallo)
+);
+INSERT INTO Stallo VALUES
+(12);
+
+
+
+
+
+
+
+
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('NRBPVN36L04B710R','Padovano','Norberto','Caprino Bergamasco','1936-07-04','ITA',NULL,'Caprino Bergamasco','Strada Provinciale 65, 101','Popolare','WN59274PO',NULL,'3636762100','norbertopadovano@teleworm.us','No',NULL,12,0);
+INSERT INTO Punteggio 
+VALUES 
+('NRBPVN36L04B710R',100,80,120,70,50,-20,400);
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('LRNBTC92L12I158T','Botticelli','Lorenzo','San Severo','1992-07-12','ITA',NULL,'San Severo','Via Opera 11','Popolare','123456789',NULL,'3398753794','lollo.er.botte@gmail.com','No',NULL,2,2000);
+INSERT INTO Punteggio 
+VALUES 
+('LRNBTC92L12I158T',80,30,50,110,5,-50,225);
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('FRNFNL85D15B157Y','Frenulo','Francesco','Brescia','1985-04-15','ITA',NULL,'Brescia','Via Uffizzi 11','Popolare','123456789',NULL,'3369872795','frafresnu@gmail.com','No',NULL,3,4000);
+INSERT INTO Punteggio 
+VALUES 
+('FRNFNL85D15B157Y',60,140,100,40,5,-20,325);
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('MRARSS99T12A089H','Rossi','Mario','Agrigento','1999-12-12','ITA',NULL,'Agrigento','Via Paradiso 12','Popolare','123456789',NULL,'3349786573','mariobros@gmail.com','No',NULL,4,6000);
+INSERT INTO Punteggio 
+VALUES 
+('MRARSS99T12A089H',40,170,20,40,5,-5,270);
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('SMNLNZ79M41A944A','Lorenzotti','Samantha','Bologna','1979-08-01','ITA',NULL,'Bologna','Via Indipendenza 16','Popolare','123456789',NULL,'3409992854','samporenzi@hotmail.com','No',NULL,5,7000);
+INSERT INTO Punteggio 
+VALUES 
+('SMNLNZ79M41A944A',20,80,20,20,10,-10,140);
+
+
+
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('MRTNST72A44G942G','Angusti','Martina','Potenza','1972-01-04','ITA',NULL,'Potenza','Via Giornalisti 44','Popolare','123456789',NULL,'3398754357','marangus@gmail.com','No',NULL,6,6000);
+INSERT INTO Punteggio 
+VALUES 
+('MRTNST72A44G942G',40,100,100,210,5,-55,200);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('FRNMDR66P12C573P','Amadori','Francesco','Cesena','1966-09-12','ITA',NULL,'Cesena','Lungo Tevere 12','Popolare','123456789',NULL,'3845679183','amafran@tiscali.it','No',NULL,7,4000);
+INSERT INTO Punteggio 
+VALUES 
+('FRNMDR66P12C573P',60,140,200,45,5,-10,440);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('MLSBST72A44G273B','Balestri','Melissa','Palermo','1972-09-11','ITA',NULL,'Palermo','Via dei Roveri 56','Popolare','123456789',NULL,'3367849582','ballalissa@gmail.com','No',NULL,8,2000);
+INSERT INTO Punteggio 
+VALUES 
+('MLSBST72A44G273B',80,120,140,60,100,0,500);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('MHMJRB94H09L736O','Jairiby','Mohamed','Venezia','1994-09-11','ITA',NULL,'Venezia','Via del poretto 33','Popolare','123456789',NULL,'3349782581','momoj@gmail.com','No',NULL,9,0000);
+INSERT INTO Punteggio 
+VALUES 
+('MHMJRB94H09L736O',100,20,20,20,5,-5,160);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('MNARZK85H13B880E','Ouruzka','Amine','CASALECCHIO DI RENO','1985-09-11','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3345678912','amineazimer@gmail.com','No',NULL,12,2000);
+INSERT INTO Punteggio 
+VALUES 
+('MNARZK85H13B880E',80,10,40,30,30,-40,150);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('NDALRB85M57A662E','Lahrib','Nadia','CASALECCHIO DI RENO','1985-09-11','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349487591','ndanda@gmail.com','No',NULL,4,4000);
+INSERT INTO Punteggio 
+VALUES 
+('NDALRB85M57A662E',60,10,10,10,5,-10,25);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('SPHTNR88D22B880O','Turner','Sophie','CASALECCHIO DI RENO','1988-08-16','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3319732586','sofia@gmail.com','No',NULL,5,6000);
+INSERT INTO Punteggio 
+VALUES 
+('SPHTNR88D22B880O',40,70,20,15,25,-20,150);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('GNNFNZ63D22B880D','Fetonzi','Gianni','CASALECCHIO DI RENO','1963-02-10','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3342785586','giannibislacchi@gmail.com','No',NULL,10,7000);
+INSERT INTO Punteggio 
+VALUES 
+('GNNFNZ63D22B880D',20,10,20,0,5,-35,20);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('BNVLTR63D22B880W','Lotaro','Benevolo','CASALECCHIO DI RENO','1963-09-11','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3344752587','malevololotaro@gmail.com','No',NULL,10,6000);
+INSERT INTO Punteggio 
+VALUES 
+('BNVLTR63D22B880W',40,10,30,20,50,-30,120);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('SRMBHR80D16B880X','Ben Hur','Surim','CASALECCHIO DI RENO','1980-09-11','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3449182511','ilgiudeo@gmail.com','No',NULL,9,4000);
+INSERT INTO Punteggio 
+VALUES 
+('SRMBHR80D16B880X',60,40,0,0,5,-5,100);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('SLMLKM82D16B880J','Olohakim','Salim','CASALECCHIO DI RENO','1982-06-15','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349785566','poolsalah@gmail.com','No',NULL,9,2000);
+INSERT INTO Punteggio 
+VALUES 
+('SLMLKM82D16B880J',80,0,10,10,20,-10,110);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('PRNNOE66D16B880L','Purina','One','CASALECCHIO DI RENO','1966-09-11','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3804938042','purinaone@gmail.com','No',NULL,4,0000);
+INSERT INTO Punteggio 
+VALUES 
+('PRNNOE66D16B880L',100,10,30,60,50,-10,240);
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('GRGGRG73D16B880J','Giorgioni','Giorgio','CASALECCHIO DI RENO','1973-09-11','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3344082567','joegiojoe@gmail.com','No',NULL,4,2000);
+INSERT INTO Punteggio 
+VALUES 
+('GRGGRG73D16B880J',80,15,15,15,15,-10,70);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('FRHLRB82D16B880K','Farhad','Lahrib','CASALECCHIO DI RENO','1982-09-11','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3804838049','huntersyler@gmail.com','No',NULL,5,4000);
+INSERT INTO Punteggio 
+VALUES 
+('FRHLRB82D16B880K',60,30,30,30,30,-30,150);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('LRTJRG88D01B880R','Lorathio','Jorge','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3445679104','jorgeh@gmail.com','No',NULL,5,6000);
+INSERT INTO Punteggio 
+VALUES 
+('LRTJRG88D01B880R',40,50,50,50,50,-40,160);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('FRSMMD88D01B880I','Fareshi','Mohamed','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3328681470','mohamoha@gmail.com','No',NULL,6,7000);
+INSERT INTO Punteggio 
+VALUES 
+('FRSMMD88D01B880I',20,15,15,15,15,-10,70);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('LCKMMM88D01B880G','Lackuft','Muhammad','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349784590','mahmood@gmail.com','No',NULL,5,6000);
+INSERT INTO Punteggio 
+VALUES 
+('LCKMMM88D01B880G',40,30,30,30,30,-30,150);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('FRJHMD88D01G779I','Farajhad','Ahmed','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349784477','supernova44@gmail.com','No',NULL,5,4000);
+INSERT INTO Punteggio 
+VALUES 
+('FRJHMD88D01G779I',60,50,50,50,50,-40,160);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('HSSHCM88D01G779A','Hossein','Hoscem','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349782974','superman6@gmail.com','No',NULL,7,2000);
+INSERT INTO Punteggio 
+VALUES 
+('HSSHCM88D01G779A',80,40,30,20,10,-20,160);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('KHLHSN88D01G779A','Khaled','Hossein','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3327782261','ilcacciatoreaquiloni@gmail.com','No',NULL,12,000);
+INSERT INTO Punteggio 
+VALUES 
+('KHLHSN88D01G779A',100,10,30,20,45,-40,165);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('MHRMRD88D01G779L','Mehrid','Mehrad','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3327782781','serahmecc@gmail.com','No',NULL,8,2000);
+INSERT INTO Punteggio 
+VALUES 
+('MHRMRD88D01G779L',80,10,10,10,5,-5,110);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('SMLBDL88D01G779C','Samaluz','Abdul','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349783386','fighter89@gmail.com','No',NULL,5,4000);
+INSERT INTO Punteggio 
+VALUES 
+('SMLBDL88D01G779C',60,140,30,20,5,-25,230);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('RNAGNN88D01G779Q','Rana','Giovanni','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349711553','raaana@gmail.com','No',NULL,6,6000);
+INSERT INTO Punteggio 
+VALUES 
+('RNAGNN88D01G779Q',40,140,00,10,5,-10,185);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('RBRRRT88D01G779Q','Roberti','Roberto','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3389737581','rob.erto@gmail.com','No',NULL,2,7000);
+INSERT INTO Punteggio 
+VALUES 
+('RBRRRT88D01G779Q',20,10,10,20,40,-10,90);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('BGLLDA88D01G779J','Baglio','Aldo','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3399783384','aldobaglio@gmail.com','No',NULL,3,6000);
+INSERT INTO Punteggio 
+VALUES 
+('BGLLDA88D01G779J',40,15,15,15,15,-10,90);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('CRSGDU88D01G779W','Caruso','Guido','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349786286','simsimi@gmail.com','No',NULL,8,4000);
+INSERT INTO Punteggio 
+VALUES 
+('CRSGDU88D01G779W',60,30,30,30,30,-30,150);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('DFRPGR88D01G779W','Odifreddi','Piergiorgio','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349787392','mariz@gmail.com','No',NULL,8,2000);
+INSERT INTO Punteggio 
+VALUES 
+('DFRPGR88D01G779W',80,50,50,50,50,-40,240);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('GRCBRN88D01G779O','Greco','Bruno','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3309265836','giolte@gmail.com','No',NULL,4,000);
+INSERT INTO Punteggio 
+VALUES 
+('GRCBRN88D01G779O',100,15,15,15,15,-10,150);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('MLNCSM88D01G779E','Milano','Cosimo','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349782886','fater@gmail.com','No',NULL,7,2000);
+INSERT INTO Punteggio 
+VALUES 
+('MLNCSM88D01G779E',80,30,30,30,30,-30,180);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('LBAGDY88D01G779Y','Alba','Gordy','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3379882581','porter@gmail.com','No',NULL,7,4000);
+INSERT INTO Punteggio 
+VALUES 
+('LBAGDY88D01G779Y',60,50,50,50,50,-40,160);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('CNSSRA88D01G779L','Cinesca','Sara','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349785831','saracinesca@gmail.com','No',NULL,9,6000);
+INSERT INTO Punteggio 
+VALUES 
+('CNSSRA88D01G779L',40,15,15,15,15,-10,90);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('LMPDRA88D01G779L','Lampa','Dario','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3348019355','lampadario@gmail.com','No',NULL,12,7000);
+INSERT INTO Punteggio 
+VALUES 
+('LMPDRA88D01G779L',20,30,30,30,30,-30,110);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('MNCNDR88D01G779C','Mancini','Andrea','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3314579081','ilmancio@gmail.com','No',NULL,14,6000);
+INSERT INTO Punteggio 
+VALUES 
+('MNCNDR88D01G779C',40,50,50,50,50,-40,200);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('MSSGPP88D01G779B','Musso','Giuseppe','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3805783102','mousse@gmail.com','No',NULL,8,4000);
+INSERT INTO Punteggio 
+VALUES 
+('MSSGPP88D01G779B',60,15,15,15,15,-10,110);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('BNDBDR88D01D872J','Bending Rodriguez','Bender','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3317772581','bender@gmail.com','No',NULL,6,2000);
+INSERT INTO Punteggio 
+VALUES 
+('BNDBDR88D01D872J',80,30,30,30,30,-30,170);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('FRYPLP88D01D872A','Fry','Philipp J.','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3369785485','fry@gmail.com','No',NULL,3,1000);
+INSERT INTO Punteggio 
+VALUES 
+('FRYPLP88D01D872A',100,50,50,50,50,-40,260);
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('PNZPLT88D01F257N','Pelato','Ponzio','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3469785580','ponzioilpelato@gmail.com','No',NULL,7,1000);
+INSERT INTO Punteggio 
+VALUES 
+('PNZPLT88D01F257N',100,50,50,50,50,-40,260);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('PPYPPY88D01M183P','Popeye','Popeye','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3399732590','tarminaz@gmail.com','No',NULL,4,1000);
+INSERT INTO Punteggio 
+VALUES 
+('PPYPPY88D01M183P',100,50,50,50,50,-40,260);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('LKKRML88D01L049D','Lukaku','Romelu','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349785381','lookukoo@gmail.com','No',NULL,11,10000);
+INSERT INTO Punteggio 
+VALUES 
+('LKKRML88D01L049D',0,50,50,50,50,-40,160);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('CRTRCE88D01D643V','Cartman','Eric','CASALECCHIO DI RENO','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3347778881','fatcartman@gmail.com','No',NULL,10,15000);
+INSERT INTO Punteggio 
+VALUES 
+('CRTRCE88D01D643V',0,50,50,50,50,-40,160);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('PTTBRD64T12A944R','Pitt','Brad','CASALECCHIO DI RENO','1964-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349382753','pezzodibread@gmail.com','No',NULL,9,11000);
+INSERT INTO Punteggio 
+VALUES 
+('PTTBRD64T12A944R',0,50,50,50,50,-40,160);
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('CRISML02M16D912Z','Cieri','Samuele','Garbagnate Milanese','2002-08-16','ITA',NULL,'Bologna','Via Val Di Setta','Casetta','123456789',NULL,'3349782581','sammy.2002@tiscali.it','No',NULL,5,44444);
+INSERT INTO Punteggio 
+VALUES 
+('CRISML02M16D912Z',0,0,0,0,0,0,0);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('CRISML02M16D914Z','Cieri','Samuele','Garbagnate Milanese','2002-08-16','ITA',NULL,'Bologna','Via Val Di Setta','Casetta','123456789',NULL,'3349782581','samuele.cieri@salvemini.bo.it','No',NULL,5,44444);
+INSERT INTO Punteggio 
+VALUES 
+('CRISML02M16D914Z',0,0,0,0,0,0,0);
+
+
+
+
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('JRRBCT96D19F205U','Biscotti','Jerry','Milano','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349782591','jerrybiscuits@gmail.com','No',NULL,3,2000);
+INSERT INTO Punteggio 
+VALUES 
+('JRRBCT96D19F205U',80,10,20,15,10,-5,130);
+
+INSERT INTO Membri (nMembro, NomeCognome, LuogoNascita, DataNascita, Parentela, Occupazione, TitoloDiStudio, Competenze, ConoscenzaLingua, Patente, AttualeAtt, Presso, Termine, SenzaLavoroDa, CodFamiglia) VALUES 
+(1,'Jerry Biscotti','Milano','1988-04-01','Capofamiglia','Conduttore','Scuole Superiori',NULL, NULL,'B2',NULL,NULL,NULL,'2021-05-05','JRRBCT96D19F205U'),
+(2,'Alexandra Rotterdelli','Milano','1988-04-01','Coniuge','Cassiera','Medie',NULL, NULL,'A1',NULL,NULL,NULL,'2021-02-05','JRRBCT96D19F205U'),
+(3,'Gianni Depp','Milano','1988-04-01','Figlio',NULL,'Elementari',NULL, 'Inglese',NULL,'Irrigatore','Milano',NULL,NULL,'JRRBCT96D19F205U');
+
+INSERT INTO SituazioneSocioSanitaria (CodFamiglia, N, Evento, Anno, DocAll) VALUES 
+('JRRBCT96D19F205U',1,'1111','2000','adsasd'),
+('JRRBCT96D19F205U',2,'2222','2000','dsadas'),
+('JRRBCT96D19F205U',3,'3333','2000','dasasd'),
+('JRRBCT96D19F205U',4,'4444','2002','adsads'),
+('JRRBCT96D19F205U',5,'5555','2004','adsads'),
+('JRRBCT96D19F205U',6,'6666','2004','adsads'),
+('JRRBCT96D19F205U',7,'7777','2004','adsads'),
+('JRRBCT96D19F205U',8,'8888','2006','adsads'),
+('JRRBCT96D19F205U',9,'9999','2004','adsads'),
+('JRRBCT96D19F205U',10,'1444','2009','adsads'),
+('JRRBCT96D19F205U',11,'1555','2004','adsads'),
+('JRRBCT96D19F205U',12,'1666','2007','adsasd');
+
+INSERT INTO DispCollaborative (CodFamiglia, AmbitoFormativo, AmbitoLavorativo, AmbitoSociale, ValutazioneCommissione) VALUES 
+('JRRBCT96D19F205U','Disponibile per insegnare','Disp. a lavorare','Disp a socializzare','La famiglia biscuits non è idonea');
+
+INSERT INTO PatrAtt (CodFamiglia, N, Elemento, Valore) VALUES 
+('JRRBCT96D19F205U',1,'1111',34523),
+('JRRBCT96D19F205U',2,'2222',65432),
+('JRRBCT96D19F205U',3,'4444',34547),
+('JRRBCT96D19F205U',4,'7777',5346);
+
+INSERT INTO PatrPass (CodFamiglia, N, Elemento, Valore, Scadenza) VALUES 
+('JRRBCT96D19F205U',1,'1111',444,'2002-08-16'),
+('JRRBCT96D19F205U',2,'2222',444,'2002-08-16'),
+('JRRBCT96D19F205U',3,'4444',444,'2002-08-16'),
+('JRRBCT96D19F205U',4,'7777',444,'2002-08-16');
+
+INSERT INTO Entrate (CodFamiglia, N, Elemento, Valore, Scadenza) VALUES 
+('JRRBCT96D19F205U',1,'1111',444,'2002-08-16'),
+('JRRBCT96D19F205U',2,'2222',444,'2002-08-16'),
+('JRRBCT96D19F205U',3,'3333',444,'2002-08-16'),
+('JRRBCT96D19F205U',4,'4444',444,'2002-08-16'),
+('JRRBCT96D19F205U',5,'5555',444,'2002-08-16'),
+('JRRBCT96D19F205U',6,'6666',444,'2002-08-16'),
+('JRRBCT96D19F205U',7,'7777',444,'2002-08-16');
+
+INSERT INTO Uscite (CodFamiglia, N, Elemento, Valore, Scadenza) VALUES 
+('JRRBCT96D19F205U',1,'1111',444,'2002-08-16'),
+('JRRBCT96D19F205U',2,'2222',444,'2002-08-16'),
+('JRRBCT96D19F205U',3,'3333',444,'2002-08-16'),
+('JRRBCT96D19F205U',4,'4444',444,'2002-08-16'),
+('JRRBCT96D19F205U',5,'5555',444,'2002-08-16'),
+('JRRBCT96D19F205U',6,'7777',444,'2002-08-16');
+
+
+
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, nMembri, ISEE) VALUES 
+('JRRBCT96D19F205Y','Biscotti','Jerry','Milano','1988-04-01','ITA',NULL,'CASALECCHIO DI RENO','Via Dei Colli','Popolare','123456789',NULL,'3349782581','biscuitsgarrick@gmail.com','No',NULL,3,2000);
+INSERT INTO Punteggio 
+VALUES 
+('JRRBCT96D19F205Y',80,5,5,5,5,-15,75);
+
+INSERT INTO Membri (nMembro, NomeCognome, LuogoNascita, DataNascita, Parentela, Occupazione, TitoloDiStudio, Competenze, ConoscenzaLingua, Patente, AttualeAtt, Presso, Termine, SenzaLavoroDa, CodFamiglia) VALUES 
+(1,'Jerry Biscotti','Milano','1988-04-01','Capofamiglia','Conduttore','Scuole Superiori',NULL, NULL,'B2',NULL,NULL,NULL,'2018-02-02','JRRBCT96D19F205Y'),
+(2,'Alexandra Rotterdelli','Milano','1988-04-01','Coniuge','Cassiera','Medie',NULL, NULL,'A1',NULL,NULL,NULL,'2010-10-10','JRRBCT96D19F205Y'),
+(3,'Gianni Depp','Milano','1988-04-01','Figlio',NULL,'Elementari',NULL, 'Inglese',NULL,'Irrigatore','Milano',NULL,NULL,'JRRBCT96D19F205Y');
+
+INSERT INTO SituazioneSocioSanitaria (CodFamiglia, N, Evento, Anno, DocAll) VALUES 
+('JRRBCT96D19F205Y',1,'1111','2000','adsasd'),
+('JRRBCT96D19F205Y',2,'2222','2000','dsadas'),
+('JRRBCT96D19F205Y',3,'3333','2000','dasasd'),
+('JRRBCT96D19F205Y',4,'4444','2002','adsads'),
+('JRRBCT96D19F205Y',5,'5555','2004','adsads'),
+('JRRBCT96D19F205Y',6,'6666','2004','adsads'),
+('JRRBCT96D19F205Y',7,'7777','2004','adsads'),
+('JRRBCT96D19F205Y',8,'8888','2006','adsads'),
+('JRRBCT96D19F205Y',9,'9999','2004','adsads'),
+('JRRBCT96D19F205Y',10,'1444','2009','adsads'),
+('JRRBCT96D19F205Y',11,'1555','2004','adsads'),
+('JRRBCT96D19F205Y',12,'1666','2007','adsasd');
+
+INSERT INTO DispCollaborative (CodFamiglia, AmbitoFormativo, AmbitoLavorativo, AmbitoSociale, ValutazioneCommissione) VALUES 
+('JRRBCT96D19F205Y','Disponibile per insegnare','Disp. a lavorare','Disp a socializzare','La famiglia Biscuits è idonea');
+
+INSERT INTO PatrAtt (CodFamiglia, N, Elemento, Valore) VALUES 
+('JRRBCT96D19F205Y',1,'1111',34523),
+('JRRBCT96D19F205Y',2,'2222',65432),
+('JRRBCT96D19F205Y',3,'4444',34547),
+('JRRBCT96D19F205Y',4,'7777',5346);
+
+INSERT INTO PatrPass (CodFamiglia, N, Elemento, Valore, Scadenza) VALUES 
+('JRRBCT96D19F205Y',1,'1111',444,'2002-08-16'),
+('JRRBCT96D19F205Y',2,'2222',444,'2002-08-16'),
+('JRRBCT96D19F205Y',3,'4444',444,'2002-08-16'),
+('JRRBCT96D19F205Y',4,'7777',444,'2002-08-16');
+
+INSERT INTO Entrate (CodFamiglia, N, Elemento, Valore, Scadenza) VALUES 
+('JRRBCT96D19F205Y',1,'1111',444,'2002-08-16'),
+('JRRBCT96D19F205Y',2,'2222',444,'2002-08-16'),
+('JRRBCT96D19F205Y',3,'3333',444,'2002-08-16'),
+('JRRBCT96D19F205Y',4,'4444',444,'2002-08-16'),
+('JRRBCT96D19F205Y',5,'5555',444,'2002-08-16'),
+('JRRBCT96D19F205Y',6,'6666',444,'2002-08-16'),
+('JRRBCT96D19F205Y',7,'7777',444,'2002-08-16');
+
+INSERT INTO Uscite (CodFamiglia, N, Elemento, Valore, Scadenza) VALUES 
+('JRRBCT96D19F205Y',1,'1111',444,'2002-08-16'),
+('JRRBCT96D19F205Y',2,'2222',444,'2002-08-16'),
+('JRRBCT96D19F205Y',3,'3333',444,'2002-08-16'),
+('JRRBCT96D19F205Y',4,'4444',444,'2002-08-16'),
+('JRRBCT96D19F205Y',5,'5555',444,'2002-08-16'),
+('JRRBCT96D19F205Y',6,'7777',444,'2002-08-16');
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE VIEW Pass AS 
+SELECT R.Cod_Fiscale, R.Cognome, R.Nome, R.nMembri, P.PunteggioISEE, P.PunteggioPresenzaMinori, P.PunteggioDisoccupazione, P.PunteggioInvalidi, P.PunteggioSituazioneDebitoria, P.PunteggioBenefit, P.PunteggioTotale, TR.CodiceTessera, DATE_FORMAT(TR.DataOraRilascioTessera, '%d/%m/%Y') AS DataOraRilascioTessera, DATE_FORMAT(TR.DataOraScadenzaTessera, '%d/%m/%Y') AS DataOraScadenzaTessera, DATE_FORMAT(R.DataOraRitiroTessera, '%d/%m/%Y') AS DataOraRitiroTessera, DATE_FORMAT(R.DataOraStalloTessera, '%d/%m/%Y') AS DataOraStalloTessera  
+FROM Richiedente AS R LEFT OUTER JOIN TesseraRilasciata AS TR 
+ON R.Cod_Fiscale = TR.CodFamiglia 
+LEFT OUTER JOIN  Tessera AS T 
+ON TR.CodiceTessera = T.Codice 
+INNER JOIN Punteggio AS P 
+ON R.Cod_Fiscale = P.CodFamiglia  
+ORDER BY P.PunteggioTotale DESC;
+
+
+CREATE VIEW Graduatoria AS 
+SELECT R.Cod_Fiscale, R.Cognome, R.Nome, R.nMembri, R.Telefono, R.Mail, P.PunteggioISEE, P.PunteggioPresenzaMinori, P.PunteggioDisoccupazione, P.PunteggioInvalidi, P.PunteggioSituazioneDebitoria, P.PunteggioBenefit, P.PunteggioTotale, TR.CodiceTessera, DATE_FORMAT(TR.DataOraRilascioTessera, '%d/%m/%Y') AS DataOraRilascioTessera, DATE_FORMAT(TR.DataOraScadenzaTessera, '%d/%m/%Y') AS DataOraScadenzaTessera, DATE_FORMAT(R.DataOraRitiroTessera, '%d/%m/%Y') AS DataOraRitiroTessera, DATE_FORMAT(R.DataOraStalloTessera, '%d/%m/%Y') AS DataOraStalloTessera  
+FROM Richiedente AS R LEFT OUTER JOIN TesseraRilasciata AS TR 
+ON R.Cod_Fiscale = TR.CodFamiglia 
+LEFT OUTER JOIN  Tessera AS T 
+ON TR.CodiceTessera = T.Codice 
+INNER JOIN Punteggio AS P 
+ON R.Cod_Fiscale = P.CodFamiglia  
+ORDER BY P.PunteggioTotale DESC;
+
+SELECT R.Cod_Fiscale, R.Cognome, R.Nome, R.nMembri, R.Telefono, R.Mail, P.PunteggioISEE, P.PunteggioPresenzaMinori, P.PunteggioDisoccupazione, P.PunteggioInvalidi, P.PunteggioSituazioneDebitoria, P.PunteggioBenefit, P.PunteggioTotale, TR.CodiceTessera, DATE_FORMAT(TR.DataOraRilascioTessera, '%d/%m/%Y') AS DataOraRilascioTessera, DATEDIFF(TR.DataOraScadenzaTessera,CURDATE()) AS GiorniScadenzaTessera, DATE_FORMAT(R.DataOraRitiroTessera, '%d/%m/%Y') AS DataOraRitiroTessera, DATEDIFF(R.DataOraStalloTessera,CURDATE()) AS GiorniStalloTessera  
+FROM Richiedente AS R LEFT OUTER JOIN TesseraRilasciata AS TR 
+ON R.Cod_Fiscale = TR.CodFamiglia 
+LEFT OUTER JOIN  Tessera AS T 
+ON TR.CodiceTessera = T.Codice 
+INNER JOIN Punteggio AS P 
+ON R.Cod_Fiscale = P.CodFamiglia  
+ORDER BY P.PunteggioTotale DESC;
+
+
+
+
+CREATE VIEW Export AS 
+SELECT R.Cod_Fiscale, R.Cognome, R.Nome, R.Cittadinanza, R.LuogoNascita, R.DataNascita, R.TipoAlloggio, R.Residenza, R.Via, R.nMembri, R.Telefono, R.Mail, P.PunteggioISEE, P.PunteggioPresenzaMinori, P.PunteggioDisoccupazione, P.PunteggioInvalidi, P.PunteggioSituazioneDebitoria, P.PunteggioBenefit, P.PunteggioTotale, TR.CodiceTessera, DATE_FORMAT(TR.DataOraRilascioTessera, '%d/%m/%Y') AS DataOraRilascioTessera, DATE_FORMAT(TR.DataOraScadenzaTessera, '%d/%m/%Y') AS DataOraScadenzaTessera, DATE_FORMAT(R.DataOraRitiroTessera, '%d/%m/%Y') AS DataOraRitiroTessera, DATE_FORMAT(R.DataOraStalloTessera, '%d/%m/%Y') AS DataOraStalloTessera 
+FROM Richiedente AS R LEFT OUTER JOIN TesseraRilasciata AS TR 
+ON R.Cod_Fiscale = TR.CodFamiglia 
+LEFT OUTER JOIN  Tessera AS T 
+ON TR.CodiceTessera = T.Codice 
+INNER JOIN Punteggio AS P 
+ON R.Cod_Fiscale = P.CodFamiglia  
+ORDER BY P.PunteggioTotale DESC;
+
+
+
+
+
+
+
+CREATE VIEW Confirmation AS 
+SELECT R.Cod_Fiscale, R.Cognome, R.Nome, R.nMembri, P.PunteggioISEE, P.PunteggioPresenzaMinori, P.PunteggioDisoccupazione, P.PunteggioInvalidi, P.PunteggioSituazioneDebitoria, P.PunteggioBenefit, P.PunteggioTotale, TR.CodiceTessera, DATE_FORMAT(TR.DataOraRilascioTessera, '%Y/%m/%d') AS DataOraRilascioTessera, DATE_FORMAT(TR.DataOraScadenzaTessera, '%Y/%m/%d') AS DataOraScadenzaTessera, DATE_FORMAT(R.DataOraRitiroTessera, '%Y/%m/%d') AS DataOraRitiroTessera, DATE_FORMAT(R.DataOraStalloTessera, '%Y/%m/%d') AS DataOraStalloTessera  
+FROM Richiedente AS R LEFT OUTER JOIN TesseraRilasciata AS TR 
+ON R.Cod_Fiscale = TR.CodFamiglia 
+LEFT OUTER JOIN  Tessera AS T 
+ON TR.CodiceTessera = T.Codice 
+INNER JOIN Punteggio AS P 
+ON R.Cod_Fiscale = P.CodFamiglia  
+ORDER BY P.PunteggioTotale DESC;
+
+CREATE VIEW StoricoTes AS 
+SELECT OrdineCronologico, CodiceTessera, CodFamiglia, Nome, Cognome, DATE_FORMAT(DataRilascio, '%d/%m/%Y') AS DataRilascio, DATE_FORMAT(DataRitiro, '%d/%m/%Y') AS DataRitiro FROM StoricoTessere AS ST INNER JOIN Richiedente AS R ON ST.CodFamiglia = R.Cod_Fiscale ORDER BY OrdineCronologico DESC;
+
+CREATE VIEW informazioniRichiedente AS
+SELECT R.Cod_Fiscale, R.Cognome, R.Nome, R.LuogoNascita, DATE_FORMAT(R.DataNascita, '%d/%m/%Y') AS DataNascita, R.Cittadinanza, R.InItaliaDallAnno, R.Residenza, R.Via, R.TipoAlloggio, R.DocumentoIdent, R.DocumentoImmig, R.Telefono, R.Mail, R.ServiziSociali, R.ComeHaConosciutoEmporio, R.nMembri, R.ISEE, TR.CodiceTessera, DATE_FORMAT(TR.DataOraRilascioTessera, '%d/%m/%Y') AS DataOraRilascioTessera, DATE_FORMAT(TR.DataOraScadenzaTessera, '%d/%m/%Y') AS DataOraScadenzaTessera, DATE_FORMAT(R.DataOraRitiroTessera, '%d/%m/%Y') AS DataOraRitiroTessera, DATE_FORMAT(R.DataOraStalloTessera, '%d/%m/%Y') AS DataOraStalloTessera, P.PunteggioISEE, P.PunteggioPresenzaMinori, P.PunteggioDisoccupazione, P.PunteggioInvalidi, P.PunteggioSituazioneDebitoria, P.PunteggioBenefit, P.PunteggioTotale 
+FROM Richiedente AS R LEFT OUTER JOIN TesseraRilasciata AS TR 
+ON R.Cod_Fiscale = TR.CodFamiglia 
+LEFT OUTER JOIN  Tessera AS T 
+ON TR.CodiceTessera = T.Codice 
+INNER JOIN Punteggio AS P 
+ON R.Cod_Fiscale = P.CodFamiglia 
+ORDER BY P.PunteggioTotale DESC;
+
+CREATE VIEW informazioniMembri AS 
+SELECT nMembro, NomeCognome, LuogoNascita, DATE_FORMAT(DataNascita, '%d/%m/%Y') AS DataNascita, Parentela, Occupazione, TitoloDiStudio, Competenze, ConoscenzaLingua, Patente, AttualeAtt, Presso, Termine, SenzaLavoroDa, CodFamiglia 
+FROM Membri;
+
+CREATE VIEW informazioniDispColl AS
+SELECT AmbitoFormativo, AmbitoLavorativo, AmbitoSociale, CodFamiglia 
+FROM DispCollaborative;
+
+CREATE VIEW informazioniSSS AS
+SELECT N, Evento, Anno, DocAll, CodFamiglia 
+FROM SituazioneSocioSanitaria;
+
+CREATE VIEW informazioniPatrAtt AS
+SELECT N, Elemento, Valore, CodFamiglia 
+FROM PatrAtt;
+
+CREATE VIEW informazioniPatrPass AS
+SELECT N, Elemento, Valore, DATE_FORMAT(Scadenza, '%d/%m/%Y') AS Scadenza, CodFamiglia 
+FROM PatrPass;
+
+CREATE VIEW informazioniEntrate AS
+SELECT N, Elemento, Valore, DATE_FORMAT(Scadenza, '%d/%m/%Y') AS Scadenza, CodFamiglia 
+FROM Entrate;
+
+CREATE VIEW informazioniUscite AS
+SELECT N, Elemento, Valore, DATE_FORMAT(Scadenza, '%d/%m/%Y') AS Scadenza, CodFamiglia 
+FROM Uscite;
+
+CREATE VIEW CompetenzeView AS
+SELECT nMembro, NomeCognome, LuogoNascita, DATE_FORMAT(DataNascita, '%d/%m/%Y') AS DataNascita, Parentela, Occupazione, TitoloDiStudio, Competenze, ConoscenzaLingua, Patente, AttualeAtt, Presso, Termine, SenzaLavoroDa, CodFamiglia 
+FROM Membri 
+ORDER BY CodFamiglia, nMembro ASC;

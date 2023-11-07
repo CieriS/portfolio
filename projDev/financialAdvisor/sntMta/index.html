@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Consulenza Finanziaria Bologna - Richiedi una prima consulenza gratuita e pianifica insieme a noi la gestione del tuo prestito!">
+    <meta name="keywords" content="Prestito, Consulenza Gratuita, Finanza, Bologna">   <!-- parole chiave principali per la tua pagina -->
+    <meta name="author" content="Samuele Cieri">    <!-- Autore del sito -->
+    <meta name="robots" content="index,follow"> <!-- specifica se i robot dei motori di ricerca devono indicizzare la pagina -->
+    <meta name="googlebot" content="index,follow">  <!-- specifica come il robot di Google deve indicizzare la pagina -->
+    <meta name="theme-color" content="#202529"> <!-- specifica il colore del tema del sito web -->
+    <meta property="og:title" content="Consulenza Gratuita">    <!-- specifica il titolo della pagina quando viene condivisa sui social media -->
+    <meta property="og:description" content="Richiedi una consulenza gratuita, ti aiutiamo a pianificare il tuo futuro">    <!-- specifica la descrizione della pagina quando viene condivisa sui social media -->
+    <meta property="og:url" content="https://cierisamuele.altervista.org/">    <!-- specifica l'URL della pagina quando viene condivisa sui social media -->
+    <meta property="og:image" content="https://cierisamuele.altervista.org/proj/financialAdvisor/sntMta/img/icon/stonks.ico">  <!-- specifica l'immagine che viene utilizzata come anteprima quando la pagina viene condivisa sui social media -->
+    <meta property="og:type" content="website"> <!-- specifica il tipo di contenuto della pagina -->
+    <meta name="application-name" content="Sito Vetrina">    <!-- specifica il nome dell'applicazione -->
+    <meta name="generator" content="Bootstrap 5.2.3, JavaScript">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="img/icon/stonks.ico">
+    <link rel="stylesheet" type="text/css" href="css/basicStyle.css">
+    <link rel="stylesheet" type="text/css" href="css/animations.css">
+    <!--<script src="../../../js/includeHTML.js"></script>-->
+    <script src="js/pageUserForceLoad.js"></script>
+
+    <link rel="preload" as="script" href="https://cdn.iubenda.com/cs/iubenda_cs.js"/>
+    <link rel="preload" as="script" href="https://cdn.iubenda.com/cs/tcf/stub-v2.js"/>
+    <script src="https://cdn.iubenda.com/cs/tcf/stub-v2.js"></script>
+    <script>
+    (_iub=self._iub||[]).csConfiguration={
+        cookiePolicyId: 50772852,
+        siteId: 3090289,
+        localConsentDomain: 'cierisamuele.altervista.org',
+        timeoutLoadConfiguration: 30000,
+        lang: 'it',
+        enableTcf: true,
+        tcfVersion: 2,
+        tcfPurposes: {
+            "2": "consent_only",
+            "3": "consent_only",
+            "4": "consent_only",
+            "5": "consent_only",
+            "6": "consent_only",
+            "7": "consent_only",
+            "8": "consent_only",
+            "9": "consent_only",
+            "10": "consent_only"
+        },
+        invalidateConsentWithoutLog: true,
+        googleAdditionalConsentMode: true,
+        consentOnContinuedBrowsing: false,
+        banner: {
+            position: "bottom",
+            acceptButtonDisplay: true,
+            customizeButtonDisplay: true,
+            closeButtonDisplay: true,
+            closeButtonRejects: true,
+            fontSizeBody: "14px",
+        },
+    }
+    </script>
+    <script async src="https://cdn.iubenda.com/cs/iubenda_cs.js"></script>
+    <title>Richiedi un Prestito - Bologna</title>
+</head>
+<body id="pageStart" class="bg-light">
+
+<!-- COSE DA FARE:
+    0)  Stistemare le label del carousel
+    1)  Aggiungere captcha al form per evitare numero di invii (opzionale)
+    2)  Cambiare stile form
+-->
+
+<!-- OFFCanvas --> 
+<div class="offcanvas offcanvas-end text-bg-dark d-none d-md-flex user-select-none" data-bs-scroll="true" data-bs-backdrop="true" tabindex="-1" id="offCanvasIndex" aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title fs-4" id="offcanvasWithBothOptionsLabel">Sommario</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div>
+            Clicca uno dei seguenti link e potrai visualizzare direttamente il contenuto della sezione cliccata.
+        </div>
+        <ol class="list-group list-group-flush list-group-numbered mt-5">
+            <li>
+                <a class="list-group-item list-group-item-action list-group-item-info btn btn-outline-warning text-center" aria-current="true" href="#pageStart">
+                    Cieri Samuele
+                </a>
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action list-group-item-dark btn btn-outline-dark text-center" href="#whyUs">
+                    Perch&eacute; noi?
+                </a>
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action list-group-item-dark btn btn-outline-dark text-center" href="#strength">
+                    Garanzie
+                </a>
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action list-group-item-dark btn btn-outline-dark text-center" href="#services">
+                    Cosa Ti Offriamo
+                </a>
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action list-group-item-dark btn btn-outline-dark text-center" href="#Consulenza">
+                    Consulenza Gratuita
+                </a>
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action list-group-item-dark btn btn-outline-dark text-center" href="#Contatti">
+                    Contatti
+                </a>
+            </li>
+        </ol>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-4 mx-4">
+        <div>
+            <span class="fs-4 user-select-auto">
+                <a class="btn btn-lg text-light" href="tel:+393349782581">
+                    <i class="fa fa-phone" aria-hidden="true"></i>&emsp;+39 334 978 2581
+                </a>
+            </span>
+                <br/>
+            <span class="fs-4 user-select-auto">
+                <a class="btn btn-lg text-light" href="mailto:sammy.2002@tiscali.it">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>&emsp;sammy.2002@tiscali.it
+                </a>
+            </span>
+        </div>
+    </div>
+</div>
+<!-- / -->
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark bg-dark text-light px-3 py-sm-1 py-lg-3 d-flex flex-row justify-content-between align-items-center" style="height: 15vh;">
+    <a class="navbar-brand fs-4">
+        <!--<img src="img/icon/santo.png" ondragstart="return false" onselectstart="return false" alt="" class="d-inline-block align-text-top ratio ratio-1x1" style="width: 24px;">-->
+        <div class="text-start" style="margin-bottom:-20px">
+            <strong>Cieri</strong>
+        </div>
+        <div class="text-end" style="margin-top:-20px">
+            &nbsp;&nbsp;Samuele
+        </div>
+    </a>
+    
+    <div class="noJScript d-none d-md-flex noJsRemove">  <!-- OFFCANVAS SCHERMO GRANDE -->
+        <a class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasIndex" aria-controls="offCanvasIndex">
+            <span class="navbar-toggler-icon"></span>
+        </a>
+    </div>
+    <div class="noJScript d-sm-flex d-md-none noJsRemove">   <!-- OFFCANVAS SCHERMO PICCOLO -->
+        <div class="btn-group dropstart">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" data-bs-auto-close="true">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-dark">
+                <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#whyUs">
+                    <span class="d-inline-block bg-info rounded-circle p-1"></span>Perch&eacute; noi?
+                </a></li>
+                <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#strength">
+                    <span class="d-inline-block bg-primary rounded-circle p-1"></span>Garanzie
+                </a></li>
+                <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#services">
+                <span class="d-inline-block bg-danger rounded-circle p-1"></span>Cosa Offriamo
+                </a></li>
+                <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#Consulenza">
+                    <span class="d-inline-block bg-success rounded-circle p-1"></span>Consulenza Gratuita
+                </a></li>
+                <li><hr color="white" class="dropdown-divider"></li>
+                <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#Contatti">
+                    <span class="d-inline-block bg-warning rounded-circle p-1"></span>Contatti
+                </a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!--
+    <noscript>
+        <img src="img/icon/stonks.ico" style="height: 24px; aspect-ratio: 1;" alt="Logo della pagina" />
+    </noscript>
+    -->
+</nav>
+<!-- / -->
+
+<!-- CAROUSEL -->
+<div id="carouselFade" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-touch="true" data-bs-pause="false">
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="3000">  <!-- PRIMA IMMAGINE CAROUSEL -->
+            <img src="img/carousel/firstImage.jpg" ondragstart="return false" onselectstart="return false" class="d-block w-100" alt="Stretta di mano">
+            <div class="carousel-caption w-25 h-25 position-absolute top-0 start-0 ms-4"> <!-- CAPTION SCHERMO GRANDE -->
+                <a class="btn btn-dark text-wrap rounded mt-4 flex-fill" style="--bs-btn-padding-y: 0.5rem; --bs-btn-padding-x: 0.75rem; --bs-btn-font-size: 1.8vw;" href="#Consulenza">
+                    <strong>Consulenza Gratuita</strong>
+                </a>
+                <p class="coloredLabelCarousel text-light fw-bolder">
+                    Investi nel tuo futuro
+                    <!--<span class="d-none d-md-block text-wrap fs-6">
+                        Investire nei tuoi progetti è investire nel tuo futuro. Affidati ai nostri servizi di consulenza finanziaria per fare la scelta giusta
+                    </span>-->
+                </p>
+            </div>
+        </div>
+        <div class="carousel-item" data-bs-interval="3000"> <!-- SECONDA IMMAGINE CAROUSEL -->
+            <img src="img/carousel/secondImage.jpg" ondragstart="return false" onselectstart="return false" class="d-block w-100" alt="Business idea">
+            <div class="carousel-caption w-25 h-25 position-absolute top-0 start-0 ms-4">  <!-- CAPTION SCHERMO GRANDE -->
+                <a class="btn btn-dark text-wrap rounded mt-4" style="--bs-btn-padding-y: 0.5rem; --bs-btn-padding-x: 0.75rem; --bs-btn-font-size: 1.8vw;" href="#Consulenza">
+                    <strong>Consulenza Gratuita</strong>
+                </a>
+                <p class="coloredLabelCarousel text-light fw-bolder">
+                    Dai una forma alle tue idee!
+                    <!--<span class="d-none d-md-block text-wrap fs-6">
+                        Il nostro team di esperti ti aiuterà a trovare il prestito perfetto per realizzare i tuoi obiettivi
+                    </span>-->
+                </p>
+            </div>
+        </div>
+        <div class="carousel-item" data-bs-interval="3000"> <!-- TERZA IMMAGINE CAROUSEL -->
+            <img src="img/carousel/thirdImage.png" ondragstart="return false" onselectstart="return false" class="d-block w-100" alt="La libert&agrave; finanziaria ti aspetta!">
+            <div class="carousel-caption w-25 h-25 position-absolute top-0 start-0 ms-4">  <!-- CAPTION SCHERMO GRANDE -->
+                <a class="btn btn-dark text-wrap rounded mt-4" style="--bs-btn-padding-y: 0.5rem; --bs-btn-padding-x: 0.75rem; --bs-btn-font-size: 1.8vw;" href="#Consulenza">
+                    <strong>Consulenza Gratuita</strong>
+                </a>
+                <p class="coloredLabelCarousel text-light fw-bolder">
+                    Scegli la libert&agrave; finanziaria
+                    <!--<span class="d-none d-md-block text-wrap fs-6">
+                        Con il supporto del nostro consulente, potrai liberarti delle preoccupazioni finanziarie e goderti la vita al massimo
+                    </span>-->
+                </p>
+            </div>
+        </div>
+        <div class="carousel-item" data-bs-interval="3000"> <!-- QUARTA IMMAGINE CAROUSEL -->
+            <img src="img/carousel/fourthImage.jpg" ondragstart="return false" onselectstart="return false" class="d-block w-100" alt="Fallo per vivere la pensione dei tuoi sogni!">
+            <div class="carousel-caption w-25 h-25 position-absolute top-0 start-0 ms-4">  <!-- CAPTION SCHERMO GRANDE -->
+                <a class="btn btn-dark text-wrap rounded mt-4" style="--bs-btn-padding-y: 0.5rem; --bs-btn-padding-x: 0.75rem; --bs-btn-font-size: 1.8vw;" href="#Consulenza">
+                    <strong>Consulenza Gratuita</strong>
+                </a>
+                <p class="coloredLabelCarousel text-light fw-bolder">
+                    Affronta gli imprevisti con serenit&agrave;
+                    <!--<span class="d-none d-md-block text-wrap fs-6">
+                        Con un prestito su misura e il supporto del nostro team, potrai affrontare qualsiasi imprevisto con la massima tranquillità
+                    </span>-->
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARROWS
+    <div class="carousel-control float-end pe-5 position-absolute end-0 top-50" style="z-index: 999;">
+        <button class="btn btn-dark btn-sm rounded-circle" type="button" data-bs-target="#carouselFade" data-bs-slide="prev" style="z-index: 999;">
+            <span class="carousel-control-prev-icon px-2" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+
+        <button class="btn btn-dark btn-sm rounded-circle" type="button" data-bs-target="#carouselFade"   data-bs-slide="next">
+            <span class="carousel-control-next-icon px-2" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    -->
+</div>
+<!-- / -->
+
+<!-- CONTENT -->
+<div data-bs-spy="scroll" data-bs-smoothScroll="false" data-bs-target="#navbar-example2" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+    <div id="whyUs" class="bg-light text-center d-flex justify-content-center"> <!-- Perché noi? -->
+        <div class="my-5 d-md-none d-sm-block w-75"> <!-- schermo piccolo -->
+            <h2 class="mb-4 fw-bolder">
+                Perch&eacute; scegliere noi?
+            </h2>
+            <p class="text-wrap lh-lg">
+                Said you needed a ride, but you wanted my car Without that face, girl, you wouldn't get far I really like you, despite who you are, oh (who you are) You see me on tv, you know I'm a star You say you don't know me, but I know that's false I'll pay the price, girl, whatever that cost (what it cost?)
+            </p>
+        </div>
+        <div class="my-5 d-none d-md-block w-50"> <!-- schermo grande -->
+            <h2 class="mb-4 fw-bold">
+                Perch&eacute; scegliere noi?
+            </h2>
+            <p class="text-wrap lh-lg">
+                Said you needed a ride, but you wanted my car Without that face, girl, you wouldn't get far I really like you, despite who you are, oh (who you are) You see me on tv, you know I'm a star You say you don't know me, but I know that's false I'll pay the price, girl, whatever that cost (what it cost?)
+            </p>
+        </div>
+    </div>
+    <div id="strength" class="bg-dark bg-opacity-25 container-fluid py-5"> <!-- STRENGTH -->
+        <h2 class="onScrollAnimationTitle mb-4 text-center fw-bolder">Questo sono io</h2> <!-- TITLE -->
+        <div class="d-flex justify-content-evenly align-content-center align-items-center flex-wrap"> <!-- CARDS -->
+            <div class="onScrollAnimationScaleIn card my-2 shadow-lg p-3 mb-5 bg-body rounded" style="width: 40vh;">
+                <img src="img/strength/first.png" ondragstart="return false" onselectstart="return false" class="card-img-top ratio ratio-1x1" alt="Stile Elegante" style="height: 30vh; object-fit:contain;">
+                <div class="card-body">
+                    <p class="card-text">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born.</p>
+                </div>
+            </div>
+            <div class="onScrollAnimationScaleIn card my-2 shadow-lg p-3 mb-5 bg-body rounded" style="width: 40vh;">
+                <img src="img/strength/second.png" ondragstart="return false" onselectstart="return false" class="card-img-top ratio ratio-1x1" alt="Utilizziamo al meglio il nostro tempo per te" style="height: 30vh; object-fit:contain;">
+                <div class="card-body">
+                    <p class="card-text">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born.</p>
+                </div>
+            </div>
+            <div class="onScrollAnimationScaleIn card my-2 shadow-lg p-3 mb-5 bg-body rounded" style="width: 40vh;">
+                <img src="img/strength/third.png" ondragstart="return false" onselectstart="return false" class="card-img-top ratio ratio-1x1" alt="Manteniamo traccia di tutti gli spostamenti di liquidità" style="height: 30vh; object-fit:contain;">
+                <div class="card-body">
+                    <p class="card-text">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born.</p>
+                </div>
+            </div>
+            <div class="onScrollAnimationScaleIn card my-2 shadow-lg p-3 mb-5 bg-body rounded" style="width: 40vh;">
+                <img src="img/strength/fourth.png" ondragstart="return false" onselectstart="return false" class="card-img-top ratio ratio-1x1" alt="Lo facciamo in piena sicurezza" style="height: 30vh; object-fit:contain;">
+                <div class="card-body">
+                    <p class="card-text">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="services" class="container-fluid bg-light bg-opacity-25 text-center my-5 py-5 position-relative"> <!-- SERVIZI -->
+        <div class="position-absolute top-50 start-0 bg-dark bg-opacity-10 rounded-end translate-middle-y invisible" style="width: 41%; height: 10rem;"><!--Spazio grigio--></div>
+        <h2 class="onScrollAnimationTitle fw-bolder bg-dark border-end border-2 border-dark shadow-lg bg-opacity-50 text-light py-4 mb-0">I nostri servizi</h2>
+        <div id="carouselExampleCaptions" class="onScrollAnimationScaleDown carousel slide" data-bs-ride="false">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="img/carouselServices/first.jpg" class="d-block w-100 rounded-bottom border-bottom border-end border-2 border-dark shadow-lg" alt="Lavoriamo in team">
+                <div class="carousel-caption text-bg-dark d-none d-md-block rounded">
+                  <h5>First slide label</h5>
+                  <p>Some representative placeholder content for the first slide.</p>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="img/carouselServices/second.jpg" class="d-block w-100 rounded-bottom border-bottom border-end border-2 border-dark shadow-lg" alt="I nostri addetti altamente qualificati si occuperanno del tuo caso">
+                <div class="carousel-caption text-bg-dark d-none d-md-block rounded">
+                  <h5>Second slide label</h5>
+                  <p>Some representative placeholder content for the second slide.</p>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="img/carouselServices/third.jpg" class="d-block w-100 rounded-bottom border-bottom border-end border-2 border-dark shadow-lg" alt="La nostra assistenza è al tuo servizio h-24">
+                <div class="carousel-caption text-bg-dark d-none d-md-block rounded">
+                  <h5>Third slide label</h5>
+                  <p>Some representative placeholder content for the third slide.</p>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    <div id="Consulenza" class="bg-dark bg-opacity-25 container-fluid py-5"> <!-- FORMS -->
+        <div class="row align-items-center">
+            <div class="onScrollAnimationLeftRight col-sm-12 col-md-7 align-self-center justify-content-evenly text-center d-flex flex-column"> <!-- FORMS -->
+                <h2 class="onScrollAnimationTitle fw-bolder">Richiedi una consulenza</h2>
+                <form method="POST" action="mailing/sendMail.php" target="_top" autocomplete="OFF">
+                    <div class="input-group my-4"> <!-- NOME E COGNOME -->
+                        <div class="form-floating">
+                            <input type="text" id="floatingName" placeholder="Nome" aria-label="Nome" class="form-control bg-light bg-opacity-50 border-bottom border-4 border-dark" name="nameForms" required>
+                            <label for="floatingName">Nome</label>
+                        </div>
+                        <div class="form-floating">
+                            <input type="text" id="floatingSurname" placeholder="Cognome" aria-label="Cognome" class="form-control bg-light bg-opacity-50 border-bottom border-4 border-dark" name="surnameForms" required>
+                            <label for="floatingSurname">Cognome</label>
+                        </div>
+                    </div>
+                    <div class="input-group my-4"> <!-- TELEPHONE -->
+                        <span class="input-group-text bg-light bg-opacity-10 border-bottom border-4 border-dark" id="telefono">334 987 8125</span>
+                        <div class="form-floating">
+                            <input type="tel" pattern="[0-9]{3} [0-9]{3} [0-9]{4}" class="form-control bg-light bg-opacity-50 border-bottom border-4 border-dark" placeholder="Inserisci qui il tuo numero di telefono" id="floatingNum" aria-label="Inserisci qui il tuo numero di telefono" aria-describedby="telefono" name="telForms" required>
+                            <label for="floatingNum">Telefono</label>
+                        </div>
+                    </div>
+                    <div class="input-group my-4"> <!-- E-MAIL -->
+                        <div class="form-floating">
+                            <input type="text" class="form-control bg-light bg-opacity-50 border-bottom border-4 border-dark" placeholder="Inserisci qui la tua e-mail" id="floatingMail" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" aria-label="Inserisci qui la tua e-mail" aria-describedby="mailDescribe" name="mailForms" required>
+                            <label for="floatingMail">E-mail</label>
+                        </div>
+                        <span class="input-group-text bg-light bg-opacity-10 border-bottom border-4 border-dark" id="mailDescribe">@esempio.com</span>
+                    </div>
+                    <div class="form-floating my-4"> <!-- SELECT -->
+                        <select class="form-select bg-light bg-opacity-50 border-bottom border-4 border-dark" id="floatingSelect" aria-label="Floating label select example" name="selForms" required>
+                            <option value="" label="Seleziona" selected disabled>Seleziona...</option>
+                            <option value="0" label="Fino a 10.000&euro;">Fino a 10.000&euro;</option>
+                            <option value="1" label="10.000&euro; - 20.000&euro;">10.000&euro; - 20.000&euro;</option>
+                            <option value="2" label="20.000&euro; - 30.000&euro;">20.000&euro; - 30.000&euro;</option>
+                            <option value="3" label="30.000&euro; - 50.000&euro;">30.000&euro; - 50.000&euro;</option>
+                            <option value="4" label="Oltre 50.000&euro;">Oltre 50.000&euro;</option>
+                        </select>
+                        <label for="floatingSelect">Quantitativo Richiesto</label>
+                    </div>
+                    <div class="text-start"> <!-- PRIVACY CB -->
+                        <!-- CHECKBOX PRIVACY POLICY SUCCESS
+                        <input type="checkbox" class="btn-check" id="flexCheckChecked" name="privacyPolicy" style="cursor: pointer" required>
+                        <label class="btn btn-outline-success" for="flexCheckChecked" style="cursor: pointer">
+                            Accetto la Privacy Policy
+                        </label>
+                         -->
+                        <div class="form-check form-switch fs-4 my-4">
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" required>
+                            <label class="form-check-label" for="flexSwitchCheckDefault">
+                                <a class="text-dark" href="https://www.iubenda.com/privacy-policy/50772852" rel="noreferrer nofollow" target="_blank">
+                                    Privacy Policy
+                                </a>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="container-fluid text-end"> <!-- SUBMIT -->
+                        <button type="submit" class="onScrollAnimationJelloBtn btn btn-dark btn-lg">Richiedi Subito!</button>
+                    </div>
+                </form>
+            </div>
+            <div class="d-sm-block d-md-none"><hr/></div>
+            <div class="onScrollAnimationBouncing col-sm-12 col-md-5 align-self-start justify-content-evenly"> <!-- INFO FORMS -->
+                <div class="bg-dark bg-opacity-75 border-2 border-dark border-bottom border-end text-light shadow-lg mb-5 p-3 rounded" style="z-index: 999;">
+                    <h2 class="onScrollAnimationTitle fw-bolder text-center">Finanzia il tuo Futuro!</h2>
+                    <div class="lh-lg">
+                        <p class="">
+                            Her mind is Tiffany-twisted She got the Mercedes Benz She got a lot of pretty, pretty boys That she calls friends How they dance in the courtyard Sweet summer sweat Some dance to remember Some dance to forget So I called up the Captain "Please bring me my wine" He said, 'We haven't had that spirit here Since 1969" And still those voices are calling from far away Wake you up in the middle of the night Just to hear them say:
+                        </p>
+                        <p class="text-start">
+                            <ul>
+                                <li>1</li>
+                                <li>2</li>
+                                <li>3</li>
+                                <li>4</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="Contatti" class="bg-light bg-opacity-25 py-5"> <!-- CONTATTI -->
+        <h2 class="mt-4 fw-bold text-center">Riguardo a noi...</h2>
+        <div class="container-fluid d-flex flex-column justify-content-between position-relative">
+            <div class="position-absolute top-0 end-0 mt-5 bg-dark bg-opacity-10 rounded-start onScrollAnimationRightLeft" style="width: 70%; height: 10rem;">  <!-- Spazio grigio da sinistra -->
+            </div>
+            <div class="position-absolute bottom-0 start-0 mb-5 bg-dark bg-opacity-10 rounded-end onScrollAnimationLeftRight" style="width: 70%; height: 10rem;">  <!-- Spazio grigio da destra -->
+            </div>
+            <div class="container-fluid my-5 onScrollAnimationRightLeft"> <!-- Chi siamo -->
+                <div class="row">
+                    <div class="col-md-1 col-sm-0">&nbsp;</div>
+                    <div class="col-md-4 col-sm-12 bg-warning bg-opacity-50 shadow-lg p-2 mt-5 rounded border-top border-end border-4 border-warning" style="z-index: 998;">
+                        <p class="text-wrap lh-lg p-3">
+                            I lost my way, oh baby, this stray heart Went to another Can you recover, baby? Oh, you're the only one that I'm dreamin' of Your precious heart Was torn apart by me
+                        </p>
+                        <div class="d-flex justify-content-end">
+                            <a class="btn btn-dark btn-lg text-nowrap rounded mt-4 me-2 mb-2" href="#pageStart">
+                                <strong>Chi Siamo?</strong>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-7 col-sm-0">&nbsp;</div>
+                </div>
+            </div>
+            <div class="container-fluid my-5 onScrollAnimationLeftRight"> <!-- Contattaci -->
+                <div class="row">
+                    <div class="col-md-7 col-sm-0">&nbsp;</div>
+                    <div class="col-md-4 col-sm-12 bg-info bg-opacity-50 shadow-lg p-2 mb-5 rounded border-bottom border-start border-4 border-info" style="z-index: 998;">
+                        <p class="text-wrap lh-lg p-3">
+                            Mama take this badge off of me, I can't use it anymore. It's getting dark, too dark to see. I feel I'm knockin' on heaven's door
+                        </p>
+                        <div>
+                            <a class="btn btn-dark btn-lg text-nowrap rounded mt-4 ms-2 mb-2" href="#Consulenza">
+                                <strong>Contattaci</strong>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-sm-0">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / -->
+
+<!-- FOOTER -->
+<footer class="bg-dark bg-opacity-75 text-center text-white">
+    <!-- Grid container -->
+    <div class="container footerInfo pb-0">
+        <!-- writes -->
+        <div class="d-flex flex-column justify-content-center align-items-center pt-4 pb-0 fst-italic fw-lighter ">
+            <p class="text-wrap lh-1 w-50">
+                <small>
+                    Better, call, call the law. When you gonna turn yourself in, yeah. You're a politician. Don't become one of Hitler's children. Bonzo goes to Bitpurg, Then goes out for a cup of tea! As i watched it on TV Somehow it really bothered me. Drank in all the bars in town To understand your foreign policy. Pick up the pieces.
+                </small>
+            </p>
+            <p class="text-nowrap d-flex justify-content-between w-50">
+                <small>
+                    <a class="text-light" href="mailto:sammy.2002@tiscali.it">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>&ensp;sammy.2002@tiscali.it
+                    </a>
+                </small>
+                <small>
+                    <a class="text-light" href="tel:+393349782581">
+                        <i class="fa fa-phone" aria-hidden="true"></i>&ensp;+39 334 978 2581
+                    </a>
+                </small>
+            </p>
+            <p class="text-nowrap d-flex justify-content-between w-50">
+                <a class="text-light" href="#" role="button" class="iubenda-advertising-preferences-link">Personalizza tracciamento pubblicitario</a>
+                <a class="text-light" href="https://www.iubenda.com/privacy-policy/50772852" rel="noreferrer nofollow" target="_blank">Privacy Policy</a>
+            </p>
+        </div>
+        <!-- Section: Social media -->
+        <section class="mb-1">
+            <!-- Facebook -->
+            <a class="btn btn-outline-light btn-floating m-1 d-none" href="#!" role="button">
+                <i class="fa fa-facebook"></i>
+            </a>
+    
+            <!-- Twitter -->
+            <a class="btn btn-outline-light btn-floating m-1 d-none" href="#!" role="button">
+                <i class="fa fa-twitter"></i>
+            </a>
+
+            <!-- Telegram -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://t.me/skunkHunt7/" role="button">
+                <i class="fa fa-telegram"></i>
+            </a>
+    
+            <!-- Google -->
+            <a class="btn btn-outline-light btn-floating m-1 d-none" href="#!" role="button">
+                <i class="fa fa-google"></i>
+            </a>
+    
+            <!-- Instagram -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://www.instagram.com/samuelecierii/" role="button">
+                <i class="fa fa-instagram"></i>
+            </a>
+    
+            <!-- Linkedin -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://www.linkedin.com/in/samuelecieri/" role="button">
+                <i class="fa fa-linkedin"></i>
+            </a>
+    
+            <!-- Github -->
+            <a class="btn btn-outline-light btn-floating m-1 d-none" href="#!" role="button">
+                <i class="fa fa-github"></i>
+            </a>
+        </section>
+        <!-- Section: Social media -->
+    </div>
+    <!-- Grid container -->
+  
+    <!-- Copyright -->
+    <div class="bg-dark text-center py-4 d-flex flex-column align-items-center justify-content-center">
+        <span>
+            ©<script>document.write(new Date().getFullYear())</script> Copyright:
+            <a class="text-white" href="#">cieri.com</a>
+        </span>
+    </div>
+    <!-- Copyright -->
+</footer>
+<!-- / -->
+
+<!-- FIXED CONTACTS -->
+<!--
+<div class="position-fixed start-0 bottom-0 ms-3 mb-5 d-flex d-md-none flex-column justify-content-between maxIndex">
+    <div>
+        <a class="btn btn-secondary btn-lg w-100 my-2" style="border-radius: 25%;" href="tel:+393349782581">
+            <i class="d-flex justify-content-center align-items-center fa fa-phone" aria-hidden="true" style="height: 4vh; aspect-ratio: 1; object-fit: fill;"></i>
+        </a>
+    </div>
+    <div>
+        <a class="btn btn-secondary btn-lg w-100 my-2" style="border-radius: 25%;" href="mailto:sammy.2002@tiscali.it">
+            <i class="d-flex justify-content-center align-items-center fa fa-envelope" aria-hidden="true" style="height: 4vh; aspect-ratio: 1; object-fit: fill;"></i>
+        </a>
+    </div>
+</div>
+-->
+
+<div class="position-fixed end-0 bottom-0 me-3 mb-2 d-flex d-md-none flex-column justify-content-between maxIndex invisible"> <!-- BOTTONE "TORNA IN CIMA" -->
+    <div>
+            
+    </div>
+</div>
+<div class="position-fixed end-0 bottom-0 me-3 mb-2 d-flex d-md-none flex-column justify-content-between maxIndex invisible"> <!-- IUBENDA A DESTRA -->
+    <div>
+            
+    </div>
+</div>
+<!--  -->
+
+<!-- JS -->
+<script> /* include */
+    //includeHTML();
+</script>
+
+<script src="js/animations/onScroll.js"></script>
+<script src="js/hideOnJsDisable.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<!-- / -->
+
+</body>
+</html>

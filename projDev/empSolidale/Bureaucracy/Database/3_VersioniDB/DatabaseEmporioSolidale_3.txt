@@ -1,0 +1,492 @@
+CREATE DATABASE EmporioSolidale;
+
+USE EmporioSolidale;
+
+
+CREATE TABLE Richiedente(
+
+    Cod_Fiscale CHAR(16) NOT NULL,
+    Cognome VARCHAR(30) NOT NULL,
+    Nome VARCHAR(30) NOT NULL,
+    LuogoNascita VARCHAR(30) NOT NULL,
+    DataNascita DATE NOT NULL,
+    Cittadinanza VARCHAR(15) NOT NULL,
+    InItaliaDallAnno YEAR(4) NULL,
+    Residenza VARCHAR(30) NOT NULL,
+    Via VARCHAR(30) NOT NULL,
+    TipoAlloggio VARCHAR(18) NOT NULL,
+    DocumentoIdent CHAR(9) NOT NULL,
+    DocumentoImmig CHAR(100) NULL,
+    Telefono CHAR(10) NOT NULL,
+    Mail VARCHAR(30) NOT NULL,
+    ServiziSociali VARCHAR(15) NOT NULL,
+    ComeHaConosciutoEmporio VARCHAR(30) NULL,
+    TipoDomanda VARCHAR(20) NOT NULL,
+    nMembri INT NOT NULL,
+    ISEE INT NOT NULL,
+    PRIMARY KEY(Cod_Fiscale)
+);
+
+
+CREATE TABLE Tessera(
+
+    Codice CHAR(10) NOT NULL,
+    PRIMARY KEY(Codice)
+);
+INSERT INTO Tessera VALUES 
+('1111111111'),
+('2222222222'),
+('3333333333'),
+('4444444444'),
+('5555555555'),
+('6666666666'),
+('7777777777'),
+('8888888888');
+
+
+CREATE TABLE TesseraRilasciata(
+
+    CodiceTessera CHAR(10) DEFAULT NULL,
+    CodFamiglia CHAR(16) NOT NULL,
+    DataOraRilascioTessera DATE DEFAULT NULL,
+    DataOraScadenzaTessera DATE DEFAULT NULL,
+    DataOraRitiroTessera DATE DEFAULT NULL,
+    DataOraStalloTessera DATE DEFAULT NULL,
+    PRIMARY KEY(CodFamiglia),
+    FOREIGN KEY(CodiceTessera) REFERENCES Tessera(Codice) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+
+CREATE TABLE Punteggio(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    PunteggioISEE INT DEFAULT 0 NULL,
+    PunteggioPresenzaMinori INT DEFAULT 0 NULL,
+    PunteggioDisoccupazione INT DEFAULT 0 NULL,
+    PunteggioInvalidi INT DEFAULT 0 NULL,
+    PunteggioSituazioneDebitoria INT DEFAULT 0 NULL,
+    PunteggioBenefit INT DEFAULT 0 NULL,
+    PunteggioTotale INT DEFAULT 0 NULL,
+    PRIMARY KEY(CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE DispCollaborative(
+
+    CodFamiglia CHAR(16) NOT NULL,    
+    AmbitoFormativo TINYTEXT NULL,
+    AmbitoLavorativo TINYTEXT NULL,
+    AmbitoSociale TINYTEXT NULL,
+    PRIMARY KEY(CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE SituazioneSocioSanitaria(
+
+    CodFamiglia CHAR(16) NOT NULL, 
+    N INT AUTO_INCREMENT NOT NULL,
+    Evento VARCHAR(35) NOT NULL,
+    Anno YEAR(4) NULL,
+    DocAll VARCHAR(30) NULL,
+    PRIMARY KEY(N, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE 
+);
+
+
+
+
+CREATE TABLE PatrAtt(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT AUTO_INCREMENT NOT NULL,
+    Elemento VARCHAR(35) NOT NULL,
+    Valore DECIMAL(8,2) NULL,
+    PRIMARY KEY(N, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE PatrPass(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT AUTO_INCREMENT NOT NULL,
+    Elemento VARCHAR(35) NOT NULL,
+    Valore DECIMAL(8,2) NULL,
+    Scadenza DATE NULL,
+    PRIMARY KEY(N, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE Entrate(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT AUTO_INCREMENT NOT NULL,
+    Elemento VARCHAR(35) NOT NULL,
+    Valore DECIMAL(8,2) NULL,
+    Scadenza DATE NULL,
+    PRIMARY KEY(N, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE Uscite(
+
+    CodFamiglia CHAR(16) NOT NULL,
+    N INT AUTO_INCREMENT NOT NULL,
+    Elemento VARCHAR(35) NOT NULL,
+    Valore DECIMAL(8,2) NULL,
+    Scadenza DATE NULL,
+    PRIMARY KEY(N, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE Membri(
+
+    nMembro INT AUTO_INCREMENT NOT NULL,
+    NomeCognome VARCHAR(60) NOT NULL,
+    LuogoNascita VARCHAR(30) NOT NULL,
+    DataNascita DATE NOT NULL,
+    Parentela  VARCHAR(10) NOT NULL,
+    Occupazione  VARCHAR(20) NULL,
+    TitoloDiStudio VARCHAR(20) NULL,
+    Competenze VARCHAR(50) NULL,
+    ConoscenzaLingua VARCHAR(30) NULL,
+    Patente VARCHAR(5) NULL,
+    AttualeAtt VARCHAR(15) NULL,
+    Presso VARCHAR(15) NULL,
+    Termine VARCHAR(15) NULL,
+    SenzaLavoroDa VARCHAR(15) NULL,
+    CodFamiglia CHAR(16) NOT NULL,
+    PRIMARY KEY(nMembro, CodFamiglia),
+    FOREIGN KEY(CodFamiglia) REFERENCES Richiedente(Cod_Fiscale) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+
+
+
+CREATE TABLE Administrator(
+
+    Username VARCHAR(15) NOT NULL,
+    Password CHAR(32) NOT NULL,
+    PRIMARY KEY(Username)
+);
+INSERT INTO Administrator VALUES 
+('emporiosolidale',md5('IlSole')),
+('giannidevani',md5('IlSole'));
+
+
+
+
+CREATE TABLE IndicatoriISEE(
+
+    ISEEmin INT NOT NULL,
+    ISEEmax INT NOT NULL,
+    Punteggio INT NOT NULL,
+    PRIMARY KEY(Punteggio)
+);
+
+INSERT INTO IndicatoriISEE (ISEEmin, ISEEmax, Punteggio) 
+    VALUES 
+    (0,1500,100),
+    (1501,3000,80),
+    (3001,4500,60),
+    (4501,6000,40),
+    (6001,7500,20);
+
+
+
+CREATE TABLE PunteggioMensile(
+
+    nComponenti INT NOT NULL,
+    ValoreEuro DECIMAL(5,2) NOT NULL,
+    ValorePunti INT NOT NULL,
+    PRIMARY KEY(nComponenti)
+);
+
+INSERT INTO PunteggioMensile  
+    VALUES 
+    (1,150,300),
+    (2,200,400),
+    (3,250,500),
+    (4,300,600);
+
+
+
+CREATE TABLE Stallo(
+
+    nMesiStallo INT NOT NULL,
+    PRIMARY KEY(nMesiStallo)
+);
+INSERT INTO Stallo VALUES
+(12);
+
+
+
+
+
+
+
+
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('HHHHHHHHHHHHHHHH','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,2000);
+INSERT INTO Punteggio 
+VALUES 
+('HHHHHHHHHHHHHHHH',3000,140,300,200,5,-10,500);
+INSERT INTO TesseraRilasciata (CodiceTessera, CodFamiglia, DataOraRilascioTessera, DataOraScadenzaTessera) VALUES 
+('1111111111','HHHHHHHHHHHHHHHH',NOW(),(NOW()+INTERVAL 1 YEAR));
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('AHHHHHHHHHHHHHHH','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,2000);
+INSERT INTO Punteggio 
+VALUES 
+('AHHHHHHHHHHHHHHH',3000,140,300,200,5,-10,100);
+INSERT INTO TesseraRilasciata (CodiceTessera, CodFamiglia, DataOraRilascioTessera, DataOraScadenzaTessera) VALUES 
+('2222222222','AHHHHHHHHHHHHHHH',NOW(),(NOW()+INTERVAL 1 YEAR));
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('BHHHHHHHHHHHHHHH','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,2000);
+INSERT INTO Punteggio 
+VALUES 
+('BHHHHHHHHHHHHHHH',3000,140,300,200,5,-10,10);
+INSERT INTO TesseraRilasciata (CodiceTessera, CodFamiglia, DataOraRilascioTessera, DataOraScadenzaTessera) VALUES 
+('3333333333','BHHHHHHHHHHHHHHH',NOW(),(NOW()+INTERVAL 1 YEAR));
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('SHHHHHHHHHHHHHHH','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,2000);
+INSERT INTO Punteggio 
+VALUES 
+('SHHHHHHHHHHHHHHH',3000,140,300,200,5,-10,444444);
+INSERT INTO TesseraRilasciata (CodiceTessera, CodFamiglia, DataOraRilascioTessera, DataOraScadenzaTessera) VALUES 
+('4444444444','SHHHHHHHHHHHHHHH',NOW(),(NOW()+INTERVAL 1 YEAR));
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('DHHHHHHHHHHHHHHH','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,2000);
+INSERT INTO Punteggio 
+VALUES 
+('DHHHHHHHHHHHHHHH',3000,140,300,200,5,-10,200);
+INSERT INTO TesseraRilasciata (CodiceTessera, CodFamiglia, DataOraRilascioTessera, DataOraScadenzaTessera) VALUES 
+('5555555555','DHHHHHHHHHHHHHHH',NOW(),(NOW()+INTERVAL 1 YEAR));
+
+
+
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('PXHHHHHHHKSLDPWa','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,5000);
+INSERT INTO Punteggio 
+VALUES 
+('PXHHHHHHHKSLDPWa',6000,140,300,210,5,-10,400);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('PXHOHHHHHKSLDPWa','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,5000);
+INSERT INTO Punteggio 
+VALUES 
+('PXHOHHHHHKSLDPWa',6000,140,300,210,5,-10,440);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('PXHHHHHHHKSLDPRa','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,5000);
+INSERT INTO Punteggio 
+VALUES 
+('PXHHHHHHHKSLDPRa',6000,140,300,210,5,-10,000);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('PXHOHHHHHKSLDPRa','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,5000);
+INSERT INTO Punteggio 
+VALUES 
+('PXHOHHHHHKSLDPRa',6000,140,300,210,5,-10,1500);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('PXHOHHHHGKSLDPWa','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,5000);
+INSERT INTO Punteggio 
+VALUES 
+('PXHOHHHHGKSLDPWa',6000,140,300,210,5,-10,20);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('PXHHHHHHGKSLDPRa','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,5000);
+INSERT INTO Punteggio 
+VALUES 
+('PXHHHHHHGKSLDPRa',6000,140,300,210,5,-10,900);
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('PXHOHHHIGKSLDPRa','GGGGG','KKKKKKK','DFSKJSDFFDSJKJ','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',5,5000);
+INSERT INTO Punteggio 
+VALUES 
+('PXHOHHHIGKSLDPRa',6000,140,300,210,5,-10,600);
+
+
+
+
+
+INSERT INTO Richiedente (Cod_Fiscale, Cognome, Nome, LuogoNascita, DataNascita, Cittadinanza, InItaliaDallAnno, Residenza, Via, TipoAlloggio, DocumentoIdent, DocumentoImmig, Telefono, Mail, ServiziSociali, ComeHaConosciutoEmporio, TipoDomanda, nMembri, ISEE) VALUES 
+('AAAAAAAAAAAAAAAA','Biscotti','Jerry','Milano','1997-09-11','ITA',NULL,'fdsgdhf','rgdfdfgfd','Popolare','123456789','','7389293896','alsadjsdjlj@gmail.com','No','','Nuova',3,5000);
+INSERT INTO Punteggio 
+VALUES 
+('AAAAAAAAAAAAAAAA',8888,888,888,888,8,-88,888);
+INSERT INTO TesseraRilasciata (CodiceTessera, CodFamiglia, DataOraRilascioTessera, DataOraScadenzaTessera) VALUES 
+('8888888888','AAAAAAAAAAAAAAAA',NOW(),(NOW()+INTERVAL 1 YEAR));
+ALTER TABLE Membri AUTO_INCREMENT = 1;
+INSERT INTO Membri (NomeCognome, LuogoNascita, DataNascita, Parentela, Occupazione, TitoloDiStudio, Competenze, ConoscenzaLingua, Patente, AttualeAtt, Presso, Termine, SenzaLavoroDa, CodFamiglia) VALUES 
+('Jerry Biscotti','Milano','1997-09-11','Padre','Conduttore','Scuole Superiori',NULL, NULL,'B2',NULL,NULL,NULL,'5 mesi','AAAAAAAAAAAAAAAA'),
+('Alexandra Rotterdelli','Milano','1997-09-11','Madre','Cassiera','Medie',NULL, NULL,'A1',NULL,NULL,NULL,'7 mesi','AAAAAAAAAAAAAAAA'),
+('Gianni Depp','Milano','1997-09-11','Figlio',NULL,'Elementari',NULL, 'Inglese',NULL,'Irrigatore','Milano','Indeterminato',NULL,'AAAAAAAAAAAAAAAA');
+ALTER TABLE Membri AUTO_INCREMENT = 1;
+ALTER TABLE SituazioneSocioSanitaria AUTO_INCREMENT = 1;
+INSERT INTO SituazioneSocioSanitaria (CodFamiglia, Evento, Anno, DocAll) VALUES 
+('AAAAAAAAAAAAAAAA','1111',2000,'adsasd'),
+('AAAAAAAAAAAAAAAA','2222',2000,'dsadas'),
+('AAAAAAAAAAAAAAAA','3333',2000,'dasasd'),
+('AAAAAAAAAAAAAAAA','4444',2002,'adsads'),
+('AAAAAAAAAAAAAAAA','5555',2004,'adsads'),
+('AAAAAAAAAAAAAAAA','6666',2004,'adsads'),
+('AAAAAAAAAAAAAAAA','7777',2004,'adsads'),
+('AAAAAAAAAAAAAAAA','8888',2006,'adsads'),
+('AAAAAAAAAAAAAAAA','9999',2004,'adsads'),
+('AAAAAAAAAAAAAAAA','1444',2009,'adsads'),
+('AAAAAAAAAAAAAAAA','1555',2004,'adsads'),
+('AAAAAAAAAAAAAAAA','1666',2007,'adsasd');
+ALTER TABLE SituazioneSocioSanitaria AUTO_INCREMENT = 1;
+INSERT INTO DispCollaborative (CodFamiglia, AmbitoFormativo, AmbitoLavorativo, AmbitoSociale) VALUES 
+('AAAAAAAAAAAAAAAA','Disponibile per insegnare','Disp. a lavorare','Disp a socializzare');
+ALTER TABLE PatrAtt AUTO_INCREMENT = 1;
+INSERT INTO PatrAtt (CodFamiglia, Elemento, Valore) VALUES 
+('AAAAAAAAAAAAAAAA','1111',34523),
+('AAAAAAAAAAAAAAAA','2222',65432),
+('AAAAAAAAAAAAAAAA','4444',34547),
+('AAAAAAAAAAAAAAAA','7777',5346);
+ALTER TABLE PatrAtt AUTO_INCREMENT = 1;
+ALTER TABLE PatrPass AUTO_INCREMENT = 1;
+INSERT INTO PatrPass (CodFamiglia, Elemento, Valore, Scadenza) VALUES 
+('AAAAAAAAAAAAAAAA','1111',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','2222',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','4444',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','7777',444,'2002-08-16');
+ALTER TABLE PatrPass AUTO_INCREMENT = 1;
+ALTER TABLE Entrate AUTO_INCREMENT = 1;
+INSERT INTO Entrate (CodFamiglia, Elemento, Valore, Scadenza) VALUES 
+('AAAAAAAAAAAAAAAA','1111',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','2222',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','3333',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','4444',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','5555',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','6666',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','7777',444,'2002-08-16');
+ALTER TABLE Entrate AUTO_INCREMENT = 1;
+ALTER TABLE Uscite AUTO_INCREMENT = 1;
+INSERT INTO Uscite (CodFamiglia, Elemento, Valore, Scadenza) VALUES 
+('AAAAAAAAAAAAAAAA','1111',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','2222',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','3333',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','4444',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','5555',444,'2002-08-16'),
+('AAAAAAAAAAAAAAAA','7777',444,'2002-08-16');
+ALTER TABLE Uscite AUTO_INCREMENT = 1;
+
+
+SELECT * 
+FROM Richiedente AS R LEFT OUTER JOIN TesseraRilasciata AS TR 
+ON R.Cod_Fiscale = TR.CodFamiglia 
+LEFT OUTER JOIN  Tessera AS T 
+ON TR.CodiceTessera = T.Codice 
+INNER JOIN Punteggio AS P 
+ON R.Cod_Fiscale = P.CodFamiglia 
+ORDER BY PunteggioTotale DESC;
+
+SELECT * 
+FROM Membri; 
+
+SELECT * 
+FROM DispCollaborative;
+
+SELECT * 
+FROM SituazioneSocioSanitaria;
+
+SELECT * 
+FROM PatrAtt;
+
+SELECT * 
+FROM PatrPass;
+
+SELECT * 
+FROM Entrate;
+
+SELECT * 
+FROM Uscite;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE VIEW Graduatoria AS 
+SELECT R.Cod_Fiscale, R.Cognome, R.Nome, R.nMembri, R.Telefono, R.Mail, P.PunteggioISEE, P.PunteggioPresenzaMinori, P.PunteggioDisoccupazione, P.PunteggioInvalidi, P.PunteggioSituazioneDebitoria, P.PunteggioBenefit, P.PunteggioTotale, DATE_FORMAT(TR.DataOraRilascioTessera, '%m/%d/%Y') AS DataOraRilascioTessera, DATE_FORMAT(TR.DataOraScadenzaTessera, '%m/%d/%Y') AS DataOraScadenzaTessera, DATE_FORMAT(TR.DataOraRitiroTessera, '%m/%d/%Y') AS DataOraRitiroTessera, DATE_FORMAT(TR.DataOraStalloTessera, '%m/%d/%Y') AS DataOraStalloTessera  
+FROM Richiedente AS R LEFT OUTER JOIN TesseraRilasciata AS TR 
+ON R.Cod_Fiscale = TR.CodFamiglia 
+LEFT OUTER JOIN  Tessera AS T 
+ON TR.CodiceTessera = T.Codice 
+INNER JOIN Punteggio AS P 
+ON R.Cod_Fiscale = P.CodFamiglia 
+ORDER BY PunteggioTotale DESC;
+
+
+CREATE VIEW Pass AS 
+SELECT R.Cod_Fiscale, R.Cognome, R.Nome, R.nMembri, P.PunteggioISEE, P.PunteggioPresenzaMinori, P.PunteggioDisoccupazione, P.PunteggioInvalidi, P.PunteggioSituazioneDebitoria, P.PunteggioBenefit, P.PunteggioTotale, TR.CodiceTessera, DATE_FORMAT(TR.DataOraRilascioTessera, '%m/%d/%Y') AS DataOraRilascioTessera, DATE_FORMAT(TR.DataOraScadenzaTessera, '%m/%d/%Y') AS DataOraScadenzaTessera, DATE_FORMAT(TR.DataOraRitiroTessera, '%m/%d/%Y') AS DataOraRitiroTessera, DATE_FORMAT(TR.DataOraStalloTessera, '%m/%d/%Y') AS DataOraStalloTessera  
+FROM Richiedente AS R LEFT OUTER JOIN TesseraRilasciata AS TR 
+ON R.Cod_Fiscale = TR.CodFamiglia 
+LEFT OUTER JOIN  Tessera AS T 
+ON TR.CodiceTessera = T.Codice 
+INNER JOIN Punteggio AS P 
+ON R.Cod_Fiscale = P.CodFamiglia 
+ORDER BY PunteggioTotale DESC;
+
+
+
+
+CREATE VIEW Export AS 
+SELECT R.Cod_Fiscale, R.Cognome, R.Nome, R.Cittadinanza, R.LuogoNascita, R.DataNascita, R.TipoAlloggio, R.Residenza, R.Via, R.TipoDomanda, R.nMembri, R.Telefono, R.Mail, P.PunteggioISEE, P.PunteggioPresenzaMinori, P.PunteggioDisoccupazione, P.PunteggioInvalidi, P.PunteggioSituazioneDebitoria, P.PunteggioBenefit, P.PunteggioTotale, TR.CodiceTessera, DATE_FORMAT(TR.DataOraRilascioTessera, '%m/%d/%Y') AS DataOraRilascioTessera, DATE_FORMAT(TR.DataOraScadenzaTessera, '%m/%d/%Y') AS DataOraScadenzaTessera, DATE_FORMAT(TR.DataOraRitiroTessera, '%m/%d/%Y') AS DataOraRitiroTessera, DATE_FORMAT(TR.DataOraStalloTessera, '%m/%d/%Y') AS DataOraStalloTessera 
+FROM Richiedente AS R LEFT OUTER JOIN TesseraRilasciata AS TR 
+ON R.Cod_Fiscale = TR.CodFamiglia 
+LEFT OUTER JOIN  Tessera AS T 
+ON TR.CodiceTessera = T.Codice 
+INNER JOIN Punteggio AS P 
+ON R.Cod_Fiscale = P.CodFamiglia 
+ORDER BY PunteggioTotale DESC;

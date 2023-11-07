@@ -1,0 +1,251 @@
+.heartbeatSx {
+    animation-name: heartbeat;
+    animation-duration: 1.5s;
+    animation-delay: .6s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-name: heartbeat;
+    -webkit-animation-duration: 1.5s;
+    -webkit-animation-delay: .6s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: normal;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: ease-in-out;
+}
+.heartbeatDx {
+    animation-name: heartbeat;
+    animation-duration: 1.5s;
+    animation-delay: 1.335s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-name: heartbeat;
+    -webkit-animation-duration: 1.5s;
+    -webkit-animation-delay: 1.35s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: normal;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: ease-in-out;
+}
+@-webkit-keyframes heartbeat {
+    from {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-transform-origin: center center;
+        transform-origin: center center;
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+    10% {
+        -webkit-transform: scale(0.91);
+        transform: scale(0.91);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+    17% {
+        -webkit-transform: scale(0.98);
+        transform: scale(0.98);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+    33% {
+        -webkit-transform: scale(0.87);
+        transform: scale(0.87);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+    45% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+}
+@keyframes heartbeat {
+    from {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-transform-origin: center center;
+        transform-origin: center center;
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+    10% {
+        -webkit-transform: scale(0.91);
+        transform: scale(0.91);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+    17% {
+        -webkit-transform: scale(0.98);
+        transform: scale(0.98);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+    33% {
+        -webkit-transform: scale(0.87);
+        transform: scale(0.87);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+    45% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+    }
+}
+
+.fadeBlur{
+    animation-name: fadeImg;
+    animation-duration: .6s;
+    animation-delay: 0s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    -webkit-animation-name: fadeImg;
+    -webkit-animation-duration: .6s;
+    -webkit-animation-delay: 0s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-direction: normal;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: linear;
+}
+@-webkit-keyframes fadeImg {
+    0% {
+        -webkit-filter: blur(40px);
+        filter: blur(40px);
+        opacity: 1;
+    }
+    100% {
+        -webkit-filter: blur(0);
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+@keyframes fadeImg {
+    0% {
+        -webkit-filter: blur(40px);
+        filter: blur(40px);
+        opacity: 1;
+    }
+    100% {
+        -webkit-filter: blur(0);
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+
+.paper{
+    font-size: 2vh;
+    width: 50vh;
+    aspect-ratio: 1;
+    background-color: whitesmoke;
+    -webkit-transform: translateY(600px) rotateX(30deg) scale(0);
+    transform: translateY(600px) rotateX(30deg) scale(0);
+-webkit-transform-origin: 50% 100%;
+    transform-origin: 50% 100%;
+opacity: 0;
+}
+
+.aperturaLettera{
+    animation-name: animazioneAperturaLettera;
+    animation-duration: .7s;
+    animation-delay: 0s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940);
+    -webkit-animation-name: animazioneAperturaLettera;
+    -webkit-animation-duration: .7s;
+    -webkit-animation-delay: 0s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-direction: normal;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940);
+}
+ @-webkit-keyframes animazioneAperturaLettera {
+    0% {
+        -webkit-transform: translateX(600px) translateY(600px) rotateX(90deg) scale(0);
+                transform: translateX(600px) translateY(600px) rotateX(90deg) scale(0);
+        -webkit-transform-origin: 50% 100%;
+                transform-origin: 50% 100%;
+        opacity: 0;
+      }
+      100% {
+        -webkit-transform: translateX(-50%) translateY(-50%) rotateX(0) scale(1);
+                transform: translateX(-50%) translateY(-50%) rotateX(0) scale(1);
+        -webkit-transform-origin: 50% -1400px;
+                transform-origin: 50% -1400px;
+        opacity: 1;
+      }
+  }
+  @keyframes animazioneAperturaLettera {
+    0% {
+      -webkit-transform: translateX(600px) translateY(600px) rotateX(90deg) scale(0);
+              transform: translateX(600px) translateY(600px) rotateX(90deg) scale(0);
+      -webkit-transform-origin: 50% 100%;
+              transform-origin: 50% 100%;
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateX(-50%) translateY(-50%) rotateX(0) scale(1);
+              transform: translateX(-50%) translateY(-50%) rotateX(0) scale(1);
+      -webkit-transform-origin: 50% -1400px;
+              transform-origin: 50% -1400px;
+      opacity: 1;
+    }
+  }
+  
+  .chiusuraLettera{
+    animation-name: animazioneChiusuraLettera;
+    animation-duration: .7s;
+    animation-delay: 0s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940);
+    -webkit-animation-name: animazioneChiusuraLettera;
+    -webkit-animation-duration: .7s;
+    -webkit-animation-delay: 0s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-direction: normal;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940);
+}
+ @-webkit-keyframes animazioneChiusuraLettera {
+    0% {
+        -webkit-transform: translateX(-50%) translateY(-50%) rotateX(0) scale(1);
+                transform: translateX(-50%) translateY(-50%) rotateX(0) scale(1);
+        -webkit-transform-origin: 50% -1400px;
+                transform-origin: 50% -1400px;
+        opacity: 1;
+      }
+      100% {
+        -webkit-transform: translateX(600px) translateY(600px) rotateX(90deg) scale(0);
+                transform: translateX(600px) translateY(600px) rotateX(90deg) scale(0);
+        -webkit-transform-origin: 50% 100%;
+                transform-origin: 50% 100%;
+        opacity: 0;
+      }
+  }
+  @keyframes animazioneChiusuraLettera {
+    0% {
+        -webkit-transform: translateX(-50%) translateY(-50%) rotateX(0) scale(1);
+                transform: translateX(-50%) translateY(-50%) rotateX(0) scale(1);
+        -webkit-transform-origin: 50% -1400px;
+                transform-origin: 50% -1400px;
+        opacity: 1;
+    }
+    100% {
+      -webkit-transform: translateX(600px) translateY(600px) rotateX(90deg) scale(0);
+              transform: translateX(600px) translateY(600px) rotateX(90deg) scale(0);
+      -webkit-transform-origin: 50% 100%;
+              transform-origin: 50% 100%;
+      opacity: 0;
+    }
+  }

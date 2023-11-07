@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yacht Voyager!</title>
+
+    <style>
+        .parent{
+            float:left; height:300; width:300px; background-color:#00ff00;
+        }
+        .child{
+            float:left; height:60; width:60px; background-color:#00ff00;
+        }
+    </style>
+
+    <script>
+        var canvas = document.querySelector("#myCanvas");
+        var context = canvas.getContext("2d");
+        
+        function drawTriangle() {
+        // the triangle
+        context.beginPath();
+        context.moveTo(200, 100);
+        context.lineTo(170, 150);
+        context.lineTo(230, 150);
+        context.closePath();
+        
+        // the outline
+        context.lineWidth = 10;
+        context.strokeStyle = "rgba(102, 102, 102, 1)";
+        context.stroke();
+        
+        // the fill color
+        context.fillStyle = "rgba(255, 204, 0, 1)";
+        context.fill();
+        }
+        drawTriangle();
+
+
+
+                window.addEventListener("keydown", moveSomething, false);
+        
+        function moveSomething(e) {
+            switch(e.keyCode) {
+                case 37:
+                    // left key pressed
+                    break;
+                case 38:
+                    // up key pressed
+                    break;
+                case 39:
+                    // right key pressed
+                    break;
+                case 40:
+                    // down key pressed
+                    break;  
+            }   
+        } 
+
+
+
+
+
+        var deltaX = 0;
+        var deltaY = 0;
+        
+        function moveSomething(e) {
+            switch(e.keyCode) {
+                case 37:
+                    deltaX -= 2;
+                    break;
+                case 38:
+                    deltaY -= 2;
+                    break;
+                case 39:
+                    deltaX += 2;
+                    break;
+                case 40:
+                    deltaY += 2;
+                    break;
+            }
+        }
+
+
+
+
+
+
+        var deltaX = 0;
+        var deltaY = 0;
+        
+        function moveSomething(e) {
+            switch(e.keyCode) {
+                case 37:
+                    deltaX -= 2;
+                    break;
+                case 38:
+                    deltaY -= 2;
+                    break;
+                case 39:
+                    deltaX += 2;
+                    break;
+                case 40:
+                    deltaY += 2;
+                    break;
+            }
+        }
+
+
+
+
+
+
+
+
+
+        var deltaX = 0;
+        var deltaY = 0;
+        
+        function moveSomething(e) {
+            switch(e.keyCode) {
+                case 37:
+                    deltaX -= 2;
+                    break;
+                case 38:
+                    deltaY -= 2;
+                    break;
+                case 39:
+                    deltaX += 2;
+                    break;
+                case 40:
+                    deltaY += 2;
+                    break;
+            }
+        }
+    </script>
+</head>
+<body>
+    
+    <!--<script src="yacht.js" onerror="window.location.replace='../../error'"></script>-->
+
+    <div id="parent" class="parent">
+        <div id="child" class="child">
+        </div>
+    </div>
+    
+</body>
+</html>

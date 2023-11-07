@@ -1,0 +1,40 @@
+.paragraph{
+    animation-name: entrance;
+    animation-duration: .8s;
+    animation-delay: .4s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.550, 0.085, 0.680, 0.530);
+    -webkit-animation-name: entrance;
+    -webkit-animation-duration: .8s;
+    -webkit-animation-delay: .4s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-direction: normal;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: cubic-bezier(0.550, 0.085, 0.680, 0.530);
+}
+ @-webkit-keyframes entrance {
+    0% {
+      -webkit-filter: blur(12px);
+              filter: blur(12px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-filter: blur(0px);
+              filter: blur(0px);
+      opacity: 1;
+    }
+  }
+  @keyframes entrance {
+    0% {
+      -webkit-filter: blur(12px);
+              filter: blur(12px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-filter: blur(0px);
+              filter: blur(0px);
+      opacity: 1;
+    }
+  }

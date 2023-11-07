@@ -1,0 +1,70 @@
+:root,input {
+    --firstColor:   rgb(0, 142, 255);
+    --secondColor:  black;
+    --thirdColor:   black;
+    --fourthColor:  black;
+
+    font-family:"Montserrat", "Times New Roman", "Georgia";
+    color: antiquewhite;
+    text-align:justify;
+}
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+/*body{
+    background-image: url(../img/bg/financialAdvisor.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 100vh;
+}*/
+.bgFirst{
+    background-color: var(--firstColor);
+}
+.bgSecond{
+    background-color: var(--secondColor);
+}
+.bgThird{
+    background-color: var(--thirdColor);
+}
+.bgFourth{
+    background-color: var(--fourthColor);
+}
+footer{
+    font-family: "Georgia", "Times New Roman", "Montserrat";
+}
+a {
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.coloredLabelCarousel{
+    margin-top: 5px;
+    border-radius: 15px;
+    font-size: 1.8vw;
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+}
+
+.noJsRemove{
+    display: none;
+    visibility: hidden;
+}
+
+.footerInfo{
+    font-size: 1.2vw;
+}
+
+.bgFixed{
+    height: 100vh;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.maxIndex{
+    z-index: 999;
+}
+

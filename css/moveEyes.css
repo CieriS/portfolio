@@ -1,0 +1,29 @@
+.sclera{
+    background-color: antiquewhite;
+    height: 25vh;
+    width: 15vh;
+    border-radius: 100%;
+}
+
+.moveEyes{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 4vh;
+    border-radius: 100%;
+    aspect-ratio: 1;
+    animation: eyesMover 4s infinite;
+}
+
+@keyframes eyesMover{
+    0%{
+        left: 20%;
+    }
+    50%{
+        left: 80%;
+    }
+    100%{
+        left: 20%;
+    }
+}

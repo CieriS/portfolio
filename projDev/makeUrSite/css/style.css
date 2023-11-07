@@ -1,0 +1,63 @@
+body.makeUrSite{
+    background-color: rgb(245,255,250);
+    overflow: hidden;
+}
+
+#tempScreen{
+  background-color: black;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+#tempScreen > section {
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+/* SETTINGS: cieri.com */
+/* unvisited link */
+a.urlWebsite {
+  color: red;
+  text-decoration: none;
+}
+
+a.urlWebsite:link {
+  color: red;
+  text-decoration: none;
+}
+
+/* visited link */
+a.urlWebsite:visited {
+  color: green;
+  text-decoration: none;
+}
+
+/* mouse over link */
+a.urlWebsite:hover {
+  color: hotpink;
+  text-decoration: underline;
+}
+
+/* selected link */
+a.urlWebsite:active {
+  color: blue;
+  text-decoration: underline;
+}
+
+/* IMMAGINI */
+div > picture > img.mainImg {
+    background-color: seagreen;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+}
+
+.intestazione{
+    background-color: rgba(255, 0, 0, 0.40);
+    height: 8vh;
+}

@@ -1,0 +1,60 @@
+√) PUNTEGGIO ISEE ( è impostabile dal settings )
+
+√) Punteggio Presenza Minori ( ancora non impostabile dal settings )
+
+
+
+
+————
+
+
+
+
+2)  Punteggio Disoccupazione 
+(il calcolo attuale: Reset della variabile con 10* Numero di disoccupati)
+ 
+    a)  Adulto disoccupato: è per OGNI adulto disoccupato? sono 10 punti per ognuno (5 se semioccupato) o da 1 disoccupato ci sono 10 punti?
+    b)  ∞
+    c)  ∞
+    d)  ∞
+    e)  Altri adulti a carico: Il modulo dice che va sommata la voce con una sola delle successive, quindi con questa, visto che non esclude le altre, mi sorge il dubbio di come la dovrei considerare.
+
+
+3)  invalidità
+
+    a)  inv. totale o malattia con inabilità lavorativa, in nucleo
+    b)  inv. totale o malattia con inabilità lavorativa, da solo
+    c)  inv. grave o malattia di adulto in nucleo
+    d)  inv. grave o malattia di adulto, da solo
+    e)  inv. grave di minore
+
+
+4)  Situazione Debitoria
+
+    a)  Pignoramento di stipendio, Pensione C/C { ??? }
+    b)  Morosità di affito o utenze domestiche { ??? }
+    c)  Sfratto esecutivo o in corso o emergenza abitativa { Tipo di Alloggio }
+    d)  Alttri debiti di varia naturapubblica, documentabili { PatrPass }
+
+5)  Benefit Da Dedurre
+
+    a)  Casa Popolare: { Parte 1 ( Tipo Di ALloggio ) }
+    b)  RES, REI, SIA { Ultima parte ( EntrateNucleoFamiliare[5] ) }
+    c)  ACCOMPAGNAMENTO { Ultima parte ( EntrateNucleoFamiliare[3] ) }
+    d)  *** CONTRIBUTI E SGRAVI { ??? }
+
+
+
+
+————
+
+
+
+
+√) Pagina storico tessere (solamente dello storico tessere): forse sarebbe utile aggiungere anche l'ora esatta in cui viene assegnata e quella in cui viene ritirata la tessera (basterebbe semplicemente trasformare i campi DATE in DATETIME)    
+
+√) Pagina delle competenze ( Mostra tutti i membri di tutte le famiglie ed è possibile cercare in esso le competenze ( magari due input, con uno cercare la famiglia e con l'altro la competenza, in modo da avere ricerche più dettagliate ) );
+
+†) Se si sbagliano i dati nell'inserimento, si viene riportati alla pagina senza perdere quelli precedenti
+
+————

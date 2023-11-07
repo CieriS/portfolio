@@ -1,0 +1,10 @@
+:root{
+    --errorBlue: rgb(32,73,123);
+    text-align: center;
+}
+
+body{
+    color: antiquewhite;
+    height: 100vh;
+    background-color:   var(--errorBlue);
+}

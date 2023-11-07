@@ -1,0 +1,32 @@
+PATH=/Applications/XAMPP/xamppfiles/bin:$PATH
+mysql -h localhost -u root
+
+CREATE TABLE Cliente(
+    id INT AUTO_INCREMENT NOT NULL,
+    mail VARCHAR (40) NOT NULL,
+    nome VARCHAR (30) NOT NULL,
+    cognome VARCHAR (30) NOT NULL,
+    telefono VARCHAR (15) NOT NULL,
+    cifraRichiesta VARCHAR (20) NOT NULL,
+    date DATETIME NOT NULL,
+    PRIMARY KEY(id)
+);
+
+INSERT INTO Cliente (mail, nome, cognome, telefono, cifraRichiesta, date) VALUES 
+('mail4', 'nome4', 'cognome4', 'tel4', 'cifraRichiesta', NOW()),
+('mail1', 'nome1', 'cognome1', 'tel1', 'cifraRichiesta', NOW()),
+('mail0', 'nome0', 'cognome0', 'tel0', 'cifraRichiesta', NOW()),
+('mail2', 'nome2', 'cognome2', 'tel2', 'cifraRichiesta', NOW()),
+('mail2', 'nome2', 'cognome2', 'tel2', 'cifraRichiesta', NOW()),
+('mail3', 'nome3', 'cognome3', 'tel3', 'cifraRichiesta', NOW()),
+('mail4', 'nome4', 'cognome4', 'tel4', 'cifraRichiesta', NOW()),
+('mail4', 'nome4', 'cognome4', 'tel4', 'cifraRichiesta', NOW()),
+('mail4', 'nome4', 'cognome4', 'tel4', 'cifraRichiesta', NOW());
+
+CREATE VIEW listaClienti AS 
+SELECT id AS "Identificatore", mail AS 'E-Mail', cognome AS 'Cognome', nome AS 'Nome', telefono AS 'Telefono', cifraRichiesta AS 'Quantitativo Richiesto', date AS 'Data Della Richiesta' 
+FROM Cliente 
+GROUP BY mail, telefono 
+ORDER BY cognome, nome ASC;
+
+SELECT * FROM listaClienti;

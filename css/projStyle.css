@@ -1,0 +1,180 @@
+body{
+    font-family: Montserrat;
+    text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+    /*box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);*/
+    cursor: default;
+    background-image: url(../img/bg/tree.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 100vh;  
+}
+
+.nav-pills > li > a.active, .nav-pills > li > a.active:hover , .nav-pills > li > .active:focus  {
+  background-color: rgb(248, 249, 250) !important;
+}
+
+.nav-pills > li > a.active, .nav-pills > li > a.active:hover > span, .nav-pills > li > .active:focus > span  {
+  color: rgb(0, 0, 0) !important;
+}
+
+.bgBlurred{
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
+section > h2 > button.progetti:nth-of-type(1){
+  width: 50vh;
+  /*width: max-content;*/
+}
+section > h2 > button.progetti:nth-of-type(2){
+  width: 50vh;
+  /*width: max-content;*/
+}
+
+.lampeggio{
+    animation-name: lampeggiante;
+    animation-duration: 1s;
+    animation-delay: .3s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    -webkit-animation-name: lampeggiante;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-delay: .3s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-direction: normal;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+ @-webkit-keyframes lampeggiante {
+    0% {
+      letter-spacing: 1vh;
+      -webkit-transform: translateZ(400px);
+              transform: translateZ(400px);
+      opacity: 0;
+    }
+    40% {
+      opacity: 0.6;
+    }
+    100% {
+      -webkit-transform: translateZ(0);
+              transform: translateZ(0);
+      opacity: 1;
+    }
+  }
+  @keyframes lampeggiante {
+    0% {
+      letter-spacing: 1vh;
+      -webkit-transform: translateZ(400px);
+              transform: translateZ(400px);
+      opacity: 0;
+    }
+    40% {
+      opacity: 0.6;
+    }
+    100% {
+      -webkit-transform: translateZ(0);
+              transform: translateZ(0);
+      opacity: 1;
+    }
+  }
+  
+
+
+
+
+.paragraph{
+    animation-name: entrance;
+    animation-duration: .8s;
+    animation-delay: .4s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.550, 0.085, 0.680, 0.530);
+    -webkit-animation-name: entrance;
+    -webkit-animation-duration: .8s;
+    -webkit-animation-delay: .4s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-direction: normal;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: cubic-bezier(0.550, 0.085, 0.680, 0.530);
+}
+ @-webkit-keyframes entrance {
+    0% {
+      -webkit-filter: blur(12px);
+              filter: blur(12px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-filter: blur(0px);
+              filter: blur(0px);
+      opacity: 1;
+    }
+  }
+  @keyframes entrance {
+    0% {
+      -webkit-filter: blur(12px);
+              filter: blur(12px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-filter: blur(0px);
+              filter: blur(0px);
+      opacity: 1;
+    }
+  }
+  
+
+
+.btnz{
+    animation-name: puffIn;
+    animation-duration: .7s;
+    animation-delay: 1s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.470, 0.000, 0.745, 0.715);
+    -webkit-animation-name: puffIn;
+    -webkit-animation-duration: .7s;
+    -webkit-animation-delay: 1s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-direction: normal;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: cubic-bezier(0.470, 0.000, 0.745, 0.715);
+}
+ @-webkit-keyframes puffIn {
+    0% {
+      -webkit-transform: scaleX(2);
+              transform: scaleX(2);
+      -webkit-filter: blur(4px);
+              filter: blur(4px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: scaleX(1);
+              transform: scaleX(1);
+      -webkit-filter: blur(0px);
+              filter: blur(0px);
+      opacity: 1;
+    }
+  }
+  @keyframes puffIn {
+    0% {
+      -webkit-transform: scaleX(2);
+              transform: scaleX(2);
+      -webkit-filter: blur(4px);
+              filter: blur(4px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: scaleX(1);
+              transform: scaleX(1);
+      -webkit-filter: blur(0px);
+              filter: blur(0px);
+      opacity: 1;
+    }
+  }  
