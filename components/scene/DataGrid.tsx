@@ -88,11 +88,12 @@ export function DataGrid({ still }: { still: boolean }) {
       s.palette = palette;
     }
 
-    // Camera: mode pose + pointer parallax.
+    // Camera: mode pose + pointer parallax. Not on touch, where the scene would slide under the finger.
     const camera = state.camera;
     const camEase = still ? 1 : 1 - Math.exp(-dt * 2.5);
-    camera.position.x += (p.camX + pointer.x * 0.8 - camera.position.x) * camEase;
-    camera.position.y += (p.camY + pointer.y * 0.4 - camera.position.y) * camEase;
+    const parallax = pointer.touch ? 0 : 1;
+    camera.position.x += (p.camX + pointer.x * 0.8 * parallax - camera.position.x) * camEase;
+    camera.position.y += (p.camY + pointer.y * 0.4 * parallax - camera.position.y) * camEase;
     camera.position.z += (p.camZ - camera.position.z) * camEase;
     camera.lookAt(0, 0, 0);
     group.rotation.y = p.rotY;
@@ -104,9 +105,11 @@ export function DataGrid({ still }: { still: boolean }) {
     const hit = o.raycaster.ray.intersectPlane(o.plane, o.hit);
     if (hit) {
       group.worldToLocal(hit);
-      const follow = still ? 1 : 1 - Math.exp(-dt * 7);
+      // Touch input is sparser and jitterier than a mouse, so it is followed more softly.
+      const follow = still || pointer.snap ? 1 : 1 - Math.exp(-dt * (pointer.touch ? 4 : 7));
       s.px += (hit.x - s.px) * follow;
       s.pz += (hit.z - s.pz) * follow;
+      pointer.snap = false;
     }
     s.heat += ((pointer.active && hit ? 1 : 0) - s.heat) * ease;
 

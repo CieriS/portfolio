@@ -1,8 +1,11 @@
 import { create } from 'zustand';
 import type { ViewId } from '@/lib/views';
 
-/** Normalized device coordinates (-1..1). Mutated in place, never via `set`. */
-export type ScenePointer = { x: number; y: number; active: boolean };
+/**
+ * Normalized device coordinates (-1..1). Mutated in place, never via `set`.
+ * `touch` marks finger input; `snap` asks the next frame to jump to the pointer instead of easing.
+ */
+export type ScenePointer = { x: number; y: number; active: boolean; touch: boolean; snap: boolean };
 export type ScenePalette = { bg: string; dim: string; ink: string };
 
 export const DARK_PALETTE: ScenePalette = { bg: '#0b0b0b', dim: '#3f3f3c', ink: '#ecebe7' };
@@ -17,7 +20,7 @@ type SceneState = {
 };
 
 export const useSceneStore = create<SceneState>()((set, get) => ({
-  pointer: { x: 0, y: 0, active: false },
+  pointer: { x: 0, y: 0, active: false, touch: false, snap: false },
   mode: 'hero',
   palette: DARK_PALETTE,
   setMode: (mode) => {
@@ -30,11 +33,16 @@ export const useSceneStore = create<SceneState>()((set, get) => ({
 
 // Transient write path: the canvas reads these inside useFrame via getState(),
 // so pointer motion never notifies subscribers and never re-renders React.
-export function writePointer(x: number, y: number) {
+export function writePointer(x: number, y: number, touch: boolean) {
   const pointer = useSceneStore.getState().pointer;
   pointer.x = x;
   pointer.y = y;
   pointer.active = true;
+  pointer.touch = touch;
+}
+
+export function snapPointer() {
+  useSceneStore.getState().pointer.snap = true;
 }
 
 export function releasePointer() {
