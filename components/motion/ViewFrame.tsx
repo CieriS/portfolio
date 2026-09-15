@@ -18,7 +18,7 @@ export function ViewFrame({ children, label }: { children: ReactNode; label: str
       initial="enter"
       animate="center"
       exit="exit"
-      className="no-scrollbar fade-edges absolute inset-0 overflow-y-auto overscroll-contain"
+      className="no-scrollbar fade-edges absolute inset-0 overflow-y-auto overscroll-y-contain"
     >
       {children}
     </motion.section>

@@ -1,13 +1,6 @@
 RewriteEngine On
 
-# Controlla se la richiesta corrisponde a una directory senza file index
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteCond %{REQUEST_URI} !/$
-RewriteCond %{REQUEST_FILENAME}/index.php !-f
-RewriteCond %{REQUEST_FILENAME}/index.html !-f
-RewriteCond %{REQUEST_FILENAME}/index.htm !-f
-RewriteCond %{REQUEST_FILENAME}/index.cgi !-f
-RewriteCond %{REQUEST_FILENAME}/index.pl !-f
-RewriteCond %{REQUEST_FILENAME}/index.py !-f
-# Reindirizza alla pagina specificata con redirect permanente
-RewriteRule ^ https://cierisamuele.altervista.org/error [R=301,L]
+# Sito spostato su Vercel: redirect permanente di ogni richiesta, conservando il percorso.
+# I vecchi URL (/index.php, /error, /projDev/*, /projProd/*) sono poi gestiti dalle redirect di next.config.ts.
+# Sostituire <progetto>.vercel.app con l'URL di produzione prima di caricare il file nella root Altervista.
+RewriteRule ^(.*)$ https://<progetto>.vercel.app/$1 [R=301,L]

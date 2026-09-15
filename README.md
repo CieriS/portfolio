@@ -335,6 +335,7 @@ npm start
 - Non viene servito da Next.js: il progetto non ha una cartella `public/`, quindi nessun file di `legacy/` è raggiungibile dal sito pubblicato.
 - È escluso da lint e typecheck.
 - I suoi URL principali sono reindirizzati con 301 (vedi [SEO](#seo)).
+- `legacy/.htaccess` reindirizza con 301 l'intero dominio Altervista verso Vercel conservando il percorso: sostituisci `<progetto>.vercel.app` con l'URL di produzione e carica il file nella root del sito Altervista.
 - Le icone del nuovo sito derivano da `legacy/img/icon/iconRed.ico`.
 
 ## Risoluzione dei problemi
