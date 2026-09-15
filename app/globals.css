@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --paper: #f3f2ee;
+  --ink: #121212;
+  --muted: #6f6e69;
+  --line: rgb(18 18 18 / 0.12);
+  --accent: #ff5b1f;
+  --frame: clamp(1rem, 2.4vw, 2.25rem);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: light;
+}
+
+.dark {
+  --paper: #0b0b0b;
+  --ink: #ecebe7;
+  --muted: #8c8b86;
+  --line: rgb(236 235 231 / 0.14);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --ease-out-expo: var(--ease-expo);
+}
+
+@layer base {
+  html,
+  body {
+    height: 100dvh;
+    overflow: hidden;
+    /* Vertical only: `none` on the X axis disables the trackpad back/forward swipe. */
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--ink);
+    color: var(--paper);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--ink);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /*
+   * Selection is disabled only on interface chrome (controls here; bars and labels via
+   * `select-none`), where a highlight is accidental — e.g. double-clicks or swipes.
+   * Reading content stays selectable, and Cmd/Ctrl+A is deliberately not intercepted.
+   */
+  button {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@utility px-frame {
+  padding-inline: var(--frame);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Scroll affordance: content dissolves at the stage edges instead of being hard-clipped. */
+@utility fade-edges {
+  mask-image: linear-gradient(to bottom, transparent 0, #000 1.25rem, #000 calc(100% - 2.5rem), transparent 100%);
+}
+
+/* Underline drawn from the left on hover (see the group rule below). */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.6s var(--ease-expo);
+}
+
+/* Functional pattern: a process whose start is not yet known. */
+@utility bg-dashed {
+  background-image: repeating-linear-gradient(90deg, var(--ink) 0 4px, transparent 4px 9px);
+}
+
+.link-underline:hover,
+.group:hover .link-underline,
+.group:focus-visible .link-underline {
+  background-size: 100% 1px;
+}
+
+@keyframes intro-rise {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+/* First paint only: CSS entrance that runs before hydration, so content is never stuck hidden. */
+html:not([data-booted]) .intro-line {
+  animation: intro-rise 1.2s var(--ease-expo) both;
+  /* Minimal lead-in: the hero title is the LCP element and must start painting right away. */
+  animation-delay: calc(var(--i, 0) * 110ms + 40ms);
+}
+
+html:not([data-booted]) .intro-fade {
+  animation: intro-fade 1.2s var(--ease-expo) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 360ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-line,
+  .intro-fade {
+    animation: none !important;
+  }
+}

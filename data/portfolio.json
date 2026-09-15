@@ -1,0 +1,543 @@
+{
+  "shared": {
+    "name": "Samuele Cieri",
+    "handle": "CieriS",
+    "contacts": [
+      { "id": "github", "label": "GitHub", "handle": "@CieriS", "url": "https://github.com/CieriS/" },
+      { "id": "linkedin", "label": "LinkedIn", "handle": "in/samuelecieri", "url": "https://www.linkedin.com/in/samuelecieri/" },
+      { "id": "gitlab", "label": "GitLab", "handle": "@CieriS", "url": "https://gitlab.com/CieriS/" }
+    ],
+    "timeline": {
+      "threadA": {
+        "id": "industry",
+        "start": "2022-02-23",
+        "end": null,
+        "organization": "Tas",
+        "phases": [
+          { "id": "interface", "stack": ["HTML", "CSS", "JavaScript", "TypeScript", "Angular", "PHP", "SQL", "Tailwind"] },
+          { "id": "systems", "stack": ["Rust", "C"] },
+          { "id": "data", "stack": ["PostgreSQL", "Docker"] }
+        ]
+      },
+      "threadB": {
+        "id": "academic",
+        "start": "2021-11-12",
+        "end": null,
+        "institution": "Università di Bologna",
+        "phases": [
+          { "id": "foundations", "stack": ["Calculus", "Linear Algebra", "Physics", "Circuit Theory"] },
+          { "id": "computing", "stack": ["Programming", "Digital Logic", "Computer Architecture", "Operating Systems"] },
+          { "id": "information", "stack": ["Databases", "Computer Networks", "Web Technologies", "Statistics"] }
+        ]
+      }
+    },
+    "projects": [
+      {
+        "id": "yourfinance",
+        "name": "yourFinance",
+        "repo": null,
+        "stack": ["Rust", "PostgreSQL", "Docker", "React"],
+        "layers": [
+          { "id": "client", "tech": "React" },
+          { "id": "api", "tech": "Rust" },
+          { "id": "storage", "tech": "PostgreSQL" }
+        ]
+      }
+    ],
+    "discipline": {
+      "biological": {
+        "heightCm": 173,
+        "weightKg": 72,
+        "daysPerWeek": 3,
+        "sessions": [
+          { "id": "A", "focus": "squat", "patterns": ["Box jump", "Pause squat", "Weighted dips", "Weighted chin-ups", "Fingertip push-ups"] },
+          { "id": "B", "focus": "hinge", "patterns": ["Broad jump", "Deficit deadlift", "Military press", "Barbell row", "Front lever"] },
+          { "id": "C", "focus": "unilateral", "patterns": ["Barbell Bulgarian split squat", "Incline bench press", "Weighted pull-ups", "Nordic curl", "Ring push-ups"] }
+        ]
+      },
+      "acoustic": {
+        "formats": ["GarageBand", "Logic Pro", "DaVinci Resolve"],
+        "pipeline": ["capture", "mix", "edit"]
+      }
+    }
+  },
+  "locales": {
+    "en": {
+      "ui": {
+        "meta": {
+          "title": "Samuele Cieri — Software Developer",
+          "description": "Software Developer based in Bologna, transitioning to Data Engineering. Systems, data, and deliberate optimization.",
+          "siteName": "Samuele Cieri",
+          "views": {
+            "hero": {
+              "title": "Samuele Cieri — Software Developer & Data Engineering",
+              "description": "Samuele Cieri, Software Developer based in Bologna and transitioning to Data Engineering: Rust and C systems, PostgreSQL data modeling, Docker and full-stack architecture."
+            },
+            "identity": {
+              "title": "Identity & engineering principles",
+              "description": "An instrumental, engineering-first approach to software: measurable objectives, data as ground truth, flat control flow. GitHub, LinkedIn and GitLab."
+            },
+            "timeline": {
+              "title": "Experience & education timeline",
+              "description": "Software Developer at Tas since 2022 — internship, apprenticeship, permanent role — moving from interfaces to systems and data with Rust, C, PostgreSQL and Docker, alongside a Computer Engineering degree at the University of Bologna."
+            },
+            "projects": {
+              "title": "Projects: Rust & PostgreSQL",
+              "description": "A project bridging toward Data Engineering: yourFinance (Rust, PostgreSQL, React), in early development."
+            },
+            "discipline": {
+              "title": "Optimization: calisthenics, sound & video",
+              "description": "The engineering method beyond code: a 3-day full-body program of weighted calisthenics, barbell and plyometrics; acoustic guitar, audio editing and video production."
+            }
+          }
+        },
+        "notFound": {
+          "title": "Not found",
+          "body": "This address does not match any view. The process may have moved or never existed.",
+          "cta": "Back to index"
+        },
+        "nav": {
+          "hero": "Index",
+          "identity": "Identity",
+          "timeline": "Execution",
+          "projects": "Systems",
+          "discipline": "Optimization"
+        },
+        "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "Auto" },
+        "locale": { "label": "Language", "en": "EN", "it": "IT", "fr": "FR" },
+        "shell": {
+          "role": "Software Developer — Data Engineering",
+          "nav": "Views",
+          "prev": "Previous view",
+          "next": "Next view",
+          "unknown": "—"
+        }
+      },
+      "hero": {
+        "role": "Software Developer",
+        "transition": "Transitioning to Data Engineering",
+        "lead": "Building the path from interfaces to systems: typed backends, relational storage, and pipelines that move data with intent.",
+        "hint": "Move the cursor — every node is a unit of computation",
+        "cta": "Explore"
+      },
+      "identity": {
+        "kicker": "Operating principle",
+        "statement": "Software is an instrument. Every language, schema and abstraction is chosen for its measurable contribution to an objective — never by habit or taste.",
+        "statementEmphasis": "instrument",
+        "principlesTitle": "Principles",
+        "principles": [
+          { "title": "Instrumental rationality", "body": "Means are evaluated against ends. What does not move the objective is removed." },
+          { "title": "Engineering before ornament", "body": "Specify, measure, then build. Form is a consequence of constraints." },
+          { "title": "Data as ground truth", "body": "Decisions are traced back to data. A model is only as reliable as its inputs." },
+          { "title": "Flat control flow", "body": "Many small functions, at most two levels of nesting, explicit contracts between them." }
+        ],
+        "contactsTitle": "Contact",
+        "contactsNote": "Repositories and direct channels."
+      },
+      "timeline": {
+        "title": "Dual-thread execution",
+        "titleEmphasis": "Dual-thread",
+        "subtitle": "Two concurrent processes sharing one clock. Neither blocks the other.",
+        "labels": {
+          "thread": "Thread",
+          "start": "Start",
+          "running": "Running",
+          "uptime": "Uptime",
+          "days": "d",
+          "now": "Now",
+          "organization": "Organization",
+          "institution": "Institution"
+        },
+        "threadA": {
+          "label": "Industry",
+          "role": "Software Developer",
+          "summary": "Professional activity since 23/02/2022: internship, apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. A deliberate descent through the stack: from user interfaces to systems programming and data management.",
+          "phases": {
+            "interface": { "title": "Interface layer", "body": "Web interfaces, server-side rendering, first contact with relational schemas; today a proprietary framework migrating to Angular and TypeScript." },
+            "systems": { "title": "Systems layer", "body": "Memory ownership, deterministic performance, low-level control with Rust and C." },
+            "data": { "title": "Data layer", "body": "Relational modeling on PostgreSQL, reproducible environments with Docker." }
+          }
+        },
+        "threadB": {
+          "label": "Academic",
+          "role": "Computer Engineering",
+          "summary": "Bachelor's degree in Computer Engineering at the University of Bologna, in progress part-time. First and only degree, executed in parallel with full-time work.",
+          "phases": {
+            "foundations": { "title": "Formal foundations", "body": "Mathematical, physical and circuit models underlying computation." },
+            "computing": { "title": "Computing systems", "body": "Programming, digital logic, hardware architectures, operating systems." },
+            "information": { "title": "Information systems", "body": "Databases, computer networks, web technologies, statistical reasoning on data." }
+          }
+        }
+      },
+      "projects": {
+        "title": "Systems & architecture",
+        "titleEmphasis": "architecture",
+        "subtitle": "Projects built as bridges toward Data Engineering.",
+        "labels": {
+          "architecture": "Topology",
+          "bridge": "Data bridge",
+          "repo": "Repository",
+          "profile": "Source on GitHub"
+        },
+        "items": {
+          "yourfinance": {
+            "summary": "Full-stack architecture for personal finance, in early development: a Rust backend exposing a typed API over a PostgreSQL store, consumed by a React client. The architecture is still evolving.",
+            "bridge": "Schema design for transactional time series, integrity constraints, and query modeling on financial records.",
+            "layers": {
+              "client": "Presentation & state",
+              "api": "Typed HTTP service",
+              "storage": "Relational persistence"
+            }
+          }
+        }
+      },
+      "discipline": {
+        "title": "Deliberate optimization",
+        "titleEmphasis": "Deliberate",
+        "subtitle": "The same method applied outside the terminal: measure, program, iterate.",
+        "biological": {
+          "title": "Biological Optimization",
+          "titleEmphasis": "Optimization",
+          "summary": "Full-body training with weighted calisthenics, barbell compounds, plyometrics and skill work in a garage gym, treated as a controlled system: 4-week blocks — pause reps, weighted, EMOM, pyramid — followed by a full deload. Targets: jump, sprint and raw strength; aesthetics is a side effect.",
+          "metrics": { "height": "Height", "weight": "Mass", "frequency": "Frequency" },
+          "units": { "height": "cm", "weight": "kg", "frequency": "/ week" },
+          "sessionsTitle": "3-day full-body",
+          "dayLabel": "Day",
+          "focus": { "squat": "Squat focus", "hinge": "Hinge focus", "unilateral": "Unilateral focus" }
+        },
+        "acoustic": {
+          "title": "Sound & Video",
+          "titleEmphasis": "Video",
+          "summary": "Acoustic guitar as the source: audio edited in GarageBand and Logic Pro, then paired with video and cut in DaVinci Resolve.",
+          "instrumentLabel": "Source",
+          "instrument": "Acoustic guitar",
+          "formatsLabel": "Software",
+          "pipelineTitle": "Production pipeline",
+          "pipeline": {
+            "capture": "Capture — acoustic guitar recording",
+            "mix": "Audio — editing in GarageBand and Logic Pro",
+            "edit": "Video — editing in DaVinci Resolve with the final audio"
+          }
+        }
+      }
+    },
+    "it": {
+      "ui": {
+        "meta": {
+          "title": "Samuele Cieri — Software Developer",
+          "description": "Software Developer a Bologna, in transizione verso il Data Engineering. Sistemi, dati e ottimizzazione deliberata.",
+          "siteName": "Samuele Cieri",
+          "views": {
+            "hero": {
+              "title": "Samuele Cieri — Software Developer e Data Engineering",
+              "description": "Samuele Cieri, Software Developer a Bologna in transizione verso il Data Engineering: sistemi in Rust e C, modellazione dati PostgreSQL, Docker e architetture full-stack."
+            },
+            "identity": {
+              "title": "Identità e principi di ingegneria",
+              "description": "Un approccio strumentale e ingegneristico al software: obiettivi misurabili, dati come verità, flusso di controllo piatto. Contatti GitHub, LinkedIn e GitLab."
+            },
+            "timeline": {
+              "title": "Esperienza e formazione",
+              "description": "Software Developer in Tas dal 2022 — tirocinio, apprendistato, tempo indeterminato — dalle interfacce ai sistemi e ai dati con Rust, C, PostgreSQL e Docker, in parallelo alla laurea in Ingegneria Informatica all'Università di Bologna."
+            },
+            "projects": {
+              "title": "Progetti: Rust e PostgreSQL",
+              "description": "Un progetto ponte verso il Data Engineering: yourFinance (Rust, PostgreSQL, React), nelle prime fasi di sviluppo."
+            },
+            "discipline": {
+              "title": "Ottimizzazione: calisthenics, suono e video",
+              "description": "Il metodo ingegneristico oltre il codice: programma full-body su 3 giorni tra calisthenics zavorrata, bilanciere e pliometria; chitarra acustica, editing audio e produzione video."
+            }
+          }
+        },
+        "notFound": {
+          "title": "Non trovato",
+          "body": "Questo indirizzo non corrisponde a nessuna vista. Il processo potrebbe essere stato spostato o non essere mai esistito.",
+          "cta": "Torna all'indice"
+        },
+        "nav": {
+          "hero": "Indice",
+          "identity": "Identità",
+          "timeline": "Esecuzione",
+          "projects": "Sistemi",
+          "discipline": "Ottimizzazione"
+        },
+        "theme": { "label": "Tema", "light": "Chiaro", "dark": "Scuro", "system": "Auto" },
+        "locale": { "label": "Lingua", "en": "EN", "it": "IT", "fr": "FR" },
+        "shell": {
+          "role": "Software Developer — Data Engineering",
+          "nav": "Viste",
+          "prev": "Vista precedente",
+          "next": "Vista successiva",
+          "unknown": "—"
+        }
+      },
+      "hero": {
+        "role": "Software Developer",
+        "transition": "In transizione verso il Data Engineering",
+        "lead": "Costruisco il percorso dalle interfacce ai sistemi: backend tipizzati, storage relazionale e pipeline che muovono dati con uno scopo.",
+        "hint": "Muovi il cursore — ogni nodo è un'unità di calcolo",
+        "cta": "Esplora"
+      },
+      "identity": {
+        "kicker": "Principio operativo",
+        "statement": "Il software è uno strumento. Ogni linguaggio, schema e astrazione è scelto per il suo contributo misurabile a un obiettivo — mai per abitudine o gusto.",
+        "statementEmphasis": "strumento",
+        "principlesTitle": "Principi",
+        "principles": [
+          { "title": "Razionalità strumentale", "body": "I mezzi sono valutati rispetto ai fini. Ciò che non avvicina l'obiettivo viene rimosso." },
+          { "title": "Ingegneria prima dell'ornamento", "body": "Specificare, misurare, poi costruire. La forma è una conseguenza dei vincoli." },
+          { "title": "Il dato come verità", "body": "Le decisioni sono ricondotte ai dati. Un modello è affidabile quanto i suoi input." },
+          { "title": "Flusso di controllo piatto", "body": "Molte funzioni semplici, al massimo due livelli di annidamento, contratti espliciti tra loro." }
+        ],
+        "contactsTitle": "Contatti",
+        "contactsNote": "Repository e canali diretti."
+      },
+      "timeline": {
+        "title": "Esecuzione dual-thread",
+        "titleEmphasis": "dual-thread",
+        "subtitle": "Due processi concorrenti che condividono un unico clock. Nessuno blocca l'altro.",
+        "labels": {
+          "thread": "Thread",
+          "start": "Inizio",
+          "running": "In esecuzione",
+          "uptime": "Uptime",
+          "days": "g",
+          "now": "Ora",
+          "organization": "Organizzazione",
+          "institution": "Ateneo"
+        },
+        "threadA": {
+          "label": "Industria",
+          "role": "Software Developer",
+          "summary": "Attività lavorativa dal 23/02/2022: tirocinio, apprendistato, oggi tempo indeterminato, full remote. Sviluppo frontend e full-stack su un framework proprietario, ora in migrazione verso Angular con generazione di codice assistita da AI. Una discesa deliberata nello stack: dalle interfacce utente alla programmazione di sistema e alla gestione dei dati.",
+          "phases": {
+            "interface": { "title": "Livello interfaccia", "body": "Interfacce web, rendering lato server, primo contatto con schemi relazionali; oggi un framework proprietario in migrazione verso Angular e TypeScript." },
+            "systems": { "title": "Livello sistema", "body": "Ownership della memoria, prestazioni deterministiche, controllo a basso livello con Rust e C." },
+            "data": { "title": "Livello dati", "body": "Modellazione relazionale su PostgreSQL, ambienti riproducibili con Docker." }
+          }
+        },
+        "threadB": {
+          "label": "Accademico",
+          "role": "Ingegneria Informatica",
+          "summary": "Laurea triennale in Ingegneria Informatica all'Università di Bologna, in corso in modalità part-time. Prima e unica laurea, eseguita in parallelo al lavoro a tempo pieno.",
+          "phases": {
+            "foundations": { "title": "Fondamenti formali", "body": "Modelli matematici, fisici e circuitali alla base del calcolo." },
+            "computing": { "title": "Sistemi di calcolo", "body": "Programmazione, reti logiche, architetture hardware, sistemi operativi." },
+            "information": { "title": "Sistemi informativi", "body": "Basi di dati, reti di calcolatori, tecnologie web, ragionamento statistico sui dati." }
+          }
+        }
+      },
+      "projects": {
+        "title": "Sistemi & architettura",
+        "titleEmphasis": "architettura",
+        "subtitle": "Progetti costruiti come ponti verso il Data Engineering.",
+        "labels": {
+          "architecture": "Topologia",
+          "bridge": "Ponte verso i dati",
+          "repo": "Repository",
+          "profile": "Sorgenti su GitHub"
+        },
+        "items": {
+          "yourfinance": {
+            "summary": "Architettura full-stack per la finanza personale, nelle prime fasi di sviluppo: backend Rust che espone un'API tipizzata su uno store PostgreSQL, consumata da un client React. L'architettura è ancora in evoluzione.",
+            "bridge": "Progettazione di schemi per serie temporali transazionali, vincoli di integrità e modellazione delle query su dati finanziari.",
+            "layers": {
+              "client": "Presentazione & stato",
+              "api": "Servizio HTTP tipizzato",
+              "storage": "Persistenza relazionale"
+            }
+          }
+        }
+      },
+      "discipline": {
+        "title": "Ottimizzazione deliberata",
+        "titleEmphasis": "deliberata",
+        "subtitle": "Lo stesso metodo applicato fuori dal terminale: misurare, programmare, iterare.",
+        "biological": {
+          "title": "Ottimizzazione Biologica",
+          "titleEmphasis": "Biologica",
+          "summary": "Allenamento full-body tra calisthenics zavorrata, fondamentali con bilanciere, pliometria e skill in una palestra in garage, trattato come un sistema controllato: blocchi di 4 settimane — pause reps, zavorra, EMOM, piramidale — seguiti da un deload completo. Obiettivi: salto, scatto e forza; l'estetica è un effetto collaterale.",
+          "metrics": { "height": "Altezza", "weight": "Massa", "frequency": "Frequenza" },
+          "units": { "height": "cm", "weight": "kg", "frequency": "/ settimana" },
+          "sessionsTitle": "Full-body su 3 giorni",
+          "dayLabel": "Giorno",
+          "focus": { "squat": "Focus squat", "hinge": "Focus stacco", "unilateral": "Focus unilaterale" }
+        },
+        "acoustic": {
+          "title": "Suono e Video",
+          "titleEmphasis": "Video",
+          "summary": "La chitarra acustica come sorgente: audio editato in GarageBand e Logic Pro, poi abbinato al video e montato in DaVinci Resolve.",
+          "instrumentLabel": "Sorgente",
+          "instrument": "Chitarra acustica",
+          "formatsLabel": "Software",
+          "pipelineTitle": "Pipeline di produzione",
+          "pipeline": {
+            "capture": "Acquisizione — registrazione della chitarra acustica",
+            "mix": "Audio — editing in GarageBand e Logic Pro",
+            "edit": "Video — montaggio in DaVinci Resolve con l'audio finale"
+          }
+        }
+      }
+    },
+    "fr": {
+      "ui": {
+        "meta": {
+          "title": "Samuele Cieri — Software Developer",
+          "description": "Software Developer basé à Bologne, en transition vers le Data Engineering. Systèmes, données et optimisation délibérée.",
+          "siteName": "Samuele Cieri",
+          "views": {
+            "hero": {
+              "title": "Samuele Cieri — Software Developer & Data Engineering",
+              "description": "Samuele Cieri, Software Developer basé à Bologne en transition vers le Data Engineering : systèmes en Rust et C, modélisation de données PostgreSQL, Docker et architectures full-stack."
+            },
+            "identity": {
+              "title": "Identité & principes d'ingénierie",
+              "description": "Une approche instrumentale du logiciel, centrée sur l'ingénierie : objectifs mesurables, données comme vérité de référence, flux de contrôle plat. GitHub, LinkedIn et GitLab."
+            },
+            "timeline": {
+              "title": "Parcours professionnel et formation",
+              "description": "Software Developer chez Tas depuis 2022 — stage, apprentissage, CDI — des interfaces aux systèmes et aux données avec Rust, C, PostgreSQL et Docker, en parallèle d'une licence en ingénierie informatique à l'Université de Bologne."
+            },
+            "projects": {
+              "title": "Projets : Rust & PostgreSQL",
+              "description": "Un projet passerelle vers le Data Engineering : yourFinance (Rust, PostgreSQL, React), en début de développement."
+            },
+            "discipline": {
+              "title": "Optimisation : callisthénie, son & vidéo",
+              "description": "La méthode d'ingénieur au-delà du code : programme full-body sur 3 jours mêlant callisthénie lestée, barre et pliométrie ; guitare acoustique, édition audio et production vidéo."
+            }
+          }
+        },
+        "notFound": {
+          "title": "Introuvable",
+          "body": "Cette adresse ne correspond à aucune vue. Le processus a peut-être été déplacé ou n'a jamais existé.",
+          "cta": "Retour à l'index"
+        },
+        "nav": {
+          "hero": "Index",
+          "identity": "Identité",
+          "timeline": "Exécution",
+          "projects": "Systèmes",
+          "discipline": "Optimisation"
+        },
+        "theme": { "label": "Thème", "light": "Clair", "dark": "Sombre", "system": "Auto" },
+        "locale": { "label": "Langue", "en": "EN", "it": "IT", "fr": "FR" },
+        "shell": {
+          "role": "Software Developer — Data Engineering",
+          "nav": "Vues",
+          "prev": "Vue précédente",
+          "next": "Vue suivante",
+          "unknown": "—"
+        }
+      },
+      "hero": {
+        "role": "Software Developer",
+        "transition": "En transition vers le Data Engineering",
+        "lead": "Je construis le chemin des interfaces aux systèmes : backends typés, stockage relationnel et pipelines qui font circuler les données avec un objectif précis.",
+        "hint": "Déplacez le curseur — chaque nœud est une unité de calcul",
+        "cta": "Explorer"
+      },
+      "identity": {
+        "kicker": "Principe opérationnel",
+        "statement": "Le logiciel est un instrument. Chaque langage, schéma et abstraction est choisi pour sa contribution mesurable à un objectif — jamais par habitude ou par goût.",
+        "statementEmphasis": "instrument",
+        "principlesTitle": "Principes",
+        "principles": [
+          { "title": "Rationalité instrumentale", "body": "Les moyens sont évalués au regard des fins. Ce qui ne fait pas avancer l'objectif est supprimé." },
+          { "title": "L'ingénierie avant l'ornement", "body": "Spécifier, mesurer, puis construire. La forme est une conséquence des contraintes." },
+          { "title": "La donnée comme vérité de référence", "body": "Les décisions sont ramenées aux données. Un modèle n'est fiable que si ses entrées le sont." },
+          { "title": "Flux de contrôle plat", "body": "De nombreuses petites fonctions, au plus deux niveaux d'imbrication, des contrats explicites entre elles." }
+        ],
+        "contactsTitle": "Contact",
+        "contactsNote": "Dépôts et canaux directs."
+      },
+      "timeline": {
+        "title": "Exécution dual-thread",
+        "titleEmphasis": "dual-thread",
+        "subtitle": "Deux processus concurrents partageant une même horloge. Aucun ne bloque l'autre.",
+        "labels": {
+          "thread": "Thread",
+          "start": "Début",
+          "running": "En cours",
+          "uptime": "Uptime",
+          "days": "j",
+          "now": "Maintenant",
+          "organization": "Organisation",
+          "institution": "Établissement"
+        },
+        "threadA": {
+          "label": "Industrie",
+          "role": "Software Developer",
+          "summary": "Activité professionnelle depuis le 23/02/2022 : stage, apprentissage, aujourd'hui en CDI, en télétravail complet. Développement frontend et full-stack sur un framework propriétaire, en cours de migration vers Angular avec génération de code assistée par IA. Une descente délibérée dans la stack : des interfaces utilisateur à la programmation système et à la gestion des données.",
+          "phases": {
+            "interface": { "title": "Couche interface", "body": "Interfaces web, rendu côté serveur, premier contact avec les schémas relationnels ; aujourd'hui un framework propriétaire en migration vers Angular et TypeScript." },
+            "systems": { "title": "Couche système", "body": "Ownership de la mémoire, performances déterministes, contrôle bas niveau avec Rust et C." },
+            "data": { "title": "Couche données", "body": "Modélisation relationnelle sur PostgreSQL, environnements reproductibles avec Docker." }
+          }
+        },
+        "threadB": {
+          "label": "Académique",
+          "role": "Ingénierie informatique",
+          "summary": "Licence en ingénierie informatique à l'Université de Bologne, en cours à temps partiel. Premier et unique diplôme, mené en parallèle d'un emploi à temps plein.",
+          "phases": {
+            "foundations": { "title": "Fondements formels", "body": "Modèles mathématiques, physiques et de circuits à la base du calcul." },
+            "computing": { "title": "Systèmes de calcul", "body": "Programmation, logique numérique, architectures matérielles, systèmes d'exploitation." },
+            "information": { "title": "Systèmes d'information", "body": "Bases de données, réseaux informatiques, technologies web, raisonnement statistique sur les données." }
+          }
+        }
+      },
+      "projects": {
+        "title": "Systèmes & architecture",
+        "titleEmphasis": "architecture",
+        "subtitle": "Des projets conçus comme des passerelles vers le Data Engineering.",
+        "labels": {
+          "architecture": "Topologie",
+          "bridge": "Passerelle vers les données",
+          "repo": "Dépôt",
+          "profile": "Sources sur GitHub"
+        },
+        "items": {
+          "yourfinance": {
+            "summary": "Architecture full-stack pour la finance personnelle, en début de développement : un backend Rust exposant une API typée sur une base PostgreSQL, consommée par un client React. L'architecture est encore en évolution.",
+            "bridge": "Conception de schémas pour des séries temporelles transactionnelles, contraintes d'intégrité et modélisation des requêtes sur des données financières.",
+            "layers": {
+              "client": "Présentation & état",
+              "api": "Service HTTP typé",
+              "storage": "Persistance relationnelle"
+            }
+          }
+        }
+      },
+      "discipline": {
+        "title": "Optimisation délibérée",
+        "titleEmphasis": "délibérée",
+        "subtitle": "La même méthode appliquée hors du terminal : mesurer, programmer, itérer.",
+        "biological": {
+          "title": "Optimisation Biologique",
+          "titleEmphasis": "Biologique",
+          "summary": "Entraînement full-body mêlant callisthénie lestée, mouvements polyarticulaires à la barre, pliométrie et travail de skills dans une salle aménagée au garage, traité comme un système contrôlé : blocs de 4 semaines — pause reps, lesté, EMOM, pyramide — suivis d'un deload complet. Objectifs : détente, sprint et force brute ; l'esthétique n'est qu'un effet secondaire.",
+          "metrics": { "height": "Taille", "weight": "Masse", "frequency": "Fréquence" },
+          "units": { "height": "cm", "weight": "kg", "frequency": "/ semaine" },
+          "sessionsTitle": "Full-body sur 3 jours",
+          "dayLabel": "Jour",
+          "focus": { "squat": "Focus squat", "hinge": "Focus soulevé de terre", "unilateral": "Focus unilatéral" }
+        },
+        "acoustic": {
+          "title": "Son & Vidéo",
+          "titleEmphasis": "Vidéo",
+          "summary": "La guitare acoustique comme source : audio édité dans GarageBand et Logic Pro, puis associé à la vidéo et monté dans DaVinci Resolve.",
+          "instrumentLabel": "Source",
+          "instrument": "Guitare acoustique",
+          "formatsLabel": "Logiciels",
+          "pipelineTitle": "Chaîne de production",
+          "pipeline": {
+            "capture": "Captation — enregistrement de la guitare acoustique",
+            "mix": "Audio — édition dans GarageBand et Logic Pro",
+            "edit": "Vidéo — montage dans DaVinci Resolve avec l'audio final"
+          }
+        }
+      }
+    }
+  }
+}
