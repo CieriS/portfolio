@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { EASE_OUT, fade } from '@/components/motion/Reveal';
 import { pad, pick } from '@/lib/format';
 import { Emphasis, Meta, SectionHead, type ViewProps } from './atoms';
@@ -12,6 +12,7 @@ const WAVE_PATH = Array.from({ length: 241 }, (_, i) => {
 }).join(' ');
 
 export function DisciplineView({ data }: ViewProps) {
+  const reduce = useReducedMotion();
   const copy = data.content.discipline;
   const { biological, acoustic } = data.shared.discipline;
   const unknown = data.content.ui.shell.unknown;
@@ -97,7 +98,9 @@ export function DisciplineView({ data }: ViewProps) {
               vectorEffect="non-scaling-stroke"
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
-              transition={{ duration: 2.2, ease: EASE_OUT, delay: 0.4 }}
+              // pathLength is neither a transform nor a layout property, so `reducedMotion="user"`
+              // leaves it running: the waveform has to be drawn instantly here instead.
+              transition={reduce ? { duration: 0 } : { duration: 2.2, ease: EASE_OUT, delay: 0.4 }}
             />
           </svg>
 

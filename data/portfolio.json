@@ -115,6 +115,7 @@
           "nav": "Views",
           "prev": "Previous view",
           "next": "Next view",
+          "skip": "Skip to content",
           "unknown": "—"
         }
       },
@@ -279,6 +280,7 @@
           "nav": "Viste",
           "prev": "Vista precedente",
           "next": "Vista successiva",
+          "skip": "Vai al contenuto",
           "unknown": "—"
         }
       },
@@ -443,6 +445,7 @@
           "nav": "Vues",
           "prev": "Vue précédente",
           "next": "Vue suivante",
+          "skip": "Aller au contenu",
           "unknown": "—"
         }
       },

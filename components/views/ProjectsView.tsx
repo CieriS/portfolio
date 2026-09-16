@@ -86,58 +86,61 @@ function ProjectRow({ project, index, copy, profileUrl, open, onToggle }: Projec
         </button>
       </h2>
 
-      <AnimatePresence initial={false}>
-        {open && item && (
-          <motion.div
-            id={panelId}
-            key="panel"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.8, ease: EASE_OUT }}
-            className="overflow-hidden"
-          >
-            <div className="grid gap-12 pb-12 md:grid-cols-12 md:gap-x-6 md:pb-16">
-              <p className="text-lg leading-relaxed md:col-span-4 md:col-start-4 md:text-xl md:leading-snug md:tracking-[-0.01em]">
-                {item.summary}
-              </p>
+      {/* The id lives on a wrapper that is always rendered: the panel itself is unmounted
+          when collapsed, which would leave the button's aria-controls pointing at nothing. */}
+      <div id={panelId}>
+        <AnimatePresence initial={false}>
+          {open && item && (
+            <motion.div
+              key="panel"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.8, ease: EASE_OUT }}
+              className="overflow-hidden"
+            >
+              <div className="grid gap-12 pb-12 md:grid-cols-12 md:gap-x-6 md:pb-16">
+                <p className="text-lg leading-relaxed md:col-span-4 md:col-start-4 md:text-xl md:leading-snug md:tracking-[-0.01em]">
+                  {item.summary}
+                </p>
 
-              <div className="md:col-span-2 md:col-start-8">
-                <Meta as="h3">{copy.labels.architecture}</Meta>
-                <ol className="relative mt-5 space-y-5 before:absolute before:bottom-2 before:left-[3px] before:top-2 before:w-px before:bg-line">
-                  {project.layers.map((layer) => (
-                    <li key={layer.id} className="relative pl-6">
-                      <span aria-hidden className="absolute left-0 top-[0.45em] size-[7px] rounded-full border border-ink bg-paper" />
-                      <p className="text-[15px] leading-tight">{layer.tech}</p>
-                      <p className="mt-1 text-sm text-muted">{pick(item.layers, layer.id) ?? layer.id}</p>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-
-              <div className="flex flex-col gap-8 md:col-span-3 md:col-start-10">
-                <div>
-                  <Meta as="h3">{copy.labels.bridge}</Meta>
-                  <p className="mt-5 text-[15px] leading-relaxed text-muted">{item.bridge}</p>
+                <div className="md:col-span-2 md:col-start-8">
+                  <Meta as="h3">{copy.labels.architecture}</Meta>
+                  <ol className="relative mt-5 space-y-5 before:absolute before:bottom-2 before:left-[3px] before:top-2 before:w-px before:bg-line">
+                    {project.layers.map((layer) => (
+                      <li key={layer.id} className="relative pl-6">
+                        <span aria-hidden className="absolute left-0 top-[0.45em] size-[7px] rounded-full border border-ink bg-paper" />
+                        <p className="text-[15px] leading-tight">{layer.tech}</p>
+                        <p className="mt-1 text-sm text-muted">{pick(item.layers, layer.id) ?? layer.id}</p>
+                      </li>
+                    ))}
+                  </ol>
                 </div>
-                {href && (
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group/link inline-flex select-none items-center gap-3 self-start text-[15px]"
-                  >
-                    <span className="link-underline group-hover/link:bg-[length:100%_1px]">
-                      {project.repo ? copy.labels.repo : copy.labels.profile}
-                    </span>
-                    <span aria-hidden>↗</span>
-                  </a>
-                )}
+
+                <div className="flex flex-col gap-8 md:col-span-3 md:col-start-10">
+                  <div>
+                    <Meta as="h3">{copy.labels.bridge}</Meta>
+                    <p className="mt-5 text-[15px] leading-relaxed text-muted">{item.bridge}</p>
+                  </div>
+                  {href && (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group/link inline-flex select-none items-center gap-3 self-start text-[15px]"
+                    >
+                      <span className="link-underline group-hover/link:bg-[length:100%_1px]">
+                        {project.repo ? copy.labels.repo : copy.labels.profile}
+                      </span>
+                      <span aria-hidden>↗</span>
+                    </a>
+                  )}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </li>
   );
 }

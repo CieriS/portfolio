@@ -33,7 +33,7 @@ export function LocaleSwitch({ locale, onChange }: LocaleSwitchProps) {
             href={pathFor(option, active)}
             hrefLang={option}
             lang={option}
-            aria-current={option === locale ? 'true' : undefined}
+            aria-current={option === locale ? 'page' : undefined}
             onClick={(event) => handleClick(event, option)}
             className={cn('select-none py-2 transition-colors duration-300', option === locale ? 'text-ink' : 'text-muted hover:text-ink')}
           >

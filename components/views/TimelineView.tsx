@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { EASE_OUT, fade } from '@/components/motion/Reveal';
 import { cn } from '@/lib/cn';
 import { formatDate, pad, pick } from '@/lib/format';
@@ -130,6 +130,11 @@ type LaneProps = {
 };
 
 function Lane({ lane, labels, unknown, ticks, nowPct, toPct }: LaneProps) {
+  // `MotionConfig reducedMotion="user"` only suppresses transform and layout animations.
+  // The lane grows via clipPath and moves its head via `left`, so neither is covered.
+  const reduce = useReducedMotion();
+  const grow = reduce ? { duration: 0 } : GROW;
+
   const { code, thread, copy } = lane;
   const known = thread.start !== null;
   const left = thread.start ? toPct(toMs(thread.start)) : 0;
@@ -168,10 +173,15 @@ function Lane({ lane, labels, unknown, ticks, nowPct, toPct }: LaneProps) {
             className="absolute inset-0 overflow-hidden"
             initial={{ clipPath: 'inset(0% 100% 0% 0%)' }}
             animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
-            transition={GROW}
+            transition={grow}
           >
             <span className={cn('absolute inset-x-0 top-1/2 h-px -translate-y-1/2', known ? 'bg-ink' : 'bg-dashed')} />
-            <motion.span className="absolute inset-0" initial={{ x: '-100%' }} animate={{ x: '0%' }} transition={PACKET}>
+            <motion.span
+              className="absolute inset-0 motion-reduce:hidden"
+              initial={{ x: '-100%' }}
+              animate={{ x: '0%' }}
+              transition={PACKET}
+            >
               <span className="absolute right-0 top-1/2 h-[3px] w-10 -translate-y-1/2 rounded-full bg-ink" />
             </motion.span>
           </motion.div>
@@ -183,7 +193,7 @@ function Lane({ lane, labels, unknown, ticks, nowPct, toPct }: LaneProps) {
             className="absolute top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2"
             initial={{ left: '0%' }}
             animate={{ left: '100%' }}
-            transition={GROW}
+            transition={grow}
           >
             <span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-60 motion-reduce:hidden" />
             <span className="absolute inset-0 rounded-full bg-accent" />

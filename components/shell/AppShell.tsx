@@ -46,6 +46,13 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
   return (
     <MotionConfig reducedMotion="user">
       <div className="relative z-10 flex h-dvh flex-col">
+        {/* First tab stop: jumps past header and language/theme controls, straight into the view. */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-[var(--frame)] focus:top-4 focus:z-20 focus:rounded-full focus:border focus:border-ink focus:bg-paper focus:px-4 focus:py-2 focus:text-[13px]"
+        >
+          {shell('skip')}
+        </a>
         <header className="intro-fade flex select-none items-center justify-between gap-6 px-frame pb-3 pt-4 md:pt-6" style={introStyle(0)}>
           <ViewLink view="hero" className="select-none whitespace-nowrap text-[15px] font-medium tracking-[-0.01em]">
             <span className="link-underline">{data.shared.name}</span>
@@ -57,7 +64,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
           </div>
         </header>
 
-        <main className="relative min-h-0 flex-1">
+        <main id="main" className="relative min-h-0 flex-1">
           <AnimatePresence mode="wait" initial={false}>
             <ViewFrame key={`${active}:${locale}`} label={nav(active)}>
               {RENDER[active](data)}
