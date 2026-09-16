@@ -21,7 +21,11 @@ const CSP = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  'upgrade-insecure-requests',
+  // No `upgrade-insecure-requests`: WebKit applies it to localhost too (Chromium exempts it),
+  // so every asset is requested over https://localhost and the page never hydrates — which
+  // breaks `npm run dev` and the documented "open the Network URL on your phone" flow in
+  // Safari. It buys nothing here anyway: the site serves no http:// resources and HSTS
+  // already forces HTTPS in production.
 ].join('; ');
 
 const SECURITY_HEADERS = [
