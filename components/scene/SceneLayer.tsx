@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
 import { useEffect } from 'react';
 import { DARK_PALETTE, LIGHT_PALETTE, releasePointer, snapPointer, useSceneStore, writePointer } from '@/store/useSceneStore';
+import { SceneErrorBoundary } from './SceneErrorBoundary';
 
 const DataField = dynamic(() => import('./DataField'), { ssr: false });
 
@@ -60,7 +61,9 @@ export function SceneLayer() {
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 select-none">
-      <DataField />
+      <SceneErrorBoundary>
+        <DataField />
+      </SceneErrorBoundary>
     </div>
   );
 }

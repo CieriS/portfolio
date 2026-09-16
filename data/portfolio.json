@@ -96,6 +96,11 @@
           "body": "This address does not match any view. The process may have moved or never existed.",
           "cta": "Back to index"
         },
+        "error": {
+          "title": "Process failed",
+          "body": "Something interrupted this view. The rest of the site is still running.",
+          "cta": "Retry"
+        },
         "nav": {
           "hero": "Index",
           "identity": "Identity",
@@ -255,6 +260,11 @@
           "body": "Questo indirizzo non corrisponde a nessuna vista. Il processo potrebbe essere stato spostato o non essere mai esistito.",
           "cta": "Torna all'indice"
         },
+        "error": {
+          "title": "Processo interrotto",
+          "body": "Qualcosa ha interrotto questa vista. Il resto del sito è ancora in esecuzione.",
+          "cta": "Riprova"
+        },
         "nav": {
           "hero": "Indice",
           "identity": "Identità",
@@ -413,6 +423,11 @@
           "title": "Introuvable",
           "body": "Cette adresse ne correspond à aucune vue. Le processus a peut-être été déplacé ou n'a jamais existé.",
           "cta": "Retour à l'index"
+        },
+        "error": {
+          "title": "Processus interrompu",
+          "body": "Quelque chose a interrompu cette vue. Le reste du site fonctionne toujours.",
+          "cta": "Réessayer"
         },
         "nav": {
           "hero": "Index",
