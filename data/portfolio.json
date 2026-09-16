@@ -71,7 +71,7 @@
           "views": {
             "hero": {
               "title": "Samuele Cieri — Software Developer & Data Engineering",
-              "description": "Samuele Cieri, Software Developer based in Bologna and transitioning to Data Engineering: Rust and C systems, PostgreSQL data modeling, Docker and full-stack architecture."
+              "description": "Samuele Cieri, Software Developer in Bologna moving into Data Engineering: Rust and C systems, PostgreSQL data modeling, Docker, full-stack architecture."
             },
             "identity": {
               "title": "Identity & engineering principles",
@@ -79,15 +79,15 @@
             },
             "timeline": {
               "title": "Experience & education timeline",
-              "description": "Software Developer at Tas since 2022 — internship, apprenticeship, permanent role — moving from interfaces to systems and data with Rust, C, PostgreSQL and Docker, alongside a Computer Engineering degree at the University of Bologna."
+              "description": "Software Developer at Tas since 2022, from interfaces to systems and data with Rust, C, PostgreSQL and Docker, alongside Computer Engineering in Bologna."
             },
             "projects": {
               "title": "Projects: Rust & PostgreSQL",
-              "description": "A project bridging toward Data Engineering: yourFinance (Rust, PostgreSQL, React), in early development."
+              "description": "yourFinance, a project bridging toward Data Engineering: a typed Rust API over PostgreSQL with a React client, in early development."
             },
             "discipline": {
               "title": "Optimization: calisthenics, sound & video",
-              "description": "The engineering method beyond code: a 3-day full-body program of weighted calisthenics, barbell and plyometrics; acoustic guitar, audio editing and video production."
+              "description": "The engineering method beyond code: a 3-day full-body program of weighted calisthenics, barbell and plyometrics; acoustic guitar and audio production."
             }
           }
         },
@@ -236,23 +236,23 @@
           "views": {
             "hero": {
               "title": "Samuele Cieri — Software Developer e Data Engineering",
-              "description": "Samuele Cieri, Software Developer a Bologna in transizione verso il Data Engineering: sistemi in Rust e C, modellazione dati PostgreSQL, Docker e architetture full-stack."
+              "description": "Samuele Cieri, Software Developer a Bologna in transizione verso il Data Engineering: sistemi in Rust e C, modellazione dati PostgreSQL, Docker."
             },
             "identity": {
               "title": "Identità e principi di ingegneria",
-              "description": "Un approccio strumentale e ingegneristico al software: obiettivi misurabili, dati come verità, flusso di controllo piatto. Contatti GitHub, LinkedIn e GitLab."
+              "description": "Un approccio strumentale e ingegneristico al software: obiettivi misurabili, dati come verità, flusso di controllo piatto. GitHub, LinkedIn, GitLab."
             },
             "timeline": {
               "title": "Esperienza e formazione",
-              "description": "Software Developer in Tas dal 2022 — tirocinio, apprendistato, tempo indeterminato — dalle interfacce ai sistemi e ai dati con Rust, C, PostgreSQL e Docker, in parallelo alla laurea in Ingegneria Informatica all'Università di Bologna."
+              "description": "Software Developer in Tas dal 2022, dalle interfacce ai sistemi e ai dati con Rust, C, PostgreSQL e Docker, in parallelo a Ingegneria Informatica a Bologna."
             },
             "projects": {
               "title": "Progetti: Rust e PostgreSQL",
-              "description": "Un progetto ponte verso il Data Engineering: yourFinance (Rust, PostgreSQL, React), nelle prime fasi di sviluppo."
+              "description": "yourFinance, progetto ponte verso il Data Engineering: API in Rust su PostgreSQL con client React, nelle prime fasi di sviluppo."
             },
             "discipline": {
               "title": "Ottimizzazione: calisthenics, suono e video",
-              "description": "Il metodo ingegneristico oltre il codice: programma full-body su 3 giorni tra calisthenics zavorrata, bilanciere e pliometria; chitarra acustica, editing audio e produzione video."
+              "description": "Il metodo ingegneristico oltre il codice: programma full-body su 3 giorni tra calisthenics zavorrata, bilanciere e pliometria; chitarra acustica e audio."
             }
           }
         },
@@ -401,23 +401,23 @@
           "views": {
             "hero": {
               "title": "Samuele Cieri — Software Developer & Data Engineering",
-              "description": "Samuele Cieri, Software Developer basé à Bologne en transition vers le Data Engineering : systèmes en Rust et C, modélisation de données PostgreSQL, Docker et architectures full-stack."
+              "description": "Samuele Cieri, Software Developer à Bologne en transition vers le Data Engineering : systèmes en Rust et C, modélisation PostgreSQL, Docker."
             },
             "identity": {
               "title": "Identité & principes d'ingénierie",
-              "description": "Une approche instrumentale du logiciel, centrée sur l'ingénierie : objectifs mesurables, données comme vérité de référence, flux de contrôle plat. GitHub, LinkedIn et GitLab."
+              "description": "Une approche instrumentale et ingénieure du logiciel : objectifs mesurables, données comme référence, flux de contrôle plat. GitHub, LinkedIn, GitLab."
             },
             "timeline": {
               "title": "Parcours professionnel et formation",
-              "description": "Software Developer chez Tas depuis 2022 — stage, apprentissage, CDI — des interfaces aux systèmes et aux données avec Rust, C, PostgreSQL et Docker, en parallèle d'une licence en ingénierie informatique à l'Université de Bologne."
+              "description": "Software Developer chez Tas depuis 2022, des interfaces aux systèmes et aux données avec Rust, C, PostgreSQL et Docker, en parallèle d'études à Bologne."
             },
             "projects": {
               "title": "Projets : Rust & PostgreSQL",
-              "description": "Un projet passerelle vers le Data Engineering : yourFinance (Rust, PostgreSQL, React), en début de développement."
+              "description": "yourFinance, projet passerelle vers le Data Engineering : une API Rust sur PostgreSQL avec client React, en début de développement."
             },
             "discipline": {
               "title": "Optimisation : callisthénie, son & vidéo",
-              "description": "La méthode d'ingénieur au-delà du code : programme full-body sur 3 jours mêlant callisthénie lestée, barre et pliométrie ; guitare acoustique, édition audio et production vidéo."
+              "description": "La méthode d'ingénieur au-delà du code : programme full-body sur 3 jours, callisthénie lestée, barre et pliométrie ; guitare acoustique et audio."
             }
           }
         },
