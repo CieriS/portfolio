@@ -10,7 +10,11 @@ export function useViewNavigation() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
+      // `repeat`: a held arrow key would step once per repeat, and every step pushes a
+      // history entry — Safari throws SecurityError past ~100 pushState calls per 30s.
+      // `shiftKey`: Shift+Arrow extends a text selection and must not also change view.
+      if (event.defaultPrevented || event.repeat) return;
+      if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
       const target = event.target as HTMLElement | null;
       if (target && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName))) return;
 
@@ -22,7 +26,11 @@ export function useViewNavigation() {
         step(1);
       } else if (event.key === 'ArrowLeft') {
         step(-1);
+      } else {
+        return;
       }
+      // Claimed: stop the browser from also scrolling or moving the caret on the same key.
+      event.preventDefault();
     };
 
     let startX = 0;
@@ -30,16 +38,19 @@ export function useViewNavigation() {
     let tracking = false;
 
     const onTouchStart = (event: TouchEvent) => {
-      tracking = event.touches.length === 1;
-      if (!tracking) return;
-      startX = event.touches[0].clientX;
-      startY = event.touches[0].clientY;
+      const touch = event.touches[0];
+      tracking = event.touches.length === 1 && touch !== undefined;
+      if (!touch) return;
+      startX = touch.clientX;
+      startY = touch.clientY;
     };
 
     const onTouchEnd = (event: TouchEvent) => {
       if (!tracking) return;
       tracking = false;
-      const touch = event.changedTouches[0];
+      // A gesture that grew to multiple fingers is a pinch, not a swipe.
+      const touch = event.touches.length === 0 ? event.changedTouches[0] : undefined;
+      if (!touch) return;
       const dx = touch.clientX - startX;
       const dy = touch.clientY - startY;
       if (Math.abs(dx) > SWIPE_MIN_PX && Math.abs(dx) > Math.abs(dy) * 1.5) {

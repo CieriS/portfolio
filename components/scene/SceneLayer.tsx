@@ -30,7 +30,7 @@ export function SceneLayer() {
     };
     const onTouchMove = (event: TouchEvent) => {
       const touch = event.touches[0];
-      write(touch.clientX, touch.clientY, true);
+      if (touch) write(touch.clientX, touch.clientY, true);
     };
     const onTouchStart = (event: TouchEvent) => {
       onTouchMove(event);
