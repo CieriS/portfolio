@@ -1,10 +1,17 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ImageResponse } from 'next/og';
-import type { Locale } from '@/i18n/routing';
+import { routing, type Locale } from '@/i18n/routing';
 import { pad } from '@/lib/format';
 import { getPortfolioBundle } from '@/lib/portfolio';
 import { VIEW_IDS, type ViewId } from '@/lib/views';
+
+/**
+ * Alt text shared by both opengraph-image routes. `alt` is a static export of Next's file
+ * convention, so it cannot vary per generated param: it reads the default locale and the
+ * other languages get the same string — as they already did when it was hardcoded twice.
+ */
+export const OG_ALT = getPortfolioBundle().contents[routing.defaultLocale].ui.meta.views.hero.title;
 
 const PAPER = '#0b0b0b';
 const INK = '#ecebe7';
