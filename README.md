@@ -57,7 +57,7 @@ Il branch `next-migration` sostituisce il precedente sito PHP, conservato in [`l
 | Qualità | ESLint 9 (`eslint-config-next`: core-web-vitals + typescript) · `tsc --noEmit` |
 | Hosting | Vercel |
 
-`@playwright/test` è già tra le devDependencies, ma non c'è ancora una suite di test configurata.
+I test end-to-end girano con Playwright su Chromium, WebKit e un profilo mobile, sulla build di produzione. La CI di GitHub Actions esegue lint, typecheck, build e test su ogni pull request.
 
 ## Requisiti
 
@@ -87,8 +87,10 @@ Per provarlo da smartphone sulla stessa rete, apri l'indirizzo *Network* stampat
 | `npm start` | Avvia la build di produzione in locale |
 | `npm run lint` | ESLint su tutto il progetto (esclusi `legacy/` e gli output di build) |
 | `npm run typecheck` | Genera i tipi delle route (`next typegen`) e verifica i tipi con `tsc --noEmit` |
+| `npm test` | Suite end-to-end Playwright; costruisce e avvia da sé la build di produzione |
+| `npm run test:ui` | Stessa suite nella modalità interattiva di Playwright |
 
-Prima di una push conviene eseguire `npm run lint`, `npm run typecheck` e `npm run build`.
+Prima di una push conviene eseguire `npm run lint`, `npm run typecheck` e `npm test`. Sono gli stessi comandi della CI.
 
 ## Variabili d'ambiente
 
@@ -296,10 +298,12 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 ├── i18n/             routing.ts (lingue) · request.ts (messages di next-intl)
 ├── lib/              views, portfolio, seo, site, structuredData, og, format, hooks, cn
 ├── store/            viewStore (per istanza) · useSceneStore (scena, transiente)
+├── e2e/              suite Playwright · helpers.ts (lingue, viste, attese)
+├── .github/workflows/ci.yml   lint, typecheck, build e test su ogni PR
 ├── legacy/           sito PHP precedente (non servito)
 ├── proxy.ts          rilevamento lingua (middleware di next-intl)
 ├── next.config.ts    plugin next-intl, redirect 301, origini ammesse in sviluppo
-├── eslint.config.mjs · postcss.config.mjs · tsconfig.json
+├── eslint.config.mjs · postcss.config.mjs · tsconfig.json · playwright.config.ts
 └── package.json
 ```
 
@@ -308,6 +312,8 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 - TypeScript in modalità `strict`, con alias `@/*` sulla radice del progetto.
 - ESLint con le configurazioni `core-web-vitals` e `typescript` di Next.js.
 - `npm run typecheck` esegue prima `next typegen`, che genera i tipi globali delle route (`PageProps`, `LayoutProps`).
+- Test end-to-end in `e2e/` con Playwright, eseguiti sulla build di produzione su Chromium, WebKit e un profilo mobile. Coprono URL e metadata di ogni lingua, navigazione e cronologia, cambio lingua, SEO, header di sicurezza, accessibilità (axe) e la tenuta del sito a un fallimento WebGL.
+- CI in `.github/workflows/ci.yml`: lint, typecheck, build e test su ogni pull request.
 - `legacy/` è escluso da TypeScript e da ESLint.
 - `reactStrictMode` attivo e indicatore di sviluppo di Next disattivato, perché si sovrapporrebbe alla navigazione.
 
