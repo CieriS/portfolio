@@ -1,4 +1,5 @@
-import type { Locale } from '@/i18n/routing';
+import { hasLocale } from 'next-intl';
+import { routing, type Locale } from '@/i18n/routing';
 import type { UiMessages } from '@/lib/portfolio';
 
 export const VIEW_IDS = ['hero', 'identity', 'timeline', 'projects', 'discipline'] as const;
@@ -9,6 +10,7 @@ export type ViewId = (typeof VIEW_IDS)[number];
 export const VIEW_SLUGS: Record<Locale, Record<ViewId, string>> = {
   en: { hero: '', identity: 'identity', timeline: 'execution', projects: 'systems', discipline: 'optimization' },
   it: { hero: '', identity: 'identita', timeline: 'esecuzione', projects: 'sistemi', discipline: 'ottimizzazione' },
+  fr: { hero: '', identity: 'identite', timeline: 'execution', projects: 'systemes', discipline: 'optimisation' },
 };
 
 export function pathFor(locale: Locale, view: ViewId): string {
@@ -24,7 +26,8 @@ export function viewFromSlug(locale: Locale, slug: string | undefined): ViewId |
 /** `/it/sistemi` → `projects`. The slug is resolved against the locale written in the path. */
 export function viewFromPath(pathname: string): ViewId | null {
   const [, locale, slug] = pathname.split('/');
-  if (locale !== 'en' && locale !== 'it') return null;
+  // Derived from routing.locales: adding a language must never need an edit here.
+  if (!hasLocale(routing.locales, locale)) return null;
   return viewFromSlug(locale, slug);
 }
 

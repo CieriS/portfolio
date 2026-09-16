@@ -17,6 +17,10 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
   const personId = `${siteUrl}#person`;
   const websiteId = `${siteUrl}#website`;
 
+  // Facts that already live in `shared`, surfaced to search engines rather than restated here.
+  const { organization } = shared.timeline.threadA;
+  const { institution } = shared.timeline.threadB;
+
   const knowsAbout = [
     ...new Set([
       ...shared.timeline.threadA.phases.flatMap((phase) => phase.stack),
@@ -43,6 +47,9 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
       jobTitle: content.hero.role,
       description: meta.description,
       knowsAbout,
+      knowsLanguage: [...routing.locales],
+      ...(organization ? { worksFor: { '@type': 'Organization', name: organization } } : {}),
+      ...(institution ? { alumniOf: { '@type': 'CollegeOrUniversity', name: institution } } : {}),
       sameAs: shared.contacts.map((contact) => contact.url),
     },
     {

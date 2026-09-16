@@ -2,7 +2,7 @@
 
 **Italiano** · [English](README.en.md) · [Français](README.fr.md)
 
-Portfolio personale di **Samuele Cieri**, Software Developer in transizione verso la Data Engineering. È una Single Page Application minimalista costruita con Next.js: il layout è bloccato a `100dvh`, le viste cambiano senza ricaricare la pagina e un campo di particelle 3D resta attivo in background. Ogni vista ha comunque un URL proprio, pre-renderizzato e indicizzabile, in inglese e in italiano.
+Portfolio personale di **Samuele Cieri**, Software Developer in transizione verso la Data Engineering. È una Single Page Application minimalista costruita con Next.js: il layout è bloccato a `100dvh`, le viste cambiano senza ricaricare la pagina e un campo di particelle 3D resta attivo in background. Ogni vista ha comunque un URL proprio, pre-renderizzato e indicizzabile, in inglese, italiano e francese.
 
 Il branch `next-migration` sostituisce il precedente sito PHP, conservato in [`legacy/`](legacy/).
 
@@ -33,7 +33,7 @@ Il branch `next-migration` sostituisce il precedente sito PHP, conservato in [`l
 ## Caratteristiche
 
 - **SPA con URL reali**: ogni vista è una pagina statica (SSG) con contenuti e metadata propri. Dopo il primo caricamento il cambio vista avviene sul client, senza ricaricare, e aggiorna URL e titolo con la History API.
-- **Bilingue (EN/IT)**: slug tradotti, rilevamento automatico della lingua e cambio lingua istantaneo che conserva vista, canvas e stato.
+- **Trilingue (EN/IT/FR)**: slug tradotti, rilevamento automatico della lingua e cambio lingua istantaneo che conserva vista, canvas e stato.
 - **Scena 3D persistente**: una griglia di 5.376 punti (three.js) che cambia forma e inquadratura a ogni vista e reagisce al puntatore. Viene caricata solo sul client e si adatta alle prestazioni del dispositivo.
 - **Tema chiaro, scuro o automatico** con next-themes, senza flash al caricamento.
 - **Animazioni curate**: intro in CSS al primo paint (prima dell'idratazione), poi Framer Motion per le transizioni tra viste, le line mask e la sottolineatura animata della navigazione.
@@ -52,7 +52,7 @@ Il branch `next-migration` sostituisce il precedente sito PHP, conservato in [`l
 | Motion | Framer Motion (`AnimatePresence`, `layoutId`, `MotionConfig`, mask reveal) |
 | 3D | three · @react-three/fiber · @react-three/drei (lazy, solo client) |
 | Stato | Zustand (store della vista per istanza via context + store della scena transiente) |
-| i18n | next-intl (`/en`, `/it`, rilevamento lingua via `proxy.ts`, cambio lingua lato client) |
+| i18n | next-intl (`/en`, `/it`, `/fr`, rilevamento lingua via `proxy.ts`, cambio lingua lato client) |
 | Dati | `data/portfolio.json` (unica sorgente: contenuti, stringhe UI, metadata SEO) |
 | Qualità | ESLint 9 (`eslint-config-next`: core-web-vitals + typescript) · `tsc --noEmit` |
 | Hosting | Vercel |
@@ -110,13 +110,13 @@ GOOGLE_SITE_VERIFICATION=il-tuo-token
 
 ## Viste e URL
 
-| # | Vista (ID) | EN | IT | Contenuto |
-| --- | --- | --- | --- | --- |
-| 01 | Indice (`hero`) | `/en` | `/it` | Nome in grande formato, ruolo, presentazione e invito a esplorare. |
-| 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | Dichiarazione d'intenti, quattro principi di ingegneria e contatti (GitHub, LinkedIn, GitLab). |
-| 03 | Esecuzione (`timeline`) | `/en/execution` | `/it/esecuzione` | Timeline a due corsie (industria e percorso accademico) su un asse temporale condiviso, con uptime in tempo reale e fasi con il relativo stack. |
-| 04 | Sistemi (`projects`) | `/en/systems` | `/it/sistemi` | Progetti in un accordion: sintesi, architettura a livelli, legame con la Data Engineering e link al repository. |
-| 05 | Ottimizzazione (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | Il metodo oltre il codice: programma di calisthenics (metriche e sessioni) e meccanica del suono (chitarra acustica, formati lossless, pipeline audio). |
+| # | Vista (ID) | EN | IT | FR | Contenuto |
+| --- | --- | --- | --- | --- | --- |
+| 01 | Indice (`hero`) | `/en` | `/it` | `/fr` | Nome in grande formato, ruolo, presentazione e invito a esplorare. |
+| 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | Dichiarazione d'intenti, quattro principi di ingegneria e contatti (GitHub, LinkedIn, GitLab). |
+| 03 | Esecuzione (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Timeline a due corsie (industria e percorso accademico) su un asse temporale condiviso, con uptime in tempo reale e fasi con il relativo stack. |
+| 04 | Sistemi (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Progetti in un accordion: sintesi, architettura a livelli, legame con la Data Engineering e link al repository. |
+| 05 | Ottimizzazione (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | Il metodo oltre il codice: programma di calisthenics (metriche e sessioni) e meccanica del suono (chitarra acustica, formati lossless, pipeline audio). |
 
 Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corrisponde a nessuna vista mostra una pagina 404 localizzata e non indicizzabile.
 
@@ -127,7 +127,7 @@ Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corris
 - **Touch**: uno swipe orizzontale (oltre 70 px e prevalentemente orizzontale) passa alla vista precedente o successiva.
 - **Frecce e contatore** nel footer, su schermi medi e grandi.
 - **Cronologia**: ogni cambio vista esegue `pushState`, quindi avanti e indietro del browser funzionano. Il titolo del documento segue la vista attiva.
-- **Lingua**: il selettore EN / IT sostituisce l'URL con lo slug tradotto (`replaceState`), aggiorna `lang` e titolo e salva il cookie `NEXT_LOCALE` per un anno, senza navigare. Canvas e vista attiva restano intatti.
+- **Lingua**: il selettore EN / IT / FR sostituisce l'URL con lo slug tradotto (`replaceState`), aggiorna `lang` e titolo e salva il cookie `NEXT_LOCALE` per un anno, senza navigare. Canvas e vista attiva restano intatti.
 - **Rilevamento lingua**: su `/` e sui percorsi senza prefisso, `proxy.ts` (middleware di next-intl) sceglie la lingua dal cookie `NEXT_LOCALE` o dall'header `Accept-Language`. La lingua predefinita è l'inglese e il prefisso è sempre presente.
 - **Tema**: il pulsante alterna Auto → Chiaro → Scuro; l'icona è rispettivamente piena a metà, vuota o piena.
 - **Scena**: il puntatore sposta leggermente la camera e "scalda" i nodi vicini. L'effetto si spegne quando il puntatore esce dalla finestra.
@@ -177,7 +177,7 @@ Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corris
 
 ## SEO
 
-- **Metadata per vista** (`lib/seo.ts`): title, description, canonical, hreflang (`en`, `it`, `x-default`), Open Graph di tipo `profile` e Twitter card `summary_large_image`. Per l'indice `x-default` punta a `/`, che rileva la lingua; per le altre viste punta alla versione inglese.
+- **Metadata per vista** (`lib/seo.ts`): title, description, canonical, hreflang (`en`, `it`, `fr`, `x-default`), Open Graph di tipo `profile` e Twitter card `summary_large_image`. Per l'indice `x-default` punta a `/`, che rileva la lingua; per le altre viste punta alla versione inglese.
 - **Immagini Open Graph** 1200 × 630 generate in build per ogni lingua e vista (`opengraph-image.tsx`, `lib/og.tsx`), con l'icona del sito legacy.
 - **JSON-LD** `@graph` (`lib/structuredData.ts`): `WebSite`, `Person` (con `knowsAbout` e `sameAs`), `ProfilePage`, `BreadcrumbList` nelle viste interne e `ItemList` di `SoftwareSourceCode` nella vista dei progetti.
 - **`sitemap.xml`** con alternate hreflang, **`robots.txt`**, **`manifest.webmanifest`**, favicon e icone ricavate dall'icona legacy `iconRed.ico`.
@@ -217,7 +217,7 @@ shared                  dati indipendenti dalla lingua
 ├── timeline            threadA (industria), threadB (accademico): date, fasi, stack
 ├── projects[]          id, name, repo, stack, layers
 └── discipline          biological (metriche, sessioni) · acoustic (formati, pipeline)
-locales.en | locales.it
+locales.en | locales.it | locales.fr
 ├── ui                  messages di next-intl: meta (SEO), notFound, nav, theme, locale, shell
 ├── hero
 ├── identity
@@ -226,7 +226,7 @@ locales.en | locales.it
 └── discipline
 ```
 
-- `shared` contiene i dati indipendenti dalla lingua (link, date, stack, metriche); `locales.en|it` contiene il copy.
+- `shared` contiene i dati indipendenti dalla lingua (link, date, stack, metriche); `locales.en|it|fr` contiene il copy.
 - Il blocco `ui` di ogni lingua è usato come messages di next-intl e contiene anche title e description SEO per vista (`ui.meta.views`).
 - Il copy è collegato ai dati condivisi tramite `id` (per esempio `shared.projects[].id` → `locales.*.projects.items[id]`).
 - I campi `*Emphasis` indicano la parola resa in corsivo serif e devono comparire nel testo a cui si riferiscono.
@@ -261,8 +261,8 @@ Pagine, immagini Open Graph, sitemap, navigazione e scorciatoie numeriche deriva
 ### Aggiungere una lingua
 
 1. `i18n/routing.ts`: aggiungi il codice a `locales`.
-2. `lib/views.ts`: aggiungi gli slug in `VIEW_SLUGS` e il codice nel controllo di `viewFromPath`, oggi limitato a `en` e `it`.
-3. `lib/seo.ts`: aggiungi il locale Open Graph in `OG_LOCALE` (per esempio `fr: 'fr_FR'`).
+2. `lib/views.ts`: aggiungi gli slug in `VIEW_SLUGS`. `viewFromPath` non va toccato: valida il locale con `hasLocale(routing.locales, …)`, quindi segue il passo 1 da solo.
+3. `lib/seo.ts`: aggiungi il locale Open Graph in `OG_LOCALE` (per esempio `pt: 'pt_PT'`).
 4. `data/portfolio.json`: aggiungi `locales.<codice>` con la stessa struttura di `en` e l'etichetta della nuova lingua in `ui.locale` di ogni lingua.
 
 TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipizzate su `Locale`.
@@ -292,7 +292,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 │   │                 useViewNavigation, useViewUrlSync
 │   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, DisciplineView, atoms
 ├── data/
-│   └── portfolio.json               contenuti EN/IT, stringhe UI, metadata SEO
+│   └── portfolio.json               contenuti EN/IT/FR, stringhe UI, metadata SEO
 ├── i18n/             routing.ts (lingue) · request.ts (messages di next-intl)
 ├── lib/              views, portfolio, seo, site, structuredData, og, format, hooks, cn
 ├── store/            viewStore (per istanza) · useSceneStore (scena, transiente)

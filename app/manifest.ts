@@ -6,10 +6,15 @@ export default function manifest(): MetadataRoute.Manifest {
   const meta = getPortfolioBundle().contents[routing.defaultLocale].ui.meta;
 
   return {
+    id: '/',
     name: meta.title,
     short_name: meta.siteName,
     description: meta.description,
+    lang: routing.defaultLocale,
+    dir: 'ltr',
+    // Left unprefixed on purpose: `/` runs the middleware's language detection.
     start_url: '/',
+    scope: '/',
     display: 'standalone',
     background_color: '#0b0b0b',
     theme_color: '#0b0b0b',
