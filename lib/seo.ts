@@ -4,7 +4,7 @@ import { getPortfolioBundle } from '@/lib/portfolio';
 import { absoluteUrl } from '@/lib/site';
 import { pathFor, type ViewId } from '@/lib/views';
 
-const OG_LOCALE: Record<Locale, string> = { en: 'en_US', it: 'it_IT' };
+const OG_LOCALE: Record<Locale, string> = { en: 'en_US', it: 'it_IT', fr: 'fr_FR' };
 
 /** hreflang map for one view: every locale plus x-default (auto-detecting root for the hero, English otherwise). */
 export function languageAlternates(view: ViewId): Record<string, string> {
