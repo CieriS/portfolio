@@ -5,7 +5,8 @@
     "contacts": [
       { "id": "github", "label": "GitHub", "handle": "@CieriS", "url": "https://github.com/CieriS/" },
       { "id": "linkedin", "label": "LinkedIn", "handle": "in/samuelecieri", "url": "https://www.linkedin.com/in/samuelecieri/" },
-      { "id": "gitlab", "label": "GitLab", "handle": "@CieriS", "url": "https://gitlab.com/CieriS/" }
+      { "id": "gitlab", "label": "GitLab", "handle": "@CieriS", "url": "https://gitlab.com/CieriS/" },
+      { "id": "instagram", "label": "instagram", "handle": "@samuelecierii", "url": "https://www.instagram.com/samuelecierii/" }
     ],
     "timeline": {
       "threadA": {
