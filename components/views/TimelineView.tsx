@@ -9,7 +9,6 @@ import type { PortfolioView, Thread } from '@/lib/portfolio';
 import { Meta, Pulse, SectionHead, type ViewProps } from './atoms';
 
 const GROW = { duration: 1.8, ease: EASE_OUT, delay: 0.3 } as const;
-const PACKET = { duration: 3.2, repeat: Infinity, ease: 'linear', delay: 2.1 } as const;
 /** Each further segment starts drawing once the previous one is done, so a gap reads as a pause. */
 const SEGMENT_STAGGER = 0.5;
 
@@ -224,9 +223,9 @@ function Lane({ thread, index, copy, labels, unknown, ticks, clock, toPct }: Lan
                 <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-ink" />
                 {/* A suspended process moves no data: only the running segment carries the packet. */}
                 {span.open && (
-                  <motion.span className="absolute inset-0 motion-reduce:hidden" initial={{ x: '-100%' }} animate={{ x: '0%' }} transition={PACKET}>
+                  <span className="packet-travel absolute inset-0 motion-reduce:hidden">
                     <span className="absolute right-0 top-1/2 h-[3px] w-10 -translate-y-1/2 rounded-full bg-ink" />
-                  </motion.span>
+                  </span>
                 )}
               </motion.div>
 
