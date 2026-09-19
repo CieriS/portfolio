@@ -230,7 +230,9 @@ function Lane({ thread, index, copy, labels, unknown, ticks, clock, toPct }: Lan
                 )}
               </motion.div>
 
-              {/* Open ends get the live head; a closed one gets a cap, so a gap has two visible edges. */}
+              {/* Every boundary is marked: a hollow dot where the thread starts, stops and
+                  starts again, the live head only where it is still running. That way an
+                  interruption is bounded on both sides instead of just fading out. */}
               {span.open ? (
                 <motion.span
                   aria-hidden
@@ -246,9 +248,7 @@ function Lane({ thread, index, copy, labels, unknown, ticks, clock, toPct }: Lan
                 <span aria-hidden className="absolute right-0 top-1/2 size-2 -translate-y-1/2 translate-x-1/2 rounded-full border border-ink bg-paper" />
               )}
 
-              {i === 0 && (
-                <span aria-hidden className="absolute left-0 top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-ink bg-paper" />
-              )}
+              <span aria-hidden className="absolute left-0 top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-ink bg-paper" />
             </div>
           );
         })}
