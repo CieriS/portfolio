@@ -218,7 +218,7 @@ Tous les contenus se trouvent dans [`data/portfolio.json`](data/portfolio.json),
 shared                  données indépendantes de la langue
 ├── name, handle
 ├── contacts[]          id, label, handle, url
-├── timeline            threadA (industrie), threadB (université) : dates, phases, stack
+├── timeline.threads[]  couloirs : id, kind (work | education), entity, segments[], phases
 ├── projects[]          id, name, repo, stack, layers
 └── discipline          biological (mesures, séances) · acoustic (formats, pipeline)
 locales.en | locales.it | locales.fr
@@ -237,7 +237,15 @@ locales.en | locales.it | locales.fr
 - Les dates sont au format ISO `YYYY-MM-DD` et s'affichent sous la forme `DD.MM.YYYY`.
 - Le JSON est affecté à des types explicites : une clé manquante ou renommée, ou une structure différente entre EN et IT, fait échouer `npm run typecheck` et le build.
 
-Champs acceptant `null` (affichés `—`) : `timeline.threadA.organization`, `timeline.threadB.start`, `timeline.threadB.institution`, `projects[].repo`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. Si `repo` vaut `null`, le lien du projet pointe vers le profil GitHub ; si la date de début d'un couloir vaut `null`, le couloir est dessiné en pointillés.
+Champs acceptant `null` (affichés `—`) : `timeline.threads[].entity`, `projects[].repo`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. Si `repo` vaut `null`, le lien du projet pointe vers le profil GitHub.
+
+### Couloirs de la frise
+
+Un couloir est une suite de `segments`, pas un intervalle unique : `{ "start": "YYYY-MM-DD", "end": null }`, avec `end: null` pour le segment encore en cours. Plusieurs segments laissent un vide sur l'axe, et les périodes d'activité sont aussi écrites en toutes lettres dans le détail du couloir. Les couloirs et les colonnes découlent du tableau : en ajouter un troisième ne demande aucune modification de code.
+
+`kind` vaut `work` ou `education` et pilote le JSON-LD : les couloirs `work` alimentent `worksFor` et `knowsAbout`, ceux `education` alimentent `alumniOf`. Toute autre valeur fait échouer le build. L'uptime en haut suit le premier couloir `work` et ne additionne que le temps actif, interruptions exclues.
+
+Chaque phase accepte un `start` facultatif. Sans lui, les phases sont réparties sur le temps actif du couloir et enjambent les vides ; avec lui, la phase est ancrée à cette date.
 
 ## Étendre le projet
 

@@ -16,6 +16,10 @@ test('security headers are served on every page', async ({ request }) => {
   expect(csp).toContain("object-src 'none'");
   expect(csp).toContain("base-uri 'self'");
   expect(csp).toContain("frame-ancestors 'none'");
+
+  // 'unsafe-eval' is granted to React in development only. This suite runs against the
+  // production build, so finding it here means the dev-only guard has leaked into a deploy.
+  expect(csp).not.toContain('unsafe-eval');
 });
 
 test('the site declares no external origins it does not use', async ({ request }) => {

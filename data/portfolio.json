@@ -9,28 +9,33 @@
       { "id": "instagram", "label": "instagram", "handle": "@samuelecierii", "url": "https://www.instagram.com/samuelecierii/" }
     ],
     "timeline": {
-      "threadA": {
-        "id": "industry",
-        "start": "2022-02-23",
-        "end": null,
-        "organization": "Tas",
-        "phases": [
-          { "id": "interface", "stack": ["HTML", "CSS", "JavaScript", "TypeScript", "Angular", "PHP", "SQL", "Tailwind"] },
-          { "id": "systems", "stack": ["Rust", "C"] },
-          { "id": "data", "stack": ["PostgreSQL", "Docker"] }
-        ]
-      },
-      "threadB": {
-        "id": "academic",
-        "start": "2021-11-12",
-        "end": null,
-        "institution": "Università di Bologna",
-        "phases": [
-          { "id": "foundations", "stack": ["Calculus", "Linear Algebra", "Physics", "Circuit Theory"] },
-          { "id": "computing", "stack": ["Programming", "Digital Logic", "Computer Architecture", "Operating Systems"] },
-          { "id": "information", "stack": ["Databases", "Computer Networks", "Web Technologies", "Statistics"] }
-        ]
-      }
+      "threads": [
+        {
+          "id": "industry",
+          "kind": "work",
+          "entity": "Tas",
+          "segments": [{ "start": "2022-02-23", "end": null }],
+          "phases": [
+            { "id": "interface", "stack": ["HTML", "CSS", "JavaScript", "TypeScript", "Angular", "PHP", "SQL", "Tailwind"] },
+            { "id": "systems", "stack": ["Rust", "C"] },
+            { "id": "data", "stack": ["PostgreSQL", "Docker"] }
+          ]
+        },
+        {
+          "id": "academic",
+          "kind": "education",
+          "entity": "Università di Bologna",
+          "segments": [
+            { "start": "2021-11-12", "end": "2023-01-01" },
+            { "start": "2024-11-01", "end": null }
+          ],
+          "phases": [
+            { "id": "foundations", "stack": ["Calculus", "Linear Algebra", "Physics", "Circuit Theory"] },
+            { "id": "computing", "stack": ["Programming", "Digital Logic", "Computer Architecture", "Operating Systems"] },
+            { "id": "information", "stack": ["Databases", "Computer Networks", "Web Technologies", "Statistics"] }
+          ]
+        }
+      ]
     },
     "projects": [
       {
@@ -149,30 +154,34 @@
           "thread": "Thread",
           "start": "Start",
           "running": "Running",
+          "suspended": "Suspended",
+          "periods": "Active periods",
           "uptime": "Uptime",
           "days": "d",
-          "now": "Now",
-          "organization": "Organization",
-          "institution": "Institution"
+          "now": "Now"
         },
-        "threadA": {
-          "label": "Industry",
-          "role": "Software Developer",
-          "summary": "Professional activity since 23/02/2022: internship, apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. A deliberate descent through the stack: from user interfaces to systems programming and data management.",
-          "phases": {
-            "interface": { "title": "Interface layer", "body": "Web interfaces, server-side rendering, first contact with relational schemas; today a proprietary framework migrating to Angular and TypeScript." },
-            "systems": { "title": "Systems layer", "body": "Memory ownership, deterministic performance, low-level control with Rust and C." },
-            "data": { "title": "Data layer", "body": "Relational modeling on PostgreSQL, reproducible environments with Docker." }
-          }
-        },
-        "threadB": {
-          "label": "Academic",
-          "role": "Computer Engineering",
-          "summary": "Bachelor's degree in Computer Engineering at the University of Bologna, in progress part-time. First and only degree, executed in parallel with full-time work.",
-          "phases": {
-            "foundations": { "title": "Formal foundations", "body": "Mathematical, physical and circuit models underlying computation." },
-            "computing": { "title": "Computing systems", "body": "Programming, digital logic, hardware architectures, operating systems." },
-            "information": { "title": "Information systems", "body": "Databases, computer networks, web technologies, statistical reasoning on data." }
+        "threads": {
+          "industry": {
+            "label": "Industry",
+            "role": "Software Developer",
+            "entityLabel": "Organization",
+            "summary": "Professional activity since 23/02/2022: internship, apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. A deliberate descent through the stack: from user interfaces to systems programming and data management.",
+            "phases": {
+              "interface": { "title": "Interface layer", "body": "Web interfaces, server-side rendering, first contact with relational schemas; today a proprietary framework migrating to Angular and TypeScript." },
+              "systems": { "title": "Systems layer", "body": "Memory ownership, deterministic performance, low-level control with Rust and C." },
+              "data": { "title": "Data layer", "body": "Relational modeling on PostgreSQL, reproducible environments with Docker." }
+            }
+          },
+          "academic": {
+            "label": "Academic",
+            "role": "Computer Engineering",
+            "entityLabel": "Institution",
+            "summary": "Bachelor's degree in Computer Engineering at the University of Bologna, part-time. Suspended from 2023 to late 2024 to concentrate on full-time work, then resumed: a paused process, not an abandoned one.",
+            "phases": {
+              "foundations": { "title": "Formal foundations", "body": "Mathematical, physical and circuit models underlying computation." },
+              "computing": { "title": "Computing systems", "body": "Programming, digital logic, hardware architectures, operating systems." },
+              "information": { "title": "Information systems", "body": "Databases, computer networks, web technologies, statistical reasoning on data." }
+            }
           }
         }
       },
@@ -314,30 +323,34 @@
           "thread": "Thread",
           "start": "Inizio",
           "running": "In esecuzione",
+          "suspended": "Sospeso",
+          "periods": "Periodi attivi",
           "uptime": "Uptime",
           "days": "g",
-          "now": "Ora",
-          "organization": "Organizzazione",
-          "institution": "Ateneo"
+          "now": "Ora"
         },
-        "threadA": {
-          "label": "Industria",
-          "role": "Software Developer",
-          "summary": "Attività lavorativa dal 23/02/2022: tirocinio, apprendistato, oggi tempo indeterminato, full remote. Sviluppo frontend e full-stack su un framework proprietario, ora in migrazione verso Angular con generazione di codice assistita da AI. Una discesa deliberata nello stack: dalle interfacce utente alla programmazione di sistema e alla gestione dei dati.",
-          "phases": {
-            "interface": { "title": "Livello interfaccia", "body": "Interfacce web, rendering lato server, primo contatto con schemi relazionali; oggi un framework proprietario in migrazione verso Angular e TypeScript." },
-            "systems": { "title": "Livello sistema", "body": "Ownership della memoria, prestazioni deterministiche, controllo a basso livello con Rust e C." },
-            "data": { "title": "Livello dati", "body": "Modellazione relazionale su PostgreSQL, ambienti riproducibili con Docker." }
-          }
-        },
-        "threadB": {
-          "label": "Accademico",
-          "role": "Ingegneria Informatica",
-          "summary": "Laurea triennale in Ingegneria Informatica all'Università di Bologna, in corso in modalità part-time. Prima e unica laurea, eseguita in parallelo al lavoro a tempo pieno.",
-          "phases": {
-            "foundations": { "title": "Fondamenti formali", "body": "Modelli matematici, fisici e circuitali alla base del calcolo." },
-            "computing": { "title": "Sistemi di calcolo", "body": "Programmazione, reti logiche, architetture hardware, sistemi operativi." },
-            "information": { "title": "Sistemi informativi", "body": "Basi di dati, reti di calcolatori, tecnologie web, ragionamento statistico sui dati." }
+        "threads": {
+          "industry": {
+            "label": "Industria",
+            "role": "Software Developer",
+            "entityLabel": "Organizzazione",
+            "summary": "Attività lavorativa dal 23/02/2022: tirocinio, apprendistato, oggi tempo indeterminato, full remote. Sviluppo frontend e full-stack su un framework proprietario, ora in migrazione verso Angular con generazione di codice assistita da AI. Una discesa deliberata nello stack: dalle interfacce utente alla programmazione di sistema e alla gestione dei dati.",
+            "phases": {
+              "interface": { "title": "Livello interfaccia", "body": "Interfacce web, rendering lato server, primo contatto con schemi relazionali; oggi un framework proprietario in migrazione verso Angular e TypeScript." },
+              "systems": { "title": "Livello sistema", "body": "Ownership della memoria, prestazioni deterministiche, controllo a basso livello con Rust e C." },
+              "data": { "title": "Livello dati", "body": "Modellazione relazionale su PostgreSQL, ambienti riproducibili con Docker." }
+            }
+          },
+          "academic": {
+            "label": "Accademico",
+            "role": "Ingegneria Informatica",
+            "entityLabel": "Ateneo",
+            "summary": "Laurea triennale in Ingegneria Informatica all'Università di Bologna, part-time. Sospesa dal 2023 a fine 2024 per concentrarmi sul lavoro a tempo pieno, poi ripresa: un processo in pausa, non abbandonato.",
+            "phases": {
+              "foundations": { "title": "Fondamenti formali", "body": "Modelli matematici, fisici e circuitali alla base del calcolo." },
+              "computing": { "title": "Sistemi di calcolo", "body": "Programmazione, reti logiche, architetture hardware, sistemi operativi." },
+              "information": { "title": "Sistemi informativi", "body": "Basi di dati, reti di calcolatori, tecnologie web, ragionamento statistico sui dati." }
+            }
           }
         }
       },
@@ -479,30 +492,34 @@
           "thread": "Thread",
           "start": "Début",
           "running": "En cours",
+          "suspended": "Suspendu",
+          "periods": "Périodes d'activité",
           "uptime": "Uptime",
           "days": "j",
-          "now": "Maintenant",
-          "organization": "Organisation",
-          "institution": "Établissement"
+          "now": "Maintenant"
         },
-        "threadA": {
-          "label": "Industrie",
-          "role": "Software Developer",
-          "summary": "Activité professionnelle depuis le 23/02/2022 : stage, apprentissage, aujourd'hui en CDI, en télétravail complet. Développement frontend et full-stack sur un framework propriétaire, en cours de migration vers Angular avec génération de code assistée par IA. Une descente délibérée dans la stack : des interfaces utilisateur à la programmation système et à la gestion des données.",
-          "phases": {
-            "interface": { "title": "Couche interface", "body": "Interfaces web, rendu côté serveur, premier contact avec les schémas relationnels ; aujourd'hui un framework propriétaire en migration vers Angular et TypeScript." },
-            "systems": { "title": "Couche système", "body": "Ownership de la mémoire, performances déterministes, contrôle bas niveau avec Rust et C." },
-            "data": { "title": "Couche données", "body": "Modélisation relationnelle sur PostgreSQL, environnements reproductibles avec Docker." }
-          }
-        },
-        "threadB": {
-          "label": "Académique",
-          "role": "Ingénierie informatique",
-          "summary": "Licence en ingénierie informatique à l'Université de Bologne, en cours à temps partiel. Premier et unique diplôme, mené en parallèle d'un emploi à temps plein.",
-          "phases": {
-            "foundations": { "title": "Fondements formels", "body": "Modèles mathématiques, physiques et de circuits à la base du calcul." },
-            "computing": { "title": "Systèmes de calcul", "body": "Programmation, logique numérique, architectures matérielles, systèmes d'exploitation." },
-            "information": { "title": "Systèmes d'information", "body": "Bases de données, réseaux informatiques, technologies web, raisonnement statistique sur les données." }
+        "threads": {
+          "industry": {
+            "label": "Industrie",
+            "role": "Software Developer",
+            "entityLabel": "Organisation",
+            "summary": "Activité professionnelle depuis le 23/02/2022 : stage, apprentissage, aujourd'hui en CDI, en télétravail complet. Développement frontend et full-stack sur un framework propriétaire, en cours de migration vers Angular avec génération de code assistée par IA. Une descente délibérée dans la stack : des interfaces utilisateur à la programmation système et à la gestion des données.",
+            "phases": {
+              "interface": { "title": "Couche interface", "body": "Interfaces web, rendu côté serveur, premier contact avec les schémas relationnels ; aujourd'hui un framework propriétaire en migration vers Angular et TypeScript." },
+              "systems": { "title": "Couche système", "body": "Ownership de la mémoire, performances déterministes, contrôle bas niveau avec Rust et C." },
+              "data": { "title": "Couche données", "body": "Modélisation relationnelle sur PostgreSQL, environnements reproductibles avec Docker." }
+            }
+          },
+          "academic": {
+            "label": "Académique",
+            "role": "Ingénierie informatique",
+            "entityLabel": "Établissement",
+            "summary": "Licence en ingénierie informatique à l'Université de Bologne, à temps partiel. Suspendue de 2023 à fin 2024 pour me concentrer sur le travail à plein temps, puis reprise : un processus mis en pause, non abandonné.",
+            "phases": {
+              "foundations": { "title": "Fondements formels", "body": "Modèles mathématiques, physiques et de circuits à la base du calcul." },
+              "computing": { "title": "Systèmes de calcul", "body": "Programmation, logique numérique, architectures matérielles, systèmes d'exploitation." },
+              "information": { "title": "Systèmes d'information", "body": "Bases de données, réseaux informatiques, technologies web, raisonnement statistique sur les données." }
+            }
           }
         }
       },

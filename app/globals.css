@@ -116,6 +116,24 @@
   background-image: repeating-linear-gradient(90deg, var(--ink) 0 4px, transparent 4px 9px);
 }
 
+/*
+ * Data packet travelling a timeline lane. A pure decorative loop, so CSS owns it: Framer
+ * resolved `repeat` to the end state and wrote `transform: none`, leaving the packet parked
+ * against the head as a stub. Hidden outright under reduced motion by `motion-reduce:hidden`.
+ */
+@keyframes packet-travel {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@utility packet-travel {
+  animation: packet-travel 3.2s linear 2.1s infinite;
+}
+
 .link-underline:hover,
 .group:hover .link-underline,
 .group:focus-visible .link-underline {
