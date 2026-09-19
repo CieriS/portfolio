@@ -1,6 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const PORT = 3000;
+/**
+ * A port of its own, not 3000: with `reuseExistingServer` a dev server left running on the
+ * default port would be reused silently, and the suite would then assert security headers
+ * and prerendered output against `next dev` instead of a production build.
+ */
+const PORT = Number(process.env.PORT ?? 3210);
 const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
@@ -29,7 +34,10 @@ export default defineConfig({
    * faithfully. Reusing a server that is already up keeps local runs quick.
    */
   webServer: {
-    command: 'npm run build && npm start',
+    command: `npm run build && npm start -- --port ${PORT}`,
+    // Canonical URLs, hreflang and the sitemap are built from SITE_URL, which otherwise
+    // falls back to a hardcoded localhost:3000 and would not match the port under test.
+    env: { SITE_URL: BASE_URL },
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
