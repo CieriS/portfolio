@@ -1,6 +1,6 @@
 import { routing, type Locale } from '@/i18n/routing';
 import { pick } from '@/lib/format';
-import { getPortfolioBundle } from '@/lib/portfolio';
+import { getPortfolioBundle, type Thread } from '@/lib/portfolio';
 import { absoluteUrl } from '@/lib/site';
 import { pathFor, type ViewId } from '@/lib/views';
 
@@ -18,12 +18,18 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
   const websiteId = `${siteUrl}#website`;
 
   // Facts that already live in `shared`, surfaced to search engines rather than restated here.
-  const { organization } = shared.timeline.threadA;
-  const { institution } = shared.timeline.threadB;
+  // Derived from each thread's `kind`, so adding a thread needs no change in this file.
+  const { threads } = shared.timeline;
+  const named = (kind: Thread['kind'], type: string) => {
+    const entities = threads.filter((thread) => thread.kind === kind && thread.entity).map((thread) => ({ '@type': type, name: thread.entity }));
+    return entities.length === 0 ? undefined : entities.length === 1 ? entities[0] : entities;
+  };
+  const worksFor = named('work', 'Organization');
+  const alumniOf = named('education', 'CollegeOrUniversity');
 
   const knowsAbout = [
     ...new Set([
-      ...shared.timeline.threadA.phases.flatMap((phase) => phase.stack),
+      ...threads.filter((thread) => thread.kind === 'work').flatMap((thread) => thread.phases.flatMap((phase) => phase.stack)),
       ...shared.projects.flatMap((project) => project.stack),
       'Data Engineering',
     ]),
@@ -48,8 +54,8 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
       description: meta.description,
       knowsAbout,
       knowsLanguage: [...routing.locales],
-      ...(organization ? { worksFor: { '@type': 'Organization', name: organization } } : {}),
-      ...(institution ? { alumniOf: { '@type': 'CollegeOrUniversity', name: institution } } : {}),
+      ...(worksFor ? { worksFor } : {}),
+      ...(alumniOf ? { alumniOf } : {}),
       sameAs: shared.contacts.map((contact) => contact.url),
     },
     {

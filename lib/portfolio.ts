@@ -1,9 +1,25 @@
-import raw from '@/data/portfolio.json';
+import rawData from '@/data/portfolio.json';
 import type { Locale } from '@/i18n/routing';
 
 export type Contact = { id: string; label: string; handle: string; url: string };
-export type Phase = { id: string; stack: string[] };
-export type Thread = { id: string; start: string | null; end: string | null; phases: Phase[] };
+
+/** One run of a thread. `end: null` means it is still running. */
+export type Segment = { start: string; end: string | null };
+
+/** `start` is optional: without it the phase is spread over the thread's active time. */
+export type Phase = { id: string; start?: string; stack: string[] };
+
+export const THREAD_KINDS = ['work', 'education'] as const;
+export type ThreadKind = (typeof THREAD_KINDS)[number];
+
+/** A thread runs over one or more segments, so an interruption is part of the model. */
+export type Thread = {
+  id: string;
+  kind: ThreadKind;
+  entity: string | null;
+  segments: Segment[];
+  phases: Phase[];
+};
 export type ProjectLayer = { id: string; tech: string };
 export type Project = { id: string; name: string; repo: string | null; stack: string[]; layers: ProjectLayer[] };
 export type Session = { id: string; focus: string; patterns: string[] };
@@ -12,10 +28,7 @@ export type SharedData = {
   name: string;
   handle: string;
   contacts: Contact[];
-  timeline: {
-    threadA: Thread & { organization: string | null };
-    threadB: Thread & { institution: string | null };
-  };
+  timeline: { threads: Thread[] };
   projects: Project[];
   discipline: {
     biological: { heightCm: number | null; weightKg: number | null; daysPerWeek: number; sessions: Session[] };
@@ -23,14 +36,30 @@ export type SharedData = {
   };
 };
 
-export type LocaleContent = (typeof raw.locales)['en'];
+export type LocaleContent = (typeof rawData.locales)['en'];
 export type UiMessages = LocaleContent['ui'];
 export type PortfolioView = { locale: Locale; shared: SharedData; content: LocaleContent };
 export type PortfolioBundle = { shared: SharedData; contents: Record<Locale, LocaleContent> };
 
+/**
+ * JSON widens every string, so `kind` arrives as `string` and cannot satisfy the union on
+ * its own. Narrowing it here keeps the rest of the app on the literal type, and a typo in
+ * the data file throws while the pages are being prerendered — that is, it fails the build.
+ */
+function asThread(raw: (typeof rawData)['shared']['timeline']['threads'][number]): Thread {
+  const kind = THREAD_KINDS.find((candidate) => candidate === raw.kind);
+  if (!kind) {
+    throw new Error(`Unknown thread kind "${raw.kind}" on thread "${raw.id}". Expected: ${THREAD_KINDS.join(', ')}.`);
+  }
+  return { ...raw, kind };
+}
+
 // Typed assignments: a missing or renamed key in the JSON (or an IT/EN shape drift) fails the build.
-const shared: SharedData = raw.shared;
-const contents: Record<Locale, LocaleContent> = raw.locales;
+const shared: SharedData = {
+  ...rawData.shared,
+  timeline: { threads: rawData.shared.timeline.threads.map(asThread) },
+};
+const contents: Record<Locale, LocaleContent> = rawData.locales;
 
 /** Both locales ship to the client so the language swap needs no navigation. */
 export function getPortfolioBundle(): PortfolioBundle {
