@@ -3,16 +3,21 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
+const DEV = process.env.NODE_ENV !== 'production';
+
 /**
  * `script-src` keeps 'unsafe-inline' on purpose. Every page here is prerendered (SSG), and a
  * nonce has to be minted per request in the middleware — that would turn the whole site
  * dynamic to protect three inline scripts we ship ourselves: the JSON-LD block, the
  * next-themes anti-flash script and Next's own bootstrap. Everything else is closed.
  * No font host is allowed because next/font self-hosts Geist and Instrument Serif at build.
+ *
+ * 'unsafe-eval' is added in development only: React rebuilds stack traces with eval() while
+ * developing and never in production, and without it Next's overlay reports a permanent issue.
  */
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  `script-src 'self' 'unsafe-inline'${DEV ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
