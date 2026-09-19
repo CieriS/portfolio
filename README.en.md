@@ -216,7 +216,7 @@ All content lives in [`data/portfolio.json`](data/portfolio.json), imported and 
 shared                  language-independent data
 ├── name, handle
 ├── contacts[]          id, label, handle, url
-├── timeline            threadA (industry), threadB (academic): dates, phases, stack
+├── timeline.threads[]  lanes: id, kind (work | education), entity, segments[], phases
 ├── projects[]          id, name, repo, stack, layers
 └── discipline          biological (metrics, sessions) · acoustic (formats, pipeline)
 locales.en | locales.it | locales.fr
@@ -235,7 +235,15 @@ locales.en | locales.it | locales.fr
 - Dates use ISO `YYYY-MM-DD` and are displayed as `DD.MM.YYYY`.
 - The JSON is assigned to explicit types: a missing or renamed key, or a different structure between EN and IT, fails `npm run typecheck` and the build.
 
-Fields that accept `null` (shown as `—`): `timeline.threadA.organization`, `timeline.threadB.start`, `timeline.threadB.institution`, `projects[].repo`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. When `repo` is `null`, the project link points to the GitHub profile; when a lane's start date is `null`, the lane is drawn dashed.
+Fields that accept `null` (shown as `—`): `timeline.threads[].entity`, `projects[].repo`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. When `repo` is `null`, the project link points to the GitHub profile.
+
+### Timeline lanes
+
+A lane is a sequence of `segments`, not a single interval: `{ "start": "YYYY-MM-DD", "end": null }`, with `end: null` for the segment still running. More than one segment leaves a gap on the axis, and the active periods are also spelled out in text in the lane's detail. Lanes and columns derive from the array, so adding a third one needs no code change.
+
+`kind` is either `work` or `education` and drives the JSON-LD: `work` lanes feed `worksFor` and `knowsAbout`, `education` lanes feed `alumniOf`. Any other value fails the build. The headline uptime follows the first `work` lane and sums active time only, excluding interruptions.
+
+Each phase takes an optional `start`. Without it, phases are spread over the lane's active time and step over the gaps; with it, the phase is anchored to that date.
 
 ## Extending the project
 

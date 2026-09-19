@@ -216,7 +216,7 @@ Tutti i contenuti stanno in [`data/portfolio.json`](data/portfolio.json), import
 shared                  dati indipendenti dalla lingua
 ├── name, handle
 ├── contacts[]          id, label, handle, url
-├── timeline            threadA (industria), threadB (accademico): date, fasi, stack
+├── timeline.threads[]  corsie: id, kind (work | education), entity, segments[], fasi
 ├── projects[]          id, name, repo, stack, layers
 └── discipline          biological (metriche, sessioni) · acoustic (formati, pipeline)
 locales.en | locales.it | locales.fr
@@ -235,7 +235,15 @@ locales.en | locales.it | locales.fr
 - Le date sono in formato ISO `YYYY-MM-DD` e vengono mostrate come `DD.MM.YYYY`.
 - Il JSON è assegnato a tipi espliciti: una chiave mancante o rinominata, o una struttura diversa tra EN e IT, fa fallire `npm run typecheck` e la build.
 
-Campi che accettano `null` (mostrati come `—`): `timeline.threadA.organization`, `timeline.threadB.start`, `timeline.threadB.institution`, `projects[].repo`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. Se `repo` è `null`, il link del progetto punta al profilo GitHub; se la data di inizio di una corsia è `null`, la corsia viene disegnata tratteggiata.
+Campi che accettano `null` (mostrati come `—`): `timeline.threads[].entity`, `projects[].repo`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. Se `repo` è `null`, il link del progetto punta al profilo GitHub.
+
+### Corsie della timeline
+
+Una corsia è una sequenza di `segments`, non un intervallo unico: `{ "start": "YYYY-MM-DD", "end": null }` con `end: null` per il segmento ancora in corso. Più segmenti producono un vuoto sull'asse, e le date dei periodi attivi vengono scritte anche in chiaro nel dettaglio della corsia. Corsie e colonne derivano dall'array, quindi aggiungerne una terza non richiede modifiche al codice.
+
+Il campo `kind` vale `work` o `education` e guida il JSON-LD: le corsie `work` alimentano `worksFor` e `knowsAbout`, quelle `education` alimentano `alumniOf`. Un valore diverso fa fallire la build. L'uptime in alto segue la prima corsia `work` e somma solo il tempo attivo, escludendo le interruzioni.
+
+Ogni fase accetta uno `start` facoltativo. Senza, le fasi sono distribuite sul tempo attivo della corsia e scavalcano i vuoti; con uno `start`, la fase viene ancorata a quella data.
 
 ## Estendere il progetto
 
