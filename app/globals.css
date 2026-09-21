@@ -130,8 +130,14 @@
   }
 }
 
+/*
+ * `backwards` is what makes the delay invisible. Without a fill mode an animation applies no
+ * keyframe while it waits, so for those 2.1s the packet fell back to its untransformed spot —
+ * `right-0`, pressed against the head — and read as a thick stub on every page load.
+ * With it, the first keyframe holds during the delay: -100%, outside the clipped segment.
+ */
 @utility packet-travel {
-  animation: packet-travel 3.2s linear 2.1s infinite;
+  animation: packet-travel 3.2s linear 2.1s infinite backwards;
 }
 
 .link-underline:hover,
