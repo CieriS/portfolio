@@ -8,11 +8,7 @@ import { expectView, gotoView, navLabel } from './helpers';
 test('the site survives a WebGL failure and only loses the canvas', async ({ page }) => {
   await page.addInitScript(() => {
     const original = HTMLCanvasElement.prototype.getContext;
-    HTMLCanvasElement.prototype.getContext = function (
-      this: HTMLCanvasElement,
-      type: string,
-      ...rest: unknown[]
-    ) {
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, type: string, ...rest: unknown[]) {
       if (String(type).includes('webgl')) return null;
       return (original as (...args: unknown[]) => unknown).call(this, type, ...rest);
     } as typeof HTMLCanvasElement.prototype.getContext;

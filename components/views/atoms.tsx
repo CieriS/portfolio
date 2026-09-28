@@ -14,7 +14,7 @@ type MetaProps = { children: ReactNode; className?: string; as?: 'p' | 'span' | 
 /** Small mono label. `as` keeps the visual style while carrying heading semantics where needed. */
 export function Meta({ children, className, as: Tag = 'p' }: MetaProps) {
   return (
-    <Tag className={cn('select-none font-mono text-[11px] uppercase tracking-[0.14em] text-muted', className)}>{children}</Tag>
+    <Tag className={cn('font-mono text-[11px] tracking-[0.14em] text-muted uppercase select-none', className)}>{children}</Tag>
   );
 }
 
@@ -25,7 +25,7 @@ export function Emphasis({ text, emphasis }: { text: string; emphasis?: string }
   return (
     <>
       {text.slice(0, at)}
-      <em className="font-serif text-[1.08em] font-normal italic tracking-[-0.01em]">{emphasis}</em>
+      <em className="font-serif text-[1.08em] font-normal tracking-[-0.01em] italic">{emphasis}</em>
       {text.slice(at + emphasis.length)}
     </>
   );
@@ -59,7 +59,7 @@ export function SectionHead({ index, label, title, emphasis, subtitle, aside }: 
         </Meta>
       </motion.div>
       <div className="md:col-span-9">
-        <h1 className="select-none text-[clamp(2.5rem,6.4vw,6.75rem)] font-medium leading-[0.95] tracking-[-0.045em] text-balance hyphens-auto">
+        <h1 className="text-[clamp(2.5rem,6.4vw,6.75rem)] leading-[0.95] font-medium tracking-[-0.045em] text-balance hyphens-auto select-none">
           <Line>
             <Emphasis text={title} emphasis={emphasis} />
           </Line>

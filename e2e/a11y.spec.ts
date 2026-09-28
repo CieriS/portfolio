@@ -9,9 +9,7 @@ for (const { view, path } of ALL_PAGES.filter((p) => p.locale === 'en')) {
     // The intro animation leaves elements mid-transition, which reads as low contrast.
     await page.waitForTimeout(2000);
 
-    const { violations } = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-      .analyze();
+    const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
 
     expect(
       violations.map((v) => `${v.id} (${v.nodes.length}): ${v.help}`),
@@ -69,9 +67,7 @@ test('a view change moves focus so screen readers announce it', async ({ page })
   await expectView(page, 'en', 'timeline');
   await page.waitForTimeout(300);
 
-  expect(await page.evaluate(() => document.activeElement?.getAttribute('aria-label'))).toBe(
-    navLabel('en', 'timeline'),
-  );
+  expect(await page.evaluate(() => document.activeElement?.getAttribute('aria-label'))).toBe(navLabel('en', 'timeline'));
 });
 
 test('the projects accordion always points aria-controls at a real element', async ({ page }) => {

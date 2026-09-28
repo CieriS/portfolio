@@ -1,0 +1,10 @@
+.next/
+node_modules/
+legacy/
+playwright-report/
+test-results/
+package-lock.json
+next-env.d.ts
+tsconfig.tsbuildinfo
+# Hand-aligned tables and trees read better than Prettier's rewrap.
+*.md

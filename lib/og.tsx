@@ -27,45 +27,41 @@ export async function renderOgImage(locale: Locale, view: ViewId): Promise<Image
   const isHero = view === 'hero';
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          padding: 72,
-          background: PAPER,
-          color: INK,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element -- next/og renders plain <img> only */}
-            <img src={iconSrc} width={56} height={56} alt="" />
-            <span style={{ fontSize: 28 }}>{shared.name}</span>
-          </div>
-          <span style={{ fontSize: 22, color: MUTED, letterSpacing: 4 }}>
-            {`(${pad(VIEW_IDS.indexOf(view) + 1)}) ${ui.nav[view].toUpperCase()}`}
-          </span>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: 72,
+        background: PAPER,
+        color: INK,
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- next/og renders plain <img> only */}
+          <img src={iconSrc} width={56} height={56} alt="" />
+          <span style={{ fontSize: 28 }}>{shared.name}</span>
         </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span style={{ fontSize: isHero ? 136 : 120, lineHeight: 1, letterSpacing: -5 }}>
-            {isHero ? shared.name : ui.nav[view]}
-          </span>
-          <span style={{ marginTop: 32, fontSize: 32, color: MUTED }}>
-            {isHero ? hero.transition : ui.meta.views[view].title}
-          </span>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, borderTop: `1px solid ${LINE}`, paddingTop: 28 }}>
-          <span style={{ width: 10, height: 10, borderRadius: 10, background: '#ff5b1f' }} />
-          <span style={{ fontSize: 22, color: MUTED, letterSpacing: 3 }}>{ui.shell.role.toUpperCase()}</span>
-        </div>
+        <span style={{ fontSize: 22, color: MUTED, letterSpacing: 4 }}>
+          {`(${pad(VIEW_IDS.indexOf(view) + 1)}) ${ui.nav[view].toUpperCase()}`}
+        </span>
       </div>
-    ),
+
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <span style={{ fontSize: isHero ? 136 : 120, lineHeight: 1, letterSpacing: -5 }}>
+          {isHero ? shared.name : ui.nav[view]}
+        </span>
+        <span style={{ marginTop: 32, fontSize: 32, color: MUTED }}>{isHero ? hero.transition : ui.meta.views[view].title}</span>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, borderTop: `1px solid ${LINE}`, paddingTop: 28 }}>
+        <span style={{ width: 10, height: 10, borderRadius: 10, background: '#ff5b1f' }} />
+        <span style={{ fontSize: 22, color: MUTED, letterSpacing: 3 }}>{ui.shell.role.toUpperCase()}</span>
+      </div>
+    </div>,
     { width: 1200, height: 630 },
   );
 }

@@ -39,7 +39,7 @@ The `next-migration` branch replaces the previous PHP site, which is kept in [`l
 - **Considered motion**: a CSS intro on first paint (before hydration), then Framer Motion for view transitions, line masks and the animated navigation underline.
 - **Complete SEO**: canonical, hreflang, Open Graph with images per language and view, JSON-LD, sitemap, robots, manifest and 301 redirects from the old PHP URLs.
 - **Accessibility**: real links, a single `h1` per URL, ARIA attributes, visible focus, and `prefers-reduced-motion` honoured in CSS, in Framer Motion and in the 3D scene.
-- **Centralised content** in a single typed JSON file: a missing key or a structural mismatch between EN and IT fails the build.
+- **Centralised, validated content**: one shared JSON file plus one per language, checked by types, a zod schema and cross-checks — inconsistent content fails the build.
 
 ## Stack
 
@@ -53,15 +53,15 @@ The `next-migration` branch replaces the previous PHP site, which is kept in [`l
 | 3D | three · @react-three/fiber · @react-three/drei (lazy, client-only) |
 | State | Zustand (per-instance view store via context + transient scene store) |
 | i18n | next-intl (`/en`, `/it`, `/fr`, language detection via `proxy.ts`, client-side language switch) |
-| Data | `data/portfolio.json` (single source: content, UI strings, SEO metadata) |
-| Quality | ESLint 9 (`eslint-config-next`: core-web-vitals + typescript) · `tsc --noEmit` |
+| Data | `data/shared.json` + `data/locales/*.json` (single source: content, UI strings, SEO metadata), validated with zod |
+| Quality | ESLint 9 (`eslint-config-next`: core-web-vitals + typescript) · Prettier · `tsc --noEmit` · Vitest · Playwright |
 | Hosting | Vercel |
 
-End-to-end tests run with Playwright on Chromium, WebKit and a mobile profile, against the production build. GitHub Actions runs lint, typecheck, build and tests on every pull request.
+End-to-end tests run with Playwright on Chromium, WebKit and a mobile profile, against the production build. Unit tests use Vitest. GitHub Actions runs formatting, lint, typecheck, unit tests, build and end-to-end tests on every pull request.
 
 ## Requirements
 
-- **Node.js ≥ 20.9.0** (`engines` field in `package.json`)
+- **Node.js ≥ 22.12.0** (required by Vitest) (`engines` field in `package.json`)
 - **npm** (the repository ships a `package-lock.json`)
 
 ## Quick start
@@ -86,11 +86,14 @@ To try it on a phone on the same network, open the *Network* address printed by 
 | `npm run build` | Production build: prerenders pages, Open Graph images, sitemap and robots |
 | `npm start` | Serves the production build locally |
 | `npm run lint` | ESLint across the project (`legacy/` and build output excluded) |
+| `npm run format` | Formats the project with Prettier (`.prettierrc.json`, with Tailwind class sorting) |
+| `npm run format:check` | Checks formatting without writing, as CI does |
 | `npm run typecheck` | Generates route types (`next typegen`) and type-checks with `tsc --noEmit` |
+| `npm run test:unit` | Vitest unit tests for the pure logic (`lib/**/*.test.ts`), in under a second |
 | `npm test` | Playwright end-to-end suite; builds and starts the production server itself |
 | `npm run test:ui` | The same suite in Playwright's interactive mode |
 
-Before pushing, it is worth running `npm run lint`, `npm run typecheck` and `npm test` — the same commands CI runs.
+Before pushing, it is worth running `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm run test:unit` and `npm test` — the same commands CI runs.
 
 ## Environment variables
 
@@ -117,7 +120,7 @@ GOOGLE_SITE_VERIFICATION=your-token
 | 01 | Index (`hero`) | `/en` | `/it` | `/fr` | Large-format name, role, introduction and a call to explore. |
 | 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | Mission statement, four engineering principles and contacts (GitHub, LinkedIn, GitLab). |
 | 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Two-lane timeline (industry and academic path) on a shared time axis, with a live uptime counter and phases with their stack. |
-| 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Projects in an accordion: summary, layered architecture, link to Data Engineering and repository link. |
+| 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Projects in an accordion: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). |
 | 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | The method beyond code: a calisthenics programme (metrics and sessions) and sound mechanics (acoustic guitar, lossless formats, audio pipeline). |
 
 Every URL is prerendered with its own content. An address that matches no view shows a localised, non-indexable 404 page.
@@ -140,7 +143,7 @@ Every URL is prerendered with its own content. An address that matches no view s
 
 - The layout and pages use `generateStaticParams`: every language × view combination is generated at build time.
 - `app/[locale]/page.tsx` (index) and `app/[locale]/[view]/page.tsx` (inner views) both render `components/seo/PortfolioPage.tsx`, a Server Component that injects the JSON-LD and starts the app on the requested view.
-- `lib/views.ts` is the single source for IDs, localised slugs and URL ↔ view conversion.
+- `lib/routes.ts` is the single source for locales, IDs, localised slugs and URL ↔ view conversion. It depends on neither Next nor next-intl, so the Playwright suite imports the same module instead of keeping a copy.
 - Both languages are sent to the client (`getPortfolioBundle`), so switching language needs no navigation.
 
 ### Shell
@@ -210,32 +213,35 @@ Selection is disabled on interface chrome only: navigation, buttons, header and 
 
 ## Data and content
 
-All content lives in [`data/portfolio.json`](data/portfolio.json), imported and typed in `lib/portfolio.ts`.
+Content lives in [`data/shared.json`](data/shared.json) and in one file per language under [`data/locales/`](data/locales/), loaded by `lib/portfolio.ts`.
 
 ```
-shared                  language-independent data
+data/shared.json        language-independent data
 ├── name, handle
 ├── contacts[]          id, label, handle, url
 ├── timeline.threads[]  lanes: id, kind (work | education), entity, segments[], phases
-├── projects[]          id, name, repo, stack, layers
+├── projects[]          id, name, source, stack, layers
 └── discipline          biological (metrics, sessions) · acoustic (formats, pipeline)
-locales.en | locales.it | locales.fr
+data/locales/<language>.json   en · it · fr
 ├── ui                  next-intl messages: meta (SEO), notFound, nav, theme, locale, shell
 ├── hero
 ├── identity
 ├── timeline
-├── projects            items[id]: summary, bridge, layers
+├── projects            items[id]: summary, bridge, highlights, layers
 └── discipline
 ```
 
-- `shared` holds language-independent data (links, dates, stack, metrics); `locales.en|it|fr` holds the copy.
+- `shared.json` holds language-independent data (links, dates, stack, metrics); `locales/<language>.json` holds the copy.
 - Each language's `ui` block is used as next-intl messages and also contains the per-view SEO title and description (`ui.meta.views`).
-- Copy is linked to shared data by `id` (for example `shared.projects[].id` → `locales.*.projects.items[id]`).
+- Copy is linked to shared data by `id` (for example `shared.projects[].id` → `projects.items[id]` in every language).
 - `*Emphasis` fields name the word rendered in italic serif and must appear in the text they refer to.
 - Dates use ISO `YYYY-MM-DD` and are displayed as `DD.MM.YYYY`.
-- The JSON is assigned to explicit types: a missing or renamed key, or a different structure between EN and IT, fails `npm run typecheck` and the build.
+- Content goes through three checks before prerendering, and any failure fails the build:
+  1. **types**: every language is assigned to the shape of `en.json`, so a missing or renamed key fails `npm run typecheck`;
+  2. **schema** (`lib/content/schema.ts`): `shared.json` is parsed with zod (enums, real ISO dates, segments ending after they start, URLs, the `source` union); the domain types are inferred from the schema;
+  3. **cross-checks** (`lib/content/validate.ts`): every thread, phase, project and layer id has copy in every language, every language has its `ui.locale` label, and every `*Emphasis` occurs in its text. All problems are listed at once, with their path.
 
-Fields that accept `null` (shown as `—`): `timeline.threads[].entity`, `projects[].repo`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. When `repo` is `null`, the project link points to the GitHub profile.
+Fields that accept `null` (shown as `—`): `timeline.threads[].entity`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. `projects[].source` is either `{ "visibility": "public", "url": "…" }` (repository link, also published as `codeRepository` in the JSON-LD) or `{ "visibility": "private" }`: the code is not linked and the project points to the Identity view, where a walkthrough can be requested. An unknown visibility or a public project without a `url` fails the build.
 
 ### Timeline lanes
 
@@ -249,8 +255,8 @@ Each phase takes an optional `start`. Without it, phases are spread over the lan
 
 ### Adding a project
 
-1. Add an entry to `shared.projects` with `id`, `name`, `repo` (or `null`), `stack` and `layers` (`id`, `tech`).
-2. In **both** languages, add `projects.items[<id>]` with `summary`, `bridge` and `layers` (one description per layer `id`).
+1. Add an entry to `shared.projects` with `id`, `name`, `source` (public with a `url`, or private), `stack` and `layers` (`id`, `tech`).
+2. In **both** languages, add `projects.items[<id>]` with `summary`, `bridge`, `highlights` (the list of engineering decisions) and `layers` (one description per layer `id`).
 3. If needed, update the title and description in `ui.meta.views.projects`.
 
 The view and the `ItemList` JSON-LD update automatically.
@@ -261,19 +267,18 @@ Add `{ id, label, handle, url }` to `shared.contacts`: it appears in the Identit
 
 ### Adding a view
 
-1. `lib/views.ts`: add the ID to `VIEW_IDS` and its slug for each language in `VIEW_SLUGS`.
+1. `lib/routes.ts`: add the ID to `VIEW_IDS` and its slug for each language in `VIEW_SLUGS`.
 2. `components/scene/modes.ts`: add the scene mode to `SCENE_MODES`.
 3. `components/views/`: create the component and register it in `RENDER` in `components/shell/AppShell.tsx`.
-4. `data/portfolio.json`: add `ui.nav.<id>`, `ui.meta.views.<id>` and the view's copy in every language.
+4. `data/locales/*.json`: add `ui.nav.<id>`, `ui.meta.views.<id>` and the view's copy in every language.
 
 Pages, Open Graph images, sitemap, navigation and number shortcuts all derive from `VIEW_IDS` (shortcuts cover up to 9 views).
 
 ### Adding a language
 
-1. `i18n/routing.ts`: add the code to `locales`.
-2. `lib/views.ts`: add the slugs to `VIEW_SLUGS`. `viewFromPath` needs no edit: it validates the locale with `hasLocale(routing.locales, …)`, so it follows step 1 on its own.
-3. `lib/seo.ts`: add the Open Graph locale to `OG_LOCALE` (for example `pt: 'pt_PT'`).
-4. `data/portfolio.json`: add `locales.<code>` with the same structure as `en`, plus the new language's label in every language's `ui.locale`.
+1. `lib/routes.ts`: add the code to `LOCALES` and the slugs to `VIEW_SLUGS`. `i18n/routing.ts`, `viewFromPath` and the E2E suite read from here and need no edit.
+2. `lib/seo.ts`: add the Open Graph locale to `OG_LOCALE` (for example `pt: 'pt_PT'`).
+3. `data/locales/<code>.json`: create it with the same structure as `en.json`, import it in `lib/portfolio.ts` and `e2e/content.ts`, and add the new language's label to every language's `ui.locale`.
 
 TypeScript flags any step you miss, because all these maps are typed on `Locale`.
 
@@ -302,9 +307,11 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   │                 useViewNavigation, useViewUrlSync
 │   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, DisciplineView, atoms
 ├── data/
-│   └── portfolio.json               EN/IT/FR content, UI strings, SEO metadata
+│   ├── shared.json                  language-independent data
+│   └── locales/                     en.json · it.json · fr.json: copy, UI strings, SEO metadata
 ├── i18n/             routing.ts (languages) · request.ts (next-intl messages)
-├── lib/              views, portfolio, seo, site, structuredData, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, seo, site, structuredData, og, format, hooks, cn
+│   └── content/      schema (zod) · validate (cross-checks)
 ├── store/            viewStore (per instance) · useSceneStore (scene, transient)
 ├── e2e/              Playwright suite · helpers.ts (locales, views, waits)
 ├── .github/workflows/ci.yml   lint, typecheck, build and tests on every PR
@@ -318,10 +325,14 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 ## Code quality
 
 - TypeScript in `strict` mode, with the `@/*` alias mapped to the project root.
+- Prettier for TypeScript, JSON, CSS and YAML (Markdown is excluded so tables and trees keep their alignment). Formatting-only commits go in `.git-blame-ignore-revs`; to use it locally: `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
 - ESLint with Next.js's `core-web-vitals` and `typescript` configurations.
 - `npm run typecheck` first runs `next typegen`, which generates the global route types (`PageProps`, `LayoutProps`).
+- Vitest unit tests next to the modules (`lib/**/*.test.ts`): slugs and URLs, timeline arithmetic (segments, gaps, phases, axis), formatting, the content schema and cross-checks, including the real files.
 - End-to-end tests in `e2e/` with Playwright, run against the production build on Chromium, WebKit and a mobile profile. They cover every language's URLs and metadata, navigation and history, the language switch, SEO, security headers, accessibility (axe) and the site's resilience to a WebGL failure.
-- CI in `.github/workflows/ci.yml`: lint, typecheck, build and tests on every pull request.
+- CI in `.github/workflows/ci.yml`: formatting, lint, typecheck, unit tests, build and end-to-end tests on every pull request.
+- Dependabot (`.github/dependabot.yml`) opens one grouped weekly PR against `development` for npm dependencies and one for GitHub Actions.
+- `.mailmap` folds the early commits signed with a hostname-derived email into one identity, without rewriting history.
 - `legacy/` is excluded from TypeScript and ESLint.
 - `reactStrictMode` is on, and Next's dev indicator is off because it would sit on top of the navigation.
 
@@ -359,7 +370,7 @@ npm start
 | On another device the page renders but ignores clicks and keys | The host is not in `allowedDevOrigins` (`next.config.ts`): add it and restart `npm run dev`. |
 | Canonical URLs and sitemap point to `localhost` in production | Set `SITE_URL`, or deploy on Vercel, which provides `VERCEL_PROJECT_PRODUCTION_URL`. |
 | Type errors on `PageProps` or `LayoutProps` | Run `npm run typecheck`: `next typegen` regenerates the route types. |
-| The build fails after editing `portfolio.json` | Check that the key exists in both languages and that the value matches the types in `lib/portfolio.ts`. |
+| The build fails after a content edit | The message lists every problem with its path (for example `it.projects.items.app.layers has no copy for "api"`). `npm run test:unit` shows it in under a second. |
 | A preview deployment does not show up on Google | That is intended: only `VERCEL_ENV=production` is indexable. |
 
 ## Contact
@@ -370,4 +381,4 @@ npm start
 
 ## License
 
-The repository does not include a license: code and content remain the author's property (all rights reserved). Font Awesome Free, in `legacy/`, is distributed under its own license ([`LICENSE.txt`](legacy/fontawesome-free-6.4.0-web/LICENSE.txt)).
+Code and content are the author's property, all rights reserved: see [`LICENSE`](LICENSE). Font Awesome Free, in `legacy/`, is distributed under its own license ([`LICENSE.txt`](legacy/fontawesome-free-6.4.0-web/LICENSE.txt)).

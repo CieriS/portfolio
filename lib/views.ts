@@ -1,35 +1,7 @@
-import { hasLocale } from 'next-intl';
-import { routing, type Locale } from '@/i18n/routing';
 import type { UiMessages } from '@/lib/portfolio';
+import type { ViewId } from '@/lib/routes';
 
-export const VIEW_IDS = ['hero', 'identity', 'timeline', 'projects', 'discipline'] as const;
-
-export type ViewId = (typeof VIEW_IDS)[number];
-
-/** Localized URL segment per view; the hero lives at the locale root. */
-export const VIEW_SLUGS: Record<Locale, Record<ViewId, string>> = {
-  en: { hero: '', identity: 'identity', timeline: 'execution', projects: 'systems', discipline: 'optimization' },
-  it: { hero: '', identity: 'identita', timeline: 'esecuzione', projects: 'sistemi', discipline: 'ottimizzazione' },
-  fr: { hero: '', identity: 'identite', timeline: 'execution', projects: 'systemes', discipline: 'optimisation' },
-};
-
-export function pathFor(locale: Locale, view: ViewId): string {
-  const slug = VIEW_SLUGS[locale][view];
-  return slug ? `/${locale}/${slug}` : `/${locale}`;
-}
-
-export function viewFromSlug(locale: Locale, slug: string | undefined): ViewId | null {
-  if (!slug) return 'hero';
-  return VIEW_IDS.find((id) => id !== 'hero' && VIEW_SLUGS[locale][id] === slug) ?? null;
-}
-
-/** `/it/sistemi` → `projects`. The slug is resolved against the locale written in the path. */
-export function viewFromPath(pathname: string): ViewId | null {
-  const [, locale, slug] = pathname.split('/');
-  // Derived from routing.locales: adding a language must never need an edit here.
-  if (!hasLocale(routing.locales, locale)) return null;
-  return viewFromSlug(locale, slug);
-}
+export { pathFor, VIEW_IDS, VIEW_SLUGS, viewFromPath, viewFromSlug, type ViewId } from '@/lib/routes';
 
 /** Mirrors the server title template (`%s — siteName`, hero absolute) for client-side view swaps. */
 export function documentTitle(meta: UiMessages['meta'], view: ViewId): string {

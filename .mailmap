@@ -1,0 +1,5 @@
+# Maps the hostname-derived identities of early commits to the canonical author,
+# so `git log`, `git shortlog` and `git blame` show one person without rewriting history.
+CieriS <sammy.2002@tiscali.it> <samu@Host-024.homenet.telecomitalia.it>
+CieriS <sammy.2002@tiscali.it> <samu@MBP-di-Samu.homenet.telecomitalia.it>
+CieriS <sammy.2002@tiscali.it> Samu <samu@MBP-di-Samu.homenet.telecomitalia.it>

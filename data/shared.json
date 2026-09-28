@@ -1,0 +1,87 @@
+{
+  "name": "Samuele Cieri",
+  "handle": "CieriS",
+  "contacts": [
+    { "id": "github", "label": "GitHub", "handle": "@CieriS", "url": "https://github.com/CieriS/" },
+    { "id": "linkedin", "label": "LinkedIn", "handle": "in/samuelecieri", "url": "https://www.linkedin.com/in/samuelecieri/" },
+    { "id": "gitlab", "label": "GitLab", "handle": "@CieriS", "url": "https://gitlab.com/CieriS/" },
+    { "id": "instagram", "label": "instagram", "handle": "@samuelecierii", "url": "https://www.instagram.com/samuelecierii/" }
+  ],
+  "timeline": {
+    "threads": [
+      {
+        "id": "industry",
+        "kind": "work",
+        "entity": "Tas",
+        "segments": [{ "start": "2022-02-23", "end": null }],
+        "phases": [
+          { "id": "interface", "stack": ["HTML", "CSS", "JavaScript", "TypeScript", "Angular", "PHP", "SQL", "Tailwind"] },
+          { "id": "systems", "stack": ["Rust", "C"] },
+          { "id": "data", "stack": ["PostgreSQL", "Docker"] }
+        ]
+      },
+      {
+        "id": "academic",
+        "kind": "education",
+        "entity": "Università di Bologna",
+        "segments": [
+          { "start": "2021-11-12", "end": "2023-01-01" },
+          { "start": "2024-11-01", "end": null }
+        ],
+        "phases": [
+          { "id": "foundations", "stack": ["Calculus", "Linear Algebra", "Physics", "Circuit Theory"] },
+          { "id": "computing", "stack": ["Programming", "Digital Logic", "Computer Architecture", "Operating Systems"] },
+          { "id": "information", "stack": ["Databases", "Computer Networks", "Web Technologies", "Statistics"] }
+        ]
+      }
+    ]
+  },
+  "projects": [
+    {
+      "id": "yourfinance",
+      "name": "yourFinance",
+      "source": { "visibility": "private" },
+      "stack": ["Rust", "PostgreSQL", "React Native", "Docker"],
+      "layers": [
+        { "id": "clients", "tech": "Expo · Tauri" },
+        { "id": "api", "tech": "Rust · Axum" },
+        { "id": "worker", "tech": "Rust · Tokio" },
+        { "id": "storage", "tech": "PostgreSQL 18" }
+      ]
+    }
+  ],
+  "discipline": {
+    "biological": {
+      "heightCm": 173,
+      "weightKg": 72,
+      "daysPerWeek": 3,
+      "sessions": [
+        {
+          "id": "A",
+          "focus": "squat",
+          "patterns": ["Box jump", "Pause squat", "Weighted dips", "Weighted chin-ups", "Fingertip push-ups"]
+        },
+        {
+          "id": "B",
+          "focus": "hinge",
+          "patterns": ["Broad jump", "Deficit deadlift", "Military press", "Barbell row", "Front lever"]
+        },
+        {
+          "id": "C",
+          "focus": "unilateral",
+          "patterns": [
+            "Barbell Bulgarian split squat",
+            "Incline bench press",
+            "Weighted pull-ups",
+            "Nordic curl",
+            "Ring push-ups"
+          ]
+        }
+      ]
+    },
+    "acoustic": {
+      "formats": ["GarageBand", "Logic Pro", "DaVinci Resolve"],
+      "pipeline": ["capture", "mix", "edit"]
+    }
+  }
+}

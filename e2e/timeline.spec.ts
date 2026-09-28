@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
-import portfolio from '../data/portfolio.json';
+import { locales, shared } from './content';
 import { gotoView, navLabel } from './helpers';
 
-const { threads } = portfolio.shared.timeline;
+const { threads } = shared.timeline;
 /** `formatDate` renders ISO as DD.MM.YYYY. */
 const asShown = (iso: string) => iso.split('-').reverse().join('.');
 
@@ -31,7 +31,7 @@ test('an interrupted thread draws one bar per segment and names its periods', as
   }
 
   // A resumed thread is still running: the gap is in its past.
-  await expect(section).toContainText(portfolio.locales.en.timeline.labels.running);
+  await expect(section).toContainText(locales.en.timeline.labels.running);
 });
 
 test('the uptime counts active time, so a gap does not inflate it', async ({ page }) => {

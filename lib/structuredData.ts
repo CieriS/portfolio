@@ -21,7 +21,9 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
   // Derived from each thread's `kind`, so adding a thread needs no change in this file.
   const { threads } = shared.timeline;
   const named = (kind: Thread['kind'], type: string) => {
-    const entities = threads.filter((thread) => thread.kind === kind && thread.entity).map((thread) => ({ '@type': type, name: thread.entity }));
+    const entities = threads
+      .filter((thread) => thread.kind === kind && thread.entity)
+      .map((thread) => ({ '@type': type, name: thread.entity }));
     return entities.length === 0 ? undefined : entities.length === 1 ? entities[0] : entities;
   };
   const worksFor = named('work', 'Organization');
@@ -95,7 +97,7 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
           description: pick(content.projects.items, project.id)?.summary,
           programmingLanguage: project.stack,
           author: { '@id': personId },
-          ...(project.repo ? { codeRepository: project.repo } : {}),
+          ...(project.source.visibility === 'public' ? { codeRepository: project.source.url } : {}),
         },
       })),
     });
