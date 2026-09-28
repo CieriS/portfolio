@@ -61,7 +61,7 @@ I test end-to-end girano con Playwright su Chromium, WebKit e un profilo mobile,
 
 ## Requisiti
 
-- **Node.js ≥ 20.9.0** (campo `engines` di `package.json`)
+- **Node.js ≥ 22.12.0** (richiesto da Vitest) (campo `engines` di `package.json`)
 - **npm** (il repository include `package-lock.json`)
 
 ## Avvio rapido
