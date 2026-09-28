@@ -41,7 +41,7 @@ La branche `next-migration` remplace l'ancien site PHP, conservé dans [`legacy/
 - **Animations soignées** : intro en CSS au premier affichage (avant l'hydratation), puis Framer Motion pour les transitions entre vues, les line masks et le soulignement animé de la navigation.
 - **SEO complet** : canonical, hreflang, Open Graph avec images par langue et par vue, JSON-LD, sitemap, robots, manifest et redirections 301 depuis les anciennes URL PHP.
 - **Accessibilité** : vrais liens, un seul `h1` par URL, attributs ARIA, focus visible et respect de `prefers-reduced-motion` en CSS, dans Framer Motion et dans la scène 3D.
-- **Contenus centralisés** dans un seul fichier JSON typé : une clé manquante ou une différence de structure entre EN et IT fait échouer le build.
+- **Contenus centralisés et validés** : un fichier JSON partagé plus un par langue, contrôlés par les types, un schéma zod et des contrôles croisés — un contenu incohérent fait échouer le build.
 
 ## Stack technique
 
@@ -55,7 +55,7 @@ La branche `next-migration` remplace l'ancien site PHP, conservé dans [`legacy/
 | 3D | three · @react-three/fiber · @react-three/drei (lazy, côté client uniquement) |
 | État | Zustand (store de vue par instance via context + store de scène transitoire) |
 | i18n | next-intl (`/en`, `/it`, `/fr`, détection de la langue via `proxy.ts`, changement de langue côté client) |
-| Données | `data/portfolio.json` (source unique : contenus, textes de l'interface, métadonnées SEO) |
+| Données | `data/shared.json` + `data/locales/*.json` (source unique : contenus, textes de l'interface, métadonnées SEO), validés avec zod |
 | Qualité | ESLint 9 (`eslint-config-next` : core-web-vitals + typescript) · `tsc --noEmit` |
 | Hébergement | Vercel |
 
@@ -89,10 +89,11 @@ Pour le tester sur un smartphone connecté au même réseau, ouvrez l'adresse *N
 | `npm start` | Lance le build de production en local |
 | `npm run lint` | ESLint sur l'ensemble du projet (hors `legacy/` et fichiers de build) |
 | `npm run typecheck` | Génère les types des routes (`next typegen`) et vérifie les types avec `tsc --noEmit` |
+| `npm run test:unit` | Tests unitaires Vitest de la logique pure (`lib/**/*.test.ts`), en moins d'une seconde |
 | `npm test` | Suite end-to-end Playwright ; construit et démarre lui-même le serveur de production |
 | `npm run test:ui` | La même suite dans le mode interactif de Playwright |
 
-Avant un push, il est conseillé d'exécuter `npm run lint`, `npm run typecheck` et `npm test` — les mêmes commandes que la CI.
+Avant un push, il est conseillé d'exécuter `npm run lint`, `npm run typecheck`, `npm run test:unit` et `npm test` — les mêmes commandes que la CI.
 
 ## Variables d'environnement
 
@@ -212,16 +213,16 @@ La sélection n'est désactivée que sur les éléments d'interface : navigation
 
 ## Données et contenus
 
-Tous les contenus se trouvent dans [`data/portfolio.json`](data/portfolio.json), importé et typé dans `lib/portfolio.ts`.
+Les contenus se trouvent dans [`data/shared.json`](data/shared.json) et dans un fichier par langue sous [`data/locales/`](data/locales/), chargés par `lib/portfolio.ts`.
 
 ```
-shared                  données indépendantes de la langue
+data/shared.json        données indépendantes de la langue
 ├── name, handle
 ├── contacts[]          id, label, handle, url
 ├── timeline.threads[]  couloirs : id, kind (work | education), entity, segments[], phases
 ├── projects[]          id, name, source, stack, layers
 └── discipline          biological (mesures, séances) · acoustic (formats, pipeline)
-locales.en | locales.it | locales.fr
+data/locales/<langue>.json   en · it · fr
 ├── ui                  messages next-intl : meta (SEO), notFound, nav, theme, locale, shell
 ├── hero
 ├── identity
@@ -230,12 +231,15 @@ locales.en | locales.it | locales.fr
 └── discipline
 ```
 
-- `shared` contient les données indépendantes de la langue (liens, dates, stack, mesures) ; `locales.en|it|fr` contient les textes.
+- `shared.json` contient les données indépendantes de la langue (liens, dates, stack, mesures) ; `locales/<langue>.json` contient les textes.
 - Le bloc `ui` de chaque langue sert de messages next-intl et contient aussi le title et la description SEO de chaque vue (`ui.meta.views`).
-- Les textes sont reliés aux données partagées par `id` (par exemple `shared.projects[].id` → `locales.*.projects.items[id]`).
+- Les textes sont reliés aux données partagées par `id` (par exemple `shared.projects[].id` → `projects.items[id]` de chaque langue).
 - Les champs `*Emphasis` désignent le mot affiché en serif italique et doivent figurer dans le texte auquel ils se rapportent.
 - Les dates sont au format ISO `YYYY-MM-DD` et s'affichent sous la forme `DD.MM.YYYY`.
-- Le JSON est affecté à des types explicites : une clé manquante ou renommée, ou une structure différente entre EN et IT, fait échouer `npm run typecheck` et le build.
+- Les contenus passent trois contrôles avant le prérendu, et toute erreur fait échouer le build :
+  1. **types** : chaque langue est affectée à la forme de `en.json`, donc une clé manquante ou renommée fait échouer `npm run typecheck` ;
+  2. **schéma** (`lib/content/schema.ts`) : `shared.json` est validé avec zod (enums, dates ISO existantes, segments qui finissent après leur début, URL, union `source`) ; les types du domaine sont dérivés du schéma ;
+  3. **contrôles croisés** (`lib/content/validate.ts`) : chaque id de couloir, phase, projet et couche a ses textes dans chaque langue, chaque langue a son libellé dans `ui.locale` et chaque `*Emphasis` apparaît dans son texte. Tous les problèmes sont listés ensemble, avec leur chemin.
 
 Champs acceptant `null` (affichés `—`) : `timeline.threads[].entity`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. `projects[].source` vaut `{ "visibility": "public", "url": "…" }` (lien vers le dépôt, publié aussi comme `codeRepository` dans le JSON-LD) ou `{ "visibility": "private" }` : le code n'est pas lié et le projet renvoie à la vue Identité, où demander une démo. Une visibilité inconnue ou un projet public sans `url` fait échouer le build.
 
@@ -266,7 +270,7 @@ Ajoutez `{ id, label, handle, url }` à `shared.contacts` : le contact apparaît
 1. `lib/routes.ts` : ajoutez l'ID à `VIEW_IDS` et son slug pour chaque langue dans `VIEW_SLUGS`.
 2. `components/scene/modes.ts` : ajoutez le mode de la scène dans `SCENE_MODES`.
 3. `components/views/` : créez le composant et enregistrez-le dans `RENDER` de `components/shell/AppShell.tsx`.
-4. `data/portfolio.json` : ajoutez `ui.nav.<id>`, `ui.meta.views.<id>` et les textes de la vue dans chaque langue.
+4. `data/locales/*.json` : ajoutez `ui.nav.<id>`, `ui.meta.views.<id>` et les textes de la vue dans chaque langue.
 
 Les pages, les images Open Graph, le sitemap, la navigation et les raccourcis numériques découlent tous de `VIEW_IDS` (les raccourcis couvrent jusqu'à 9 vues).
 
@@ -274,7 +278,7 @@ Les pages, les images Open Graph, le sitemap, la navigation et les raccourcis nu
 
 1. `lib/routes.ts` : ajoutez le code à `LOCALES` et les slugs dans `VIEW_SLUGS`. `i18n/routing.ts`, `viewFromPath` et la suite E2E lisent ici et n'ont pas besoin d'être modifiés.
 2. `lib/seo.ts` : ajoutez la locale Open Graph dans `OG_LOCALE` (par exemple `pt: 'pt_PT'`).
-3. `data/portfolio.json` : ajoutez `locales.<code>` avec la même structure que `en`, ainsi que le libellé de la nouvelle langue dans `ui.locale` de chaque langue.
+3. `data/locales/<code>.json` : créez-le avec la même structure que `en.json`, importez-le dans `lib/portfolio.ts` et `e2e/content.ts`, et ajoutez le libellé de la nouvelle langue dans `ui.locale` de chaque langue.
 
 TypeScript signale chaque étape oubliée, car toutes ces tables sont typées sur `Locale`.
 
@@ -303,9 +307,11 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   │                 useViewNavigation, useViewUrlSync
 │   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, DisciplineView, atoms
 ├── data/
-│   └── portfolio.json               contenus EN/IT/FR, textes de l'interface, métadonnées SEO
+│   ├── shared.json                  données indépendantes de la langue
+│   └── locales/                     en.json · it.json · fr.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)
-├── lib/              views, portfolio, seo, site, structuredData, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, seo, site, structuredData, og, format, hooks, cn
+│   └── content/      schema (zod) · validate (contrôles croisés)
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)
 ├── e2e/              suite Playwright · helpers.ts (langues, vues, attentes)
 ├── .github/workflows/ci.yml   lint, typecheck, build et tests sur chaque PR
@@ -321,6 +327,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 - TypeScript en mode `strict`, avec l'alias `@/*` pointant vers la racine du projet.
 - ESLint avec les configurations `core-web-vitals` et `typescript` de Next.js.
 - `npm run typecheck` exécute d'abord `next typegen`, qui génère les types globaux des routes (`PageProps`, `LayoutProps`).
+- Tests unitaires Vitest à côté des modules (`lib/**/*.test.ts`) : slugs et URL, arithmétique de la timeline (segments, interruptions, phases, axe), formatage, schéma et contrôles des contenus, fichiers réels compris.
 - Tests end-to-end dans `e2e/` avec Playwright, exécutés contre le build de production sur Chromium, WebKit et un profil mobile. Ils couvrent les URL et métadonnées de chaque langue, la navigation et l'historique, le changement de langue, le SEO, les en-têtes de sécurité, l'accessibilité (axe) et la résistance du site à une panne WebGL.
 - CI dans `.github/workflows/ci.yml` : lint, typecheck, build et tests sur chaque pull request.
 - Dependabot (`.github/dependabot.yml`) ouvre chaque semaine une PR groupée vers `development` pour les dépendances npm et une pour les GitHub Actions.
@@ -362,7 +369,7 @@ npm start
 | Sur un autre appareil, la page s'affiche mais ne réagit ni aux clics ni au clavier | L'hôte n'est pas dans `allowedDevOrigins` (`next.config.ts`) : ajoutez-le et relancez `npm run dev`. |
 | Les canonical et le sitemap pointent vers `localhost` en production | Définissez `SITE_URL`, ou déployez sur Vercel, qui fournit `VERCEL_PROJECT_PRODUCTION_URL`. |
 | Erreurs de type sur `PageProps` ou `LayoutProps` | Lancez `npm run typecheck` : `next typegen` régénère les types des routes. |
-| Le build échoue après une modification de `portfolio.json` | Vérifiez que la clé existe dans les deux langues et que la valeur respecte les types de `lib/portfolio.ts`. |
+| Le build échoue après une modification des contenus | Le message liste chaque problème avec son chemin (par exemple `it.projects.items.app.layers has no copy for "api"`). `npm run test:unit` l'affiche en moins d'une seconde. |
 | Un déploiement de prévisualisation n'apparaît pas sur Google | C'est voulu : seul `VERCEL_ENV=production` est indexable. |
 
 ## Contacts
