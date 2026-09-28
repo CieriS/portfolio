@@ -117,7 +117,7 @@ GOOGLE_SITE_VERIFICATION=il-tuo-token
 | 01 | Indice (`hero`) | `/en` | `/it` | `/fr` | Nome in grande formato, ruolo, presentazione e invito a esplorare. |
 | 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | Dichiarazione d'intenti, quattro principi di ingegneria e contatti (GitHub, LinkedIn, GitLab). |
 | 03 | Esecuzione (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Timeline a due corsie (industria e percorso accademico) su un asse temporale condiviso, con uptime in tempo reale e fasi con il relativo stack. |
-| 04 | Sistemi (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Progetti in un accordion: sintesi, architettura a livelli, legame con la Data Engineering e link al repository. |
+| 04 | Sistemi (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Progetti in un accordion: sintesi, scelte di ingegneria, architettura a livelli, legame con la Data Engineering e link al repository (o ai contatti, se il codice è privato). |
 | 05 | Ottimizzazione (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | Il metodo oltre il codice: programma di calisthenics (metriche e sessioni) e meccanica del suono (chitarra acustica, formati lossless, pipeline audio). |
 
 Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corrisponde a nessuna vista mostra una pagina 404 localizzata e non indicizzabile.
@@ -217,14 +217,14 @@ shared                  dati indipendenti dalla lingua
 ├── name, handle
 ├── contacts[]          id, label, handle, url
 ├── timeline.threads[]  corsie: id, kind (work | education), entity, segments[], fasi
-├── projects[]          id, name, repo, stack, layers
+├── projects[]          id, name, source, stack, layers
 └── discipline          biological (metriche, sessioni) · acoustic (formati, pipeline)
 locales.en | locales.it | locales.fr
 ├── ui                  messages di next-intl: meta (SEO), notFound, nav, theme, locale, shell
 ├── hero
 ├── identity
 ├── timeline
-├── projects            items[id]: summary, bridge, layers
+├── projects            items[id]: summary, bridge, highlights, layers
 └── discipline
 ```
 
@@ -235,7 +235,7 @@ locales.en | locales.it | locales.fr
 - Le date sono in formato ISO `YYYY-MM-DD` e vengono mostrate come `DD.MM.YYYY`.
 - Il JSON è assegnato a tipi espliciti: una chiave mancante o rinominata, o una struttura diversa tra EN e IT, fa fallire `npm run typecheck` e la build.
 
-Campi che accettano `null` (mostrati come `—`): `timeline.threads[].entity`, `projects[].repo`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. Se `repo` è `null`, il link del progetto punta al profilo GitHub.
+Campi che accettano `null` (mostrati come `—`): `timeline.threads[].entity`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. `projects[].source` vale `{ "visibility": "public", "url": "…" }` (link al repository, pubblicato anche come `codeRepository` nel JSON-LD) oppure `{ "visibility": "private" }`: il codice non viene linkato e il progetto rimanda alla vista Identità, da cui chiedere una demo. Una visibilità sconosciuta o un progetto pubblico senza `url` fa fallire la build.
 
 ### Corsie della timeline
 
@@ -249,8 +249,8 @@ Ogni fase accetta uno `start` facoltativo. Senza, le fasi sono distribuite sul t
 
 ### Aggiungere un progetto
 
-1. Aggiungi un elemento a `shared.projects` con `id`, `name`, `repo` (o `null`), `stack` e `layers` (`id`, `tech`).
-2. In **entrambe** le lingue aggiungi `projects.items[<id>]` con `summary`, `bridge` e `layers` (una descrizione per ogni `id` di livello).
+1. Aggiungi un elemento a `shared.projects` con `id`, `name`, `source` (pubblico con `url` o privato), `stack` e `layers` (`id`, `tech`).
+2. In **entrambe** le lingue aggiungi `projects.items[<id>]` con `summary`, `bridge`, `highlights` (elenco delle scelte di ingegneria) e `layers` (una descrizione per ogni `id` di livello).
 3. Se necessario, aggiorna title e description in `ui.meta.views.projects`.
 
 La vista e il JSON-LD `ItemList` si aggiornano automaticamente.

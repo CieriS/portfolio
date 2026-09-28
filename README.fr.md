@@ -119,7 +119,7 @@ GOOGLE_SITE_VERIFICATION=votre-jeton
 | 01 | Index (`hero`) | `/en` | `/it` | `/fr` | Nom en très grand format, rôle, présentation et invitation à explorer. |
 | 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | Déclaration d'intention, quatre principes d'ingénierie et contacts (GitHub, LinkedIn, GitLab). |
 | 03 | Exécution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Frise chronologique à deux couloirs (industrie et parcours universitaire) sur un axe temporel commun, avec un compteur d'uptime en temps réel et des phases accompagnées de leur stack. |
-| 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Projets présentés en accordéon : résumé, architecture en couches, lien avec la Data Engineering et lien vers le dépôt. |
+| 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Projets présentés en accordéon : résumé, choix d'ingénierie, architecture en couches, lien avec la Data Engineering et lien vers le dépôt (ou vers les contacts si le code est privé). |
 | 05 | Optimisation (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | La méthode au-delà du code : programme de callisthénie (mesures et séances) et mécanique du son (guitare acoustique, formats sans perte, pipeline audio). |
 
 Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspond à aucune vue affiche une page 404 localisée et non indexable.
@@ -219,14 +219,14 @@ shared                  données indépendantes de la langue
 ├── name, handle
 ├── contacts[]          id, label, handle, url
 ├── timeline.threads[]  couloirs : id, kind (work | education), entity, segments[], phases
-├── projects[]          id, name, repo, stack, layers
+├── projects[]          id, name, source, stack, layers
 └── discipline          biological (mesures, séances) · acoustic (formats, pipeline)
 locales.en | locales.it | locales.fr
 ├── ui                  messages next-intl : meta (SEO), notFound, nav, theme, locale, shell
 ├── hero
 ├── identity
 ├── timeline
-├── projects            items[id] : summary, bridge, layers
+├── projects            items[id] : summary, bridge, highlights, layers
 └── discipline
 ```
 
@@ -237,7 +237,7 @@ locales.en | locales.it | locales.fr
 - Les dates sont au format ISO `YYYY-MM-DD` et s'affichent sous la forme `DD.MM.YYYY`.
 - Le JSON est affecté à des types explicites : une clé manquante ou renommée, ou une structure différente entre EN et IT, fait échouer `npm run typecheck` et le build.
 
-Champs acceptant `null` (affichés `—`) : `timeline.threads[].entity`, `projects[].repo`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. Si `repo` vaut `null`, le lien du projet pointe vers le profil GitHub.
+Champs acceptant `null` (affichés `—`) : `timeline.threads[].entity`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. `projects[].source` vaut `{ "visibility": "public", "url": "…" }` (lien vers le dépôt, publié aussi comme `codeRepository` dans le JSON-LD) ou `{ "visibility": "private" }` : le code n'est pas lié et le projet renvoie à la vue Identité, où demander une démo. Une visibilité inconnue ou un projet public sans `url` fait échouer le build.
 
 ### Couloirs de la frise
 
@@ -251,8 +251,8 @@ Chaque phase accepte un `start` facultatif. Sans lui, les phases sont réparties
 
 ### Ajouter un projet
 
-1. Ajoutez une entrée à `shared.projects` avec `id`, `name`, `repo` (ou `null`), `stack` et `layers` (`id`, `tech`).
-2. Dans **les deux** langues, ajoutez `projects.items[<id>]` avec `summary`, `bridge` et `layers` (une description par `id` de couche).
+1. Ajoutez une entrée à `shared.projects` avec `id`, `name`, `source` (public avec `url`, ou privé), `stack` et `layers` (`id`, `tech`).
+2. Dans **les deux** langues, ajoutez `projects.items[<id>]` avec `summary`, `bridge`, `highlights` (liste des choix d'ingénierie) et `layers` (une description par `id` de couche).
 3. Si nécessaire, mettez à jour le title et la description dans `ui.meta.views.projects`.
 
 La vue et le JSON-LD `ItemList` se mettent à jour automatiquement.

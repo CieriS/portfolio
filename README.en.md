@@ -117,7 +117,7 @@ GOOGLE_SITE_VERIFICATION=your-token
 | 01 | Index (`hero`) | `/en` | `/it` | `/fr` | Large-format name, role, introduction and a call to explore. |
 | 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | Mission statement, four engineering principles and contacts (GitHub, LinkedIn, GitLab). |
 | 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Two-lane timeline (industry and academic path) on a shared time axis, with a live uptime counter and phases with their stack. |
-| 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Projects in an accordion: summary, layered architecture, link to Data Engineering and repository link. |
+| 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Projects in an accordion: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). |
 | 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | The method beyond code: a calisthenics programme (metrics and sessions) and sound mechanics (acoustic guitar, lossless formats, audio pipeline). |
 
 Every URL is prerendered with its own content. An address that matches no view shows a localised, non-indexable 404 page.
@@ -217,14 +217,14 @@ shared                  language-independent data
 ├── name, handle
 ├── contacts[]          id, label, handle, url
 ├── timeline.threads[]  lanes: id, kind (work | education), entity, segments[], phases
-├── projects[]          id, name, repo, stack, layers
+├── projects[]          id, name, source, stack, layers
 └── discipline          biological (metrics, sessions) · acoustic (formats, pipeline)
 locales.en | locales.it | locales.fr
 ├── ui                  next-intl messages: meta (SEO), notFound, nav, theme, locale, shell
 ├── hero
 ├── identity
 ├── timeline
-├── projects            items[id]: summary, bridge, layers
+├── projects            items[id]: summary, bridge, highlights, layers
 └── discipline
 ```
 
@@ -235,7 +235,7 @@ locales.en | locales.it | locales.fr
 - Dates use ISO `YYYY-MM-DD` and are displayed as `DD.MM.YYYY`.
 - The JSON is assigned to explicit types: a missing or renamed key, or a different structure between EN and IT, fails `npm run typecheck` and the build.
 
-Fields that accept `null` (shown as `—`): `timeline.threads[].entity`, `projects[].repo`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. When `repo` is `null`, the project link points to the GitHub profile.
+Fields that accept `null` (shown as `—`): `timeline.threads[].entity`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. `projects[].source` is either `{ "visibility": "public", "url": "…" }` (repository link, also published as `codeRepository` in the JSON-LD) or `{ "visibility": "private" }`: the code is not linked and the project points to the Identity view, where a walkthrough can be requested. An unknown visibility or a public project without a `url` fails the build.
 
 ### Timeline lanes
 
@@ -249,8 +249,8 @@ Each phase takes an optional `start`. Without it, phases are spread over the lan
 
 ### Adding a project
 
-1. Add an entry to `shared.projects` with `id`, `name`, `repo` (or `null`), `stack` and `layers` (`id`, `tech`).
-2. In **both** languages, add `projects.items[<id>]` with `summary`, `bridge` and `layers` (one description per layer `id`).
+1. Add an entry to `shared.projects` with `id`, `name`, `source` (public with a `url`, or private), `stack` and `layers` (`id`, `tech`).
+2. In **both** languages, add `projects.items[<id>]` with `summary`, `bridge`, `highlights` (the list of engineering decisions) and `layers` (one description per layer `id`).
 3. If needed, update the title and description in `ui.meta.views.projects`.
 
 The view and the `ItemList` JSON-LD update automatically.
