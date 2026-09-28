@@ -324,6 +324,8 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 - `npm run typecheck` exécute d'abord `next typegen`, qui génère les types globaux des routes (`PageProps`, `LayoutProps`).
 - Tests end-to-end dans `e2e/` avec Playwright, exécutés contre le build de production sur Chromium, WebKit et un profil mobile. Ils couvrent les URL et métadonnées de chaque langue, la navigation et l'historique, le changement de langue, le SEO, les en-têtes de sécurité, l'accessibilité (axe) et la résistance du site à une panne WebGL.
 - CI dans `.github/workflows/ci.yml` : lint, typecheck, build et tests sur chaque pull request.
+- Dependabot (`.github/dependabot.yml`) ouvre chaque semaine une PR groupée vers `development` pour les dépendances npm et une pour les GitHub Actions.
+- `.mailmap` regroupe sous une seule identité les premiers commits signés avec l'email dérivé du nom d'hôte, sans réécrire l'historique.
 - `legacy/` est exclu de TypeScript et d'ESLint.
 - `reactStrictMode` est activé, et l'indicateur de développement de Next est désactivé car il recouvrirait la navigation.
 
@@ -372,4 +374,4 @@ npm start
 
 ## Licence
 
-Le dépôt n'inclut pas de licence : le code et les contenus restent la propriété de l'auteur (tous droits réservés). Font Awesome Free, dans `legacy/`, est distribué sous sa propre licence ([`LICENSE.txt`](legacy/fontawesome-free-6.4.0-web/LICENSE.txt)).
+Le code et les contenus sont la propriété de l'auteur, tous droits réservés : voir [`LICENSE`](LICENSE). Font Awesome Free, dans `legacy/`, est distribué sous sa propre licence ([`LICENSE.txt`](legacy/fontawesome-free-6.4.0-web/LICENSE.txt)).

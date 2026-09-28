@@ -322,6 +322,8 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 - `npm run typecheck` first runs `next typegen`, which generates the global route types (`PageProps`, `LayoutProps`).
 - End-to-end tests in `e2e/` with Playwright, run against the production build on Chromium, WebKit and a mobile profile. They cover every language's URLs and metadata, navigation and history, the language switch, SEO, security headers, accessibility (axe) and the site's resilience to a WebGL failure.
 - CI in `.github/workflows/ci.yml`: lint, typecheck, build and tests on every pull request.
+- Dependabot (`.github/dependabot.yml`) opens one grouped weekly PR against `development` for npm dependencies and one for GitHub Actions.
+- `.mailmap` folds the early commits signed with a hostname-derived email into one identity, without rewriting history.
 - `legacy/` is excluded from TypeScript and ESLint.
 - `reactStrictMode` is on, and Next's dev indicator is off because it would sit on top of the navigation.
 
@@ -370,4 +372,4 @@ npm start
 
 ## License
 
-The repository does not include a license: code and content remain the author's property (all rights reserved). Font Awesome Free, in `legacy/`, is distributed under its own license ([`LICENSE.txt`](legacy/fontawesome-free-6.4.0-web/LICENSE.txt)).
+Code and content are the author's property, all rights reserved: see [`LICENSE`](LICENSE). Font Awesome Free, in `legacy/`, is distributed under its own license ([`LICENSE.txt`](legacy/fontawesome-free-6.4.0-web/LICENSE.txt)).
