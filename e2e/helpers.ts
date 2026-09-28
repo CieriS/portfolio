@@ -1,4 +1,4 @@
-import portfolio from '../data/portfolio.json';
+import { locales } from './content';
 import { LOCALES, pathFor, VIEW_IDS, type Locale, type ViewId } from '../lib/routes';
 
 /**
@@ -12,11 +12,11 @@ export const ALL_PAGES = LOCALES.flatMap((locale) => VIEW_IDS.map((view) => ({ l
 
 /** The label the shell puts on the active view's <section>, straight from the content file. */
 export function navLabel(locale: Locale, view: ViewId): string {
-  return portfolio.locales[locale].ui.nav[view];
+  return locales[locale].ui.nav[view];
 }
 
 export function localeSwitchLabel(locale: Locale): string {
-  return portfolio.locales.en.ui.locale[locale];
+  return locales.en.ui.locale[locale];
 }
 
 /**

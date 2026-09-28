@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
-import portfolio from '../data/portfolio.json';
+import { locales } from './content';
 import { expectView, gotoView, pathFor } from './helpers';
 
-const copy = portfolio.locales.en.projects;
+const copy = locales.en.projects;
 
 test('a private project shows its highlights and never links to a repository', async ({ page }) => {
   await gotoView(page, 'en', 'projects');
