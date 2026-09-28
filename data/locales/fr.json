@@ -68,10 +68,22 @@
     "statementEmphasis": "instrument",
     "principlesTitle": "Principes",
     "principles": [
-      { "title": "Rationalité instrumentale", "body": "Les moyens sont évalués au regard des fins. Ce qui ne fait pas avancer l'objectif est supprimé." },
-      { "title": "L'ingénierie avant l'ornement", "body": "Spécifier, mesurer, puis construire. La forme est une conséquence des contraintes." },
-      { "title": "La donnée comme vérité de référence", "body": "Les décisions sont ramenées aux données. Un modèle n'est fiable que si ses entrées le sont." },
-      { "title": "Flux de contrôle plat", "body": "De nombreuses petites fonctions, au plus deux niveaux d'imbrication, des contrats explicites entre elles." }
+      {
+        "title": "Rationalité instrumentale",
+        "body": "Les moyens sont évalués au regard des fins. Ce qui ne fait pas avancer l'objectif est supprimé."
+      },
+      {
+        "title": "L'ingénierie avant l'ornement",
+        "body": "Spécifier, mesurer, puis construire. La forme est une conséquence des contraintes."
+      },
+      {
+        "title": "La donnée comme vérité de référence",
+        "body": "Les décisions sont ramenées aux données. Un modèle n'est fiable que si ses entrées le sont."
+      },
+      {
+        "title": "Flux de contrôle plat",
+        "body": "De nombreuses petites fonctions, au plus deux niveaux d'imbrication, des contrats explicites entre elles."
+      }
     ],
     "contactsTitle": "Contact",
     "contactsNote": "Dépôts et canaux directs."
@@ -97,9 +109,18 @@
         "entityLabel": "Organisation",
         "summary": "Activité professionnelle depuis le 23/02/2022 : stage, apprentissage, aujourd'hui en CDI, en télétravail complet. Développement frontend et full-stack sur un framework propriétaire, en cours de migration vers Angular avec génération de code assistée par IA. Une descente délibérée dans la stack : des interfaces utilisateur à la programmation système et à la gestion des données.",
         "phases": {
-          "interface": { "title": "Couche interface", "body": "Interfaces web, rendu côté serveur, premier contact avec les schémas relationnels ; aujourd'hui un framework propriétaire en migration vers Angular et TypeScript." },
-          "systems": { "title": "Couche système", "body": "Ownership de la mémoire, performances déterministes, contrôle bas niveau avec Rust et C." },
-          "data": { "title": "Couche données", "body": "Modélisation relationnelle sur PostgreSQL, environnements reproductibles avec Docker." }
+          "interface": {
+            "title": "Couche interface",
+            "body": "Interfaces web, rendu côté serveur, premier contact avec les schémas relationnels ; aujourd'hui un framework propriétaire en migration vers Angular et TypeScript."
+          },
+          "systems": {
+            "title": "Couche système",
+            "body": "Ownership de la mémoire, performances déterministes, contrôle bas niveau avec Rust et C."
+          },
+          "data": {
+            "title": "Couche données",
+            "body": "Modélisation relationnelle sur PostgreSQL, environnements reproductibles avec Docker."
+          }
         }
       },
       "academic": {
@@ -108,9 +129,18 @@
         "entityLabel": "Établissement",
         "summary": "Licence en ingénierie informatique à l'Université de Bologne, à temps partiel. Suspendue de 2023 à fin 2024 pour me concentrer sur le travail à plein temps, puis reprise : un processus mis en pause, non abandonné.",
         "phases": {
-          "foundations": { "title": "Fondements formels", "body": "Modèles mathématiques, physiques et de circuits à la base du calcul." },
-          "computing": { "title": "Systèmes de calcul", "body": "Programmation, logique numérique, architectures matérielles, systèmes d'exploitation." },
-          "information": { "title": "Systèmes d'information", "body": "Bases de données, réseaux informatiques, technologies web, raisonnement statistique sur les données." }
+          "foundations": {
+            "title": "Fondements formels",
+            "body": "Modèles mathématiques, physiques et de circuits à la base du calcul."
+          },
+          "computing": {
+            "title": "Systèmes de calcul",
+            "body": "Programmation, logique numérique, architectures matérielles, systèmes d'exploitation."
+          },
+          "information": {
+            "title": "Systèmes d'information",
+            "body": "Bases de données, réseaux informatiques, technologies web, raisonnement statistique sur les données."
+          }
         }
       }
     }

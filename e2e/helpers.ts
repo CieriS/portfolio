@@ -30,11 +30,10 @@ export function localeSwitchLabel(locale: Locale): string {
  */
 export async function gotoView(page: import('@playwright/test').Page, locale: Locale, view: ViewId) {
   await page.goto(pathFor(locale, view));
-  await page.waitForFunction(
-    () => (document.querySelector('header button')?.textContent ?? '').trim().length > 0,
-    undefined,
-    { timeout: 15_000, polling: 100 },
-  );
+  await page.waitForFunction(() => (document.querySelector('header button')?.textContent ?? '').trim().length > 0, undefined, {
+    timeout: 15_000,
+    polling: 100,
+  });
 }
 
 /**

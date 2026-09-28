@@ -20,7 +20,7 @@ export function LocaleSwitch({ locale, onChange }: LocaleSwitchProps) {
   };
 
   return (
-    <nav aria-label={t('label')} className="flex select-none items-center gap-1.5 text-[13px]">
+    <nav aria-label={t('label')} className="flex items-center gap-1.5 text-[13px] select-none">
       {routing.locales.map((option, index) => (
         <Fragment key={option}>
           {index > 0 && (
@@ -35,7 +35,10 @@ export function LocaleSwitch({ locale, onChange }: LocaleSwitchProps) {
             lang={option}
             aria-current={option === locale ? 'page' : undefined}
             onClick={(event) => handleClick(event, option)}
-            className={cn('select-none py-2 transition-colors duration-300', option === locale ? 'text-ink' : 'text-muted hover:text-ink')}
+            className={cn(
+              'py-2 transition-colors duration-300 select-none',
+              option === locale ? 'text-ink' : 'text-muted hover:text-ink',
+            )}
           >
             {t(option)}
           </a>

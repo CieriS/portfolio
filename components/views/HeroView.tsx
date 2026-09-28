@@ -10,13 +10,13 @@ export function HeroView({ data }: ViewProps) {
   const [first, ...rest] = data.shared.name.split(' ');
 
   return (
-    <div className="flex min-h-full flex-col px-frame pb-8 pt-6 md:pb-10">
+    <div className="flex min-h-full flex-col px-frame pt-6 pb-8 md:pb-10">
       <div className="flex flex-1 items-end">
-        <h1 className="select-none text-[clamp(4rem,15.5vw,17rem)] font-medium leading-[0.84] tracking-[-0.06em]">
+        <h1 className="text-[clamp(4rem,15.5vw,17rem)] leading-[0.84] font-medium tracking-[-0.06em] select-none">
           <Line intro={0}>{first}</Line>
           {/* Keeps "Samuele Cieri" as two words in the extracted text; invisible between block lines. */}{' '}
           <Line intro={1}>
-            <em className="font-serif text-[1.06em] font-normal italic tracking-[-0.025em]">{rest.join(' ')}</em>
+            <em className="font-serif text-[1.06em] font-normal tracking-[-0.025em] italic">{rest.join(' ')}</em>
           </Line>
         </h1>
       </div>
@@ -38,7 +38,7 @@ export function HeroView({ data }: ViewProps) {
           {copy.lead}
         </motion.p>
         <motion.div variants={fade} className="intro-fade md:col-span-2 md:justify-self-end" style={introStyle(5)}>
-          <ViewLink view="identity" className="group inline-flex select-none items-center gap-4 text-[15px]">
+          <ViewLink view="identity" className="group inline-flex items-center gap-4 text-[15px] select-none">
             <span className="link-underline">{copy.cta}</span>
             <span
               aria-hidden

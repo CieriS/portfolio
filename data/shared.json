@@ -56,9 +56,27 @@
       "weightKg": 72,
       "daysPerWeek": 3,
       "sessions": [
-        { "id": "A", "focus": "squat", "patterns": ["Box jump", "Pause squat", "Weighted dips", "Weighted chin-ups", "Fingertip push-ups"] },
-        { "id": "B", "focus": "hinge", "patterns": ["Broad jump", "Deficit deadlift", "Military press", "Barbell row", "Front lever"] },
-        { "id": "C", "focus": "unilateral", "patterns": ["Barbell Bulgarian split squat", "Incline bench press", "Weighted pull-ups", "Nordic curl", "Ring push-ups"] }
+        {
+          "id": "A",
+          "focus": "squat",
+          "patterns": ["Box jump", "Pause squat", "Weighted dips", "Weighted chin-ups", "Fingertip push-ups"]
+        },
+        {
+          "id": "B",
+          "focus": "hinge",
+          "patterns": ["Broad jump", "Deficit deadlift", "Military press", "Barbell row", "Front lever"]
+        },
+        {
+          "id": "C",
+          "focus": "unilateral",
+          "patterns": [
+            "Barbell Bulgarian split squat",
+            "Incline bench press",
+            "Weighted pull-ups",
+            "Nordic curl",
+            "Ring push-ups"
+          ]
+        }
       ]
     },
     "acoustic": {

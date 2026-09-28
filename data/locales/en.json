@@ -68,10 +68,19 @@
     "statementEmphasis": "instrument",
     "principlesTitle": "Principles",
     "principles": [
-      { "title": "Instrumental rationality", "body": "Means are evaluated against ends. What does not move the objective is removed." },
+      {
+        "title": "Instrumental rationality",
+        "body": "Means are evaluated against ends. What does not move the objective is removed."
+      },
       { "title": "Engineering before ornament", "body": "Specify, measure, then build. Form is a consequence of constraints." },
-      { "title": "Data as ground truth", "body": "Decisions are traced back to data. A model is only as reliable as its inputs." },
-      { "title": "Flat control flow", "body": "Many small functions, at most two levels of nesting, explicit contracts between them." }
+      {
+        "title": "Data as ground truth",
+        "body": "Decisions are traced back to data. A model is only as reliable as its inputs."
+      },
+      {
+        "title": "Flat control flow",
+        "body": "Many small functions, at most two levels of nesting, explicit contracts between them."
+      }
     ],
     "contactsTitle": "Contact",
     "contactsNote": "Repositories and direct channels."
@@ -97,8 +106,14 @@
         "entityLabel": "Organization",
         "summary": "Professional activity since 23/02/2022: internship, apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. A deliberate descent through the stack: from user interfaces to systems programming and data management.",
         "phases": {
-          "interface": { "title": "Interface layer", "body": "Web interfaces, server-side rendering, first contact with relational schemas; today a proprietary framework migrating to Angular and TypeScript." },
-          "systems": { "title": "Systems layer", "body": "Memory ownership, deterministic performance, low-level control with Rust and C." },
+          "interface": {
+            "title": "Interface layer",
+            "body": "Web interfaces, server-side rendering, first contact with relational schemas; today a proprietary framework migrating to Angular and TypeScript."
+          },
+          "systems": {
+            "title": "Systems layer",
+            "body": "Memory ownership, deterministic performance, low-level control with Rust and C."
+          },
           "data": { "title": "Data layer", "body": "Relational modeling on PostgreSQL, reproducible environments with Docker." }
         }
       },
@@ -108,9 +123,18 @@
         "entityLabel": "Institution",
         "summary": "Bachelor's degree in Computer Engineering at the University of Bologna, part-time. Suspended from 2023 to late 2024 to concentrate on full-time work, then resumed: a paused process, not an abandoned one.",
         "phases": {
-          "foundations": { "title": "Formal foundations", "body": "Mathematical, physical and circuit models underlying computation." },
-          "computing": { "title": "Computing systems", "body": "Programming, digital logic, hardware architectures, operating systems." },
-          "information": { "title": "Information systems", "body": "Databases, computer networks, web technologies, statistical reasoning on data." }
+          "foundations": {
+            "title": "Formal foundations",
+            "body": "Mathematical, physical and circuit models underlying computation."
+          },
+          "computing": {
+            "title": "Computing systems",
+            "body": "Programming, digital logic, hardware architectures, operating systems."
+          },
+          "information": {
+            "title": "Information systems",
+            "body": "Databases, computer networks, web technologies, statistical reasoning on data."
+          }
         }
       }
     }

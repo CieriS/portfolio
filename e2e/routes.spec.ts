@@ -37,9 +37,9 @@ test('an unknown slug returns a localized, non-indexable 404', async ({ page }) 
   // Next emits its own `noindex` for the not-found boundary, next to the layout's
   // site-wide `index, follow`. Crawlers take the most restrictive of conflicting
   // directives, so what matters is that a noindex is present at all.
-  const directives = await page.locator('meta[name="robots"]').evaluateAll((tags) =>
-    tags.map((tag) => tag.getAttribute('content')),
-  );
+  const directives = await page
+    .locator('meta[name="robots"]')
+    .evaluateAll((tags) => tags.map((tag) => tag.getAttribute('content')));
   expect(directives.some((value) => value?.includes('noindex'))).toBe(true);
 });
 

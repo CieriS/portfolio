@@ -11,7 +11,7 @@ export function IdentityView({ data }: ViewProps) {
   const { contacts } = data.shared;
 
   return (
-    <div className="px-frame pb-28 pt-10 md:pt-16">
+    <div className="px-frame pt-10 pb-28 md:pt-16">
       <div className="grid gap-y-8 md:grid-cols-12 md:gap-x-6">
         <motion.div variants={fade} className="flex gap-[0.5em] md:col-span-3">
           {/* The index is decoration: keep it out of the page's h1. */}
@@ -37,7 +37,7 @@ export function IdentityView({ data }: ViewProps) {
         <motion.ol variants={fade} className="grid gap-x-6 gap-y-12 sm:grid-cols-2 md:col-span-9">
           {copy.principles.map((principle, index) => (
             <li key={principle.title} className="border-t border-line pt-5">
-              <span className="select-none font-mono text-[11px] tabular-nums text-muted">{pad(index + 1)}</span>
+              <span className="font-mono text-[11px] text-muted tabular-nums select-none">{pad(index + 1)}</span>
               <h3 className="mt-4 text-lg font-medium tracking-[-0.015em]">{principle.title}</h3>
               <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-muted">{principle.body}</p>
             </li>
@@ -59,14 +59,16 @@ export function IdentityView({ data }: ViewProps) {
                 rel="noopener noreferrer me"
                 className="group flex items-center justify-between gap-6 py-5 md:py-7"
               >
-                <span className="select-none text-[clamp(1.75rem,4vw,3.75rem)] font-medium leading-none tracking-[-0.04em] transition-transform duration-700 ease-out-expo group-hover:translate-x-3">
+                <span className="text-[clamp(1.75rem,4vw,3.75rem)] leading-none font-medium tracking-[-0.04em] transition-transform duration-700 ease-out-expo select-none group-hover:translate-x-3">
                   {contact.label}
                 </span>
                 <span className="flex items-center gap-5">
-                  <span className="hidden font-mono text-[11px] uppercase tracking-[0.14em] text-muted sm:inline">{contact.handle}</span>
+                  <span className="hidden font-mono text-[11px] tracking-[0.14em] text-muted uppercase sm:inline">
+                    {contact.handle}
+                  </span>
                   <span
                     aria-hidden
-                    className="grid size-10 select-none place-items-center rounded-full border border-line transition-all duration-500 ease-out-expo group-hover:rotate-45 group-hover:border-ink group-hover:bg-ink group-hover:text-paper"
+                    className="grid size-10 place-items-center rounded-full border border-line transition-all duration-500 ease-out-expo select-none group-hover:rotate-45 group-hover:border-ink group-hover:bg-ink group-hover:text-paper"
                   >
                     ↑
                   </span>

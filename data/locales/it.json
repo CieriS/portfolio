@@ -68,10 +68,22 @@
     "statementEmphasis": "strumento",
     "principlesTitle": "Principi",
     "principles": [
-      { "title": "Razionalità strumentale", "body": "I mezzi sono valutati rispetto ai fini. Ciò che non avvicina l'obiettivo viene rimosso." },
-      { "title": "Ingegneria prima dell'ornamento", "body": "Specificare, misurare, poi costruire. La forma è una conseguenza dei vincoli." },
-      { "title": "Il dato come verità", "body": "Le decisioni sono ricondotte ai dati. Un modello è affidabile quanto i suoi input." },
-      { "title": "Flusso di controllo piatto", "body": "Molte funzioni semplici, al massimo due livelli di annidamento, contratti espliciti tra loro." }
+      {
+        "title": "Razionalità strumentale",
+        "body": "I mezzi sono valutati rispetto ai fini. Ciò che non avvicina l'obiettivo viene rimosso."
+      },
+      {
+        "title": "Ingegneria prima dell'ornamento",
+        "body": "Specificare, misurare, poi costruire. La forma è una conseguenza dei vincoli."
+      },
+      {
+        "title": "Il dato come verità",
+        "body": "Le decisioni sono ricondotte ai dati. Un modello è affidabile quanto i suoi input."
+      },
+      {
+        "title": "Flusso di controllo piatto",
+        "body": "Molte funzioni semplici, al massimo due livelli di annidamento, contratti espliciti tra loro."
+      }
     ],
     "contactsTitle": "Contatti",
     "contactsNote": "Repository e canali diretti."
@@ -97,9 +109,18 @@
         "entityLabel": "Organizzazione",
         "summary": "Attività lavorativa dal 23/02/2022: tirocinio, apprendistato, oggi tempo indeterminato, full remote. Sviluppo frontend e full-stack su un framework proprietario, ora in migrazione verso Angular con generazione di codice assistita da AI. Una discesa deliberata nello stack: dalle interfacce utente alla programmazione di sistema e alla gestione dei dati.",
         "phases": {
-          "interface": { "title": "Livello interfaccia", "body": "Interfacce web, rendering lato server, primo contatto con schemi relazionali; oggi un framework proprietario in migrazione verso Angular e TypeScript." },
-          "systems": { "title": "Livello sistema", "body": "Ownership della memoria, prestazioni deterministiche, controllo a basso livello con Rust e C." },
-          "data": { "title": "Livello dati", "body": "Modellazione relazionale su PostgreSQL, ambienti riproducibili con Docker." }
+          "interface": {
+            "title": "Livello interfaccia",
+            "body": "Interfacce web, rendering lato server, primo contatto con schemi relazionali; oggi un framework proprietario in migrazione verso Angular e TypeScript."
+          },
+          "systems": {
+            "title": "Livello sistema",
+            "body": "Ownership della memoria, prestazioni deterministiche, controllo a basso livello con Rust e C."
+          },
+          "data": {
+            "title": "Livello dati",
+            "body": "Modellazione relazionale su PostgreSQL, ambienti riproducibili con Docker."
+          }
         }
       },
       "academic": {
@@ -108,9 +129,18 @@
         "entityLabel": "Ateneo",
         "summary": "Laurea triennale in Ingegneria Informatica all'Università di Bologna, part-time. Sospesa dal 2023 a fine 2024 per concentrarmi sul lavoro a tempo pieno, poi ripresa: un processo in pausa, non abbandonato.",
         "phases": {
-          "foundations": { "title": "Fondamenti formali", "body": "Modelli matematici, fisici e circuitali alla base del calcolo." },
-          "computing": { "title": "Sistemi di calcolo", "body": "Programmazione, reti logiche, architetture hardware, sistemi operativi." },
-          "information": { "title": "Sistemi informativi", "body": "Basi di dati, reti di calcolatori, tecnologie web, ragionamento statistico sui dati." }
+          "foundations": {
+            "title": "Fondamenti formali",
+            "body": "Modelli matematici, fisici e circuitali alla base del calcolo."
+          },
+          "computing": {
+            "title": "Sistemi di calcolo",
+            "body": "Programmazione, reti logiche, architetture hardware, sistemi operativi."
+          },
+          "information": {
+            "title": "Sistemi informativi",
+            "body": "Basi di dati, reti di calcolatori, tecnologie web, ragionamento statistico sui dati."
+          }
         }
       }
     }

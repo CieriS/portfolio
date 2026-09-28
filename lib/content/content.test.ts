@@ -15,7 +15,13 @@ describe('the real content', () => {
 
 describe('schema', () => {
   it('rejects an unknown thread kind', () => {
-    const result = ThreadSchema.safeParse({ id: 'x', kind: 'hobby', entity: null, segments: [{ start: '2024-01-01', end: null }], phases: [] });
+    const result = ThreadSchema.safeParse({
+      id: 'x',
+      kind: 'hobby',
+      entity: null,
+      segments: [{ start: '2024-01-01', end: null }],
+      phases: [],
+    });
     expect(result.success).toBe(false);
   });
 

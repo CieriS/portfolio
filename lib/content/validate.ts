@@ -33,7 +33,8 @@ export function findContentIssues(shared: SharedData, contents: Record<string, C
         continue;
       }
       for (const phase of thread.phases) {
-        if (!threadCopy.phases[phase.id]) issues.push(`${at(`timeline.threads.${thread.id}.phases`)} has no copy for "${phase.id}"`);
+        if (!threadCopy.phases[phase.id])
+          issues.push(`${at(`timeline.threads.${thread.id}.phases`)} has no copy for "${phase.id}"`);
       }
     }
 

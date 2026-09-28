@@ -49,15 +49,18 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
         {/* First tab stop: jumps past header and language/theme controls, straight into the view. */}
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-[var(--frame)] focus:top-4 focus:z-20 focus:rounded-full focus:border focus:border-ink focus:bg-paper focus:px-4 focus:py-2 focus:text-[13px]"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-[var(--frame)] focus:z-20 focus:rounded-full focus:border focus:border-ink focus:bg-paper focus:px-4 focus:py-2 focus:text-[13px]"
         >
           {shell('skip')}
         </a>
-        <header className="intro-fade flex select-none items-center justify-between gap-6 px-frame pb-3 pt-4 md:pt-6" style={introStyle(0)}>
-          <ViewLink view="hero" className="select-none whitespace-nowrap text-[15px] font-medium tracking-[-0.01em]">
+        <header
+          className="intro-fade flex items-center justify-between gap-6 px-frame pt-4 pb-3 select-none md:pt-6"
+          style={introStyle(0)}
+        >
+          <ViewLink view="hero" className="text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap select-none">
             <span className="link-underline">{data.shared.name}</span>
           </ViewLink>
-          <p className="hidden font-mono text-[11px] uppercase tracking-[0.14em] text-muted lg:block">{shell('role')}</p>
+          <p className="hidden font-mono text-[11px] tracking-[0.14em] text-muted uppercase lg:block">{shell('role')}</p>
           <div className="flex items-center gap-6">
             <LocaleSwitch locale={locale} onChange={onLocaleChange} />
             <ThemeToggle />
@@ -72,7 +75,10 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
           </AnimatePresence>
         </main>
 
-        <footer className="intro-fade flex select-none items-center justify-between gap-6 px-frame pb-4 pt-3 md:pb-6" style={introStyle(1)}>
+        <footer
+          className="intro-fade flex items-center justify-between gap-6 px-frame pt-3 pb-4 select-none md:pb-6"
+          style={introStyle(1)}
+        >
           <NavBar />
           <div className="hidden items-center gap-4 md:flex">
             <button
@@ -83,7 +89,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
             >
               ←
             </button>
-            <p className="font-mono text-[11px] tabular-nums text-muted">
+            <p className="font-mono text-[11px] text-muted tabular-nums">
               <span className="text-ink">{pad(index + 1)}</span> / {pad(VIEW_IDS.length)}
             </p>
             <button

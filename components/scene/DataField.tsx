@@ -23,10 +23,7 @@ export default function DataField() {
       camera={{ position: [0, 5.2, 10.5], fov: 40, near: 0.1, far: 80 }}
       onCreated={() => setReady(true)}
     >
-      <PerformanceMonitor
-        onDecline={() => setDpr(1)}
-        onIncline={() => setDpr(Math.min(window.devicePixelRatio, MAX_DPR))}
-      />
+      <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => setDpr(Math.min(window.devicePixelRatio, MAX_DPR))} />
       <DataGrid still={still} />
     </Canvas>
   );

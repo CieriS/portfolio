@@ -30,7 +30,7 @@ type LineProps = { children: ReactNode; className?: string; intro?: number };
 export function Line({ children, className, intro }: LineProps) {
   const hasIntro = intro !== undefined;
   return (
-    <span className={cn('-mb-[0.12em] block overflow-hidden pb-[0.12em] pr-[0.06em]', className)}>
+    <span className={cn('-mb-[0.12em] block overflow-hidden pr-[0.06em] pb-[0.12em]', className)}>
       <motion.span
         variants={lineVariants}
         className={cn('block', hasIntro && 'intro-line')}

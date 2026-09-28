@@ -26,7 +26,7 @@ export function DisciplineView({ data }: ViewProps) {
   ];
 
   return (
-    <div className="px-frame pb-28 pt-10 md:pt-16">
+    <div className="px-frame pt-10 pb-28 md:pt-16">
       <SectionHead
         index={5}
         label={data.content.ui.nav.discipline}
@@ -38,7 +38,7 @@ export function DisciplineView({ data }: ViewProps) {
       <div className="mt-20 grid gap-24 md:mt-32 md:grid-cols-12 md:gap-x-6">
         <motion.section variants={fade} className="md:col-span-4 md:col-start-4">
           <Meta>(A)</Meta>
-          <h2 className="mt-5 text-3xl font-medium leading-none tracking-[-0.035em] md:text-[2.75rem]">
+          <h2 className="mt-5 text-3xl leading-none font-medium tracking-[-0.035em] md:text-[2.75rem]">
             <Emphasis text={bio.title} emphasis={bio.titleEmphasis} />
           </h2>
           <p className="mt-6 text-[15px] leading-relaxed text-muted">{bio.summary}</p>
@@ -46,9 +46,9 @@ export function DisciplineView({ data }: ViewProps) {
           <dl className="mt-12 grid grid-cols-3 gap-x-4 border-t border-line">
             {metrics.map((metric) => (
               <div key={metric.id} className="pt-5">
-                <dt className="select-none font-mono text-[11px] uppercase tracking-[0.14em] text-muted">{metric.label}</dt>
+                <dt className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase select-none">{metric.label}</dt>
                 <dd className="mt-4">
-                  <span className="block text-4xl font-light tabular-nums leading-none tracking-[-0.04em] md:text-5xl">
+                  <span className="block text-4xl leading-none font-light tracking-[-0.04em] tabular-nums md:text-5xl">
                     {metric.value ?? unknown}
                   </span>
                   <span className="mt-2 block font-mono text-[11px] text-muted">{metric.unit}</span>
@@ -62,7 +62,7 @@ export function DisciplineView({ data }: ViewProps) {
             <ol className="mt-5">
               {biological.sessions.map((session) => (
                 <li key={session.id} className="grid grid-cols-[5.5rem_minmax(0,1fr)] border-t border-line py-4">
-                  <span className="select-none font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+                  <span className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase select-none">
                     {bio.dayLabel} {session.id}
                   </span>
                   <div>
@@ -77,7 +77,7 @@ export function DisciplineView({ data }: ViewProps) {
 
         <motion.section variants={fade} className="md:col-span-4 md:col-start-9">
           <Meta>(B)</Meta>
-          <h2 className="mt-5 text-3xl font-medium leading-none tracking-[-0.035em] md:text-[2.75rem]">
+          <h2 className="mt-5 text-3xl leading-none font-medium tracking-[-0.035em] md:text-[2.75rem]">
             <Emphasis text={sound.title} emphasis={sound.titleEmphasis} />
           </h2>
           <p className="mt-6 text-[15px] leading-relaxed text-muted">{sound.summary}</p>
@@ -106,11 +106,13 @@ export function DisciplineView({ data }: ViewProps) {
 
           <dl className="mt-10 grid grid-cols-2 gap-x-4 border-t border-line">
             <div className="pt-5">
-              <dt className="select-none font-mono text-[11px] uppercase tracking-[0.14em] text-muted">{sound.instrumentLabel}</dt>
+              <dt className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase select-none">
+                {sound.instrumentLabel}
+              </dt>
               <dd className="mt-3 text-[15px]">{sound.instrument}</dd>
             </div>
             <div className="pt-5">
-              <dt className="select-none font-mono text-[11px] uppercase tracking-[0.14em] text-muted">{sound.formatsLabel}</dt>
+              <dt className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase select-none">{sound.formatsLabel}</dt>
               <dd className="mt-3 text-[15px]">{acoustic.formats.join(' · ')}</dd>
             </div>
           </dl>
@@ -120,7 +122,7 @@ export function DisciplineView({ data }: ViewProps) {
             <ol className="mt-5">
               {acoustic.pipeline.map((stepId, index) => (
                 <li key={stepId} className="grid grid-cols-[2.5rem_minmax(0,1fr)] border-t border-line py-4">
-                  <span className="select-none font-mono text-[11px] tabular-nums text-muted">{pad(index + 1)}</span>
+                  <span className="font-mono text-[11px] text-muted tabular-nums select-none">{pad(index + 1)}</span>
                   <span className="text-[15px]">{pick(sound.pipeline, stepId) ?? stepId}</span>
                 </li>
               ))}

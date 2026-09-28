@@ -24,7 +24,7 @@ export function NavBar() {
                 view={id}
                 aria-current={isActive ? 'page' : undefined}
                 aria-label={t(id)}
-                className="group relative flex select-none items-baseline gap-2 py-2 text-[13px]"
+                className="group relative flex items-baseline gap-2 py-2 text-[13px] select-none"
               >
                 <span
                   className={cn(
