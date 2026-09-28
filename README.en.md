@@ -54,10 +54,10 @@ The `next-migration` branch replaces the previous PHP site, which is kept in [`l
 | State | Zustand (per-instance view store via context + transient scene store) |
 | i18n | next-intl (`/en`, `/it`, `/fr`, language detection via `proxy.ts`, client-side language switch) |
 | Data | `data/shared.json` + `data/locales/*.json` (single source: content, UI strings, SEO metadata), validated with zod |
-| Quality | ESLint 9 (`eslint-config-next`: core-web-vitals + typescript) · `tsc --noEmit` |
+| Quality | ESLint 9 (`eslint-config-next`: core-web-vitals + typescript) · Prettier · `tsc --noEmit` · Vitest · Playwright |
 | Hosting | Vercel |
 
-End-to-end tests run with Playwright on Chromium, WebKit and a mobile profile, against the production build. GitHub Actions runs lint, typecheck, build and tests on every pull request.
+End-to-end tests run with Playwright on Chromium, WebKit and a mobile profile, against the production build. Unit tests use Vitest. GitHub Actions runs formatting, lint, typecheck, unit tests, build and end-to-end tests on every pull request.
 
 ## Requirements
 
@@ -86,12 +86,14 @@ To try it on a phone on the same network, open the *Network* address printed by 
 | `npm run build` | Production build: prerenders pages, Open Graph images, sitemap and robots |
 | `npm start` | Serves the production build locally |
 | `npm run lint` | ESLint across the project (`legacy/` and build output excluded) |
+| `npm run format` | Formats the project with Prettier (`.prettierrc.json`, with Tailwind class sorting) |
+| `npm run format:check` | Checks formatting without writing, as CI does |
 | `npm run typecheck` | Generates route types (`next typegen`) and type-checks with `tsc --noEmit` |
 | `npm run test:unit` | Vitest unit tests for the pure logic (`lib/**/*.test.ts`), in under a second |
 | `npm test` | Playwright end-to-end suite; builds and starts the production server itself |
 | `npm run test:ui` | The same suite in Playwright's interactive mode |
 
-Before pushing, it is worth running `npm run lint`, `npm run typecheck`, `npm run test:unit` and `npm test` — the same commands CI runs.
+Before pushing, it is worth running `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm run test:unit` and `npm test` — the same commands CI runs.
 
 ## Environment variables
 
@@ -323,11 +325,12 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 ## Code quality
 
 - TypeScript in `strict` mode, with the `@/*` alias mapped to the project root.
+- Prettier for TypeScript, JSON, CSS and YAML (Markdown is excluded so tables and trees keep their alignment). Formatting-only commits go in `.git-blame-ignore-revs`; to use it locally: `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
 - ESLint with Next.js's `core-web-vitals` and `typescript` configurations.
 - `npm run typecheck` first runs `next typegen`, which generates the global route types (`PageProps`, `LayoutProps`).
 - Vitest unit tests next to the modules (`lib/**/*.test.ts`): slugs and URLs, timeline arithmetic (segments, gaps, phases, axis), formatting, the content schema and cross-checks, including the real files.
 - End-to-end tests in `e2e/` with Playwright, run against the production build on Chromium, WebKit and a mobile profile. They cover every language's URLs and metadata, navigation and history, the language switch, SEO, security headers, accessibility (axe) and the site's resilience to a WebGL failure.
-- CI in `.github/workflows/ci.yml`: lint, typecheck, build and tests on every pull request.
+- CI in `.github/workflows/ci.yml`: formatting, lint, typecheck, unit tests, build and end-to-end tests on every pull request.
 - Dependabot (`.github/dependabot.yml`) opens one grouped weekly PR against `development` for npm dependencies and one for GitHub Actions.
 - `.mailmap` folds the early commits signed with a hostname-derived email into one identity, without rewriting history.
 - `legacy/` is excluded from TypeScript and ESLint.

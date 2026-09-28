@@ -54,10 +54,10 @@ Il branch `next-migration` sostituisce il precedente sito PHP, conservato in [`l
 | Stato | Zustand (store della vista per istanza via context + store della scena transiente) |
 | i18n | next-intl (`/en`, `/it`, `/fr`, rilevamento lingua via `proxy.ts`, cambio lingua lato client) |
 | Dati | `data/shared.json` + `data/locales/*.json` (unica sorgente: contenuti, stringhe UI, metadata SEO), validati con zod |
-| Qualità | ESLint 9 (`eslint-config-next`: core-web-vitals + typescript) · `tsc --noEmit` |
+| Qualità | ESLint 9 (`eslint-config-next`: core-web-vitals + typescript) · Prettier · `tsc --noEmit` · Vitest · Playwright |
 | Hosting | Vercel |
 
-I test end-to-end girano con Playwright su Chromium, WebKit e un profilo mobile, sulla build di produzione. La CI di GitHub Actions esegue lint, typecheck, build e test su ogni pull request.
+I test end-to-end girano con Playwright su Chromium, WebKit e un profilo mobile, sulla build di produzione. I test unitari usano Vitest. La CI di GitHub Actions esegue formattazione, lint, typecheck, test unitari, build e test end-to-end su ogni pull request.
 
 ## Requisiti
 
@@ -86,12 +86,14 @@ Per provarlo da smartphone sulla stessa rete, apri l'indirizzo *Network* stampat
 | `npm run build` | Build di produzione: pre-renderizza pagine, immagini Open Graph, sitemap e robots |
 | `npm start` | Avvia la build di produzione in locale |
 | `npm run lint` | ESLint su tutto il progetto (esclusi `legacy/` e gli output di build) |
+| `npm run format` | Formatta il progetto con Prettier (`.prettierrc.json`, con ordinamento delle classi Tailwind) |
+| `npm run format:check` | Verifica la formattazione senza modificare i file, come in CI |
 | `npm run typecheck` | Genera i tipi delle route (`next typegen`) e verifica i tipi con `tsc --noEmit` |
 | `npm run test:unit` | Test unitari Vitest della logica pura (`lib/**/*.test.ts`), in meno di un secondo |
 | `npm test` | Suite end-to-end Playwright; costruisce e avvia da sé la build di produzione |
 | `npm run test:ui` | Stessa suite nella modalità interattiva di Playwright |
 
-Prima di una push conviene eseguire `npm run lint`, `npm run typecheck`, `npm run test:unit` e `npm test`. Sono gli stessi comandi della CI.
+Prima di una push conviene eseguire `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm run test:unit` e `npm test`. Sono gli stessi comandi della CI.
 
 ## Variabili d'ambiente
 
@@ -323,11 +325,12 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 ## Qualità del codice
 
 - TypeScript in modalità `strict`, con alias `@/*` sulla radice del progetto.
+- Prettier per TypeScript, JSON, CSS e YAML (i Markdown sono esclusi per non riallineare tabelle e alberi). I commit di sola formattazione vanno elencati in `.git-blame-ignore-revs`; per usarlo in locale: `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
 - ESLint con le configurazioni `core-web-vitals` e `typescript` di Next.js.
 - `npm run typecheck` esegue prima `next typegen`, che genera i tipi globali delle route (`PageProps`, `LayoutProps`).
 - Test unitari con Vitest accanto ai moduli (`lib/**/*.test.ts`): slug e URL, aritmetica della timeline (segmenti, vuoti, fasi, asse), formattazione, schema e verifiche dei contenuti, inclusi i file reali.
 - Test end-to-end in `e2e/` con Playwright, eseguiti sulla build di produzione su Chromium, WebKit e un profilo mobile. Coprono URL e metadata di ogni lingua, navigazione e cronologia, cambio lingua, SEO, header di sicurezza, accessibilità (axe) e la tenuta del sito a un fallimento WebGL.
-- CI in `.github/workflows/ci.yml`: lint, typecheck, build e test su ogni pull request.
+- CI in `.github/workflows/ci.yml`: formattazione, lint, typecheck, test unitari, build e test end-to-end su ogni pull request.
 - Dependabot (`.github/dependabot.yml`) apre ogni settimana una PR raggruppata verso `development` per le dipendenze npm e una per le GitHub Actions.
 - `.mailmap` unifica sotto un'unica identità i commit iniziali firmati con l'email generata dal nome host, senza riscrivere la cronologia.
 - `legacy/` è escluso da TypeScript e da ESLint.

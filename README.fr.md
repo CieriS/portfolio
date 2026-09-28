@@ -56,10 +56,10 @@ La branche `next-migration` remplace l'ancien site PHP, conservé dans [`legacy/
 | État | Zustand (store de vue par instance via context + store de scène transitoire) |
 | i18n | next-intl (`/en`, `/it`, `/fr`, détection de la langue via `proxy.ts`, changement de langue côté client) |
 | Données | `data/shared.json` + `data/locales/*.json` (source unique : contenus, textes de l'interface, métadonnées SEO), validés avec zod |
-| Qualité | ESLint 9 (`eslint-config-next` : core-web-vitals + typescript) · `tsc --noEmit` |
+| Qualité | ESLint 9 (`eslint-config-next` : core-web-vitals + typescript) · Prettier · `tsc --noEmit` · Vitest · Playwright |
 | Hébergement | Vercel |
 
-Les tests end-to-end tournent avec Playwright sur Chromium, WebKit et un profil mobile, contre le build de production. GitHub Actions exécute lint, typecheck, build et tests sur chaque pull request.
+Les tests end-to-end tournent avec Playwright sur Chromium, WebKit et un profil mobile, contre le build de production. Les tests unitaires utilisent Vitest. GitHub Actions exécute formatage, lint, typecheck, tests unitaires, build et tests end-to-end sur chaque pull request.
 
 ## Prérequis
 
@@ -88,12 +88,14 @@ Pour le tester sur un smartphone connecté au même réseau, ouvrez l'adresse *N
 | `npm run build` | Build de production : pré-rend les pages, les images Open Graph, le sitemap et robots |
 | `npm start` | Lance le build de production en local |
 | `npm run lint` | ESLint sur l'ensemble du projet (hors `legacy/` et fichiers de build) |
+| `npm run format` | Formate le projet avec Prettier (`.prettierrc.json`, avec tri des classes Tailwind) |
+| `npm run format:check` | Vérifie le formatage sans modifier les fichiers, comme la CI |
 | `npm run typecheck` | Génère les types des routes (`next typegen`) et vérifie les types avec `tsc --noEmit` |
 | `npm run test:unit` | Tests unitaires Vitest de la logique pure (`lib/**/*.test.ts`), en moins d'une seconde |
 | `npm test` | Suite end-to-end Playwright ; construit et démarre lui-même le serveur de production |
 | `npm run test:ui` | La même suite dans le mode interactif de Playwright |
 
-Avant un push, il est conseillé d'exécuter `npm run lint`, `npm run typecheck`, `npm run test:unit` et `npm test` — les mêmes commandes que la CI.
+Avant un push, il est conseillé d'exécuter `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm run test:unit` et `npm test` — les mêmes commandes que la CI.
 
 ## Variables d'environnement
 
@@ -325,11 +327,12 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 ## Qualité du code
 
 - TypeScript en mode `strict`, avec l'alias `@/*` pointant vers la racine du projet.
+- Prettier pour TypeScript, JSON, CSS et YAML (le Markdown est exclu pour garder l'alignement des tableaux et arbres). Les commits de pur formatage vont dans `.git-blame-ignore-revs` ; pour l'utiliser en local : `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
 - ESLint avec les configurations `core-web-vitals` et `typescript` de Next.js.
 - `npm run typecheck` exécute d'abord `next typegen`, qui génère les types globaux des routes (`PageProps`, `LayoutProps`).
 - Tests unitaires Vitest à côté des modules (`lib/**/*.test.ts`) : slugs et URL, arithmétique de la timeline (segments, interruptions, phases, axe), formatage, schéma et contrôles des contenus, fichiers réels compris.
 - Tests end-to-end dans `e2e/` avec Playwright, exécutés contre le build de production sur Chromium, WebKit et un profil mobile. Ils couvrent les URL et métadonnées de chaque langue, la navigation et l'historique, le changement de langue, le SEO, les en-têtes de sécurité, l'accessibilité (axe) et la résistance du site à une panne WebGL.
-- CI dans `.github/workflows/ci.yml` : lint, typecheck, build et tests sur chaque pull request.
+- CI dans `.github/workflows/ci.yml` : formatage, lint, typecheck, tests unitaires, build et tests end-to-end sur chaque pull request.
 - Dependabot (`.github/dependabot.yml`) ouvre chaque semaine une PR groupée vers `development` pour les dépendances npm et une pour les GitHub Actions.
 - `.mailmap` regroupe sous une seule identité les premiers commits signés avec l'email dérivé du nom d'hôte, sans réécrire l'historique.
 - `legacy/` est exclu de TypeScript et d'ESLint.
