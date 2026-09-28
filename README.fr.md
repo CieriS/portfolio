@@ -142,7 +142,7 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 
 - Le layout et les pages utilisent `generateStaticParams` : toutes les combinaisons langue × vue sont générées au build.
 - `app/[locale]/page.tsx` (index) et `app/[locale]/[view]/page.tsx` (vues internes) rendent tous deux `components/seo/PortfolioPage.tsx`, un Server Component qui injecte le JSON-LD et démarre l'application sur la vue demandée.
-- `lib/views.ts` est la source unique des ID, des slugs localisés et des conversions URL ↔ vue.
+- `lib/routes.ts` est la source unique des langues, des ID, des slugs localisés et des conversions URL ↔ vue. Il ne dépend ni de Next ni de next-intl : la suite Playwright importe le même module au lieu d'en garder une copie.
 - Les deux langues sont envoyées au client (`getPortfolioBundle`) : le changement de langue ne nécessite donc aucune navigation.
 
 ### Shell
@@ -263,7 +263,7 @@ Ajoutez `{ id, label, handle, url }` à `shared.contacts` : le contact apparaît
 
 ### Ajouter une vue
 
-1. `lib/views.ts` : ajoutez l'ID à `VIEW_IDS` et son slug pour chaque langue dans `VIEW_SLUGS`.
+1. `lib/routes.ts` : ajoutez l'ID à `VIEW_IDS` et son slug pour chaque langue dans `VIEW_SLUGS`.
 2. `components/scene/modes.ts` : ajoutez le mode de la scène dans `SCENE_MODES`.
 3. `components/views/` : créez le composant et enregistrez-le dans `RENDER` de `components/shell/AppShell.tsx`.
 4. `data/portfolio.json` : ajoutez `ui.nav.<id>`, `ui.meta.views.<id>` et les textes de la vue dans chaque langue.
@@ -272,10 +272,9 @@ Les pages, les images Open Graph, le sitemap, la navigation et les raccourcis nu
 
 ### Ajouter une langue
 
-1. `i18n/routing.ts` : ajoutez le code à `locales`.
-2. `lib/views.ts` : ajoutez les slugs dans `VIEW_SLUGS`. `viewFromPath` n'a pas besoin d'être modifié : il valide la locale avec `hasLocale(routing.locales, …)` et suit donc l'étape 1 tout seul.
-3. `lib/seo.ts` : ajoutez la locale Open Graph dans `OG_LOCALE` (par exemple `pt: 'pt_PT'`).
-4. `data/portfolio.json` : ajoutez `locales.<code>` avec la même structure que `en`, ainsi que le libellé de la nouvelle langue dans `ui.locale` de chaque langue.
+1. `lib/routes.ts` : ajoutez le code à `LOCALES` et les slugs dans `VIEW_SLUGS`. `i18n/routing.ts`, `viewFromPath` et la suite E2E lisent ici et n'ont pas besoin d'être modifiés.
+2. `lib/seo.ts` : ajoutez la locale Open Graph dans `OG_LOCALE` (par exemple `pt: 'pt_PT'`).
+3. `data/portfolio.json` : ajoutez `locales.<code>` avec la même structure que `en`, ainsi que le libellé de la nouvelle langue dans `ui.locale` de chaque langue.
 
 TypeScript signale chaque étape oubliée, car toutes ces tables sont typées sur `Locale`.
 
