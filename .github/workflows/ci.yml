@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   check:
-    name: Lint, types and build
+    name: Format, lint, types, unit tests and build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,8 +21,10 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
+      - run: npm run test:unit
       - run: npm run build
 
   e2e:
