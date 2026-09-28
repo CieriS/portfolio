@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { EASE_OUT, fade } from '@/components/motion/Reveal';
+import { ViewLink } from '@/components/shell/ViewLink';
 import { cn } from '@/lib/cn';
 import { pad, pick } from '@/lib/format';
 import type { PortfolioView, Project } from '@/lib/portfolio';
@@ -12,8 +13,7 @@ type ProjectsCopy = PortfolioView['content']['projects'];
 
 export function ProjectsView({ data }: ViewProps) {
   const copy = data.content.projects;
-  const { projects, contacts } = data.shared;
-  const profileUrl = contacts.find((contact) => contact.id === 'github')?.url ?? null;
+  const { projects } = data.shared;
   const [openId, setOpenId] = useState<string | null>(projects[0]?.id ?? null);
 
   return (
@@ -33,7 +33,6 @@ export function ProjectsView({ data }: ViewProps) {
             project={project}
             index={index}
             copy={copy}
-            profileUrl={profileUrl}
             open={openId === project.id}
             onToggle={() => setOpenId(openId === project.id ? null : project.id)}
           />
@@ -47,14 +46,12 @@ type ProjectRowProps = {
   project: Project;
   index: number;
   copy: ProjectsCopy;
-  profileUrl: string | null;
   open: boolean;
   onToggle: () => void;
 };
 
-function ProjectRow({ project, index, copy, profileUrl, open, onToggle }: ProjectRowProps) {
+function ProjectRow({ project, index, copy, open, onToggle }: ProjectRowProps) {
   const item = pick(copy.items, project.id);
-  const href = project.repo ?? profileUrl;
   const panelId = `project-${project.id}`;
 
   return (
@@ -100,9 +97,22 @@ function ProjectRow({ project, index, copy, profileUrl, open, onToggle }: Projec
               className="overflow-hidden"
             >
               <div className="grid gap-12 pb-12 md:grid-cols-12 md:gap-x-6 md:pb-16">
-                <p className="text-lg leading-relaxed md:col-span-4 md:col-start-4 md:text-xl md:leading-snug md:tracking-[-0.01em]">
-                  {item.summary}
-                </p>
+                <div className="md:col-span-4 md:col-start-4">
+                  <p className="text-lg leading-relaxed md:text-xl md:leading-snug md:tracking-[-0.01em]">{item.summary}</p>
+                  <Meta as="h3" className="mt-10">
+                    {copy.labels.highlights}
+                  </Meta>
+                  <ul className="mt-5 space-y-3 text-[15px] leading-snug text-muted">
+                    {item.highlights.map((highlight) => (
+                      <li key={highlight} className="flex gap-3">
+                        <span aria-hidden className="font-mono text-ink">
+                          —
+                        </span>
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 <div className="md:col-span-2 md:col-start-8">
                   <Meta as="h3">{copy.labels.architecture}</Meta>
@@ -122,19 +132,7 @@ function ProjectRow({ project, index, copy, profileUrl, open, onToggle }: Projec
                     <Meta as="h3">{copy.labels.bridge}</Meta>
                     <p className="mt-5 text-[15px] leading-relaxed text-muted">{item.bridge}</p>
                   </div>
-                  {href && (
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group/link inline-flex select-none items-center gap-3 self-start text-[15px]"
-                    >
-                      <span className="link-underline group-hover/link:bg-[length:100%_1px]">
-                        {project.repo ? copy.labels.repo : copy.labels.profile}
-                      </span>
-                      <span aria-hidden>↗</span>
-                    </a>
-                  )}
+                  <SourceLink project={project} copy={copy} />
                 </div>
               </div>
             </motion.div>
@@ -142,5 +140,29 @@ function ProjectRow({ project, index, copy, profileUrl, open, onToggle }: Projec
         </AnimatePresence>
       </div>
     </li>
+  );
+}
+
+const LINK_CLASS = 'group/link inline-flex select-none items-center gap-3 self-start text-[15px]';
+
+/** Public code links out to its repository; private code points to the contacts, where access can be asked for. */
+function SourceLink({ project, copy }: { project: Project; copy: ProjectsCopy }) {
+  const text = project.source.visibility === 'public' ? copy.labels.repo : copy.labels.private;
+  const label = <span className="link-underline group-hover/link:bg-[length:100%_1px]">{text}</span>;
+
+  if (project.source.visibility === 'public') {
+    return (
+      <a href={project.source.url} target="_blank" rel="noopener noreferrer" className={LINK_CLASS}>
+        {label}
+        <span aria-hidden>↗</span>
+      </a>
+    );
+  }
+
+  return (
+    <ViewLink view="identity" className={LINK_CLASS} data-source="private">
+      {label}
+      <span aria-hidden>→</span>
+    </ViewLink>
   );
 }

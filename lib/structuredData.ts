@@ -95,7 +95,7 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
           description: pick(content.projects.items, project.id)?.summary,
           programmingLanguage: project.stack,
           author: { '@id': personId },
-          ...(project.repo ? { codeRepository: project.repo } : {}),
+          ...(project.source.visibility === 'public' ? { codeRepository: project.source.url } : {}),
         },
       })),
     });

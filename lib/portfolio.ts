@@ -21,7 +21,14 @@ export type Thread = {
   phases: Phase[];
 };
 export type ProjectLayer = { id: string; tech: string };
-export type Project = { id: string; name: string; repo: string | null; stack: string[]; layers: ProjectLayer[] };
+
+export const SOURCE_VISIBILITIES = ['public', 'private'] as const;
+export type SourceVisibility = (typeof SOURCE_VISIBILITIES)[number];
+
+/** Where a project's code lives: a public repository, or private code shown on request. */
+export type ProjectSource = { visibility: 'public'; url: string } | { visibility: 'private' };
+
+export type Project = { id: string; name: string; source: ProjectSource; stack: string[]; layers: ProjectLayer[] };
 export type Session = { id: string; focus: string; patterns: string[] };
 
 export type SharedData = {
@@ -54,10 +61,30 @@ function asThread(raw: (typeof rawData)['shared']['timeline']['threads'][number]
   return { ...raw, kind };
 }
 
+type RawProject = (typeof rawData)['shared']['projects'][number];
+
+/**
+ * Same narrowing as threads, for the source union: a public project without a `url`, or an
+ * unknown visibility, fails the build instead of rendering a link to nowhere.
+ */
+function asProject(raw: RawProject): Project {
+  const source: { visibility: string; url?: string } = raw.source;
+  const visibility = SOURCE_VISIBILITIES.find((candidate) => candidate === source.visibility);
+  if (!visibility) {
+    throw new Error(
+      `Unknown source visibility "${source.visibility}" on project "${raw.id}". Expected: ${SOURCE_VISIBILITIES.join(', ')}.`,
+    );
+  }
+  if (visibility === 'private') return { ...raw, source: { visibility } };
+  if (!source.url) throw new Error(`Public project "${raw.id}" needs a source url.`);
+  return { ...raw, source: { visibility, url: source.url } };
+}
+
 // Typed assignments: a missing or renamed key in the JSON (or an IT/EN shape drift) fails the build.
 const shared: SharedData = {
   ...rawData.shared,
   timeline: { threads: rawData.shared.timeline.threads.map(asThread) },
+  projects: rawData.shared.projects.map(asProject),
 };
 const contents: Record<Locale, LocaleContent> = rawData.locales;
 

@@ -41,12 +41,13 @@
       {
         "id": "yourfinance",
         "name": "yourFinance",
-        "repo": null,
-        "stack": ["Rust", "PostgreSQL", "Docker", "React"],
+        "source": { "visibility": "private" },
+        "stack": ["Rust", "PostgreSQL", "React Native", "Docker"],
         "layers": [
-          { "id": "client", "tech": "React" },
-          { "id": "api", "tech": "Rust" },
-          { "id": "storage", "tech": "PostgreSQL" }
+          { "id": "clients", "tech": "Expo · Tauri" },
+          { "id": "api", "tech": "Rust · Axum" },
+          { "id": "worker", "tech": "Rust · Tokio" },
+          { "id": "storage", "tech": "PostgreSQL 18" }
         ]
       }
     ],
@@ -89,7 +90,7 @@
             },
             "projects": {
               "title": "Projects: Rust & PostgreSQL",
-              "description": "yourFinance, a project bridging toward Data Engineering: a typed Rust API over PostgreSQL with a React client, in early development."
+              "description": "yourFinance, a multi-user personal finance platform: layered Rust API and worker over PostgreSQL with RLS and triggers, Expo and Tauri clients."
             },
             "discipline": {
               "title": "Optimization: calisthenics, sound & video",
@@ -192,17 +193,27 @@
         "labels": {
           "architecture": "Topology",
           "bridge": "Data bridge",
+          "highlights": "Engineering decisions",
           "repo": "Repository",
-          "profile": "Source on GitHub"
+          "private": "Private source — walkthrough on request"
         },
         "items": {
           "yourfinance": {
-            "summary": "Full-stack architecture for personal finance, in early development: a Rust backend exposing a typed API over a PostgreSQL store, consumed by a React client. The architecture is still evolving.",
-            "bridge": "Schema design for transactional time series, integrity constraints, and query modeling on financial records.",
+            "summary": "Multi-user personal finance platform: a layered Rust workspace (pure domain, SQLx data layer, Axum API, background worker) over PostgreSQL, serving an Expo app for iOS, Android and web plus a Tauri desktop shell.",
+            "bridge": "Integrity enforced in the database: balances maintained only by triggers, row-level security per user, SQL analytics functions for trends and budgets, idempotent imports of third-party exports.",
+            "highlights": [
+              "Hexagonal crate split: an I/O-free domain checked in CI",
+              "Row-level security scoped on every pooled connection",
+              "Transactional outbox for push notifications, SKIP LOCKED job claims",
+              "Rotating refresh tokens, rate-limited login, typed error codes",
+              "Prometheus metrics, OTLP traces, health probes, graceful shutdown",
+              "Playwright E2E on the real stack, k6 load tests, compile-time checked SQL"
+            ],
             "layers": {
-              "client": "Presentation & state",
-              "api": "Typed HTTP service",
-              "storage": "Relational persistence"
+              "clients": "Mobile, web & desktop",
+              "api": "Typed HTTP API, JWT",
+              "worker": "Scheduled jobs",
+              "storage": "Triggers, RLS, analytics"
             }
           }
         }
@@ -258,7 +269,7 @@
             },
             "projects": {
               "title": "Progetti: Rust e PostgreSQL",
-              "description": "yourFinance, progetto ponte verso il Data Engineering: API in Rust su PostgreSQL con client React, nelle prime fasi di sviluppo."
+              "description": "yourFinance, piattaforma multi-utente di finanza personale: API e worker Rust a livelli su PostgreSQL con RLS e trigger, client Expo e Tauri."
             },
             "discipline": {
               "title": "Ottimizzazione: calisthenics, suono e video",
@@ -361,17 +372,27 @@
         "labels": {
           "architecture": "Topologia",
           "bridge": "Ponte verso i dati",
+          "highlights": "Scelte di ingegneria",
           "repo": "Repository",
-          "profile": "Sorgenti su GitHub"
+          "private": "Codice privato — demo su richiesta"
         },
         "items": {
           "yourfinance": {
-            "summary": "Architettura full-stack per la finanza personale, nelle prime fasi di sviluppo: backend Rust che espone un'API tipizzata su uno store PostgreSQL, consumata da un client React. L'architettura è ancora in evoluzione.",
-            "bridge": "Progettazione di schemi per serie temporali transazionali, vincoli di integrità e modellazione delle query su dati finanziari.",
+            "summary": "Piattaforma multi-utente di finanza personale: un workspace Rust a livelli (dominio puro, data layer SQLx, API Axum, worker in background) su PostgreSQL, al servizio di un’app Expo per iOS, Android e web e di una shell desktop Tauri.",
+            "bridge": "Integrità garantita dal database: saldi aggiornati solo dai trigger, row-level security per utente, funzioni SQL analitiche per andamenti e budget, import idempotenti da export di terze parti.",
+            "highlights": [
+              "Crate esagonali: dominio senza I/O verificato in CI",
+              "Row-level security impostata su ogni connessione del pool",
+              "Outbox transazionale per le push, job con SKIP LOCKED",
+              "Refresh token ruotati, login con rate limit, codici d’errore tipizzati",
+              "Metriche Prometheus, tracce OTLP, health probe, graceful shutdown",
+              "E2E Playwright sullo stack reale, load test k6, SQL verificato in compilazione"
+            ],
             "layers": {
-              "client": "Presentazione & stato",
-              "api": "Servizio HTTP tipizzato",
-              "storage": "Persistenza relazionale"
+              "clients": "Mobile, web e desktop",
+              "api": "API HTTP tipizzata, JWT",
+              "worker": "Job pianificati",
+              "storage": "Trigger, RLS, analytics"
             }
           }
         }
@@ -427,7 +448,7 @@
             },
             "projects": {
               "title": "Projets : Rust & PostgreSQL",
-              "description": "yourFinance, projet passerelle vers le Data Engineering : une API Rust sur PostgreSQL avec client React, en début de développement."
+              "description": "yourFinance, plateforme multi-utilisateur de finance personnelle : API et worker Rust en couches sur PostgreSQL avec RLS et triggers, clients Expo et Tauri."
             },
             "discipline": {
               "title": "Optimisation : callisthénie, son & vidéo",
@@ -530,17 +551,27 @@
         "labels": {
           "architecture": "Topologie",
           "bridge": "Passerelle vers les données",
+          "highlights": "Choix d’ingénierie",
           "repo": "Dépôt",
-          "profile": "Sources sur GitHub"
+          "private": "Code privé — démo sur demande"
         },
         "items": {
           "yourfinance": {
-            "summary": "Architecture full-stack pour la finance personnelle, en début de développement : un backend Rust exposant une API typée sur une base PostgreSQL, consommée par un client React. L'architecture est encore en évolution.",
-            "bridge": "Conception de schémas pour des séries temporelles transactionnelles, contraintes d'intégrité et modélisation des requêtes sur des données financières.",
+            "summary": "Plateforme multi-utilisateur de finance personnelle : un workspace Rust en couches (domaine pur, couche de données SQLx, API Axum, worker en arrière-plan) sur PostgreSQL, au service d’une app Expo pour iOS, Android et web et d’un shell desktop Tauri.",
+            "bridge": "Intégrité garantie par la base : soldes mis à jour uniquement par des triggers, row-level security par utilisateur, fonctions SQL analytiques pour tendances et budgets, imports idempotents d’exports tiers.",
+            "highlights": [
+              "Crates hexagonales : domaine sans I/O vérifié en CI",
+              "Row-level security appliquée à chaque connexion du pool",
+              "Outbox transactionnelle pour les push, jobs avec SKIP LOCKED",
+              "Refresh tokens rotatifs, login limité en débit, codes d’erreur typés",
+              "Métriques Prometheus, traces OTLP, sondes de santé, arrêt propre",
+              "E2E Playwright sur la vraie stack, tests de charge k6, SQL vérifié à la compilation"
+            ],
             "layers": {
-              "client": "Présentation & état",
-              "api": "Service HTTP typé",
-              "storage": "Persistance relationnelle"
+              "clients": "Mobile, web et desktop",
+              "api": "API HTTP typée, JWT",
+              "worker": "Tâches planifiées",
+              "storage": "Triggers, RLS, analytique"
             }
           }
         }
