@@ -331,7 +331,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 - Vitest unit tests next to the modules (`lib/**/*.test.ts`): slugs and URLs, timeline arithmetic (segments, gaps, phases, axis), formatting, the content schema and cross-checks, including the real files.
 - End-to-end tests in `e2e/` with Playwright, run against the production build on Chromium, WebKit and a mobile profile. They cover every language's URLs and metadata, navigation and history, the language switch, SEO, security headers, accessibility (axe) and the site's resilience to a WebGL failure.
 - CI in `.github/workflows/ci.yml`: formatting, lint, typecheck, unit tests, build and end-to-end tests on every pull request.
-- Dependabot (`.github/dependabot.yml`) opens one grouped weekly PR against `development` for npm dependencies and one for GitHub Actions.
+- Dependabot (`.github/dependabot.yml`) opens one grouped weekly PR against `development` for npm dependencies and one for GitHub Actions. Major bumps of `eslint` and `typescript` are ignored until `eslint-config-next` supports them.
 - `.mailmap` folds the early commits signed with a hostname-derived email into one identity, without rewriting history.
 - `legacy/` is excluded from TypeScript and ESLint.
 - `reactStrictMode` is on, and Next's dev indicator is off because it would sit on top of the navigation.

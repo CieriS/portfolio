@@ -331,7 +331,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 - Test unitari con Vitest accanto ai moduli (`lib/**/*.test.ts`): slug e URL, aritmetica della timeline (segmenti, vuoti, fasi, asse), formattazione, schema e verifiche dei contenuti, inclusi i file reali.
 - Test end-to-end in `e2e/` con Playwright, eseguiti sulla build di produzione su Chromium, WebKit e un profilo mobile. Coprono URL e metadata di ogni lingua, navigazione e cronologia, cambio lingua, SEO, header di sicurezza, accessibilità (axe) e la tenuta del sito a un fallimento WebGL.
 - CI in `.github/workflows/ci.yml`: formattazione, lint, typecheck, test unitari, build e test end-to-end su ogni pull request.
-- Dependabot (`.github/dependabot.yml`) apre ogni settimana una PR raggruppata verso `development` per le dipendenze npm e una per le GitHub Actions.
+- Dependabot (`.github/dependabot.yml`) apre ogni settimana una PR raggruppata verso `development` per le dipendenze npm e una per le GitHub Actions. Le major di `eslint` e `typescript` sono ignorate finché `eslint-config-next` non le supporta.
 - `.mailmap` unifica sotto un'unica identità i commit iniziali firmati con l'email generata dal nome host, senza riscrivere la cronologia.
 - `legacy/` è escluso da TypeScript e da ESLint.
 - `reactStrictMode` attivo e indicatore di sviluppo di Next disattivato, perché si sovrapporrebbe alla navigazione.
