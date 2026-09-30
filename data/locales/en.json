@@ -168,6 +168,24 @@
           "worker": "Scheduled jobs",
           "storage": "Triggers, RLS, analytics"
         }
+      },
+      "ariaer": {
+        "summary": "End-to-end data platform for Emilia-Romagna air quality on ARPAE open data, enriched with Open-Meteo weather: Rust ingestion into partitioned Parquet, dbt models on DuckDB locally and BigQuery on GCP, Dagster orchestration. Work in progress: data exploration is done.",
+        "bridge": "A pure data engineering project: provisional measurements revised after validation, gaps and inconsistent formats in the source, turned into a historized, tested dataset that answers legal-limit exceedances, pollutant trends and weather correlation.",
+        "highlights": [
+          "Idempotent incremental ingestion: rolling-window reprocessing and upserts on the natural key",
+          "Layered dbt models (staging, intermediate, marts) with SCD Type 2 station history",
+          "Data quality as code: uniqueness, completeness and freshness tests",
+          "Completeness measured against an expected time grid, never filled in raw",
+          "Legal limits in a dbt seed, never hardcoded",
+          "Same models on DuckDB and BigQuery, infrastructure via Terraform"
+        ],
+        "layers": {
+          "ingestion": "ARPAE and Open-Meteo, idempotent",
+          "lake": "Raw partitioned by year/month",
+          "transform": "Staging, intermediate, marts",
+          "orchestration": "Schedules, backfills, lineage"
+        }
       }
     }
   },

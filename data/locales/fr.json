@@ -174,6 +174,24 @@
           "worker": "Tâches planifiées",
           "storage": "Triggers, RLS, analytique"
         }
+      },
+      "ariaer": {
+        "summary": "Plateforme de données de bout en bout sur la qualité de l’air en Émilie-Romagne, à partir des open data ARPAE enrichies par la météo Open-Meteo : ingestion en Rust vers du Parquet partitionné, modèles dbt sur DuckDB en local et BigQuery sur GCP, orchestration Dagster. En cours : l’exploration des données est terminée.",
+        "bridge": "Un projet de data engineering pur : mesures provisoires révisées après validation, trous et formats incohérents dans la source, transformés en un jeu de données historisé et testé qui répond sur les dépassements des seuils légaux, les tendances des polluants et la corrélation avec la météo.",
+        "highlights": [
+          "Ingestion incrémentale et idempotente : retraitement sur fenêtre glissante et upserts sur la clé naturelle",
+          "Modèles dbt en couches (staging, intermediate, marts) avec historique SCD Type 2 des stations",
+          "Qualité des données en code : tests d’unicité, de complétude et de fraîcheur",
+          "Complétude mesurée sur une grille temporelle attendue, jamais comblée dans le raw",
+          "Seuils légaux dans un seed dbt, jamais codés en dur",
+          "Mêmes modèles sur DuckDB et BigQuery, infrastructure via Terraform"
+        ],
+        "layers": {
+          "ingestion": "ARPAE et Open-Meteo, idempotente",
+          "lake": "Raw partitionné par année/mois",
+          "transform": "Staging, intermediate, marts",
+          "orchestration": "Schedules, backfills, lineage"
+        }
       }
     }
   },

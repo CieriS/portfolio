@@ -24,9 +24,19 @@ test('the private source link swaps to the contacts view in place', async ({ pag
   expect(new URL(page.url()).pathname).toBe(pathFor('en', 'identity'));
 });
 
-test('private projects publish no codeRepository in the JSON-LD', async ({ page }) => {
+test('only public projects publish a codeRepository in the JSON-LD', async ({ page }) => {
   await page.goto(pathFor('en', 'projects'));
   const raw = await page.locator('script[type="application/ld+json"]').innerHTML();
   expect(raw).toContain('SoftwareSourceCode');
-  expect(raw).not.toContain('codeRepository');
+  expect(raw).toContain('"codeRepository":"https://github.com/CieriS/aria-er"');
+  expect(raw.match(/codeRepository/g)).toHaveLength(1);
+});
+
+test('a public project links to its repository in a new tab', async ({ page }) => {
+  await gotoView(page, 'en', 'projects');
+  const panel = page.locator('#project-ariaer');
+  await page.getByRole('button', { name: /aria-er/ }).click();
+  const repo = panel.getByRole('link', { name: copy.labels.repo });
+  await expect(repo).toHaveAttribute('href', 'https://github.com/CieriS/aria-er');
+  await expect(repo).toHaveAttribute('target', '_blank');
 });
