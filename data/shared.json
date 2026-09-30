@@ -48,6 +48,18 @@
         { "id": "worker", "tech": "Rust · Tokio" },
         { "id": "storage", "tech": "PostgreSQL 18" }
       ]
+    },
+    {
+      "id": "ariaer",
+      "name": "aria-er",
+      "source": { "visibility": "public", "url": "https://github.com/CieriS/aria-er" },
+      "stack": ["Rust", "dbt", "Dagster", "DuckDB", "BigQuery", "Terraform"],
+      "layers": [
+        { "id": "ingestion", "tech": "Rust" },
+        { "id": "lake", "tech": "Parquet" },
+        { "id": "transform", "tech": "dbt · DuckDB · BigQuery" },
+        { "id": "orchestration", "tech": "Dagster" }
+      ]
     }
   ],
   "discipline": {

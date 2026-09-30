@@ -174,6 +174,24 @@
           "worker": "Job pianificati",
           "storage": "Trigger, RLS, analytics"
         }
+      },
+      "ariaer": {
+        "summary": "Piattaforma dati end-to-end sulla qualità dell’aria in Emilia-Romagna, sugli open data ARPAE arricchiti con il meteo di Open-Meteo: ingestion in Rust verso Parquet partizionato, modelli dbt su DuckDB in locale e BigQuery su GCP, orchestrazione con Dagster. In corso: l’esplorazione dei dati è completata.",
+        "bridge": "Un progetto di data engineering puro: misure provvisorie riviste dopo la validazione, buchi e formati incoerenti nella sorgente, trasformati in un dataset storicizzato e testato che risponde su superamenti dei limiti di legge, trend degli inquinanti e correlazione con il meteo.",
+        "highlights": [
+          "Ingestion incrementale e idempotente: riprocessamento a finestra mobile e upsert sulla chiave naturale",
+          "Modelli dbt a livelli (staging, intermediate, marts) con storico SCD Type 2 delle stazioni",
+          "Qualità del dato come codice: test di unicità, completezza e freschezza",
+          "Completezza misurata su una griglia temporale attesa, mai riempita nel raw",
+          "Limiti di legge in un seed dbt, mai scritti nel codice",
+          "Stessi modelli su DuckDB e BigQuery, infrastruttura con Terraform"
+        ],
+        "layers": {
+          "ingestion": "ARPAE e Open-Meteo, idempotente",
+          "lake": "Raw partizionato per anno/mese",
+          "transform": "Staging, intermediate, marts",
+          "orchestration": "Schedule, backfill, lineage"
+        }
       }
     }
   },
