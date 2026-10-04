@@ -45,7 +45,7 @@
       "discipline": "Ottimizzazione"
     },
     "theme": { "label": "Tema", "light": "Chiaro", "dark": "Scuro", "system": "Auto" },
-    "locale": { "label": "Lingua", "en": "EN", "it": "IT", "fr": "FR" },
+    "locale": { "label": "Lingua", "en": "EN", "it": "IT", "fr": "FR", "de": "DE" },
     "shell": {
       "role": "Software Developer — Data Engineering",
       "nav": "Viste",

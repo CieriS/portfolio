@@ -6,6 +6,7 @@ describe('pathFor', () => {
     expect(pathFor('it', 'hero')).toBe('/it');
     expect(pathFor('it', 'projects')).toBe('/it/sistemi');
     expect(pathFor('fr', 'discipline')).toBe('/fr/optimisation');
+    expect(pathFor('de', 'timeline')).toBe('/de/ausfuehrung');
   });
 });
 

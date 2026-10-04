@@ -1,3 +1,4 @@
+import de from '@/data/locales/de.json';
 import en from '@/data/locales/en.json';
 import fr from '@/data/locales/fr.json';
 import it from '@/data/locales/it.json';
@@ -33,7 +34,7 @@ export type PortfolioBundle = { shared: SharedData; contents: Record<Locale, Loc
  * 2. schema: the shared data is parsed with zod (enums, ISO dates, URLs, the source union);
  * 3. cross-checks: copy keyed by shared ids, `*Emphasis` words present in their text.
  */
-const contents: Record<Locale, LocaleContent> = { en, it, fr };
+const contents: Record<Locale, LocaleContent> = { en, it, fr, de };
 const shared: SharedData = SharedSchema.parse(rawShared);
 
 const issues = findContentIssues(shared, contents);

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import de from '@/data/locales/de.json';
 import en from '@/data/locales/en.json';
 import fr from '@/data/locales/fr.json';
 import it_ from '@/data/locales/it.json';
@@ -9,7 +10,7 @@ import { findContentIssues, findEmphasisIssues, type CopyUnderCheck } from './va
 describe('the real content', () => {
   it('parses and passes every cross-check', () => {
     const shared = SharedSchema.parse(rawShared);
-    expect(findContentIssues(shared, { en, it: it_, fr })).toEqual([]);
+    expect(findContentIssues(shared, { en, it: it_, fr, de })).toEqual([]);
   });
 });
 
