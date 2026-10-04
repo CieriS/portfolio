@@ -19,9 +19,13 @@ export function ViewFrame({ children, label }: { children: ReactNode; label: str
    * it puts the keyboard caret inside the scroll container the user is now looking at.
    * `data-booted` marks the handover from the first-paint CSS intro: on the very first
    * render there is no previous view, so stealing focus would only interrupt the intro.
+   * A control marked `data-keep-focus` (the language menu) keeps it: the same view simply
+   * re-renders in another language, and the keyboard user stays where they were.
    */
   useEffect(() => {
-    if (document.documentElement.dataset.booted !== undefined) ref.current?.focus();
+    if (document.documentElement.dataset.booted === undefined) return;
+    if (document.activeElement?.closest('[data-keep-focus]')) return;
+    ref.current?.focus();
   }, []);
 
   return (

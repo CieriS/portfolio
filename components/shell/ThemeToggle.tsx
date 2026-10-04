@@ -25,6 +25,7 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
+      data-theme-toggle
       onClick={() => setTheme(next)}
       aria-label={`${t('label')}: ${t(current)}`}
       className="group flex items-center gap-2.5 py-2 text-[13px]"
