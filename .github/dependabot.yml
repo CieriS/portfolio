@@ -10,6 +10,13 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    # Majors held back until eslint-config-next supports them: its bundled eslint-plugin-react
+    # breaks on ESLint 10 and typescript-eslint refuses TypeScript 7. Drop an entry once it does.
+    ignore:
+      - dependency-name: eslint
+        update-types: ['version-update:semver-major']
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:

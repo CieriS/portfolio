@@ -33,7 +33,7 @@ The `next-migration` branch replaces the previous PHP site, which is kept in [`l
 ## Features
 
 - **SPA with real URLs**: each view is a static page (SSG) with its own content and metadata. After the first load, view changes happen on the client without a reload, updating the URL and title through the History API.
-- **Trilingual (EN/IT/FR)**: translated slugs, automatic language detection and an instant language switch that keeps the view, the canvas and the state.
+- **Four languages (EN/IT/FR/DE)**: translated slugs, automatic language detection and an instant language switch that keeps the view, the canvas and the state.
 - **Persistent 3D scene**: a 5,376-point grid (three.js) that changes shape and camera angle for each view and reacts to the pointer. It loads on the client only and adapts to the device's performance.
 - **Light, dark or automatic theme** with next-themes, with no flash on load.
 - **Considered motion**: a CSS intro on first paint (before hydration), then Framer Motion for view transitions, line masks and the animated navigation underline.
@@ -132,7 +132,7 @@ Every URL is prerendered with its own content. An address that matches no view s
 - **Touch**: a horizontal swipe (over 70 px and mostly horizontal) moves to the previous or next view.
 - **Arrows and counter** in the footer on medium and large screens.
 - **History**: every view change calls `pushState`, so the browser's back and forward buttons work. The document title follows the active view.
-- **Language**: the EN / IT / FR switch replaces the URL with the translated slug (`replaceState`), updates `lang` and the title, and stores the `NEXT_LOCALE` cookie for one year, without navigating. The canvas and the active view stay intact.
+- **Language**: the header shows only the active language; the trigger opens an animated menu (`listbox`) listing every language by its native name, usable with mouse, touch and keyboard (arrows, Home/End, Enter/Space, Esc, outside click; focus returns to the trigger). Picking a language replaces the URL with the translated slug (`replaceState`), updates `lang` and the title, and stores the `NEXT_LOCALE` cookie for one year, without navigating. The canvas and the active view stay intact.
 - **Language detection**: on `/` and on unprefixed paths, `proxy.ts` (the next-intl middleware) picks the language from the `NEXT_LOCALE` cookie or the `Accept-Language` header. The default language is English and the prefix is always present.
 - **Theme**: the button cycles Auto → Light → Dark; the icon is half-filled, empty or full respectively.
 - **Scene**: the pointer nudges the camera and "heats up" nearby nodes. The effect fades out when the pointer leaves the window.
@@ -144,7 +144,7 @@ Every URL is prerendered with its own content. An address that matches no view s
 - The layout and pages use `generateStaticParams`: every language × view combination is generated at build time.
 - `app/[locale]/page.tsx` (index) and `app/[locale]/[view]/page.tsx` (inner views) both render `components/seo/PortfolioPage.tsx`, a Server Component that injects the JSON-LD and starts the app on the requested view.
 - `lib/routes.ts` is the single source for locales, IDs, localised slugs and URL ↔ view conversion. It depends on neither Next nor next-intl, so the Playwright suite imports the same module instead of keeping a copy.
-- Both languages are sent to the client (`getPortfolioBundle`), so switching language needs no navigation.
+- All languages are sent to the client (`getPortfolioBundle`), so switching language needs no navigation.
 
 ### Shell
 
@@ -182,7 +182,7 @@ Every URL is prerendered with its own content. An address that matches no view s
 
 ## SEO
 
-- **Per-view metadata** (`lib/seo.ts`): title, description, canonical, hreflang (`en`, `it`, `fr`, `x-default`), Open Graph `profile` and a `summary_large_image` Twitter card. For the index, `x-default` points to `/`, which detects the language; for the other views it points to the English version.
+- **Per-view metadata** (`lib/seo.ts`): title, description, canonical, hreflang (`en`, `it`, `fr`, `de`, `x-default`), Open Graph `profile` and a `summary_large_image` Twitter card. For the index, `x-default` points to `/`, which detects the language; for the other views it points to the English version.
 - **Open Graph images** at 1200 × 630, generated at build time for every language and view (`opengraph-image.tsx`, `lib/og.tsx`), featuring the legacy site's icon.
 - **JSON-LD** `@graph` (`lib/structuredData.ts`): `WebSite`, `Person` (with `knowsAbout` and `sameAs`), `ProfilePage`, `BreadcrumbList` on inner views and an `ItemList` of `SoftwareSourceCode` on the projects view.
 - **`sitemap.xml`** with hreflang alternates, **`robots.txt`**, **`manifest.webmanifest`**, plus a favicon and icons derived from the legacy `iconRed.ico`.
@@ -203,7 +203,7 @@ After the first deploy: Google Search Console → add a URL-prefix property → 
 
 - Navigation through real links, with `aria-current="page"` on the active view; each view is a `section` with an `aria-label`.
 - The projects accordion uses `aria-expanded` and `aria-controls`; buttons and controls have localised labels.
-- Focus is always visible (`:focus-visible`), the `lang` attribute updates on language change, and the language switch links carry `hreflang`.
+- Focus is always visible (`:focus-visible`), the `lang` attribute updates on language change; the language menu exposes `aria-haspopup="listbox"`, `aria-expanded` and `aria-selected`, and each option carries its own `lang`.
 - Decorative elements (canvas, arrows, indices) are marked `aria-hidden`.
 - Reduced motion is honoured at three levels: CSS intro, Framer Motion and the scene's frame loop.
 
@@ -276,7 +276,7 @@ Pages, Open Graph images, sitemap, navigation and number shortcuts all derive fr
 
 ### Adding a language
 
-1. `lib/routes.ts`: add the code to `LOCALES` and the slugs to `VIEW_SLUGS`. `i18n/routing.ts`, `viewFromPath` and the E2E suite read from here and need no edit.
+1. `lib/routes.ts`: add the code to `LOCALES`, its native name to `LOCALE_NAMES` and the slugs to `VIEW_SLUGS`. The language menu is generated from here. `i18n/routing.ts`, `viewFromPath` and the E2E suite read from here and need no edit.
 2. `lib/seo.ts`: add the Open Graph locale to `OG_LOCALE` (for example `pt: 'pt_PT'`).
 3. `data/locales/<code>.json`: create it with the same structure as `en.json`, import it in `lib/portfolio.ts` and `e2e/content.ts`, and add the new language's label to every language's `ui.locale`.
 
@@ -308,7 +308,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, DisciplineView, atoms
 ├── data/
 │   ├── shared.json                  language-independent data
-│   └── locales/                     en.json · it.json · fr.json: copy, UI strings, SEO metadata
+│   └── locales/                     en.json · it.json · fr.json · de.json: copy, UI strings, SEO metadata
 ├── i18n/             routing.ts (languages) · request.ts (next-intl messages)
 ├── lib/              routes, views, portfolio, timeline, seo, site, structuredData, og, format, hooks, cn
 │   └── content/      schema (zod) · validate (cross-checks)
@@ -331,7 +331,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 - Vitest unit tests next to the modules (`lib/**/*.test.ts`): slugs and URLs, timeline arithmetic (segments, gaps, phases, axis), formatting, the content schema and cross-checks, including the real files.
 - End-to-end tests in `e2e/` with Playwright, run against the production build on Chromium, WebKit and a mobile profile. They cover every language's URLs and metadata, navigation and history, the language switch, SEO, security headers, accessibility (axe) and the site's resilience to a WebGL failure.
 - CI in `.github/workflows/ci.yml`: formatting, lint, typecheck, unit tests, build and end-to-end tests on every pull request.
-- Dependabot (`.github/dependabot.yml`) opens one grouped weekly PR against `development` for npm dependencies and one for GitHub Actions.
+- Dependabot (`.github/dependabot.yml`) opens one grouped weekly PR against `development` for npm dependencies and one for GitHub Actions. Major bumps of `eslint` and `typescript` are ignored until `eslint-config-next` supports them.
 - `.mailmap` folds the early commits signed with a hostname-derived email into one identity, without rewriting history.
 - `legacy/` is excluded from TypeScript and ESLint.
 - `reactStrictMode` is on, and Next's dev indicator is off because it would sit on top of the navigation.

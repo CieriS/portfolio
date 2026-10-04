@@ -1,5 +1,5 @@
 import { locales } from './content';
-import { LOCALES, pathFor, VIEW_IDS, type Locale, type ViewId } from '../lib/routes';
+import { LOCALE_NAMES, LOCALES, pathFor, VIEW_IDS, type Locale, type ViewId } from '../lib/routes';
 
 /**
  * Locales, views and slugs come from the app's own framework-free `lib/routes.ts`, so the
@@ -15,8 +15,15 @@ export function navLabel(locale: Locale, view: ViewId): string {
   return locales[locale].ui.nav[view];
 }
 
-export function localeSwitchLabel(locale: Locale): string {
-  return locales.en.ui.locale[locale];
+/** The option's accessible name in the language menu: the language's own name. */
+export function localeOptionName(locale: Locale): string {
+  return LOCALE_NAMES[locale];
+}
+
+/** Opens the header language menu and picks a locale, the way a pointer user would. */
+export async function switchLocale(page: import('@playwright/test').Page, locale: Locale) {
+  await page.locator('header button[aria-haspopup="listbox"]').click();
+  await page.getByRole('option', { name: localeOptionName(locale), exact: true }).click();
 }
 
 /**
@@ -30,10 +37,14 @@ export function localeSwitchLabel(locale: Locale): string {
  */
 export async function gotoView(page: import('@playwright/test').Page, locale: Locale, view: ViewId) {
   await page.goto(pathFor(locale, view));
-  await page.waitForFunction(() => (document.querySelector('header button')?.textContent ?? '').trim().length > 0, undefined, {
-    timeout: 15_000,
-    polling: 100,
-  });
+  await page.waitForFunction(
+    () => (document.querySelector('[data-theme-toggle]')?.textContent ?? '').trim().length > 0,
+    undefined,
+    {
+      timeout: 15_000,
+      polling: 100,
+    },
+  );
 }
 
 /**

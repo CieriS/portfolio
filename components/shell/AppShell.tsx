@@ -54,7 +54,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
           {shell('skip')}
         </a>
         <header
-          className="intro-fade flex items-center justify-between gap-6 px-frame pt-4 pb-3 select-none md:pt-6"
+          className="intro-fade relative z-20 flex items-center justify-between gap-6 px-frame pt-4 pb-3 select-none md:pt-6"
           style={introStyle(0)}
         >
           <ViewLink view="hero" className="text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap select-none">

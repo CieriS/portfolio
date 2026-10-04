@@ -35,7 +35,7 @@ La branche `next-migration` remplace l'ancien site PHP, conservé dans [`legacy/
 ## Fonctionnalités
 
 - **SPA avec de vraies URL** : chaque vue est une page statique (SSG) avec son propre contenu et ses propres métadonnées. Après le premier chargement, le changement de vue se fait côté client, sans rechargement, et met à jour l'URL et le titre via l'History API.
-- **Trilingue (EN/IT/FR)** : slugs traduits, détection automatique de la langue et changement de langue instantané qui conserve la vue, le canvas et l'état.
+- **Quatre langues (EN/IT/FR/DE)** : slugs traduits, détection automatique de la langue et changement de langue instantané qui conserve la vue, le canvas et l'état.
 - **Scène 3D persistante** : une grille de 5 376 points (three.js) qui change de forme et de cadrage à chaque vue et réagit au pointeur. Elle est chargée uniquement côté client et s'adapte aux performances de l'appareil.
 - **Thème clair, sombre ou automatique** avec next-themes, sans flash au chargement.
 - **Animations soignées** : intro en CSS au premier affichage (avant l'hydratation), puis Framer Motion pour les transitions entre vues, les line masks et le soulignement animé de la navigation.
@@ -134,7 +134,7 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 - **Tactile** : un balayage horizontal (plus de 70 px et majoritairement horizontal) passe à la vue précédente ou suivante.
 - **Flèches et compteur** dans le pied de page, sur les écrans moyens et grands.
 - **Historique** : chaque changement de vue appelle `pushState`, donc les boutons précédent et suivant du navigateur fonctionnent. Le titre du document suit la vue active.
-- **Langue** : le sélecteur EN / IT / FR remplace l'URL par le slug traduit (`replaceState`), met à jour `lang` et le titre, et enregistre le cookie `NEXT_LOCALE` pour un an, sans navigation. Le canvas et la vue active restent intacts.
+- **Langue** : l'en-tête n'affiche que la langue active ; le bouton ouvre un menu animé (`listbox`) listant chaque langue par son nom natif, utilisable à la souris, au toucher et au clavier (flèches, Début/Fin, Entrée/Espace, Échap, clic à l'extérieur ; le focus revient au bouton). Choisir une langue remplace l'URL par le slug traduit (`replaceState`), met à jour `lang` et le titre, et enregistre le cookie `NEXT_LOCALE` pour un an, sans navigation. Le canvas et la vue active restent intacts.
 - **Détection de la langue** : sur `/` et sur les chemins sans préfixe, `proxy.ts` (le middleware next-intl) choisit la langue d'après le cookie `NEXT_LOCALE` ou l'en-tête `Accept-Language`. La langue par défaut est l'anglais et le préfixe est toujours présent.
 - **Thème** : le bouton alterne Auto → Clair → Sombre ; l'icône est respectivement à moitié pleine, vide ou pleine.
 - **Scène** : le pointeur déplace légèrement la caméra et « réchauffe » les nœuds voisins. L'effet s'estompe lorsque le pointeur quitte la fenêtre.
@@ -146,7 +146,7 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 - Le layout et les pages utilisent `generateStaticParams` : toutes les combinaisons langue × vue sont générées au build.
 - `app/[locale]/page.tsx` (index) et `app/[locale]/[view]/page.tsx` (vues internes) rendent tous deux `components/seo/PortfolioPage.tsx`, un Server Component qui injecte le JSON-LD et démarre l'application sur la vue demandée.
 - `lib/routes.ts` est la source unique des langues, des ID, des slugs localisés et des conversions URL ↔ vue. Il ne dépend ni de Next ni de next-intl : la suite Playwright importe le même module au lieu d'en garder une copie.
-- Les deux langues sont envoyées au client (`getPortfolioBundle`) : le changement de langue ne nécessite donc aucune navigation.
+- Toutes les langues sont envoyées au client (`getPortfolioBundle`) : le changement de langue ne nécessite donc aucune navigation.
 
 ### Shell
 
@@ -184,7 +184,7 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 
 ## SEO
 
-- **Métadonnées par vue** (`lib/seo.ts`) : title, description, canonical, hreflang (`en`, `it`, `fr`, `x-default`), Open Graph de type `profile` et Twitter card `summary_large_image`. Pour l'index, `x-default` pointe vers `/`, qui détecte la langue ; pour les autres vues, il pointe vers la version anglaise.
+- **Métadonnées par vue** (`lib/seo.ts`) : title, description, canonical, hreflang (`en`, `it`, `fr`, `de`, `x-default`), Open Graph de type `profile` et Twitter card `summary_large_image`. Pour l'index, `x-default` pointe vers `/`, qui détecte la langue ; pour les autres vues, il pointe vers la version anglaise.
 - **Images Open Graph** en 1200 × 630, générées au build pour chaque langue et chaque vue (`opengraph-image.tsx`, `lib/og.tsx`), avec l'icône de l'ancien site.
 - **JSON-LD** `@graph` (`lib/structuredData.ts`) : `WebSite`, `Person` (avec `knowsAbout` et `sameAs`), `ProfilePage`, `BreadcrumbList` sur les vues internes et `ItemList` de `SoftwareSourceCode` sur la vue des projets.
 - **`sitemap.xml`** avec alternatives hreflang, **`robots.txt`**, **`manifest.webmanifest`**, ainsi qu'un favicon et des icônes dérivés de l'icône legacy `iconRed.ico`.
@@ -205,7 +205,7 @@ Après le premier déploiement : Google Search Console → ajouter une propriét
 
 - Navigation par de vrais liens, avec `aria-current="page"` sur la vue active ; chaque vue est une `section` dotée d'un `aria-label`.
 - L'accordéon des projets utilise `aria-expanded` et `aria-controls` ; les boutons et contrôles ont des libellés localisés.
-- Focus toujours visible (`:focus-visible`), attribut `lang` mis à jour lors du changement de langue, `hreflang` sur les liens du sélecteur de langue.
+- Focus toujours visible (`:focus-visible`), attribut `lang` mis à jour lors du changement de langue ; le menu des langues expose `aria-haspopup="listbox"`, `aria-expanded` et `aria-selected`, et chaque option porte son propre `lang`.
 - Éléments décoratifs (canvas, flèches, index) marqués `aria-hidden`.
 - Réduction des animations respectée à trois niveaux : intro CSS, Framer Motion et boucle de rendu de la scène.
 
@@ -278,7 +278,7 @@ Les pages, les images Open Graph, le sitemap, la navigation et les raccourcis nu
 
 ### Ajouter une langue
 
-1. `lib/routes.ts` : ajoutez le code à `LOCALES` et les slugs dans `VIEW_SLUGS`. `i18n/routing.ts`, `viewFromPath` et la suite E2E lisent ici et n'ont pas besoin d'être modifiés.
+1. `lib/routes.ts` : ajoutez le code à `LOCALES`, son nom natif dans `LOCALE_NAMES` et les slugs dans `VIEW_SLUGS`. Le menu des langues est généré à partir d'ici. `i18n/routing.ts`, `viewFromPath` et la suite E2E lisent ici et n'ont pas besoin d'être modifiés.
 2. `lib/seo.ts` : ajoutez la locale Open Graph dans `OG_LOCALE` (par exemple `pt: 'pt_PT'`).
 3. `data/locales/<code>.json` : créez-le avec la même structure que `en.json`, importez-le dans `lib/portfolio.ts` et `e2e/content.ts`, et ajoutez le libellé de la nouvelle langue dans `ui.locale` de chaque langue.
 
@@ -310,7 +310,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, DisciplineView, atoms
 ├── data/
 │   ├── shared.json                  données indépendantes de la langue
-│   └── locales/                     en.json · it.json · fr.json : textes, interface, métadonnées SEO
+│   └── locales/                     en.json · it.json · fr.json · de.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)
 ├── lib/              routes, views, portfolio, timeline, seo, site, structuredData, og, format, hooks, cn
 │   └── content/      schema (zod) · validate (contrôles croisés)
@@ -333,7 +333,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 - Tests unitaires Vitest à côté des modules (`lib/**/*.test.ts`) : slugs et URL, arithmétique de la timeline (segments, interruptions, phases, axe), formatage, schéma et contrôles des contenus, fichiers réels compris.
 - Tests end-to-end dans `e2e/` avec Playwright, exécutés contre le build de production sur Chromium, WebKit et un profil mobile. Ils couvrent les URL et métadonnées de chaque langue, la navigation et l'historique, le changement de langue, le SEO, les en-têtes de sécurité, l'accessibilité (axe) et la résistance du site à une panne WebGL.
 - CI dans `.github/workflows/ci.yml` : formatage, lint, typecheck, tests unitaires, build et tests end-to-end sur chaque pull request.
-- Dependabot (`.github/dependabot.yml`) ouvre chaque semaine une PR groupée vers `development` pour les dépendances npm et une pour les GitHub Actions.
+- Dependabot (`.github/dependabot.yml`) ouvre chaque semaine une PR groupée vers `development` pour les dépendances npm et une pour les GitHub Actions. Les versions majeures d’`eslint` et de `typescript` sont ignorées tant que `eslint-config-next` ne les prend pas en charge.
 - `.mailmap` regroupe sous une seule identité les premiers commits signés avec l'email dérivé du nom d'hôte, sans réécrire l'historique.
 - `legacy/` est exclu de TypeScript et d'ESLint.
 - `reactStrictMode` est activé, et l'indicateur de développement de Next est désactivé car il recouvrirait la navigation.
