@@ -107,16 +107,13 @@
         "label": "Industrie",
         "role": "Software Developer",
         "entityLabel": "Organisation",
-        "summary": "Berufstätig seit dem 23.02.2022: Praktikum, Ausbildung, heute unbefristet angestellt, vollständig remote. Frontend- und Full-Stack-Entwicklung auf einem proprietären Framework, das mit KI-gestützter Codegenerierung zu Angular migriert wird. Der Arbeitsalltag besteht aus Oberflächen und den relationalen Daten dahinter; Rust gehört zum Data-Engineering-Weg, den ich parallel dazu lerne.",
+        "summary": "Berufstätig seit dem 23.02.2022: Praktikum, Ausbildung, heute unbefristet angestellt, vollständig remote. Frontend- und Full-Stack-Entwicklung auf einem proprietären Framework, das mit KI-gestützter Codegenerierung zu Angular migriert wird. Der Arbeitsalltag besteht aus Oberflächen, in reproduzierbaren Docker-Umgebungen; Rust und PostgreSQL gehören zum Data-Engineering-Weg, den ich parallel dazu lerne.",
         "phases": {
           "interface": {
             "title": "Oberflächenschicht",
             "body": "Weboberflächen, serverseitiges Rendering, erster Kontakt mit relationalen Schemata; heute ein proprietäres Framework in Migration zu Angular und TypeScript."
           },
-          "data": {
-            "title": "Datenschicht",
-            "body": "Relationale Modellierung auf PostgreSQL, reproduzierbare Umgebungen mit Docker."
-          }
+          "environments": { "title": "Umgebungen", "body": "Reproduzierbare Entwicklungsumgebungen mit Docker." }
         }
       },
       "academic": {
@@ -151,7 +148,7 @@
           },
           "modeling": {
             "title": "Datenmodellierung",
-            "body": "Partitioniertes Parquet, getestete dbt-Modelle, DuckDB lokal und BigQuery in der Cloud."
+            "body": "Relationale Modellierung auf PostgreSQL, partitioniertes Parquet, getestete dbt-Modelle auf DuckDB und BigQuery."
           },
           "orchestration": {
             "title": "Orchestrierung",
