@@ -16,7 +16,6 @@
         "segments": [{ "start": "2022-02-23", "end": null }],
         "phases": [
           { "id": "interface", "stack": ["HTML", "CSS", "JavaScript", "TypeScript", "Angular", "PHP", "SQL", "Tailwind"] },
-          { "id": "systems", "stack": ["Rust", "C"] },
           { "id": "data", "stack": ["PostgreSQL", "Docker"] }
         ]
       },

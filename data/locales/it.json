@@ -15,7 +15,7 @@
         },
         "timeline": {
           "title": "Esperienza e formazione",
-          "description": "Software Developer in Tas dal 2022, dalle interfacce ai sistemi e ai dati con Rust, C, PostgreSQL e Docker, in parallelo a Ingegneria Informatica a Bologna."
+          "description": "Software Developer in Tas dal 2022, su Angular e TypeScript, in parallelo a Ingegneria Informatica a Bologna e allo studio del Data Engineering con Rust."
         },
         "projects": {
           "title": "Progetti: Rust e PostgreSQL",
@@ -107,15 +107,11 @@
         "label": "Industria",
         "role": "Software Developer",
         "entityLabel": "Organizzazione",
-        "summary": "Attività lavorativa dal 23/02/2022: tirocinio, apprendistato, oggi tempo indeterminato, full remote. Sviluppo frontend e full-stack su un framework proprietario, ora in migrazione verso Angular con generazione di codice assistita da AI. Una discesa deliberata nello stack: dalle interfacce utente alla programmazione di sistema e alla gestione dei dati.",
+        "summary": "Attività lavorativa dal 23/02/2022: tirocinio, apprendistato, oggi tempo indeterminato, full remote. Sviluppo frontend e full-stack su un framework proprietario, ora in migrazione verso Angular con generazione di codice assistita da AI. Il lavoro quotidiano sono le interfacce e i dati relazionali che le alimentano; Rust appartiene al percorso di Data Engineering che studio in parallelo.",
         "phases": {
           "interface": {
             "title": "Livello interfaccia",
             "body": "Interfacce web, rendering lato server, primo contatto con schemi relazionali; oggi un framework proprietario in migrazione verso Angular e TypeScript."
-          },
-          "systems": {
-            "title": "Livello sistema",
-            "body": "Ownership della memoria, prestazioni deterministiche, controllo a basso livello con Rust e C."
           },
           "data": {
             "title": "Livello dati",

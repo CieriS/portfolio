@@ -15,7 +15,7 @@
         },
         "timeline": {
           "title": "Experience & education timeline",
-          "description": "Software Developer at Tas since 2022, from interfaces to systems and data with Rust, C, PostgreSQL and Docker, alongside Computer Engineering in Bologna."
+          "description": "Software Developer at Tas since 2022, on Angular and TypeScript, alongside Computer Engineering in Bologna and a Data Engineering path built on Rust."
         },
         "projects": {
           "title": "Projects: Rust & PostgreSQL",
@@ -104,15 +104,11 @@
         "label": "Industry",
         "role": "Software Developer",
         "entityLabel": "Organization",
-        "summary": "Professional activity since 23/02/2022: internship, apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. A deliberate descent through the stack: from user interfaces to systems programming and data management.",
+        "summary": "Professional activity since 23/02/2022: internship, apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. The day job is interfaces and the relational data behind them; Rust belongs to the Data Engineering path I study alongside it.",
         "phases": {
           "interface": {
             "title": "Interface layer",
             "body": "Web interfaces, server-side rendering, first contact with relational schemas; today a proprietary framework migrating to Angular and TypeScript."
-          },
-          "systems": {
-            "title": "Systems layer",
-            "body": "Memory ownership, deterministic performance, low-level control with Rust and C."
           },
           "data": { "title": "Data layer", "body": "Relational modeling on PostgreSQL, reproducible environments with Docker." }
         }

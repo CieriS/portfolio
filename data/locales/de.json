@@ -15,7 +15,7 @@
         },
         "timeline": {
           "title": "Berufserfahrung und Ausbildung",
-          "description": "Software Developer bei Tas seit 2022, von Oberflächen zu Systemen und Daten mit Rust, C, PostgreSQL und Docker, parallel zum Studium in Bologna."
+          "description": "Software Developer bei Tas seit 2022, mit Angular und TypeScript, parallel zum Studium in Bologna und zum Data-Engineering-Weg mit Rust."
         },
         "projects": {
           "title": "Projekte: Rust & PostgreSQL",
@@ -107,15 +107,11 @@
         "label": "Industrie",
         "role": "Software Developer",
         "entityLabel": "Organisation",
-        "summary": "Berufstätig seit dem 23.02.2022: Praktikum, Ausbildung, heute unbefristet angestellt, vollständig remote. Frontend- und Full-Stack-Entwicklung auf einem proprietären Framework, das mit KI-gestützter Codegenerierung zu Angular migriert wird. Ein bewusster Abstieg durch den Stack: von Benutzeroberflächen zu Systemprogrammierung und Datenmanagement.",
+        "summary": "Berufstätig seit dem 23.02.2022: Praktikum, Ausbildung, heute unbefristet angestellt, vollständig remote. Frontend- und Full-Stack-Entwicklung auf einem proprietären Framework, das mit KI-gestützter Codegenerierung zu Angular migriert wird. Der Arbeitsalltag besteht aus Oberflächen und den relationalen Daten dahinter; Rust gehört zum Data-Engineering-Weg, den ich parallel dazu lerne.",
         "phases": {
           "interface": {
             "title": "Oberflächenschicht",
             "body": "Weboberflächen, serverseitiges Rendering, erster Kontakt mit relationalen Schemata; heute ein proprietäres Framework in Migration zu Angular und TypeScript."
-          },
-          "systems": {
-            "title": "Systemschicht",
-            "body": "Speicher-Ownership, deterministische Performance, Low-Level-Kontrolle mit Rust und C."
           },
           "data": {
             "title": "Datenschicht",
