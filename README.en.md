@@ -115,13 +115,13 @@ GOOGLE_SITE_VERIFICATION=your-token
 
 ## Views and URLs
 
-| # | View (ID) | EN | IT | FR | Content |
-| --- | --- | --- | --- | --- | --- |
-| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | Large-format name, role, introduction and a call to explore. |
-| 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | Mission statement, four engineering principles and contacts (GitHub, LinkedIn, GitLab). |
-| 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
-| 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Projects in an accordion: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
-| 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | The method beyond code: a calisthenics programme (metrics and sessions) and sound mechanics (acoustic guitar, lossless formats, audio pipeline). |
+| # | View (ID) | EN | IT | FR | DE | Content |
+| --- | --- | --- | --- | --- | --- | --- |
+| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Large-format name, role, introduction and a call to explore. |
+| 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Mission statement, four engineering principles and contacts (GitHub, LinkedIn, GitLab). |
+| 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
+| 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Projects in an accordion: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
+| 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | The method beyond code: a calisthenics programme (metrics and sessions) and sound mechanics (acoustic guitar, lossless formats, audio pipeline). |
 
 Every URL is prerendered with its own content. An address that matches no view shows a localised, non-indexable 404 page.
 
@@ -256,7 +256,7 @@ Each phase takes an optional `start`. Without it, phases are spread over the lan
 ### Adding a project
 
 1. Add an entry to `shared.projects` with `id`, `name`, `source` (public with a `url`, or private), `stack` and `layers` (`id`, `tech`).
-2. In **both** languages, add `projects.items[<id>]` with `summary`, `bridge`, `highlights` (the list of engineering decisions) and `layers` (one description per layer `id`).
+2. In **every** language, add `projects.items[<id>]` with `summary`, `bridge`, `highlights` (the list of engineering decisions) and `layers` (one description per layer `id`).
 3. If needed, update the title and description in `ui.meta.views.projects`.
 
 The view and the `ItemList` JSON-LD update automatically.

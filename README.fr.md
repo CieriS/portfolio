@@ -117,13 +117,13 @@ GOOGLE_SITE_VERIFICATION=votre-jeton
 
 ## Vues et URL
 
-| # | Vue (ID) | EN | IT | FR | Contenu |
-| --- | --- | --- | --- | --- | --- |
-| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | Nom en très grand format, rôle, présentation et invitation à explorer. |
-| 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | Déclaration d'intention, quatre principes d'ingénierie et contacts (GitHub, LinkedIn, GitLab). |
-| 03 | Exécution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Frise chronologique à trois couloirs (industrie, parcours universitaire et étude en autonomie du Data Engineering) sur un axe temporel commun, avec un compteur d'uptime en temps réel et des phases accompagnées de leur stack. |
-| 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Projets présentés en accordéon : résumé, choix d'ingénierie, architecture en couches, lien avec la Data Engineering et lien vers le dépôt (ou vers les contacts si le code est privé). Actuellement : yourFinance (privé) et aria-er (public). |
-| 05 | Optimisation (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | La méthode au-delà du code : programme de callisthénie (mesures et séances) et mécanique du son (guitare acoustique, formats sans perte, pipeline audio). |
+| # | Vue (ID) | EN | IT | FR | DE | Contenu |
+| --- | --- | --- | --- | --- | --- | --- |
+| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Nom en très grand format, rôle, présentation et invitation à explorer. |
+| 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Déclaration d'intention, quatre principes d'ingénierie et contacts (GitHub, LinkedIn, GitLab). |
+| 03 | Exécution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Frise chronologique à trois couloirs (industrie, parcours universitaire et étude en autonomie du Data Engineering) sur un axe temporel commun, avec un compteur d'uptime en temps réel et des phases accompagnées de leur stack. |
+| 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Projets présentés en accordéon : résumé, choix d'ingénierie, architecture en couches, lien avec la Data Engineering et lien vers le dépôt (ou vers les contacts si le code est privé). Actuellement : yourFinance (privé) et aria-er (public). |
+| 05 | Optimisation (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | La méthode au-delà du code : programme de callisthénie (mesures et séances) et mécanique du son (guitare acoustique, formats sans perte, pipeline audio). |
 
 Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspond à aucune vue affiche une page 404 localisée et non indexable.
 
@@ -258,7 +258,7 @@ Chaque phase accepte un `start` facultatif. Sans lui, les phases sont réparties
 ### Ajouter un projet
 
 1. Ajoutez une entrée à `shared.projects` avec `id`, `name`, `source` (public avec `url`, ou privé), `stack` et `layers` (`id`, `tech`).
-2. Dans **les deux** langues, ajoutez `projects.items[<id>]` avec `summary`, `bridge`, `highlights` (liste des choix d'ingénierie) et `layers` (une description par `id` de couche).
+2. Dans **chaque** langue, ajoutez `projects.items[<id>]` avec `summary`, `bridge`, `highlights` (liste des choix d'ingénierie) et `layers` (une description par `id` de couche).
 3. Si nécessaire, mettez à jour le title et la description dans `ui.meta.views.projects`.
 
 La vue et le JSON-LD `ItemList` se mettent à jour automatiquement.
