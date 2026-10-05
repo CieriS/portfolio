@@ -15,7 +15,7 @@
         },
         "timeline": {
           "title": "Experience & education timeline",
-          "description": "Software Developer at Tas since 2022, from interfaces to systems and data with Rust, C, PostgreSQL and Docker, alongside Computer Engineering in Bologna."
+          "description": "Software Developer at Tas since 2022, on Angular and TypeScript, alongside Computer Engineering in Bologna and a Data Engineering path built on Rust."
         },
         "projects": {
           "title": "Projects: Rust & PostgreSQL",
@@ -86,9 +86,9 @@
     "contactsNote": "Repositories and direct channels."
   },
   "timeline": {
-    "title": "Dual-thread execution",
-    "titleEmphasis": "Dual-thread",
-    "subtitle": "Two concurrent processes sharing one clock. Neither blocks the other.",
+    "title": "Multi-thread execution",
+    "titleEmphasis": "Multi-thread",
+    "subtitle": "Three concurrent processes sharing one clock. None blocks the others.",
     "labels": {
       "thread": "Thread",
       "start": "Start",
@@ -104,15 +104,11 @@
         "label": "Industry",
         "role": "Software Developer",
         "entityLabel": "Organization",
-        "summary": "Professional activity since 23/02/2022: internship, apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. A deliberate descent through the stack: from user interfaces to systems programming and data management.",
+        "summary": "Professional activity since 23/02/2022: internship, apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. The day job is interfaces and the relational data behind them; Rust belongs to the Data Engineering path I study alongside it.",
         "phases": {
           "interface": {
             "title": "Interface layer",
             "body": "Web interfaces, server-side rendering, first contact with relational schemas; today a proprietary framework migrating to Angular and TypeScript."
-          },
-          "systems": {
-            "title": "Systems layer",
-            "body": "Memory ownership, deterministic performance, low-level control with Rust and C."
           },
           "data": { "title": "Data layer", "body": "Relational modeling on PostgreSQL, reproducible environments with Docker." }
         }
@@ -134,6 +130,26 @@
           "information": {
             "title": "Information systems",
             "body": "Databases, computer networks, web technologies, statistical reasoning on data."
+          }
+        }
+      },
+      "independent": {
+        "label": "Independent",
+        "role": "Data Engineering",
+        "entityLabel": "Self-directed study",
+        "summary": "A Data Engineering path started in February 2026, alongside work and university: this is where I use Rust. The study runs through projects: ingestion, modeling and orchestration tried on real data.",
+        "phases": {
+          "systems": {
+            "title": "Systems layer",
+            "body": "Memory ownership, deterministic performance, low-level control with Rust."
+          },
+          "modeling": {
+            "title": "Data modeling",
+            "body": "Partitioned Parquet, tested dbt models, DuckDB locally and BigQuery in the cloud."
+          },
+          "orchestration": {
+            "title": "Orchestration",
+            "body": "Pipelines scheduled with Dagster, infrastructure declared with Terraform."
           }
         }
       }

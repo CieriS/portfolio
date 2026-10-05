@@ -17,6 +17,18 @@ test('every thread in the data gets its own lane and detail column', async ({ pa
   }
 });
 
+test('a thread without an entity shows its label alone, not a placeholder', async ({ page }) => {
+  await gotoView(page, 'en', 'timeline');
+  const articles = page.locator('main > section article');
+  const threadCopy: Record<string, { entityLabel: string }> = locales.en.timeline.threads;
+
+  for (const [i, thread] of threads.entries()) {
+    const { entityLabel } = threadCopy[thread.id];
+    const line = articles.nth(i).getByText(entityLabel, { exact: false }).first();
+    await expect(line).toHaveText(thread.entity ? `${entityLabel}: ${thread.entity}` : entityLabel);
+  }
+});
+
 test('an interrupted thread draws one bar per segment and names its periods', async ({ page }) => {
   const interrupted = threads.find((thread) => thread.segments.length > 1);
   test.skip(!interrupted, 'no thread currently has more than one segment');

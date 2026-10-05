@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Thread } from './portfolio';
-import { activeMs, axisOrigin, buildAxis, formatUptime, phaseAt, spansOf, toMs } from './timeline';
+import { activeMs, axisOrigin, buildAxis, formatUptime, phaseAt, phaseMarksFit, spansOf, toMs } from './timeline';
 
 const DAY = 86_400_000;
 
@@ -67,6 +67,29 @@ describe('phaseAt', () => {
 
   it('falls back to 0 when nothing has started', () => {
     expect(phaseAt(gapped, 0, [])).toBe(0);
+  });
+});
+
+describe('phaseMarksFit', () => {
+  it('accepts labels that are spread out and clear of the edge', () => {
+    expect(phaseMarksFit([10, 40, 70])).toBe(true);
+  });
+
+  it('rejects labels that would overlap each other', () => {
+    expect(phaseMarksFit([10, 15, 70])).toBe(false);
+  });
+
+  it('rejects a last label that would run off the end of the axis', () => {
+    expect(phaseMarksFit([10, 95])).toBe(false);
+  });
+
+  it('treats the required room as inclusive and configurable', () => {
+    expect(phaseMarksFit([0, 12, 88])).toBe(true);
+    expect(phaseMarksFit([0, 12, 88], 13)).toBe(false);
+  });
+
+  it('has nothing to reject when there are no phases', () => {
+    expect(phaseMarksFit([])).toBe(true);
   });
 });
 

@@ -121,7 +121,7 @@ GOOGLE_SITE_VERIFICATION=votre-jeton
 | --- | --- | --- | --- | --- | --- |
 | 01 | Index (`hero`) | `/en` | `/it` | `/fr` | Nom en très grand format, rôle, présentation et invitation à explorer. |
 | 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | Déclaration d'intention, quatre principes d'ingénierie et contacts (GitHub, LinkedIn, GitLab). |
-| 03 | Exécution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Frise chronologique à deux couloirs (industrie et parcours universitaire) sur un axe temporel commun, avec un compteur d'uptime en temps réel et des phases accompagnées de leur stack. |
+| 03 | Exécution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Frise chronologique à trois couloirs (industrie, parcours universitaire et étude en autonomie du Data Engineering) sur un axe temporel commun, avec un compteur d'uptime en temps réel et des phases accompagnées de leur stack. |
 | 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Projets présentés en accordéon : résumé, choix d'ingénierie, architecture en couches, lien avec la Data Engineering et lien vers le dépôt (ou vers les contacts si le code est privé). Actuellement : yourFinance (privé) et aria-er (public). |
 | 05 | Optimisation (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | La méthode au-delà du code : programme de callisthénie (mesures et séances) et mécanique du son (guitare acoustique, formats sans perte, pipeline audio). |
 
@@ -243,7 +243,7 @@ data/locales/<langue>.json   en · it · fr
   2. **schéma** (`lib/content/schema.ts`) : `shared.json` est validé avec zod (enums, dates ISO existantes, segments qui finissent après leur début, URL, union `source`) ; les types du domaine sont dérivés du schéma ;
   3. **contrôles croisés** (`lib/content/validate.ts`) : chaque id de couloir, phase, projet et couche a ses textes dans chaque langue, chaque langue a son libellé dans `ui.locale` et chaque `*Emphasis` apparaît dans son texte. Tous les problèmes sont listés ensemble, avec leur chemin.
 
-Champs acceptant `null` (affichés `—`) : `timeline.threads[].entity`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. `projects[].source` vaut `{ "visibility": "public", "url": "…" }` (lien vers le dépôt, publié aussi comme `codeRepository` dans le JSON-LD) ou `{ "visibility": "private" }` : le code n'est pas lié et le projet renvoie à la vue Identité, où demander une démo. Une visibilité inconnue ou un projet public sans `url` fait échouer le build.
+Champs acceptant `null` (affichés `—`) : `discipline.biological.heightCm`, `discipline.biological.weightKg`. `timeline.threads[].entity` accepte aussi `null` : le couloir affiche alors seulement son `entityLabel` (ex. « Étude en autonomie ») et reste hors de `worksFor` / `alumniOf`. `projects[].source` vaut `{ "visibility": "public", "url": "…" }` (lien vers le dépôt, publié aussi comme `codeRepository` dans le JSON-LD) ou `{ "visibility": "private" }` : le code n'est pas lié et le projet renvoie à la vue Identité, où demander une démo. Une visibilité inconnue ou un projet public sans `url` fait échouer le build.
 
 ### Couloirs de la frise
 
@@ -251,7 +251,7 @@ Un couloir est une suite de `segments`, pas un intervalle unique : `{ "start": "
 
 `kind` vaut `work` ou `education` et pilote le JSON-LD : les couloirs `work` alimentent `worksFor` et `knowsAbout`, ceux `education` alimentent `alumniOf`. Toute autre valeur fait échouer le build. L'uptime en haut suit le premier couloir `work` et ne additionne que le temps actif, interruptions exclues.
 
-Chaque phase accepte un `start` facultatif. Sans lui, les phases sont réparties sur le temps actif du couloir et enjambent les vides ; avec lui, la phase est ancrée à cette date.
+Chaque phase accepte un `start` facultatif. Sans lui, les phases sont réparties sur le temps actif du couloir et enjambent les vides ; avec lui, la phase est ancrée à cette date. Quand les étiquettes des phases n'ont pas la place sur l'axe (couloir récent : moins de 12 % de l'axe entre une étiquette et la suivante, ou le bord), la ligne reste vide et les phases ne se lisent que dans le détail : c'est `phaseMarksFit`, dans `lib/timeline.ts`, qui en décide.
 
 ## Étendre le projet
 
