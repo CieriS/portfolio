@@ -7,7 +7,7 @@
       "views": {
         "hero": {
           "title": "Samuele Cieri — Software Developer & Data Engineering",
-          "description": "Samuele Cieri, Software Developer in Bologna moving into Data Engineering: Rust and C systems, PostgreSQL data modeling, Docker, full-stack architecture."
+          "description": "Samuele Cieri, Software Developer in Bologna moving into Data Engineering: Angular at work, Rust, PostgreSQL and dbt pipelines in personal projects."
         },
         "identity": {
           "title": "Identity & engineering principles",
@@ -104,13 +104,13 @@
         "label": "Industry",
         "role": "Software Developer",
         "entityLabel": "Organization",
-        "summary": "Professional activity since 23/02/2022: internship, apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. The day job is interfaces and the relational data behind them; Rust belongs to the Data Engineering path I study alongside it.",
+        "summary": "Professional activity since 23/02/2022: internship, apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. The day job is interfaces, in reproducible Docker environments; Rust and PostgreSQL belong to the Data Engineering path I study alongside it.",
         "phases": {
           "interface": {
             "title": "Interface layer",
             "body": "Web interfaces, server-side rendering, first contact with relational schemas; today a proprietary framework migrating to Angular and TypeScript."
           },
-          "data": { "title": "Data layer", "body": "Relational modeling on PostgreSQL, reproducible environments with Docker." }
+          "environments": { "title": "Environments", "body": "Reproducible development environments with Docker." }
         }
       },
       "academic": {
@@ -145,7 +145,7 @@
           },
           "modeling": {
             "title": "Data modeling",
-            "body": "Partitioned Parquet, tested dbt models, DuckDB locally and BigQuery in the cloud."
+            "body": "Relational modeling on PostgreSQL, partitioned Parquet, tested dbt models on DuckDB and BigQuery."
           },
           "orchestration": {
             "title": "Orchestration",

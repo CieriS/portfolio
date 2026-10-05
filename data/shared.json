@@ -16,7 +16,7 @@
         "segments": [{ "start": "2022-02-23", "end": null }],
         "phases": [
           { "id": "interface", "stack": ["HTML", "CSS", "JavaScript", "TypeScript", "Angular", "PHP", "SQL", "Tailwind"] },
-          { "id": "data", "stack": ["PostgreSQL", "Docker"] }
+          { "id": "environments", "stack": ["Docker"] }
         ]
       },
       {
@@ -40,7 +40,7 @@
         "segments": [{ "start": "2026-02-01", "end": null }],
         "phases": [
           { "id": "systems", "stack": ["Rust"] },
-          { "id": "modeling", "stack": ["Parquet", "dbt", "DuckDB", "BigQuery"] },
+          { "id": "modeling", "stack": ["PostgreSQL", "Parquet", "dbt", "DuckDB", "BigQuery"] },
           { "id": "orchestration", "stack": ["Dagster", "Terraform"] }
         ]
       }

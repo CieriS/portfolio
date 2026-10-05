@@ -7,7 +7,7 @@
       "views": {
         "hero": {
           "title": "Samuele Cieri — Software Developer e Data Engineering",
-          "description": "Samuele Cieri, Software Developer a Bologna in transizione verso il Data Engineering: sistemi in Rust e C, modellazione dati PostgreSQL, Docker."
+          "description": "Samuele Cieri, Software Developer a Bologna in transizione verso il Data Engineering: Angular sul lavoro, Rust, PostgreSQL e dbt nei progetti personali."
         },
         "identity": {
           "title": "Identità e principi di ingegneria",
@@ -107,16 +107,13 @@
         "label": "Industria",
         "role": "Software Developer",
         "entityLabel": "Organizzazione",
-        "summary": "Attività lavorativa dal 23/02/2022: tirocinio, apprendistato, oggi tempo indeterminato, full remote. Sviluppo frontend e full-stack su un framework proprietario, ora in migrazione verso Angular con generazione di codice assistita da AI. Il lavoro quotidiano sono le interfacce e i dati relazionali che le alimentano; Rust appartiene al percorso di Data Engineering che studio in parallelo.",
+        "summary": "Attività lavorativa dal 23/02/2022: tirocinio, apprendistato, oggi tempo indeterminato, full remote. Sviluppo frontend e full-stack su un framework proprietario, ora in migrazione verso Angular con generazione di codice assistita da AI. Il lavoro quotidiano sono le interfacce, in ambienti riproducibili con Docker; Rust e PostgreSQL appartengono al percorso di Data Engineering che studio in parallelo.",
         "phases": {
           "interface": {
             "title": "Livello interfaccia",
             "body": "Interfacce web, rendering lato server, primo contatto con schemi relazionali; oggi un framework proprietario in migrazione verso Angular e TypeScript."
           },
-          "data": {
-            "title": "Livello dati",
-            "body": "Modellazione relazionale su PostgreSQL, ambienti riproducibili con Docker."
-          }
+          "environments": { "title": "Ambienti", "body": "Ambienti di sviluppo riproducibili con Docker." }
         }
       },
       "academic": {
@@ -151,7 +148,7 @@
           },
           "modeling": {
             "title": "Modellazione dati",
-            "body": "Parquet partizionato, modelli dbt testati, DuckDB in locale e BigQuery nel cloud."
+            "body": "Modellazione relazionale su PostgreSQL, Parquet partizionato, modelli dbt testati su DuckDB e BigQuery."
           },
           "orchestration": {
             "title": "Orchestrazione",
