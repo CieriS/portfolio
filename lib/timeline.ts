@@ -44,6 +44,18 @@ export function phaseAt(thread: Thread, index: number, spans: Span[]): number {
   return spans[spans.length - 1].to;
 }
 
+/** Share of the axis, in percent, that one phase label needs to stay readable. */
+export const PHASE_LABEL_ROOM = 12;
+
+/**
+ * Whether phase labels placed at `marks` (axis percentages, ascending) have room: a young
+ * thread squeezes all its phases into a sliver of the axis, where the labels would pile up
+ * and run off the edge. The caller then drops the row; the phases stay listed in the detail.
+ */
+export function phaseMarksFit(marks: number[], room = PHASE_LABEL_ROOM): boolean {
+  return marks.every((mark, i) => (marks[i + 1] ?? 100) - mark >= room);
+}
+
 export function formatUptime(ms: number, days: string): string {
   const total = Math.max(0, Math.floor(ms / 1000));
   const d = Math.floor(total / 86_400);

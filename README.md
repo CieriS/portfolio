@@ -119,7 +119,7 @@ GOOGLE_SITE_VERIFICATION=il-tuo-token
 | --- | --- | --- | --- | --- | --- |
 | 01 | Indice (`hero`) | `/en` | `/it` | `/fr` | Nome in grande formato, ruolo, presentazione e invito a esplorare. |
 | 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | Dichiarazione d'intenti, quattro principi di ingegneria e contatti (GitHub, LinkedIn, GitLab). |
-| 03 | Esecuzione (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Timeline a due corsie (industria e percorso accademico) su un asse temporale condiviso, con uptime in tempo reale e fasi con il relativo stack. |
+| 03 | Esecuzione (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Timeline a tre corsie (industria, percorso accademico e studio autonomo del Data Engineering) su un asse temporale condiviso, con uptime in tempo reale e fasi con il relativo stack. |
 | 04 | Sistemi (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Progetti in un accordion: sintesi, scelte di ingegneria, architettura a livelli, legame con la Data Engineering e link al repository (o ai contatti, se il codice è privato). Oggi: yourFinance (privato) e aria-er (pubblico). |
 | 05 | Ottimizzazione (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | Il metodo oltre il codice: programma di calisthenics (metriche e sessioni) e meccanica del suono (chitarra acustica, formati lossless, pipeline audio). |
 
@@ -241,7 +241,7 @@ data/locales/<lingua>.json   en · it · fr
   2. **schema** (`lib/content/schema.ts`): `shared.json` è validato con zod (enum, date ISO esistenti, segmenti che finiscono dopo l'inizio, URL, unione `source`); i tipi del dominio sono derivati dallo schema;
   3. **verifiche incrociate** (`lib/content/validate.ts`): ogni id di corsia, fase, progetto e livello ha il suo copy in ogni lingua, ogni lingua ha l'etichetta in `ui.locale` e ogni `*Emphasis` compare nel suo testo. Tutti i problemi vengono elencati insieme, con il percorso.
 
-Campi che accettano `null` (mostrati come `—`): `timeline.threads[].entity`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. `projects[].source` vale `{ "visibility": "public", "url": "…" }` (link al repository, pubblicato anche come `codeRepository` nel JSON-LD) oppure `{ "visibility": "private" }`: il codice non viene linkato e il progetto rimanda alla vista Identità, da cui chiedere una demo. Una visibilità sconosciuta o un progetto pubblico senza `url` fa fallire la build.
+Campi che accettano `null` (mostrati come `—`): `discipline.biological.heightCm`, `discipline.biological.weightKg`. Anche `timeline.threads[].entity` accetta `null`: la corsia mostra allora solo la sua `entityLabel` (es. "Studio autonomo") e resta fuori da `worksFor` / `alumniOf`. `projects[].source` vale `{ "visibility": "public", "url": "…" }` (link al repository, pubblicato anche come `codeRepository` nel JSON-LD) oppure `{ "visibility": "private" }`: il codice non viene linkato e il progetto rimanda alla vista Identità, da cui chiedere una demo. Una visibilità sconosciuta o un progetto pubblico senza `url` fa fallire la build.
 
 ### Corsie della timeline
 
@@ -249,7 +249,7 @@ Una corsia è una sequenza di `segments`, non un intervallo unico: `{ "start": "
 
 Il campo `kind` vale `work` o `education` e guida il JSON-LD: le corsie `work` alimentano `worksFor` e `knowsAbout`, quelle `education` alimentano `alumniOf`. Un valore diverso fa fallire la build. L'uptime in alto segue la prima corsia `work` e somma solo il tempo attivo, escludendo le interruzioni.
 
-Ogni fase accetta uno `start` facoltativo. Senza, le fasi sono distribuite sul tempo attivo della corsia e scavalcano i vuoti; con uno `start`, la fase viene ancorata a quella data.
+Ogni fase accetta uno `start` facoltativo. Senza, le fasi sono distribuite sul tempo attivo della corsia e scavalcano i vuoti; con uno `start`, la fase viene ancorata a quella data. Se sull'asse le etichette delle fasi non hanno spazio (corsia giovane: meno del 12% dell'asse fra un'etichetta e la successiva, o il bordo), la riga resta vuota e le fasi si leggono solo nel dettaglio: lo decide `phaseMarksFit` in `lib/timeline.ts`.
 
 ## Estendere il progetto
 

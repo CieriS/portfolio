@@ -89,9 +89,9 @@
     "contactsNote": "Repository e canali diretti."
   },
   "timeline": {
-    "title": "Esecuzione dual-thread",
-    "titleEmphasis": "dual-thread",
-    "subtitle": "Due processi concorrenti che condividono un unico clock. Nessuno blocca l'altro.",
+    "title": "Esecuzione multi-thread",
+    "titleEmphasis": "multi-thread",
+    "subtitle": "Tre processi concorrenti che condividono un unico clock. Nessuno blocca gli altri.",
     "labels": {
       "thread": "Thread",
       "start": "Inizio",
@@ -136,6 +136,26 @@
           "information": {
             "title": "Sistemi informativi",
             "body": "Basi di dati, reti di calcolatori, tecnologie web, ragionamento statistico sui dati."
+          }
+        }
+      },
+      "independent": {
+        "label": "Indipendente",
+        "role": "Data Engineering",
+        "entityLabel": "Studio autonomo",
+        "summary": "Percorso di Data Engineering iniziato a febbraio 2026, in parallelo a lavoro e università: è qui che uso Rust. Lo studio passa dai progetti: ingestion, modellazione e orchestrazione provate su dati reali.",
+        "phases": {
+          "systems": {
+            "title": "Livello sistema",
+            "body": "Ownership della memoria, prestazioni deterministiche, controllo a basso livello con Rust."
+          },
+          "modeling": {
+            "title": "Modellazione dati",
+            "body": "Parquet partizionato, modelli dbt testati, DuckDB in locale e BigQuery nel cloud."
+          },
+          "orchestration": {
+            "title": "Orchestrazione",
+            "body": "Pipeline pianificate con Dagster, infrastruttura dichiarata con Terraform."
           }
         }
       }

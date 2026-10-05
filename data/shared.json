@@ -29,8 +29,19 @@
         ],
         "phases": [
           { "id": "foundations", "stack": ["Calculus", "Linear Algebra", "Physics", "Circuit Theory"] },
-          { "id": "computing", "stack": ["Programming", "Digital Logic", "Computer Architecture", "Operating Systems"] },
+          { "id": "computing", "stack": ["C Programming", "Digital Logic", "Computer Architecture", "Operating Systems"] },
           { "id": "information", "stack": ["Databases", "Computer Networks", "Web Technologies", "Statistics"] }
+        ]
+      },
+      {
+        "id": "independent",
+        "kind": "education",
+        "entity": null,
+        "segments": [{ "start": "2026-02-01", "end": null }],
+        "phases": [
+          { "id": "systems", "stack": ["Rust"] },
+          { "id": "modeling", "stack": ["Parquet", "dbt", "DuckDB", "BigQuery"] },
+          { "id": "orchestration", "stack": ["Dagster", "Terraform"] }
         ]
       }
     ]

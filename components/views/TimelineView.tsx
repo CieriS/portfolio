@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 import { formatDate, pad, pick } from '@/lib/format';
 import { useNow } from '@/lib/hooks';
 import type { PortfolioView, Thread } from '@/lib/portfolio';
-import { activeMs, axisOrigin, buildAxis, formatUptime, phaseAt, spansOf } from '@/lib/timeline';
+import { activeMs, axisOrigin, buildAxis, formatUptime, phaseAt, phaseMarksFit, spansOf } from '@/lib/timeline';
 import { Meta, Pulse, SectionHead, type ViewProps } from './atoms';
 
 const GROW = { duration: 1.8, ease: EASE_OUT, delay: 0.3 } as const;
@@ -139,6 +139,7 @@ function Lane({ thread, index, copy, labels, unknown, ticks, clock, toPct }: Lan
   // open segment collapses, which would render a running thread as suspended on the server.
   const running = thread.segments.some((segment) => segment.end === null);
   const first = thread.segments[0];
+  const marks = thread.phases.map((_, i) => toPct(phaseAt(thread, i, spans)));
 
   return (
     <div className="border-t border-line pt-6 pb-10">
@@ -224,16 +225,18 @@ function Lane({ thread, index, copy, labels, unknown, ticks, clock, toPct }: Lan
         })}
       </div>
 
+      {/* The row keeps its height either way, so every lane stays the same size. */}
       <div className="relative mt-5 hidden h-4 md:block">
-        {thread.phases.map((phase, i) => (
-          <span
-            key={phase.id}
-            className="absolute top-0 border-l border-line pl-2 font-mono text-[11px] whitespace-nowrap text-muted"
-            style={{ left: `${toPct(phaseAt(thread, i, spans))}%` }}
-          >
-            {pad(i + 1)} {pick(copy?.phases ?? {}, phase.id)?.title ?? phase.id}
-          </span>
-        ))}
+        {phaseMarksFit(marks) &&
+          thread.phases.map((phase, i) => (
+            <span
+              key={phase.id}
+              className="absolute top-0 border-l border-line pl-2 font-mono text-[11px] whitespace-nowrap text-muted"
+              style={{ left: `${marks[i]}%` }}
+            >
+              {pad(i + 1)} {pick(copy?.phases ?? {}, phase.id)?.title ?? phase.id}
+            </span>
+          ))}
       </div>
     </div>
   );
@@ -261,7 +264,8 @@ function ThreadDetail({ thread, index, copy, labels, unknown }: ThreadDetailProp
       </Meta>
       <h3 className="mt-5 text-2xl font-medium tracking-[-0.025em] md:text-3xl">{copy?.role ?? thread.id}</h3>
       <p className="mt-2 font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
-        {copy?.entityLabel}: {thread.entity ?? unknown}
+        {/* A thread with no entity (self-directed study) states its label alone, not "label: —". */}
+        {thread.entity ? `${copy?.entityLabel}: ${thread.entity}` : copy?.entityLabel}
       </p>
       {thread.segments.length > 1 && (
         <p className="mt-1 font-mono text-[11px] tracking-[0.14em] text-muted uppercase">

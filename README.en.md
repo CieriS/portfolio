@@ -119,7 +119,7 @@ GOOGLE_SITE_VERIFICATION=your-token
 | --- | --- | --- | --- | --- | --- |
 | 01 | Index (`hero`) | `/en` | `/it` | `/fr` | Large-format name, role, introduction and a call to explore. |
 | 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | Mission statement, four engineering principles and contacts (GitHub, LinkedIn, GitLab). |
-| 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Two-lane timeline (industry and academic path) on a shared time axis, with a live uptime counter and phases with their stack. |
+| 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
 | 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | Projects in an accordion: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
 | 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | The method beyond code: a calisthenics programme (metrics and sessions) and sound mechanics (acoustic guitar, lossless formats, audio pipeline). |
 
@@ -241,7 +241,7 @@ data/locales/<language>.json   en · it · fr
   2. **schema** (`lib/content/schema.ts`): `shared.json` is parsed with zod (enums, real ISO dates, segments ending after they start, URLs, the `source` union); the domain types are inferred from the schema;
   3. **cross-checks** (`lib/content/validate.ts`): every thread, phase, project and layer id has copy in every language, every language has its `ui.locale` label, and every `*Emphasis` occurs in its text. All problems are listed at once, with their path.
 
-Fields that accept `null` (shown as `—`): `timeline.threads[].entity`, `discipline.biological.heightCm`, `discipline.biological.weightKg`. `projects[].source` is either `{ "visibility": "public", "url": "…" }` (repository link, also published as `codeRepository` in the JSON-LD) or `{ "visibility": "private" }`: the code is not linked and the project points to the Identity view, where a walkthrough can be requested. An unknown visibility or a public project without a `url` fails the build.
+Fields that accept `null` (shown as `—`): `discipline.biological.heightCm`, `discipline.biological.weightKg`. `timeline.threads[].entity` accepts `null` too: the lane then shows its `entityLabel` alone (e.g. "Self-directed study") and stays out of `worksFor` / `alumniOf`. `projects[].source` is either `{ "visibility": "public", "url": "…" }` (repository link, also published as `codeRepository` in the JSON-LD) or `{ "visibility": "private" }`: the code is not linked and the project points to the Identity view, where a walkthrough can be requested. An unknown visibility or a public project without a `url` fails the build.
 
 ### Timeline lanes
 
@@ -249,7 +249,7 @@ A lane is a sequence of `segments`, not a single interval: `{ "start": "YYYY-MM-
 
 `kind` is either `work` or `education` and drives the JSON-LD: `work` lanes feed `worksFor` and `knowsAbout`, `education` lanes feed `alumniOf`. Any other value fails the build. The headline uptime follows the first `work` lane and sums active time only, excluding interruptions.
 
-Each phase takes an optional `start`. Without it, phases are spread over the lane's active time and step over the gaps; with it, the phase is anchored to that date.
+Each phase takes an optional `start`. Without it, phases are spread over the lane's active time and step over the gaps; with it, the phase is anchored to that date. When the phase labels have no room on the axis (a young lane: less than 12% of the axis between one label and the next, or the edge), the row stays empty and the phases are read in the detail only: `phaseMarksFit` in `lib/timeline.ts` decides.
 
 ## Extending the project
 
