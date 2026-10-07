@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { LOCALES } from '../lib/routes';
 import { shared } from './content';
 import { ALL_PAGES, pathFor } from './helpers';
 
@@ -27,6 +28,15 @@ test('the index carries WebSite, Person and ProfilePage', async ({ page }) => {
     addressLocality: shared.address.locality,
     addressCountry: shared.address.country,
   });
+});
+
+test('the Person keeps one url in every language', async ({ page, baseURL }) => {
+  for (const locale of LOCALES) {
+    await page.goto(pathFor(locale, 'identity'));
+    const person = (await jsonLd(page))['@graph'].find((n) => n['@type'] === 'Person');
+    expect(person?.url).toBe(`${baseURL}/`);
+    expect(person?.['@id']).toBe(`${baseURL}/#person`);
+  }
 });
 
 test('every page is indexable and carries the bare Search Console token', async ({ page }) => {

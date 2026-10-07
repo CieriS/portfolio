@@ -51,7 +51,8 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
       '@id': personId,
       name: shared.name,
       ...(shared.alternateNames.length > 0 ? { alternateName: shared.alternateNames } : {}),
-      url: homeUrl,
+      // The bare origin in every language: the same address the profiles in `sameAs` link back to.
+      url: siteUrl,
       image: absoluteUrl('/icon.png'),
       jobTitle: content.hero.role,
       description: meta.description,

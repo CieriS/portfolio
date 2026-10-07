@@ -186,7 +186,7 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 
 - **Métadonnées par vue** (`lib/seo.ts`) : title, description, canonical, hreflang (`en`, `it`, `fr`, `de`, `x-default`), Open Graph de type `profile` et Twitter card `summary_large_image`. Pour l'index, `x-default` pointe vers `/`, qui détecte la langue ; pour les autres vues, il pointe vers la version anglaise.
 - **Images Open Graph** en 1200 × 630, générées au build pour chaque langue et chaque vue (`opengraph-image.tsx`, `lib/og.tsx`), avec l'icône de l'ancien site.
-- **JSON-LD** `@graph` (`lib/structuredData.ts`) : `WebSite`, `Person` (avec `alternateName`, `address`, `knowsAbout` et `sameAs`), `ProfilePage`, `BreadcrumbList` sur les vues internes et `ItemList` de `SoftwareSourceCode` sur la vue des projets.
+- **JSON-LD** `@graph` (`lib/structuredData.ts`) : `WebSite`, `Person` (avec `alternateName`, `address`, `knowsAbout` et `sameAs` ; `url` est la racine du site dans toutes les langues), `ProfilePage`, `BreadcrumbList` sur les vues internes et `ItemList` de `SoftwareSourceCode` sur la vue des projets.
 - **`sitemap.xml`** avec alternatives hreflang, **`robots.txt`**, **`manifest.webmanifest`**, ainsi qu'un favicon et des icônes dérivés de l'icône legacy `iconRed.ico`.
 - **Indexation maîtrisée** : seule la production est indexable (voir [Variables d'environnement](#variables-denvironnement)). La balise `robots` est définie par page, pas dans le layout : la 404 ne porte donc que le `noindex` de Next.
 - **Contenu des projets toujours dans le HTML** : les panneaux fermés de l'accordéon restent montés (hauteur nulle, `inert`), donc les textes et le lien vers le dépôt de chaque projet sont dans la page prérendue sans aucune interaction.
