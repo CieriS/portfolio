@@ -37,7 +37,9 @@ export default defineConfig({
     command: `npm run build && npm start -- --port ${PORT}`,
     // Canonical URLs, hreflang and the sitemap are built from SITE_URL, which otherwise
     // falls back to a hardcoded localhost:3000 and would not match the port under test.
-    env: { SITE_URL: BASE_URL },
+    // The verification variable is given as the whole tag Search Console hands out, the form
+    // that used to be published escaped inside `content`: seo.spec.ts expects the bare token.
+    env: { SITE_URL: BASE_URL, GOOGLE_SITE_VERIFICATION: '<meta name="google-site-verification" content="e2e-token" />' },
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

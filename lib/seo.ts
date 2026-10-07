@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { routing, type Locale } from '@/i18n/routing';
 import { getPortfolioBundle } from '@/lib/portfolio';
-import { absoluteUrl } from '@/lib/site';
+import { absoluteUrl, IS_INDEXABLE } from '@/lib/site';
 import { pathFor, type ViewId } from '@/lib/views';
 
 const OG_LOCALE: Record<Locale, string> = { en: 'en_US', it: 'it_IT', fr: 'fr_FR', de: 'de_DE' };
@@ -25,6 +25,15 @@ export function buildViewMetadata(locale: Locale, view: ViewId): Metadata {
     title: view === 'hero' ? { absolute: title } : title,
     description,
     alternates: { canonical: url, languages: languageAlternates(view) },
+    // Set per page rather than in the layout: the not-found boundary inherits layout metadata,
+    // and would otherwise carry `index, follow` next to the `noindex` Next adds for it.
+    robots: IS_INDEXABLE
+      ? {
+          index: true,
+          follow: true,
+          googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
+        }
+      : { index: false, follow: false },
     openGraph: {
       type: 'profile',
       firstName,
