@@ -18,8 +18,8 @@
           "description": "Software Developer chez Tas depuis 2022, sur Angular et TypeScript, en parallèle d'études à Bologne et d'un parcours Data Engineering en Rust."
         },
         "projects": {
-          "title": "Projets : Rust & PostgreSQL",
-          "description": "yourFinance, plateforme multi-utilisateur de finance personnelle : API et worker Rust en couches sur PostgreSQL avec RLS et triggers, clients Expo et Tauri."
+          "title": "Projets : Rust, PostgreSQL & dbt",
+          "description": "yourFinance, plateforme de finance personnelle avec API Rust sur PostgreSQL, et aria-er, pipeline de données sur la qualité de l’air avec Rust, dbt et Dagster."
         },
         "discipline": {
           "title": "Optimisation : callisthénie, son & vidéo",
