@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { shared } from './content';
 import { ALL_PAGES, pathFor } from './helpers';
 
 async function jsonLd(page: import('@playwright/test').Page) {
@@ -19,6 +20,21 @@ test('the index carries WebSite, Person and ProfilePage', async ({ page }) => {
   expect(person?.knowsLanguage).toBeTruthy();
   expect(person?.worksFor).toBeTruthy();
   expect(person?.alumniOf).toBeTruthy();
+  // Name variants and place tie the site to the same person as the profiles in `sameAs`.
+  expect(person?.alternateName).toEqual(shared.alternateNames);
+  expect(person?.address).toEqual({
+    '@type': 'PostalAddress',
+    addressLocality: shared.address.locality,
+    addressCountry: shared.address.country,
+  });
+});
+
+test('every page is indexable and carries the bare Search Console token', async ({ page }) => {
+  for (const { path } of ALL_PAGES) {
+    await page.goto(path);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'index, follow');
+    await expect(page.locator('meta[name="google-site-verification"]')).toHaveAttribute('content', 'e2e-token');
+  }
 });
 
 test('inner views add a breadcrumb, and projects adds an ItemList', async ({ page }) => {

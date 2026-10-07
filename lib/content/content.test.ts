@@ -37,6 +37,17 @@ describe('schema', () => {
     expect(ProjectSourceSchema.safeParse({ visibility: 'private' }).success).toBe(true);
     expect(ProjectSourceSchema.safeParse({ visibility: 'secret' }).success).toBe(false);
   });
+
+  it('requires an address with a two-letter country code, and non-empty alternate names', () => {
+    const { address, alternateNames } = SharedSchema.shape;
+    expect(address.safeParse({ locality: 'Bologna', country: 'IT' }).success).toBe(true);
+    expect(address.safeParse({ locality: 'Bologna', country: 'Italy' }).success).toBe(false);
+    expect(address.safeParse({ locality: 'Bologna', country: 'it' }).success).toBe(false);
+    expect(address.safeParse({ locality: '', country: 'IT' }).success).toBe(false);
+    expect(address.safeParse({ country: 'IT' }).success).toBe(false);
+    expect(alternateNames.safeParse([]).success).toBe(true);
+    expect(alternateNames.safeParse(['']).success).toBe(false);
+  });
 });
 
 describe('findContentIssues', () => {

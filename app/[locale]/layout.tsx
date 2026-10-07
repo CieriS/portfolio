@@ -7,7 +7,8 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { SceneLayer } from '@/components/scene/SceneLayer';
 import { routing } from '@/i18n/routing';
 import { getPortfolioBundle } from '@/lib/portfolio';
-import { IS_INDEXABLE, SITE_URL } from '@/lib/site';
+import { SITE_URL } from '@/lib/site';
+import { googleVerificationToken } from '@/lib/verification';
 import '../globals.css';
 
 const sans = Geist({ subsets: ['latin'], variable: '--font-geist', display: 'swap' });
@@ -31,12 +32,12 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-// Site-wide defaults; each page adds its own title, description, canonical, hreflang and Open Graph.
+// Site-wide defaults; each page adds its own title, description, canonical, hreflang, robots and Open Graph.
 export async function generateMetadata({ params }: LayoutProps<'/[locale]'>): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'meta' });
   const { name } = getPortfolioBundle().shared;
-  const googleVerification = process.env.GOOGLE_SITE_VERIFICATION;
+  const googleVerification = googleVerificationToken(process.env.GOOGLE_SITE_VERIFICATION);
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -47,13 +48,6 @@ export async function generateMetadata({ params }: LayoutProps<'/[locale]'>): Pr
     creator: name,
     publisher: name,
     formatDetection: { email: false, address: false, telephone: false },
-    robots: IS_INDEXABLE
-      ? {
-          index: true,
-          follow: true,
-          googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
-        }
-      : { index: false, follow: false },
     ...(googleVerification ? { verification: { google: googleVerification } } : {}),
   };
 }

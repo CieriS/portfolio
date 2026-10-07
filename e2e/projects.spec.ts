@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { locales } from './content';
+import { LOCALES } from '../lib/routes';
+import { locales, shared } from './content';
 import { expectView, gotoView, pathFor } from './helpers';
 
 const copy = locales.en.projects;
@@ -39,4 +40,47 @@ test('a public project links to its repository in a new tab', async ({ page }) =
   const repo = panel.getByRole('link', { name: copy.labels.repo });
   await expect(repo).toHaveAttribute('href', 'https://github.com/CieriS/aria-er');
   await expect(repo).toHaveAttribute('target', '_blank');
+});
+
+test('the served HTML carries every project in full, collapsed ones included', async ({ request }) => {
+  // No browser, no JavaScript: this is what a crawler receives before rendering anything.
+  const decode = (html: string) =>
+    html
+      .replace(/&#x27;/g, "'")
+      .replace(/&amp;/g, '&')
+      .replace(/&quot;/g, '"');
+
+  for (const locale of LOCALES) {
+    const html = decode(await (await request.get(pathFor(locale, 'projects'))).text());
+    for (const project of shared.projects) {
+      const item = locales[locale].projects.items[project.id as keyof typeof copy.items];
+      for (const text of [item.summary, item.bridge, ...item.highlights]) expect(html).toContain(text);
+      if (project.source.visibility === 'public') expect(html).toContain(`<a href="${project.source.url}"`);
+    }
+  }
+});
+
+test('a collapsed project is inert until it is opened', async ({ page }) => {
+  await gotoView(page, 'en', 'projects');
+  const panel = page.locator('#project-ariaer');
+  const repo = panel.locator('a[href*="github.com"]');
+
+  // In the DOM for crawlers, out of reach for keyboard and assistive tech.
+  await expect(repo).toHaveCount(1);
+  await expect(panel).toHaveAttribute('inert', '');
+  const takesFocus = () =>
+    repo.evaluate((link: HTMLElement) => {
+      link.focus();
+      return document.activeElement === link;
+    });
+  expect(await takesFocus()).toBe(false);
+
+  await page.getByRole('button', { name: /aria-er/ }).click();
+  await expect(panel).not.toHaveAttribute('inert');
+  await expect(repo).toBeVisible();
+  expect(await takesFocus()).toBe(true);
+
+  await page.getByRole('button', { name: /aria-er/ }).click();
+  await expect(panel).toHaveAttribute('inert', '');
+  await expect(panel).toHaveCSS('height', '0px');
 });

@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { EASE_OUT, fade } from '@/components/motion/Reveal';
 import { ViewLink } from '@/components/shell/ViewLink';
@@ -83,65 +83,61 @@ function ProjectRow({ project, index, copy, open, onToggle }: ProjectRowProps) {
         </button>
       </h2>
 
-      {/* The id lives on a wrapper that is always rendered: the panel itself is unmounted
-          when collapsed, which would leave the button's aria-controls pointing at nothing. */}
-      <div id={panelId}>
-        <AnimatePresence initial={false}>
-          {open && item && (
-            <motion.div
-              key="panel"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.8, ease: EASE_OUT }}
-              className="overflow-hidden"
-            >
-              <div className="grid gap-12 pb-12 md:grid-cols-12 md:gap-x-6 md:pb-16">
-                <div className="md:col-span-4 md:col-start-4">
-                  <p className="text-lg leading-relaxed md:text-xl md:leading-snug md:tracking-[-0.01em]">{item.summary}</p>
-                  <Meta as="h3" className="mt-10">
-                    {copy.labels.highlights}
-                  </Meta>
-                  <ul className="mt-5 space-y-3 text-[15px] leading-snug text-muted">
-                    {item.highlights.map((highlight) => (
-                      <li key={highlight} className="flex gap-3">
-                        <span aria-hidden className="font-mono text-ink">
-                          —
-                        </span>
-                        {highlight}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+      {/* Collapsed panels stay mounted, so every project's copy and repository link is in the
+          prerendered HTML for crawlers; `inert` keeps them away from focus and assistive tech. */}
+      {item && (
+        <motion.div
+          id={panelId}
+          inert={!open}
+          initial={false}
+          animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
+          transition={{ duration: 0.8, ease: EASE_OUT }}
+          className="overflow-hidden"
+        >
+          <div className="grid gap-12 pb-12 md:grid-cols-12 md:gap-x-6 md:pb-16">
+            <div className="md:col-span-4 md:col-start-4">
+              <p className="text-lg leading-relaxed md:text-xl md:leading-snug md:tracking-[-0.01em]">{item.summary}</p>
+              <Meta as="h3" className="mt-10">
+                {copy.labels.highlights}
+              </Meta>
+              <ul className="mt-5 space-y-3 text-[15px] leading-snug text-muted">
+                {item.highlights.map((highlight) => (
+                  <li key={highlight} className="flex gap-3">
+                    <span aria-hidden className="font-mono text-ink">
+                      —
+                    </span>
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                <div className="md:col-span-2 md:col-start-8">
-                  <Meta as="h3">{copy.labels.architecture}</Meta>
-                  <ol className="relative mt-5 space-y-5 before:absolute before:top-2 before:bottom-2 before:left-[3px] before:w-px before:bg-line">
-                    {project.layers.map((layer) => (
-                      <li key={layer.id} className="relative pl-6">
-                        <span
-                          aria-hidden
-                          className="absolute top-[0.45em] left-0 size-[7px] rounded-full border border-ink bg-paper"
-                        />
-                        <p className="text-[15px] leading-tight">{layer.tech}</p>
-                        <p className="mt-1 text-sm text-muted">{pick(item.layers, layer.id) ?? layer.id}</p>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
+            <div className="md:col-span-2 md:col-start-8">
+              <Meta as="h3">{copy.labels.architecture}</Meta>
+              <ol className="relative mt-5 space-y-5 before:absolute before:top-2 before:bottom-2 before:left-[3px] before:w-px before:bg-line">
+                {project.layers.map((layer) => (
+                  <li key={layer.id} className="relative pl-6">
+                    <span
+                      aria-hidden
+                      className="absolute top-[0.45em] left-0 size-[7px] rounded-full border border-ink bg-paper"
+                    />
+                    <p className="text-[15px] leading-tight">{layer.tech}</p>
+                    <p className="mt-1 text-sm text-muted">{pick(item.layers, layer.id) ?? layer.id}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
 
-                <div className="flex flex-col gap-8 md:col-span-3 md:col-start-10">
-                  <div>
-                    <Meta as="h3">{copy.labels.bridge}</Meta>
-                    <p className="mt-5 text-[15px] leading-relaxed text-muted">{item.bridge}</p>
-                  </div>
-                  <SourceLink project={project} copy={copy} />
-                </div>
+            <div className="flex flex-col gap-8 md:col-span-3 md:col-start-10">
+              <div>
+                <Meta as="h3">{copy.labels.bridge}</Meta>
+                <p className="mt-5 text-[15px] leading-relaxed text-muted">{item.bridge}</p>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              <SourceLink project={project} copy={copy} />
+            </div>
+          </div>
+        </motion.div>
+      )}
     </li>
   );
 }

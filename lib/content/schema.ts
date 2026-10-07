@@ -45,6 +45,10 @@ export const SessionSchema = z.object({ id: z.string().min(1), focus: z.string()
 export const SharedSchema = z.object({
   name: z.string().min(1),
   handle: z.string().min(1),
+  /** Other spellings and handles the same person is searched by; published as `alternateName`. */
+  alternateNames: z.array(z.string().min(1)),
+  /** `country` is an ISO 3166-1 alpha-2 code. */
+  address: z.object({ locality: z.string().min(1), country: z.string().regex(/^[A-Z]{2}$/, 'country is a two-letter ISO code') }),
   contacts: z.array(ContactSchema),
   timeline: z.object({ threads: z.array(ThreadSchema).min(1) }),
   projects: z.array(ProjectSchema),

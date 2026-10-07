@@ -2,7 +2,7 @@
 
 [Italiano](README.md) · **English** · [Français](README.fr.md)
 
-Personal portfolio of **Samuele Cieri**, a Software Developer transitioning to Data Engineering. It is a minimal Single Page Application built with Next.js: the layout is locked to `100dvh`, views swap without reloading the page, and a 3D particle field keeps running in the background. Every view still has its own prerendered, indexable URL, in English, Italian and French.
+Personal portfolio of **Samuele Cieri**, a Software Developer transitioning to Data Engineering. It is a minimal Single Page Application built with Next.js: the layout is locked to `100dvh`, views swap without reloading the page, and a 3D particle field keeps running in the background. Every view still has its own prerendered, indexable URL, in English, Italian, French and German.
 
 The `next-migration` branch replaces the previous PHP site, which is kept in [`legacy/`](legacy/).
 
@@ -102,7 +102,7 @@ No variable is required: the project works locally without any configuration.
 | Variable | Purpose |
 | --- | --- |
 | `SITE_URL` | Optional. Canonical origin for canonical URLs, hreflang, sitemap, Open Graph and JSON-LD; trailing slashes are stripped. Only needed with a custom domain. When missing, the Vercel production URL (`VERCEL_PROJECT_PRODUCTION_URL`) is used, and `http://localhost:3000` locally. |
-| `GOOGLE_SITE_VERIFICATION` | Optional. Google Search Console verification token, published as a meta tag. |
+| `GOOGLE_SITE_VERIFICATION` | Optional. Google Search Console verification token, published as a meta tag. Accepts the bare token or the whole `<meta>` tag copied from Search Console (`lib/verification.ts` extracts the token); any other value fails the build. The site is static: a change to the variable only takes effect after a new deploy. |
 | `VERCEL_PROJECT_PRODUCTION_URL` | Set by Vercel. Used when `SITE_URL` is missing. |
 | `VERCEL_ENV` | Set by Vercel. Only `production` is indexable: previews get `noindex` and a `robots.txt` with `Disallow: /`. Outside Vercel, where the variable does not exist, the site is indexable. |
 
@@ -184,9 +184,10 @@ Every URL is prerendered with its own content. An address that matches no view s
 
 - **Per-view metadata** (`lib/seo.ts`): title, description, canonical, hreflang (`en`, `it`, `fr`, `de`, `x-default`), Open Graph `profile` and a `summary_large_image` Twitter card. For the index, `x-default` points to `/`, which detects the language; for the other views it points to the English version.
 - **Open Graph images** at 1200 × 630, generated at build time for every language and view (`opengraph-image.tsx`, `lib/og.tsx`), featuring the legacy site's icon.
-- **JSON-LD** `@graph` (`lib/structuredData.ts`): `WebSite`, `Person` (with `knowsAbout` and `sameAs`), `ProfilePage`, `BreadcrumbList` on inner views and an `ItemList` of `SoftwareSourceCode` on the projects view.
+- **JSON-LD** `@graph` (`lib/structuredData.ts`): `WebSite`, `Person` (with `alternateName`, `address`, `knowsAbout` and `sameAs`), `ProfilePage`, `BreadcrumbList` on inner views and an `ItemList` of `SoftwareSourceCode` on the projects view.
 - **`sitemap.xml`** with hreflang alternates, **`robots.txt`**, **`manifest.webmanifest`**, plus a favicon and icons derived from the legacy `iconRed.ico`.
-- **Controlled indexing**: only production is indexable (see [Environment variables](#environment-variables)).
+- **Controlled indexing**: only production is indexable (see [Environment variables](#environment-variables)). The `robots` meta is set per page, not in the layout, so the 404 carries only Next's `noindex`.
+- **Project content always in the HTML**: collapsed accordion panels stay mounted (zero height, `inert`), so every project's copy and repository link is in the prerendered page without any interaction.
 - **Page structure**: a single `h1` per URL, real links in the navigation, `rel="me"` on social profiles, `X-Powered-By` header disabled.
 - **301 redirects** from the old PHP URLs:
 
@@ -202,7 +203,7 @@ After the first deploy: Google Search Console → add a URL-prefix property → 
 ## Accessibility
 
 - Navigation through real links, with `aria-current="page"` on the active view; each view is a `section` with an `aria-label`.
-- The projects accordion uses `aria-expanded` and `aria-controls`; buttons and controls have localised labels.
+- The projects accordion uses `aria-expanded` and `aria-controls`; collapsed panels are `inert`, out of reach for focus and assistive technology; buttons and controls have localised labels.
 - Focus is always visible (`:focus-visible`), the `lang` attribute updates on language change; the language menu exposes `aria-haspopup="listbox"`, `aria-expanded` and `aria-selected`, and each option carries its own `lang`.
 - Decorative elements (canvas, arrows, indices) are marked `aria-hidden`.
 - Reduced motion is honoured at three levels: CSS intro, Framer Motion and the scene's frame loop.
@@ -240,6 +241,8 @@ data/locales/<language>.json   en · it · fr
   1. **types**: every language is assigned to the shape of `en.json`, so a missing or renamed key fails `npm run typecheck`;
   2. **schema** (`lib/content/schema.ts`): `shared.json` is parsed with zod (enums, real ISO dates, segments ending after they start, URLs, the `source` union); the domain types are inferred from the schema;
   3. **cross-checks** (`lib/content/validate.ts`): every thread, phase, project and layer id has copy in every language, every language has its `ui.locale` label, and every `*Emphasis` occurs in its text. All problems are listed at once, with their path.
+
+`alternateNames` (other spellings and handles the same person is searched by) and `address` (`locality` and `country`, a two-letter ISO code) feed the `alternateName` and `address` of the JSON-LD `Person`; an invalid country code fails the build.
 
 Fields that accept `null` (shown as `—`): `discipline.biological.heightCm`, `discipline.biological.weightKg`. `timeline.threads[].entity` accepts `null` too: the lane then shows its `entityLabel` alone (e.g. "Self-directed study") and stays out of `worksFor` / `alumniOf`. `projects[].source` is either `{ "visibility": "public", "url": "…" }` (repository link, also published as `codeRepository` in the JSON-LD) or `{ "visibility": "private" }`: the code is not linked and the project points to the Identity view, where a walkthrough can be requested. An unknown visibility or a public project without a `url` fails the build.
 
@@ -310,7 +313,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   ├── shared.json                  language-independent data
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, UI strings, SEO metadata
 ├── i18n/             routing.ts (languages) · request.ts (next-intl messages)
-├── lib/              routes, views, portfolio, timeline, seo, site, structuredData, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, og, format, hooks, cn
 │   └── content/      schema (zod) · validate (cross-checks)
 ├── store/            viewStore (per instance) · useSceneStore (scene, transient)
 ├── e2e/              Playwright suite · helpers.ts (locales, views, waits)
