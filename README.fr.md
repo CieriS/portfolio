@@ -104,7 +104,7 @@ Aucune variable n'est obligatoire : en local, le projet fonctionne sans configur
 | Variable | Rôle |
 | --- | --- |
 | `SITE_URL` | Facultative. Origine canonique pour les canonical, hreflang, sitemap, Open Graph et JSON-LD ; les slashs finaux sont supprimés. Utile uniquement avec un domaine personnalisé. En son absence, l'URL de production Vercel (`VERCEL_PROJECT_PRODUCTION_URL`) est utilisée, et `http://localhost:3000` en local. |
-| `GOOGLE_SITE_VERIFICATION` | Facultative. Jeton de validation Google Search Console, publié sous forme de balise meta. |
+| `GOOGLE_SITE_VERIFICATION` | Facultative. Jeton de validation Google Search Console, publié sous forme de balise meta. Accepte le jeton seul ou la balise `<meta>` entière copiée depuis la Search Console (`lib/verification.ts` en extrait le jeton) ; toute autre valeur fait échouer le build. Le site est statique : une modification de la variable ne prend effet qu'après un nouveau déploiement. |
 | `VERCEL_PROJECT_PRODUCTION_URL` | Définie par Vercel. Utilisée quand `SITE_URL` est absente. |
 | `VERCEL_ENV` | Définie par Vercel. Seul `production` est indexable : les prévisualisations reçoivent `noindex` et un `robots.txt` avec `Disallow: /`. Hors de Vercel, où la variable n'existe pas, le site est indexable. |
 
@@ -186,9 +186,10 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 
 - **Métadonnées par vue** (`lib/seo.ts`) : title, description, canonical, hreflang (`en`, `it`, `fr`, `de`, `x-default`), Open Graph de type `profile` et Twitter card `summary_large_image`. Pour l'index, `x-default` pointe vers `/`, qui détecte la langue ; pour les autres vues, il pointe vers la version anglaise.
 - **Images Open Graph** en 1200 × 630, générées au build pour chaque langue et chaque vue (`opengraph-image.tsx`, `lib/og.tsx`), avec l'icône de l'ancien site.
-- **JSON-LD** `@graph` (`lib/structuredData.ts`) : `WebSite`, `Person` (avec `knowsAbout` et `sameAs`), `ProfilePage`, `BreadcrumbList` sur les vues internes et `ItemList` de `SoftwareSourceCode` sur la vue des projets.
+- **JSON-LD** `@graph` (`lib/structuredData.ts`) : `WebSite`, `Person` (avec `alternateName`, `address`, `knowsAbout` et `sameAs`), `ProfilePage`, `BreadcrumbList` sur les vues internes et `ItemList` de `SoftwareSourceCode` sur la vue des projets.
 - **`sitemap.xml`** avec alternatives hreflang, **`robots.txt`**, **`manifest.webmanifest`**, ainsi qu'un favicon et des icônes dérivés de l'icône legacy `iconRed.ico`.
-- **Indexation maîtrisée** : seule la production est indexable (voir [Variables d'environnement](#variables-denvironnement)).
+- **Indexation maîtrisée** : seule la production est indexable (voir [Variables d'environnement](#variables-denvironnement)). La balise `robots` est définie par page, pas dans le layout : la 404 ne porte donc que le `noindex` de Next.
+- **Contenu des projets toujours dans le HTML** : les panneaux fermés de l'accordéon restent montés (hauteur nulle, `inert`), donc les textes et le lien vers le dépôt de chaque projet sont dans la page prérendue sans aucune interaction.
 - **Structure des pages** : un seul `h1` par URL, de vrais liens dans la navigation, `rel="me"` sur les profils sociaux, en-tête `X-Powered-By` désactivé.
 - **Redirections 301** depuis les anciennes URL PHP :
 
@@ -204,7 +205,7 @@ Après le premier déploiement : Google Search Console → ajouter une propriét
 ## Accessibilité
 
 - Navigation par de vrais liens, avec `aria-current="page"` sur la vue active ; chaque vue est une `section` dotée d'un `aria-label`.
-- L'accordéon des projets utilise `aria-expanded` et `aria-controls` ; les boutons et contrôles ont des libellés localisés.
+- L'accordéon des projets utilise `aria-expanded` et `aria-controls` ; les panneaux fermés sont `inert`, hors du focus et des technologies d'assistance ; les boutons et contrôles ont des libellés localisés.
 - Focus toujours visible (`:focus-visible`), attribut `lang` mis à jour lors du changement de langue ; le menu des langues expose `aria-haspopup="listbox"`, `aria-expanded` et `aria-selected`, et chaque option porte son propre `lang`.
 - Éléments décoratifs (canvas, flèches, index) marqués `aria-hidden`.
 - Réduction des animations respectée à trois niveaux : intro CSS, Framer Motion et boucle de rendu de la scène.
@@ -242,6 +243,8 @@ data/locales/<langue>.json   en · it · fr
   1. **types** : chaque langue est affectée à la forme de `en.json`, donc une clé manquante ou renommée fait échouer `npm run typecheck` ;
   2. **schéma** (`lib/content/schema.ts`) : `shared.json` est validé avec zod (enums, dates ISO existantes, segments qui finissent après leur début, URL, union `source`) ; les types du domaine sont dérivés du schéma ;
   3. **contrôles croisés** (`lib/content/validate.ts`) : chaque id de couloir, phase, projet et couche a ses textes dans chaque langue, chaque langue a son libellé dans `ui.locale` et chaque `*Emphasis` apparaît dans son texte. Tous les problèmes sont listés ensemble, avec leur chemin.
+
+`alternateNames` (autres graphies et identifiants sous lesquels la même personne est recherchée) et `address` (`locality` et `country`, code ISO à deux lettres) alimentent `alternateName` et `address` du `Person` dans le JSON-LD ; un code pays invalide fait échouer le build.
 
 Champs acceptant `null` (affichés `—`) : `discipline.biological.heightCm`, `discipline.biological.weightKg`. `timeline.threads[].entity` accepte aussi `null` : le couloir affiche alors seulement son `entityLabel` (ex. « Étude en autonomie ») et reste hors de `worksFor` / `alumniOf`. `projects[].source` vaut `{ "visibility": "public", "url": "…" }` (lien vers le dépôt, publié aussi comme `codeRepository` dans le JSON-LD) ou `{ "visibility": "private" }` : le code n'est pas lié et le projet renvoie à la vue Identité, où demander une démo. Une visibilité inconnue ou un projet public sans `url` fait échouer le build.
 
@@ -312,7 +315,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   ├── shared.json                  données indépendantes de la langue
 │   └── locales/                     en.json · it.json · fr.json · de.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)
-├── lib/              routes, views, portfolio, timeline, seo, site, structuredData, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, og, format, hooks, cn
 │   └── content/      schema (zod) · validate (contrôles croisés)
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)
 ├── e2e/              suite Playwright · helpers.ts (langues, vues, attentes)
