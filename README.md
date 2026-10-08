@@ -198,7 +198,14 @@ Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corris
 | `/projDev/*` | `/it/sistemi` |
 | `/projProd/*` | `/it/sistemi` |
 
-Dopo il primo deploy: Google Search Console → aggiungi la proprietà URL → invia `/sitemap.xml`.
+### Google Search Console
+
+1. Aggiungi una proprietà di tipo "Prefisso URL" e scegli la verifica con tag HTML.
+2. Imposta `GOOGLE_SITE_VERIFICATION` su Vercel (token o tag intero) e **rifai il deploy**: la variabile è letta in build. Controlla il risultato con `curl -s https://<sito>/en | grep google-site-verification`, poi premi "Verifica".
+3. In "Sitemap" invia `sitemap.xml`. Su una proprietà nuova lo stato "Impossibile recuperare" con "Ultima lettura" vuota significa solo che Google non l'ha ancora letta: può volerci un paio di giorni.
+4. Le richieste manuali di indicizzazione sono poche al giorno. Vanno fatte sulle URL con la lingua (`/en`, `/it`, `/en/systems`, …): la radice `/` risponde con un redirect e non viene indicizzata come pagina.
+
+Con un dominio personale conviene una proprietà di tipo "Dominio", verificata via DNS.
 
 ## Accessibilità
 

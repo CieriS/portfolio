@@ -198,7 +198,14 @@ Every URL is prerendered with its own content. An address that matches no view s
 | `/projDev/*` | `/it/sistemi` |
 | `/projProd/*` | `/it/sistemi` |
 
-After the first deploy: Google Search Console → add a URL-prefix property → submit `/sitemap.xml`.
+### Google Search Console
+
+1. Add a "URL prefix" property and pick the HTML tag verification.
+2. Set `GOOGLE_SITE_VERIFICATION` on Vercel (token or whole tag) and **redeploy**: the variable is read at build time. Check the result with `curl -s https://<site>/en | grep google-site-verification`, then press "Verify".
+3. Under "Sitemaps" submit `sitemap.xml`. On a new property the status "Couldn't fetch" with an empty "Last read" only means Google has not read it yet: it can take a couple of days.
+4. Manual indexing requests are limited to a few per day. Spend them on the URLs with a language (`/en`, `/it`, `/en/systems`, …): the root `/` answers with a redirect and is never indexed as a page.
+
+With a custom domain, prefer a "Domain" property verified through DNS.
 
 ## Accessibility
 

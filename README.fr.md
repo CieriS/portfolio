@@ -200,7 +200,14 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 | `/projDev/*` | `/it/sistemi` |
 | `/projProd/*` | `/it/sistemi` |
 
-Après le premier déploiement : Google Search Console → ajouter une propriété de type préfixe d'URL → envoyer `/sitemap.xml`.
+### Google Search Console
+
+1. Ajoutez une propriété de type « Préfixe d'URL » et choisissez la validation par balise HTML.
+2. Définissez `GOOGLE_SITE_VERIFICATION` sur Vercel (jeton ou balise entière) et **redéployez** : la variable est lue au build. Vérifiez le résultat avec `curl -s https://<site>/en | grep google-site-verification`, puis cliquez sur « Valider ».
+3. Dans « Sitemaps », envoyez `sitemap.xml`. Sur une propriété neuve, l'état « Impossible de récupérer » avec « Dernière lecture » vide signifie seulement que Google ne l'a pas encore lu : cela peut prendre quelques jours.
+4. Les demandes d'indexation manuelles sont limitées à quelques-unes par jour. Réservez-les aux URL avec la langue (`/en`, `/it`, `/en/systems`, …) : la racine `/` répond par une redirection et n'est jamais indexée comme page.
+
+Avec un domaine personnalisé, préférez une propriété de type « Domaine », validée par DNS.
 
 ## Accessibilité
 
