@@ -125,7 +125,7 @@ Every URL is prerendered with its own content. An address that matches no view s
 
 ## Navigation and interaction
 
-- **Bottom links** (`01`–`05`): real `<a href>` elements, so middle-click, "open in new tab" and crawlers all work. A primary click swaps the view in place.
+- **Bottom links** (`01`–`05`): real `<a href>` elements, so middle-click, "open in new tab" and crawlers all work. A primary click swaps the view in place. Next to the active item sits the everyday word for that view ("Execution · Experience"), which is also part of every link's accessible name.
 - **Keyboard**: `1`–`5` jump to a view, `←` and `→` cycle through them. Keys are ignored while a modifier is held or when focus is in a text field.
 - **Touch**: a horizontal swipe (over 70 px and mostly horizontal) moves to the previous or next view.
 - **Arrows and counter** in the footer on medium and large screens.
@@ -231,7 +231,7 @@ data/shared.json        language-independent data
 ├── projects[]          id, name, source, stack, layers
 └── discipline          biological (metrics, sessions) · acoustic (formats, pipeline)
 data/locales/<language>.json   en · it · fr · de
-├── ui                  next-intl messages: meta (SEO), notFound, nav, theme, locale, shell
+├── ui                  next-intl messages: meta (SEO), notFound, nav, navPlain, theme, locale, shell
 ├── hero
 ├── identity
 ├── timeline

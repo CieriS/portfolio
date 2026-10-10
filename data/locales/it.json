@@ -44,6 +44,13 @@
       "projects": "Sistemi",
       "discipline": "Ottimizzazione"
     },
+    "navPlain": {
+      "hero": "Home",
+      "identity": "Chi sono",
+      "timeline": "Esperienza",
+      "projects": "Progetti",
+      "discipline": "Tempo libero"
+    },
     "theme": { "label": "Tema", "light": "Chiaro", "dark": "Scuro", "system": "Auto" },
     "locale": { "label": "Lingua", "en": "EN", "it": "IT", "fr": "FR", "de": "DE" },
     "shell": {
