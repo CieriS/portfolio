@@ -121,7 +121,7 @@ GOOGLE_SITE_VERIFICATION=your-token
 | 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | A title that is the first sentence of the mission statement (the rest is its subtitle), four engineering principles and contacts (GitHub, LinkedIn, GitLab). |
 | 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
 | 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Projects in an accordion: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
-| 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | The method beyond code: a calisthenics programme (metrics and sessions) and sound mechanics (acoustic guitar, lossless formats, audio pipeline). |
+| 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | Training and music beyond the code: strength and power (method, metrics, weekly plan) and music and video production (acoustic guitar, software, workflow). |
 
 Every URL is prerendered with its own content. An address that matches no view shows a localised, non-indexable 404 page.
 

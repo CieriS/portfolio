@@ -2,7 +2,7 @@
   "ui": {
     "meta": {
       "title": "Samuele Cieri — Software Developer",
-      "description": "Software Developer a Bologna, in transizione verso il Data Engineering. Sistemi, dati e ottimizzazione deliberata.",
+      "description": "Software Developer a Bologna, in transizione verso il Data Engineering. Angular e TypeScript sul lavoro; Rust, PostgreSQL e dbt nei progetti personali.",
       "siteName": "Samuele Cieri",
       "views": {
         "hero": {
@@ -22,8 +22,8 @@
           "description": "yourFinance, piattaforma di finanza personale con API Rust su PostgreSQL, e aria-er, pipeline dati sulla qualità dell’aria con Rust, dbt e Dagster."
         },
         "discipline": {
-          "title": "Ottimizzazione: calisthenics, suono e video",
-          "description": "Il metodo ingegneristico oltre il codice: programma full-body su 3 giorni tra calisthenics zavorrata, bilanciere e pliometria; chitarra acustica e audio."
+          "title": "Allenamento e musica oltre il codice",
+          "description": "Come mi alleno e come produco musica: sedute full-body con calisthenics zavorrata, bilanciere e pliometria; chitarra acustica, audio e montaggio video."
         }
       }
     },
@@ -210,31 +210,31 @@
     }
   },
   "discipline": {
-    "title": "Ottimizzazione deliberata",
-    "titleEmphasis": "deliberata",
-    "subtitle": "Lo stesso metodo applicato fuori dal terminale: misurare, programmare, iterare.",
+    "title": "Oltre il codice",
+    "titleEmphasis": "codice",
+    "subtitle": "Allenamento e musica, con lo stesso metodo che uso nel lavoro: misurare, pianificare, correggere.",
     "biological": {
-      "title": "Ottimizzazione Biologica",
-      "titleEmphasis": "Biologica",
-      "summary": "Allenamento full-body tra calisthenics zavorrata, fondamentali con bilanciere, pliometria e skill in una palestra in garage, trattato come un sistema controllato: blocchi di 4 settimane — pause reps, zavorra, EMOM, piramidale — seguiti da un deload completo. Obiettivi: salto, scatto e forza; l'estetica è un effetto collaterale.",
-      "metrics": { "height": "Altezza", "weight": "Massa", "frequency": "Frequenza" },
-      "units": { "height": "cm", "weight": "kg", "frequency": "/ settimana" },
-      "sessionsTitle": "Full-body su 3 giorni",
+      "title": "Forza ed esplosività",
+      "titleEmphasis": "esplosività",
+      "summary": "Mi alleno in una palestra in garage con sedute full-body che si ripetono ogni settimana: calisthenics zavorrata, fondamentali con il bilanciere, pliometria e skill a corpo libero (front lever, handstand, muscle-up, human flag, planche). Ogni blocco dura quattro settimane e cambia metodo a ogni settimana: ripetizioni con pausa, zavorra, EMOM, piramidale. Poi una settimana di scarico. Obiettivo: la prestazione, non l'estetica. Salto, scatto e forza.",
+      "metrics": { "height": "Altezza", "weight": "Peso", "frequency": "Allenamenti" },
+      "units": { "height": "cm", "weight": "kg", "frequency": "a settimana" },
+      "sessionsTitle": "Programma settimanale",
       "dayLabel": "Giorno",
       "focus": { "squat": "Focus squat", "hinge": "Focus stacco", "unilateral": "Focus unilaterale" }
     },
     "acoustic": {
-      "title": "Suono e Video",
-      "titleEmphasis": "Video",
-      "summary": "La chitarra acustica come sorgente: audio editato in GarageBand e Logic Pro, poi abbinato al video e montato in DaVinci Resolve.",
-      "instrumentLabel": "Sorgente",
+      "title": "Musica e video",
+      "titleEmphasis": "video",
+      "summary": "Faccio tutto da solo: suono e registro la chitarra acustica, lavoro l'audio in GarageBand e Logic Pro, giro il video e lo monto in DaVinci Resolve.",
+      "instrumentLabel": "Strumento",
       "instrument": "Chitarra acustica",
       "formatsLabel": "Software",
-      "pipelineTitle": "Pipeline di produzione",
+      "pipelineTitle": "Fasi di lavoro",
       "pipeline": {
-        "capture": "Acquisizione — registrazione della chitarra acustica",
+        "capture": "Registrazione — chitarra acustica",
         "mix": "Audio — editing in GarageBand e Logic Pro",
-        "edit": "Video — montaggio in DaVinci Resolve con l'audio finale"
+        "edit": "Video — riprese, poi montaggio in DaVinci Resolve con l'audio finale"
       }
     }
   }

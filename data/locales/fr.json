@@ -2,7 +2,7 @@
   "ui": {
     "meta": {
       "title": "Samuele Cieri — Software Developer",
-      "description": "Software Developer basé à Bologne, en transition vers le Data Engineering. Systèmes, données et optimisation délibérée.",
+      "description": "Software Developer basé à Bologne, en transition vers le Data Engineering. Angular et TypeScript au travail ; Rust, PostgreSQL et dbt dans mes projets.",
       "siteName": "Samuele Cieri",
       "views": {
         "hero": {
@@ -22,8 +22,8 @@
           "description": "yourFinance, plateforme de finance personnelle avec API Rust sur PostgreSQL, et aria-er, pipeline de données sur la qualité de l’air avec Rust, dbt et Dagster."
         },
         "discipline": {
-          "title": "Optimisation : callisthénie, son & vidéo",
-          "description": "La méthode d'ingénieur au-delà du code : programme full-body sur 3 jours, callisthénie lestée, barre et pliométrie ; guitare acoustique et audio."
+          "title": "Entraînement et musique au-delà du code",
+          "description": "Comment je m'entraîne et produis ma musique : séances full-body, callisthénie lestée, barre et pliométrie ; guitare acoustique, audio et montage vidéo."
         }
       }
     },
@@ -210,31 +210,31 @@
     }
   },
   "discipline": {
-    "title": "Optimisation délibérée",
-    "titleEmphasis": "délibérée",
-    "subtitle": "La même méthode appliquée hors du terminal : mesurer, programmer, itérer.",
+    "title": "Au-delà du code",
+    "titleEmphasis": "code",
+    "subtitle": "Entraînement et musique, avec la même méthode qu'au travail : mesurer, planifier, ajuster.",
     "biological": {
-      "title": "Optimisation Biologique",
-      "titleEmphasis": "Biologique",
-      "summary": "Entraînement full-body mêlant callisthénie lestée, mouvements polyarticulaires à la barre, pliométrie et travail de skills dans une salle aménagée au garage, traité comme un système contrôlé : blocs de 4 semaines — pause reps, lesté, EMOM, pyramide — suivis d'un deload complet. Objectifs : détente, sprint et force brute ; l'esthétique n'est qu'un effet secondaire.",
-      "metrics": { "height": "Taille", "weight": "Masse", "frequency": "Fréquence" },
-      "units": { "height": "cm", "weight": "kg", "frequency": "/ semaine" },
-      "sessionsTitle": "Full-body sur 3 jours",
+      "title": "Force & explosivité",
+      "titleEmphasis": "explosivité",
+      "summary": "Je m'entraîne dans une salle aménagée au garage, avec des séances full-body qui se répètent chaque semaine : callisthénie lestée, mouvements de base à la barre, pliométrie et figures au poids du corps (front lever, handstand, muscle-up, human flag, planche). Chaque bloc dure quatre semaines et change de méthode chaque semaine : répétitions avec pause, lest, EMOM, pyramide. Vient ensuite une semaine de décharge. L'objectif est la performance, pas l'esthétique : détente, sprint et force.",
+      "metrics": { "height": "Taille", "weight": "Poids", "frequency": "Séances" },
+      "units": { "height": "cm", "weight": "kg", "frequency": "par semaine" },
+      "sessionsTitle": "Programme hebdomadaire",
       "dayLabel": "Jour",
       "focus": { "squat": "Focus squat", "hinge": "Focus soulevé de terre", "unilateral": "Focus unilatéral" }
     },
     "acoustic": {
-      "title": "Son & Vidéo",
-      "titleEmphasis": "Vidéo",
-      "summary": "La guitare acoustique comme source : audio édité dans GarageBand et Logic Pro, puis associé à la vidéo et monté dans DaVinci Resolve.",
-      "instrumentLabel": "Source",
+      "title": "Musique & vidéo",
+      "titleEmphasis": "vidéo",
+      "summary": "Je fais tout moi-même : je joue et j'enregistre la guitare acoustique, je travaille l'audio dans GarageBand et Logic Pro, je tourne la vidéo et je la monte dans DaVinci Resolve.",
+      "instrumentLabel": "Instrument",
       "instrument": "Guitare acoustique",
       "formatsLabel": "Logiciels",
-      "pipelineTitle": "Chaîne de production",
+      "pipelineTitle": "Étapes",
       "pipeline": {
-        "capture": "Captation — enregistrement de la guitare acoustique",
-        "mix": "Audio — édition dans GarageBand et Logic Pro",
-        "edit": "Vidéo — montage dans DaVinci Resolve avec l'audio final"
+        "capture": "Enregistrement — guitare acoustique",
+        "mix": "Audio — montage dans GarageBand et Logic Pro",
+        "edit": "Vidéo — tournage, puis montage dans DaVinci Resolve avec l'audio final"
       }
     }
   }

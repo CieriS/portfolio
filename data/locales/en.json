@@ -2,7 +2,7 @@
   "ui": {
     "meta": {
       "title": "Samuele Cieri — Software Developer",
-      "description": "Software Developer based in Bologna, transitioning to Data Engineering. Systems, data, and deliberate optimization.",
+      "description": "Software Developer based in Bologna, transitioning to Data Engineering. Angular and TypeScript at work; Rust, PostgreSQL and dbt in personal projects.",
       "siteName": "Samuele Cieri",
       "views": {
         "hero": {
@@ -22,8 +22,8 @@
           "description": "yourFinance, a personal finance platform on a layered Rust API over PostgreSQL, and aria-er, an air-quality data pipeline built with Rust, dbt and Dagster."
         },
         "discipline": {
-          "title": "Optimization: calisthenics, sound & video",
-          "description": "The engineering method beyond code: a 3-day full-body program of weighted calisthenics, barbell and plyometrics; acoustic guitar and audio production."
+          "title": "Training and music beyond the code",
+          "description": "How I train and make music: full-body sessions of weighted calisthenics, barbell lifts and plyometrics; acoustic guitar, audio editing and video."
         }
       }
     },
@@ -207,31 +207,31 @@
     }
   },
   "discipline": {
-    "title": "Deliberate optimization",
-    "titleEmphasis": "Deliberate",
-    "subtitle": "The same method applied outside the terminal: measure, program, iterate.",
+    "title": "Beyond the code",
+    "titleEmphasis": "code",
+    "subtitle": "Training and music, run with the same method I use at work: measure, plan, adjust.",
     "biological": {
-      "title": "Biological Optimization",
-      "titleEmphasis": "Optimization",
-      "summary": "Full-body training with weighted calisthenics, barbell compounds, plyometrics and skill work in a garage gym, treated as a controlled system: 4-week blocks — pause reps, weighted, EMOM, pyramid — followed by a full deload. Targets: jump, sprint and raw strength; aesthetics is a side effect.",
-      "metrics": { "height": "Height", "weight": "Mass", "frequency": "Frequency" },
-      "units": { "height": "cm", "weight": "kg", "frequency": "/ week" },
-      "sessionsTitle": "3-day full-body",
+      "title": "Strength & power",
+      "titleEmphasis": "power",
+      "summary": "I train in a garage gym with full-body sessions that repeat every week: weighted calisthenics, barbell compound lifts, plyometrics and bodyweight skills (front lever, handstand, muscle-up, human flag, planche). Each block lasts four weeks and changes method every week: pause reps, weighted work, EMOM, pyramid sets. Then a deload week. The goal is performance, not looks: jump, sprint and strength.",
+      "metrics": { "height": "Height", "weight": "Weight", "frequency": "Sessions" },
+      "units": { "height": "cm", "weight": "kg", "frequency": "per week" },
+      "sessionsTitle": "Weekly plan",
       "dayLabel": "Day",
-      "focus": { "squat": "Squat focus", "hinge": "Hinge focus", "unilateral": "Unilateral focus" }
+      "focus": { "squat": "Squat focus", "hinge": "Deadlift focus", "unilateral": "Unilateral focus" }
     },
     "acoustic": {
-      "title": "Sound & Video",
-      "titleEmphasis": "Video",
-      "summary": "Acoustic guitar as the source: audio edited in GarageBand and Logic Pro, then paired with video and cut in DaVinci Resolve.",
-      "instrumentLabel": "Source",
+      "title": "Music & video",
+      "titleEmphasis": "video",
+      "summary": "I do it all myself: I play and record acoustic guitar, edit the audio in GarageBand and Logic Pro, shoot the video and cut it in DaVinci Resolve.",
+      "instrumentLabel": "Instrument",
       "instrument": "Acoustic guitar",
       "formatsLabel": "Software",
-      "pipelineTitle": "Production pipeline",
+      "pipelineTitle": "Workflow",
       "pipeline": {
-        "capture": "Capture — acoustic guitar recording",
+        "capture": "Recording — acoustic guitar",
         "mix": "Audio — editing in GarageBand and Logic Pro",
-        "edit": "Video — editing in DaVinci Resolve with the final audio"
+        "edit": "Video — shooting, then editing in DaVinci Resolve with the final audio"
       }
     }
   }
