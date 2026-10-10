@@ -4,9 +4,7 @@
 
 Portfolio personnel de **Samuele Cieri**, Software Developer en reconversion vers la Data Engineering. C'est une Single Page Application minimaliste construite avec Next.js : la mise en page est fixée à `100dvh`, les vues changent sans recharger la page et un champ de particules 3D reste actif en arrière-plan. Chaque vue possède malgré tout sa propre URL, pré-rendue et indexable, en anglais, en italien et en français.
 
-Le site est disponible en anglais, en italien et en français.
-
-La branche `next-migration` remplace l'ancien site PHP, conservé dans [`legacy/`](legacy/).
+Le site est disponible en anglais, en italien, en français et en allemand.
 
 ## Sommaire
 
@@ -26,8 +24,9 @@ La branche `next-migration` remplace l'ancien site PHP, conservé dans [`legacy/
 - [Étendre le projet](#étendre-le-projet)
 - [Structure du projet](#structure-du-projet)
 - [Qualité du code](#qualité-du-code)
+- [Méthode de travail](#méthode-de-travail)
 - [Déploiement sur Vercel](#déploiement-sur-vercel)
-- [Site legacy](#site-legacy)
+- [Ancien site](#ancien-site)
 - [Dépannage](#dépannage)
 - [Contacts](#contacts)
 - [Licence](#licence)
@@ -71,7 +70,6 @@ Les tests end-to-end tournent avec Playwright sur Chromium, WebKit et un profil 
 ```bash
 git clone https://github.com/CieriS/portfolio.git
 cd portfolio
-git checkout next-migration
 npm install
 npm run dev
 ```
@@ -87,7 +85,7 @@ Pour le tester sur un smartphone connecté au même réseau, ouvrez l'adresse *N
 | `npm run dev` | Serveur de développement avec rechargement à chaud sur http://localhost:3000 |
 | `npm run build` | Build de production : pré-rend les pages, les images Open Graph, le sitemap et robots |
 | `npm start` | Lance le build de production en local |
-| `npm run lint` | ESLint sur l'ensemble du projet (hors `legacy/` et fichiers de build) |
+| `npm run lint` | ESLint sur l'ensemble du projet (hors fichiers de build) |
 | `npm run format` | Formate le projet avec Prettier (`.prettierrc.json`, avec tri des classes Tailwind) |
 | `npm run format:check` | Vérifie le formatage sans modifier les fichiers, comme la CI |
 | `npm run typecheck` | Génère les types des routes (`next typegen`) et vérifie les types avec `tsc --noEmit` |
@@ -189,7 +187,7 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 - **Métadonnées par vue** (`lib/seo.ts`) : title, description, canonical, hreflang (`en`, `it`, `fr`, `de`, `x-default`), Open Graph de type `profile` et Twitter card `summary_large_image`. Pour l'index, `x-default` pointe vers `/`, qui détecte la langue ; pour les autres vues, il pointe vers la version anglaise.
 - **Images Open Graph** en 1200 × 630, générées au build pour chaque langue et chaque vue (`opengraph-image.tsx`, `lib/og.tsx`), avec l'icône de l'ancien site.
 - **JSON-LD** `@graph` (`lib/structuredData.ts`) : `WebSite`, `Person` (avec `alternateName`, `address`, `knowsAbout` et `sameAs` ; `url` est la racine du site dans toutes les langues), `ProfilePage`, `BreadcrumbList` sur les vues internes et `ItemList` de `SoftwareSourceCode` sur la vue des projets.
-- **`sitemap.xml`** avec alternatives hreflang, **`robots.txt`**, **`manifest.webmanifest`**, ainsi qu'un favicon et des icônes dérivés de l'icône legacy `iconRed.ico`.
+- **`sitemap.xml`** avec alternatives hreflang, **`robots.txt`**, **`manifest.webmanifest`**, ainsi qu'un favicon et des icônes dérivés de l'icône de l'ancien site.
 - **Indexation maîtrisée** : seule la production est indexable (voir [Variables d'environnement](#variables-denvironnement)). La balise `robots` est définie par page, pas dans le layout : la 404 ne porte donc que le `noindex` de Next.
 - **Contenu des projets toujours dans le HTML** : les panneaux fermés de l'accordéon restent montés (hauteur nulle, `inert`), donc les textes et le lien vers le dépôt de chaque projet sont dans la page prérendue sans aucune interaction.
 - **Structure des pages** : un seul `h1` par URL, de vrais liens dans la navigation, `rel="me"` sur les profils sociaux, en-tête `X-Powered-By` désactivé.
@@ -329,7 +327,6 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)
 ├── e2e/              suite Playwright · helpers.ts (langues, vues, attentes)
 ├── .github/workflows/ci.yml   lint, typecheck, build et tests sur chaque PR
-├── legacy/           ancien site PHP (non servi)
 ├── proxy.ts          détection de la langue (middleware next-intl)
 ├── next.config.ts    plugin next-intl, redirections 301, origines autorisées en développement
 ├── eslint.config.mjs · postcss.config.mjs · tsconfig.json · playwright.config.ts
@@ -344,19 +341,29 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 - `npm run typecheck` exécute d'abord `next typegen`, qui génère les types globaux des routes (`PageProps`, `LayoutProps`).
 - Tests unitaires Vitest à côté des modules (`lib/**/*.test.ts`) : slugs et URL, arithmétique de la timeline (segments, interruptions, phases, axe), formatage, schéma et contrôles des contenus, fichiers réels compris.
 - Tests end-to-end dans `e2e/` avec Playwright, exécutés contre le build de production sur Chromium, WebKit et un profil mobile. Ils couvrent les URL et métadonnées de chaque langue, la navigation et l'historique, le changement de langue, le SEO, les en-têtes de sécurité, l'accessibilité (axe) et la résistance du site à une panne WebGL.
-- CI dans `.github/workflows/ci.yml` : formatage, lint, typecheck, tests unitaires, build et tests end-to-end sur chaque pull request.
+- CI dans `.github/workflows/ci.yml` : formatage, lint, typecheck, tests unitaires, build et tests end-to-end sur chaque pull request et à chaque push sur `development`. Ses deux jobs sont des contrôles obligatoires pour la fusion (voir [Méthode de travail](#méthode-de-travail)).
 - Dependabot (`.github/dependabot.yml`) ouvre chaque semaine une PR groupée vers `development` pour les dépendances npm et une pour les GitHub Actions. Les versions majeures d’`eslint` et de `typescript` sont ignorées tant que `eslint-config-next` ne les prend pas en charge.
 - `.mailmap` regroupe sous une seule identité les premiers commits signés avec l'email dérivé du nom d'hôte, sans réécrire l'historique.
-- `legacy/` est exclu de TypeScript et d'ESLint.
 - `reactStrictMode` est activé, et l'indicateur de développement de Next est désactivé car il recouvrirait la navigation.
+
+## Méthode de travail
+
+`development` est la branche de production et elle est protégée : on n'y arrive que par une pull request.
+
+1. Une branche par tâche, créée depuis `development` : `features/<nom-explicite>`.
+2. Avant le push, en local : `npm run format:check && npm run lint && npm run typecheck && npm run test:unit && npm test`.
+3. Push de la branche et pull request vers `development`. La PR déclenche la CI (les mêmes commandes) et un déploiement de prévisualisation sur Vercel, non indexable.
+4. La fusion n'est possible que si les deux contrôles de la CI passent, et elle constitue le déploiement en production. On utilise « Create a merge commit », afin que l'historique conserve les commits de la branche.
+5. La branche est supprimée après la fusion.
+
+Les issues et les pull requests sont rédigées en anglais ; les messages de commit en italien.
 
 ## Déploiement sur Vercel
 
-1. Publiez la branche sur GitHub : `git push -u origin next-migration`.
-2. Sur vercel.com → **Add New → Project** → importez `CieriS/portfolio`. Next.js est détecté automatiquement (build `npm run build`, installation `npm install`).
-3. **Settings → Git → Production Branch** : `next-migration` (ou `development` après la fusion).
-4. Variables facultatives dans **Settings → Environment Variables** : `GOOGLE_SITE_VERIFICATION` et `SITE_URL` (uniquement avec un domaine personnalisé).
-5. Déploiement : le site est en ligne sur `https://<projet>.vercel.app`. Chaque push sur la branche de production est redéployé automatiquement ; les autres branches et les PR génèrent des prévisualisations non indexables.
+1. Sur vercel.com → **Add New → Project** → importez `CieriS/portfolio`. Next.js est détecté automatiquement (build `npm run build`, installation `npm install`).
+2. **Settings → Git → Production Branch** : `development`.
+3. Variables facultatives dans **Settings → Environment Variables** : `GOOGLE_SITE_VERIFICATION` et `SITE_URL` (uniquement avec un domaine personnalisé).
+4. Le site est en ligne sur `https://<projet>.vercel.app`. Chaque fusion dans `development` est déployée automatiquement ; les autres branches et les PR génèrent des prévisualisations non indexables.
 
 Sinon, depuis le terminal : `npx vercel login`, puis `npx vercel` (prévisualisation) et `npx vercel --prod` (production).
 
@@ -367,15 +374,12 @@ npm run build
 npm start
 ```
 
-## Site legacy
+## Ancien site
 
-`legacy/` contient l'ancien portfolio, hébergé sur Altervista : PHP et MySQL, HTML, CSS et JavaScript, Font Awesome 6.4 et une collection de projets dans `projDev/`. Son README d'origine se trouve dans [`legacy/readMe.md`](legacy/readMe.md).
+Le portfolio était auparavant un site PHP et MySQL hébergé sur Altervista. Son code n'est plus dans ce dépôt (il reste dans l'historique git) ; il en subsiste aujourd'hui :
 
-- Next.js ne le sert pas : le projet n'a pas de dossier `public/`, donc aucun fichier de `legacy/` n'est accessible depuis le site publié.
-- Il est exclu du lint et de la vérification des types.
-- Ses principales URL sont redirigées en 301 (voir [SEO](#seo)).
-- `legacy/.htaccess` redirige en 301 tout le domaine Altervista vers Vercel en conservant le chemin : remplacez `<progetto>.vercel.app` par l'URL de production et déposez le fichier à la racine du site Altervista.
-- Les icônes du nouveau site dérivent de `legacy/img/icon/iconRed.ico`.
+- les redirections 301 de ses URL principales vers les nouvelles vues (voir [SEO](#seo)) ;
+- l'icône, dont dérivent le favicon et les icônes de ce site.
 
 ## Dépannage
 
@@ -395,4 +399,4 @@ npm start
 
 ## Licence
 
-Le code et les contenus sont la propriété de l'auteur, tous droits réservés : voir [`LICENSE`](LICENSE). Font Awesome Free, dans `legacy/`, est distribué sous sa propre licence ([`LICENSE.txt`](legacy/fontawesome-free-6.4.0-web/LICENSE.txt)).
+Le code et les contenus sont la propriété de l'auteur, tous droits réservés : voir [`LICENSE`](LICENSE).

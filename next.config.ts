@@ -57,7 +57,8 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: '/:path*', headers: SECURITY_HEADERS }];
   },
-  // Permanent redirects for URLs of the legacy PHP site, preserving existing links and ranking signals.
+  // Permanent redirects for URLs of the previous PHP site (no longer in this repository),
+  // preserving existing links and ranking signals.
   async redirects() {
     return [
       { source: '/index.php', destination: '/', permanent: true },
