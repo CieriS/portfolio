@@ -3,18 +3,18 @@
 import { useParams } from 'next/navigation';
 import { hasLocale } from 'next-intl';
 import { routing } from '@/i18n/routing';
-import { getPortfolioBundle } from '@/lib/portfolio';
+import { errorCopy } from '@/lib/errorCopy';
 
 /**
  * Boundary for the views. It sits below the locale layout, so the canvas, the theme and
- * the fonts survive; only the page body is replaced. Copy is read straight from the
- * bundle because this renders above `NextIntlClientProvider`, where `useTranslations`
- * is not available yet.
+ * the fonts survive; only the page body is replaced. Copy comes from `lib/errorCopy.ts`: this
+ * renders above `NextIntlClientProvider`, where `useTranslations` is not available yet, and
+ * it must not import the full content bundle into the browser.
  */
 export default function ViewError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   const params = useParams<{ locale: string }>();
   const locale = hasLocale(routing.locales, params.locale) ? params.locale : routing.defaultLocale;
-  const copy = getPortfolioBundle().contents[locale].ui.error;
+  const copy = errorCopy(locale);
 
   return (
     <main className="relative z-10 flex h-dvh flex-col justify-between px-frame py-6 md:py-10">

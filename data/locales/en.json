@@ -32,11 +32,6 @@
       "body": "This address does not match any view. The process may have moved or never existed.",
       "cta": "Back to index"
     },
-    "error": {
-      "title": "Process failed",
-      "body": "Something interrupted this view. The rest of the site is still running.",
-      "cta": "Retry"
-    },
     "nav": {
       "hero": "Index",
       "identity": "Identity",

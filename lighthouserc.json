@@ -15,7 +15,7 @@
         "largest-contentful-paint": ["error", { "maxNumericValue": 4000, "aggregationMethod": "median" }],
         "cumulative-layout-shift": ["error", { "maxNumericValue": 0.02, "aggregationMethod": "median" }],
         "total-blocking-time": ["warn", { "maxNumericValue": 500, "aggregationMethod": "median" }],
-        "total-byte-weight": ["error", { "maxNumericValue": 820000 }]
+        "total-byte-weight": ["error", { "maxNumericValue": 700000 }]
       }
     },
     "upload": { "target": "filesystem", "outputDir": ".lighthouseci" }

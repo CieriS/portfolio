@@ -1,0 +1,22 @@
+{
+  "en": {
+    "title": "Process failed",
+    "body": "Something interrupted this view. The rest of the site is still running.",
+    "cta": "Retry"
+  },
+  "it": {
+    "title": "Processo interrotto",
+    "body": "Qualcosa ha interrotto questa vista. Il resto del sito è ancora in esecuzione.",
+    "cta": "Riprova"
+  },
+  "fr": {
+    "title": "Processus interrompu",
+    "body": "Quelque chose a interrompu cette vue. Le reste du site fonctionne toujours.",
+    "cta": "Réessayer"
+  },
+  "de": {
+    "title": "Prozess unterbrochen",
+    "body": "Etwas hat diese Ansicht unterbrochen. Der Rest der Website funktioniert weiterhin.",
+    "cta": "Erneut versuchen"
+  }
+}
