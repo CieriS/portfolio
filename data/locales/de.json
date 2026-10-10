@@ -2,7 +2,7 @@
   "ui": {
     "meta": {
       "title": "Samuele Cieri — Software Developer",
-      "description": "Software Developer aus Bologna auf dem Weg ins Data Engineering. Systeme, Daten und gezielte Optimierung.",
+      "description": "Software Developer aus Bologna auf dem Weg ins Data Engineering. Angular und TypeScript im Beruf; Rust, PostgreSQL und dbt in eigenen Projekten.",
       "siteName": "Samuele Cieri",
       "views": {
         "hero": {
@@ -22,8 +22,8 @@
           "description": "yourFinance, Plattform für persönliche Finanzen mit Rust-API auf PostgreSQL, und aria-er, Datenpipeline zur Luftqualität mit Rust, dbt und Dagster."
         },
         "discipline": {
-          "title": "Optimierung: Calisthenics, Audio & Video",
-          "description": "Die Ingenieursmethode jenseits des Codes: 3-Tage-Ganzkörperplan, gewichtete Calisthenics, Langhantel und Plyometrie; Akustikgitarre und Audio."
+          "title": "Training und Musik jenseits des Codes",
+          "description": "Wie ich trainiere und Musik produziere: Ganzkörpereinheiten mit gewichteten Calisthenics, Langhantel und Plyometrie; Akustikgitarre, Audio und Videoschnitt."
         }
       }
     },
@@ -210,31 +210,31 @@
     }
   },
   "discipline": {
-    "title": "Gezielte Optimierung",
-    "titleEmphasis": "Gezielte",
-    "subtitle": "Dieselbe Methode jenseits des Terminals: messen, planen, iterieren.",
+    "title": "Jenseits des Codes",
+    "titleEmphasis": "Codes",
+    "subtitle": "Training und Musik, mit derselben Methode wie im Beruf: messen, planen, anpassen.",
     "biological": {
-      "title": "Biologische Optimierung",
-      "titleEmphasis": "Biologische",
-      "summary": "Ganzkörpertraining aus gewichteten Calisthenics, Mehrgelenkübungen mit der Langhantel, Plyometrie und Skill-Arbeit in einem Garagen-Gym, behandelt wie ein geregeltes System: 4-Wochen-Blöcke — Pausenwiederholungen, gewichtet, EMOM, Pyramide — gefolgt von einem vollständigen Deload. Ziele: Sprungkraft, Sprint und Maximalkraft; Ästhetik ist nur ein Nebeneffekt.",
-      "metrics": { "height": "Größe", "weight": "Masse", "frequency": "Frequenz" },
-      "units": { "height": "cm", "weight": "kg", "frequency": "/ Woche" },
-      "sessionsTitle": "3-Tage-Ganzkörper",
+      "title": "Kraft & Explosivität",
+      "titleEmphasis": "Explosivität",
+      "summary": "Ich trainiere in einem Garagen-Gym mit Ganzkörpereinheiten, die sich jede Woche wiederholen: Calisthenics mit Zusatzgewicht, Grundübungen mit der Langhantel, Plyometrie und Skills mit dem eigenen Körpergewicht (Front Lever, Handstand, Muscle-up, Human Flag, Planche). Jeder Block dauert vier Wochen und wechselt jede Woche die Methode: Pausenwiederholungen, Zusatzgewicht, EMOM, Pyramide. Danach folgt eine Deload-Woche. Das Ziel ist Leistung, nicht Aussehen: Sprungkraft, Sprint und Kraft.",
+      "metrics": { "height": "Größe", "weight": "Gewicht", "frequency": "Einheiten" },
+      "units": { "height": "cm", "weight": "kg", "frequency": "pro Woche" },
+      "sessionsTitle": "Wochenplan",
       "dayLabel": "Tag",
       "focus": { "squat": "Fokus Kniebeuge", "hinge": "Fokus Kreuzheben", "unilateral": "Fokus unilateral" }
     },
     "acoustic": {
-      "title": "Audio & Video",
+      "title": "Musik & Video",
       "titleEmphasis": "Video",
-      "summary": "Die Akustikgitarre als Quelle: Audio bearbeitet in GarageBand und Logic Pro, dann mit dem Video zusammengeführt und in DaVinci Resolve geschnitten.",
-      "instrumentLabel": "Quelle",
+      "summary": "Ich mache alles selbst: Ich spiele und nehme Akustikgitarre auf, bearbeite das Audio in GarageBand und Logic Pro, drehe das Video und schneide es in DaVinci Resolve.",
+      "instrumentLabel": "Instrument",
       "instrument": "Akustikgitarre",
       "formatsLabel": "Software",
-      "pipelineTitle": "Produktionskette",
+      "pipelineTitle": "Ablauf",
       "pipeline": {
-        "capture": "Aufnahme — Akustikgitarre aufnehmen",
+        "capture": "Aufnahme — Akustikgitarre",
         "mix": "Audio — Bearbeitung in GarageBand und Logic Pro",
-        "edit": "Video — Schnitt in DaVinci Resolve mit dem finalen Audio"
+        "edit": "Video — Dreh, dann Schnitt in DaVinci Resolve mit dem finalen Audio"
       }
     }
   }
