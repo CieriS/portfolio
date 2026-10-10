@@ -344,6 +344,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 - CI dans `.github/workflows/ci.yml` : formatage, lint, typecheck, tests unitaires, build et tests end-to-end sur chaque pull request et à chaque push sur `development`. Ses deux jobs sont des contrôles obligatoires pour la fusion (voir [Méthode de travail](#méthode-de-travail)).
 - Dependabot (`.github/dependabot.yml`) ouvre chaque semaine une PR groupée vers `development` pour les dépendances npm et une pour les GitHub Actions. Les versions majeures d’`eslint` et de `typescript` sont ignorées tant que `eslint-config-next` ne les prend pas en charge.
 - `.mailmap` regroupe sous une seule identité les premiers commits signés avec l'email dérivé du nom d'hôte, sans réécrire l'historique.
+- Les source maps sont publiées en production aussi (`productionBrowserSourceMaps`) : le dépôt est public, elles n'exposent donc rien de nouveau et gardent lisibles les traces d'erreur et les audits de performance. Le navigateur ne les télécharge qu'avec les outils de développement ouverts.
 - `reactStrictMode` est activé, et l'indicateur de développement de Next est désactivé car il recouvrirait la navigation.
 
 ## Méthode de travail

@@ -342,6 +342,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 - CI in `.github/workflows/ci.yml`: formatting, lint, typecheck, unit tests, build and end-to-end tests on every pull request and on every push to `development`. Its two jobs are required checks for merging (see [Workflow](#workflow)).
 - Dependabot (`.github/dependabot.yml`) opens one grouped weekly PR against `development` for npm dependencies and one for GitHub Actions. Major bumps of `eslint` and `typescript` are ignored until `eslint-config-next` supports them.
 - `.mailmap` folds the early commits signed with a hostname-derived email into one identity, without rewriting history.
+- Source maps are published in production too (`productionBrowserSourceMaps`): the repository is public, so they expose nothing new and keep stack traces and performance audits readable. The browser fetches them only with devtools open.
 - `reactStrictMode` is on, and Next's dev indicator is off because it would sit on top of the navigation.
 
 ## Workflow

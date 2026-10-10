@@ -45,6 +45,9 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // The repository is public, so shipping source maps gives nothing away and makes production
+  // stack traces and performance audits readable. They are fetched only when devtools ask.
+  productionBrowserSourceMaps: true,
   // The dev badge sits bottom-left, exactly over the navigation.
   devIndicators: false,
   // Next blocks dev assets/HMR for any host other than localhost: without this, opening the

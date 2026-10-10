@@ -342,6 +342,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 - CI in `.github/workflows/ci.yml`: formattazione, lint, typecheck, test unitari, build e test end-to-end su ogni pull request e a ogni push su `development`. I suoi due job sono controlli obbligatori per il merge (vedi [Flusso di lavoro](#flusso-di-lavoro)).
 - Dependabot (`.github/dependabot.yml`) apre ogni settimana una PR raggruppata verso `development` per le dipendenze npm e una per le GitHub Actions. Le major di `eslint` e `typescript` sono ignorate finché `eslint-config-next` non le supporta.
 - `.mailmap` unifica sotto un'unica identità i commit iniziali firmati con l'email generata dal nome host, senza riscrivere la cronologia.
+- Source map pubblicate anche in produzione (`productionBrowserSourceMaps`): il repository è pubblico, quindi non espongono nulla di nuovo e rendono leggibili stack trace e audit di prestazioni. Il browser le scarica solo con gli strumenti di sviluppo aperti.
 - `reactStrictMode` attivo e indicatore di sviluppo di Next disattivato, perché si sovrapporrebbe alla navigazione.
 
 ## Flusso di lavoro
