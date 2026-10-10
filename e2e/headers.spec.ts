@@ -50,3 +50,25 @@ test('X-Powered-By is not advertised', async ({ request }) => {
   const response = await request.get(pathFor('en', 'hero'));
   expect(response.headers()['x-powered-by']).toBeUndefined();
 });
+
+test('first-party scripts ship with a source map', async ({ request }) => {
+  const html = await (await request.get(pathFor('en', 'hero'))).text();
+  // Next's polyfill bundle is the one exception: prebuilt third-party code, served with
+  // `nomodule` and therefore never loaded by a browser that supports modules.
+  const tags = [...html.matchAll(/<script\b[^>]*\bsrc="(\/_next\/static\/[^"]+\.js)"[^>]*>/g)];
+  const scripts = [...new Set(tags.filter((tag) => !/nomodule/i.test(tag[0])).map((tag) => tag[1]))];
+  expect(scripts.length).toBeGreaterThan(0);
+
+  let mapped = 0;
+  for (const src of scripts) {
+    const code = await (await request.get(src)).text();
+    const reference = /\/\/# sourceMappingURL=(\S+)\s*$/.exec(code)?.[1];
+    if (!reference) continue;
+    const map = await request.get(new URL(reference, `http://x${src}`).pathname);
+    expect(map.status(), `${src} points at a missing map`).toBe(200);
+    expect(Array.isArray((await map.json()).sources)).toBe(true);
+    mapped += 1;
+  }
+  // None of the chunks a modern browser loads may be left unreadable in production.
+  expect(mapped).toBe(scripts.length);
+});
