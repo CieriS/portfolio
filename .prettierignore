@@ -7,3 +7,4 @@ next-env.d.ts
 tsconfig.tsbuildinfo
 # Hand-aligned tables and trees read better than Prettier's rewrap.
 *.md
+.lighthouseci/
