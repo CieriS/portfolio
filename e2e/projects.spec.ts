@@ -99,3 +99,23 @@ test('every project starts collapsed and opens one at a time', async ({ page }) 
   await expect(buttons.nth(1)).toHaveAttribute('aria-expanded', 'true');
   await expect(buttons.nth(0)).toHaveAttribute('aria-expanded', 'false');
 });
+
+test('hovering a row moves only that row, and never dims the others', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'touch devices have no hover');
+  await gotoView(page, 'en', 'projects');
+
+  const rows = page.getByRole('main').locator('li:has(> h2)');
+  const title = (index: number) => rows.nth(index).locator('h2 button > span').nth(1);
+  await expect(rows).toHaveCount(shared.projects.length);
+
+  // An open project is the one being read: pointing at another row must leave it untouched.
+  await rows.nth(0).getByRole('button').click();
+  await rows.nth(1).getByRole('button').hover();
+  await expect(title(1)).not.toHaveCSS('translate', 'none');
+  await expect(title(0)).toHaveCSS('translate', 'none');
+
+  // Moving on, the row left behind settles back instead of staying half highlighted.
+  await rows.nth(0).getByRole('button').hover();
+  await expect(title(1)).toHaveCSS('translate', 'none');
+  for (const row of await rows.all()) await expect(row).toHaveCSS('opacity', '1');
+});
