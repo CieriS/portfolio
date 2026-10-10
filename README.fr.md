@@ -166,7 +166,7 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 - Chaque vue possède un mode dans `components/scene/modes.ts` (amplitude, fréquence, vitesse, flux, rayon et force du pointeur, présence, position de la caméra). Lors d'un changement de vue, les paramètres évoluent progressivement vers les nouvelles valeurs.
 - `PerformanceMonitor` ramène le device pixel ratio à 1 lorsque la fréquence d'images baisse et le remonte jusqu'à 1,75 lorsqu'elle s'améliore.
 - Avec `prefers-reduced-motion: reduce`, le canvas passe en `frameloop="demand"` et ne se redessine que lorsque la vue ou le thème change.
-- La palette suit le thème résolu (clair ou sombre) et porte aussi la taille des points : en thème clair le point est plus foncé et environ 25 % plus grand, car des points sombres sur fond clair paraissent plus fins que des points clairs sur fond sombre à contraste égal.
+- La palette suit le thème résolu (clair ou sombre) et porte aussi la taille des points : en thème clair le point est plus foncé et environ 25 % plus grand, car des points sombres sur fond clair paraissent plus fins que des points clairs sur fond sombre à contraste égal. Sur les vues internes, où le champ est atténué pour laisser lire le texte, le thème clair en conserve davantage (`presenceScale`), sans quoi il disparaîtrait presque sur le papier crème.
 
 ### Animations
 

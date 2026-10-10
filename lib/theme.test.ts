@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { SCENE_MODES } from '../components/scene/modes';
 import { THEME, type ThemeName } from './theme';
 
 const css = readFileSync(new URL('../app/globals.css', import.meta.url), 'utf8');
@@ -63,6 +64,37 @@ describe('light theme', () => {
 
   it('compensates the thinner look of dark points with a larger point', () => {
     expect(THEME.light.pointSize).toBeGreaterThan(THEME.dark.pointSize);
+  });
+});
+
+describe('scene presence behind the inner views', () => {
+  const mix = (from: string, to: string, t: number) =>
+    `#${rgb(from)
+      .map((channel, i) =>
+        Math.round(channel + (rgb(to)[i] - channel) * t)
+          .toString(16)
+          .padStart(2, '0'),
+      )
+      .join('')}`;
+  /** Contrast of a resting point against the paper once the view's presence is applied. */
+  const resting = (name: ThemeName, presence: number) => {
+    const { paper, dot, presenceScale } = THEME[name];
+    return contrast(mix(paper, dot, Math.min(1, presence * presenceScale)), paper);
+  };
+  const inner = Object.entries(SCENE_MODES).filter(([view]) => view !== 'hero');
+
+  it('leaves the dark theme as designed', () => {
+    expect(THEME.dark.presenceScale).toBe(1);
+  });
+
+  it.each(inner)('%s: the light field is at least as readable as the dark one, and never above text', (_view, mode) => {
+    expect(resting('light', mode.presence)).toBeGreaterThan(resting('dark', mode.presence));
+    expect(resting('light', mode.presence)).toBeGreaterThan(1.6);
+    expect(resting('light', mode.presence)).toBeLessThan(3);
+  });
+
+  it('never exceeds full presence, so the hero is unchanged', () => {
+    expect(resting('light', SCENE_MODES.hero.presence)).toBeCloseTo(contrast(THEME.light.dot, THEME.light.paper), 5);
   });
 });
 
