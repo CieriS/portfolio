@@ -77,6 +77,11 @@ test('the projects accordion always points aria-controls at a real element', asy
 
   const targetExists = () => page.evaluate((id) => !!document.getElementById(id!), panelId);
 
+  // Collapsed from the start, expanded on a click, collapsed again: the target is there throughout.
+  await expect(button).toHaveAttribute('aria-expanded', 'false');
+  expect(await targetExists()).toBe(true);
+
+  await button.click();
   await expect(button).toHaveAttribute('aria-expanded', 'true');
   expect(await targetExists()).toBe(true);
 
