@@ -117,7 +117,7 @@ GOOGLE_SITE_VERIFICATION=il-tuo-token
 
 | # | Vista (ID) | EN | IT | FR | DE | Contenuto |
 | --- | --- | --- | --- | --- | --- | --- |
-| 01 | Indice (`hero`) | `/en` | `/it` | `/fr` | `/de` | Nome in grande formato, ruolo, presentazione e invito a esplorare. |
+| 01 | Indice (`hero`) | `/en` | `/it` | `/fr` | `/de` | Nome in grande formato, ruolo, presentazione, un paragrafo con datore di lavoro, studi, stack e progetti (i fatti che un motore di ricerca deve leggere già nella home) e invito a esplorare. |
 | 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Dichiarazione d'intenti, quattro principi di ingegneria e contatti (GitHub, LinkedIn, GitLab). |
 | 03 | Esecuzione (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Timeline a tre corsie (industria, percorso accademico e studio autonomo del Data Engineering) su un asse temporale condiviso, con uptime in tempo reale e fasi con il relativo stack. |
 | 04 | Sistemi (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Progetti in un accordion: sintesi, scelte di ingegneria, architettura a livelli, legame con la Data Engineering e link al repository (o ai contatti, se il codice è privato). Oggi: yourFinance (privato) e aria-er (pubblico). |

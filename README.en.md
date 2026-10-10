@@ -117,7 +117,7 @@ GOOGLE_SITE_VERIFICATION=your-token
 
 | # | View (ID) | EN | IT | FR | DE | Content |
 | --- | --- | --- | --- | --- | --- | --- |
-| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Large-format name, role, introduction and a call to explore. |
+| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Large-format name, role, introduction, a paragraph naming employer, studies, stack and projects (the facts a search engine should read on the home page itself) and a call to explore. |
 | 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Mission statement, four engineering principles and contacts (GitHub, LinkedIn, GitLab). |
 | 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
 | 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Projects in an accordion: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
