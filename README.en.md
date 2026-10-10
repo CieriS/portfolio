@@ -129,6 +129,7 @@ Every URL is prerendered with its own content. An address that matches no view s
 - **Keyboard**: `1`–`5` jump to a view, `←` and `→` cycle through them. Keys are ignored while a modifier is held or when focus is in a text field.
 - **Touch**: a horizontal swipe (over 70 px and mostly horizontal) moves to the previous or next view.
 - **Arrows and counter** in the footer on medium and large screens.
+- **Scroll indicator**: scrollbars are hidden, so a view taller than the screen shows a thin line on the right edge with a thumb that follows the scroll. It appears only where there is content below the fold (measured with `ResizeObserver`; geometry in `lib/scroll.ts`) and is hidden from assistive technology.
 - **History**: every view change calls `pushState`, so the browser's back and forward buttons work. The document title follows the active view.
 - **Language**: the header shows only the active language; the trigger opens an animated menu (`listbox`) listing every language by its native name, usable with mouse, touch and keyboard (arrows, Home/End, Enter/Space, Esc, outside click; focus returns to the trigger). Picking a language replaces the URL with the translated slug (`replaceState`), updates `lang` and the title, and stores the `NEXT_LOCALE` cookie for one year, without navigating. The canvas and the active view stay intact.
 - **Language detection**: on `/` and on unprefixed paths, `proxy.ts` (the next-intl middleware) picks the language from the `NEXT_LOCALE` cookie or the `Accept-Language` header. The default language is English and the prefix is always present.
@@ -321,7 +322,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   ├── shared.json                  language-independent data
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, UI strings, SEO metadata
 ├── i18n/             routing.ts (languages) · request.ts (next-intl messages)
-├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, theme, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, format, hooks, cn
 │   └── content/      schema (zod) · validate (cross-checks)
 ├── store/            viewStore (per instance) · useSceneStore (scene, transient)
 ├── e2e/              Playwright suite · helpers.ts (locales, views, waits)

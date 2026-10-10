@@ -104,3 +104,31 @@ test.describe('reduced motion', () => {
     expect(visible).toBe(false);
   });
 });
+
+test('a view taller than the stage shows a scroll indicator that follows the scroll', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 600 });
+  await gotoView(page, 'en', 'discipline');
+  const section = page.locator('main > section');
+  const indicator = section.locator('[data-scroll-indicator]');
+  const thumb = indicator.locator('div div div');
+
+  // Decoration for sighted users: present, visible, and hidden from assistive technology.
+  await expect(indicator).toHaveAttribute('aria-hidden', 'true');
+  await expect(thumb).toBeVisible();
+  const top = async () => (await thumb.boundingBox())!.y;
+  const start = await top();
+
+  await section.evaluate((el) => el.scrollTo(0, el.scrollHeight));
+  await expect.poll(top).toBeGreaterThan(start + 20);
+  // At the end of the content the thumb rests on the end of its track.
+  const track = (await indicator.locator('div div').first().boundingBox())!;
+  const box = (await thumb.boundingBox())!;
+  expect(Math.abs(box.y + box.height - (track.y + track.height))).toBeLessThan(2);
+});
+
+test('a view that fits the stage shows no scroll indicator', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1300 });
+  await gotoView(page, 'en', 'hero');
+  await expect(page.locator('main > section')).toBeVisible();
+  await expect(page.locator('[data-scroll-indicator]')).toHaveCount(0);
+});

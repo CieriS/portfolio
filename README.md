@@ -129,6 +129,7 @@ Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corris
 - **Tastiera**: `1`–`5` saltano a una vista, `←` e `→` scorrono in modo circolare. I tasti vengono ignorati se è premuto un modificatore o se il focus è in un campo di testo.
 - **Touch**: uno swipe orizzontale (oltre 70 px e prevalentemente orizzontale) passa alla vista precedente o successiva.
 - **Frecce e contatore** nel footer, su schermi medi e grandi.
+- **Indicatore di scorrimento**: le scrollbar sono nascoste, quindi una vista più alta dello schermo mostra sul bordo destro una linea sottile con un cursore che segue lo scorrimento. Compare solo dove c'è contenuto sotto la piega (misurato con `ResizeObserver`; geometria in `lib/scroll.ts`) ed è nascosto alle tecnologie assistive.
 - **Cronologia**: ogni cambio vista esegue `pushState`, quindi avanti e indietro del browser funzionano. Il titolo del documento segue la vista attiva.
 - **Lingua**: l'header mostra solo la lingua attiva; il pulsante apre un menu animato (`listbox`) con tutte le lingue, ciascuna col proprio nome nativo, usabile con mouse, touch e tastiera (frecce, Home/End, Invio/Spazio, Esc, clic fuori; il focus torna al pulsante). Scegliere una lingua sostituisce l'URL con lo slug tradotto (`replaceState`), aggiorna `lang` e titolo e salva il cookie `NEXT_LOCALE` per un anno, senza navigare. Canvas e vista attiva restano intatti.
 - **Rilevamento lingua**: su `/` e sui percorsi senza prefisso, `proxy.ts` (middleware di next-intl) sceglie la lingua dal cookie `NEXT_LOCALE` o dall'header `Accept-Language`. La lingua predefinita è l'inglese e il prefisso è sempre presente.
@@ -321,7 +322,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 │   ├── shared.json                  dati indipendenti dalla lingua
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, stringhe UI, metadata SEO
 ├── i18n/             routing.ts (lingue) · request.ts (messages di next-intl)
-├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, theme, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, format, hooks, cn
 │   └── content/      schema (zod) · validate (verifiche incrociate)
 ├── store/            viewStore (per istanza) · useSceneStore (scena, transiente)
 ├── e2e/              suite Playwright · helpers.ts (lingue, viste, attese)
