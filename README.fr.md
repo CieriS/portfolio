@@ -41,6 +41,7 @@ Le site est disponible en anglais, en italien, en français et en allemand.
 - **SEO complet** : canonical, hreflang, Open Graph avec images par langue et par vue, JSON-LD, sitemap, robots, manifest et redirections 301 depuis les anciennes URL PHP.
 - **Accessibilité** : vrais liens, un seul `h1` par URL, attributs ARIA, focus visible et respect de `prefers-reduced-motion` en CSS, dans Framer Motion et dans la scène 3D.
 - **Contenus centralisés et validés** : un fichier JSON partagé plus un par langue, contrôlés par les types, un schéma zod et des contrôles croisés — un contenu incohérent fait échouer le build.
+- **CV sur demande** : le PDF est généré à chaque téléchargement à partir des mêmes contenus que le site, avec les coordonnées privées lues dans des variables d'environnement. Il n'est pas public : le visiteur laisse une adresse e-mail et reçoit un lien signé qui expire ; le propriétaire le télécharge tout de suite avec un mot de passe.
 
 ## Stack technique
 
@@ -56,6 +57,7 @@ Le site est disponible en anglais, en italien, en français et en allemand.
 | i18n | next-intl (`/en`, `/it`, `/fr`, détection de la langue via `proxy.ts`, changement de langue côté client) |
 | Données | `data/shared.json` + `data/locales/*.json` (source unique : contenus, textes de l'interface, métadonnées SEO), validés avec zod |
 | Qualité | ESLint 9 (`eslint-config-next` : core-web-vitals + typescript) · Prettier · `tsc --noEmit` · Vitest · Playwright |
+| PDF | pdf-lib (CV généré sur demande, côté serveur uniquement) |
 | Hébergement | Vercel |
 
 Les tests end-to-end tournent avec Playwright sur Chromium, WebKit et un profil mobile, contre le build de production. Les tests unitaires utilisent Vitest. GitHub Actions exécute formatage, lint, typecheck, tests unitaires, build et tests end-to-end sur chaque pull request.
@@ -105,6 +107,13 @@ Aucune variable n'est obligatoire : en local, le projet fonctionne sans configur
 | `GOOGLE_SITE_VERIFICATION` | Facultative. Jeton de validation Google Search Console, publié sous forme de balise meta. Accepte le jeton seul ou la balise `<meta>` entière copiée depuis la Search Console (`lib/verification.ts` en extrait le jeton) ; toute autre valeur fait échouer le build. Le site est statique : une modification de la variable ne prend effet qu'après un nouveau déploiement. |
 | `VERCEL_PROJECT_PRODUCTION_URL` | Définie par Vercel. Utilisée quand `SITE_URL` est absente. |
 | `VERCEL_ENV` | Définie par Vercel. Seul `production` est indexable : les prévisualisations reçoivent `noindex` et un `robots.txt` avec `Disallow: /`. Hors de Vercel, où la variable n'existe pas, le site est indexable. |
+| `CV_ADMIN_PASSWORD` | Facultative. Mot de passe du propriétaire : télécharge le CV sans autre étape. Au moins 16 caractères, sinon le téléchargement par mot de passe reste désactivé (le journal du serveur l'indique). |
+| `CV_LINK_SECRET` | Facultative. Secret (au moins 32 caractères, p. ex. `openssl rand -base64 48`) qui signe les liens envoyés par e-mail. Le changer invalide tous les liens déjà envoyés. |
+| `RESEND_API_KEY` · `CV_MAIL_FROM` | Facultatives. Clé d'API [Resend](https://resend.com) et expéditeur vérifié (p. ex. `Samuele Cieri <cv@domaine.fr>`). À fournir avec `CV_LINK_SECRET` : s'il en manque une des trois, les liens par e-mail restent désactivés. |
+| `CV_NOTIFY_EMAIL` | Facultative. Adresse qui reçoit un avis à chaque demande de CV, avec l'e-mail du demandeur. |
+| `CV_EMAIL` · `CV_PHONE` | Facultatives. Coordonnées imprimées uniquement dans le PDF : c'est pour elles que le CV n'est pas public, et elles ne sont pas dans le dépôt. |
+
+Les variables du CV sont lues par la route `/api/cv` au démarrage du serveur, pas au build : les pages statiques ne les contiennent jamais. Sans aucune d'elles, le site fonctionne et le formulaire répond « indisponible ».
 
 En local, vous pouvez créer un fichier `.env.local`, déjà ignoré par Git :
 
@@ -183,6 +192,15 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 - `lib/theme.ts` répète papier et encre pour ce qui ne peut pas lire les custom properties (scène WebGL, `theme-color`, manifest, images Open Graph). `lib/theme.test.ts` échoue si CSS et TypeScript divergent, si le texte passe sous les contrastes AA/AAA ou si les points de la scène deviennent invisibles ou plus forts que le texte.
 - Utilitaires personnalisés : `px-frame`, `no-scrollbar`, `fade-edges`, `link-underline`, `bg-dashed`.
 - Polices chargées avec `next/font` et `display: swap` : Geist pour le texte, Geist Mono pour les étiquettes, Instrument Serif en italique pour les mots mis en valeur.
+
+### CV sur demande
+
+- `app/api/cv/route.ts` est la seule partie rendue à chaque requête : tout le reste reste prérendu. C'est un adaptateur mince : il lit la configuration, appelle `lib/cv/service.ts` et traduit le résultat en réponse HTTP.
+- `lib/cv/service.ts` contient les deux règles, sans HTTP ni PDF : bon mot de passe → PDF ; e-mail valide → lien signé envoyé à cette adresse (et avis au propriétaire). Un champ caché (honeypot) arrête les robots sans le leur faire savoir.
+- `lib/cv/token.ts` : le lien transporte e-mail, langue et expiration (24 heures, `lib/cv/common.ts`), signés en HMAC-SHA256. Aucune base de données n'est nécessaire, et un lien modifié ou expiré est refusé. Les mots de passe sont comparés en temps constant.
+- `lib/cv/document.ts` construit le CV en données pures à partir de `data/shared.json` et de la langue choisie ; `lib/cv/pdf.ts` le met en page en A4 avec les polices standard (aucun fichier de police à distribuer). Les textes du PDF et de l'e-mail sont dans `data/cv.json`, hors des fichiers de langue envoyés au navigateur.
+- `lib/cv/mailer.ts` est le port de sortie pour l'e-mail, avec un adaptateur pour l'API REST de Resend via `fetch` (sans SDK). Un envoi par SMS serait un autre adaptateur.
+- Limites connues : pas de limite de requêtes par adresse, car il faudrait un état partagé ; sur Vercel, on configure une règle de rate limiting du Firewall sur `/api/cv`. Le mot de passe du propriétaire doit être long justement parce que les tentatives ne sont pas comptées.
 
 ## SEO
 
@@ -309,6 +327,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   │   └── [view]/
 │   │       ├── page.tsx             vues internes (slugs localisés)
 │   │       └── opengraph-image.tsx  image Open Graph par vue
+│   ├── api/cv/route.ts              téléchargement du CV (seule route dynamique)
 │   ├── globals.css                  tokens de couleur, utilitaires Tailwind, intro CSS
 │   ├── sitemap.ts · robots.ts · manifest.ts
 │   └── favicon.ico · icon.png · apple-icon.png
@@ -319,13 +338,15 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   ├── seo/          PortfolioPage (JSON-LD + application)
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
 │   │                 useViewNavigation, useViewUrlSync
-│   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, DisciplineView, atoms
+│   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, DisciplineView, CvRequest, atoms
 ├── data/
 │   ├── shared.json                  données indépendantes de la langue
+│   ├── cv.json                      textes du PDF et de l'e-mail du CV (serveur uniquement)
 │   └── locales/                     en.json · it.json · fr.json · de.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)
 ├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, format, hooks, cn
-│   └── content/      schema (zod) · validate (contrôles croisés)
+│   ├── content/      schema (zod) · validate (contrôles croisés)
+│   └── cv/           service, token, config, document, pdf, mailer, copy, common (CV sur demande)
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)
 ├── e2e/              suite Playwright · helpers.ts (langues, vues, attentes)
 ├── .github/workflows/ci.yml   lint, typecheck, build et tests sur chaque PR
@@ -367,7 +388,7 @@ Les issues et les pull requests sont rédigées en anglais ; les messages de com
 
 1. Sur vercel.com → **Add New → Project** → importez `CieriS/portfolio`. Next.js est détecté automatiquement (build `npm run build`, installation `npm install`).
 2. **Settings → Git → Production Branch** : `development`.
-3. Variables facultatives dans **Settings → Environment Variables** : `GOOGLE_SITE_VERIFICATION` et `SITE_URL` (uniquement avec un domaine personnalisé).
+3. Variables facultatives dans **Settings → Environment Variables** : `GOOGLE_SITE_VERIFICATION` et `SITE_URL` (uniquement avec un domaine personnalisé). Pour le CV : `CV_ADMIN_PASSWORD`, `CV_LINK_SECRET`, `RESEND_API_KEY`, `CV_MAIL_FROM`, `CV_NOTIFY_EMAIL`, `CV_EMAIL`, `CV_PHONE` (voir [Variables d'environnement](#variables-denvironnement)).
 4. Le site est en ligne sur `https://<projet>.vercel.app`. Chaque fusion dans `development` est déployée automatiquement ; les autres branches et les PR génèrent des prévisualisations non indexables.
 
 Sinon, depuis le terminal : `npx vercel login`, puis `npx vercel` (prévisualisation) et `npx vercel --prod` (production).
