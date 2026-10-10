@@ -108,3 +108,4 @@ $RECYCLE.BIN/
 # Linux
 .directory
 .Trash-*
+.lighthouseci/

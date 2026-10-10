@@ -60,3 +60,29 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 14
+
+  lighthouse:
+    name: Lighthouse budget
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          # Canonical URLs are built from SITE_URL; match the port lighthouserc.json serves on.
+          SITE_URL: http://localhost:3220
+
+      # Three mobile runs per page against the production build; lighthouserc.json holds the
+      # budget. Pinned here rather than installed, to keep it out of every other job's install.
+      - run: npx --yes @lhci/cli@0.15.1 autorun
+
+      - if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
+          retention-days: 14
