@@ -8,8 +8,8 @@ const copy = locales.en.projects;
 test('a private project shows its highlights and never links to a repository', async ({ page }) => {
   await gotoView(page, 'en', 'projects');
 
-  // The first project starts expanded.
   const panel = page.locator('#project-yourfinance');
+  await page.getByRole('button', { name: /yourFinance/ }).click();
   await expect(panel.getByRole('heading', { name: copy.labels.highlights })).toBeVisible();
   await expect(panel.getByRole('listitem').filter({ hasText: copy.items.yourfinance.highlights[0] })).toBeVisible();
 
@@ -19,6 +19,7 @@ test('a private project shows its highlights and never links to a repository', a
 
 test('the private source link swaps to the contacts view in place', async ({ page }) => {
   await gotoView(page, 'en', 'projects');
+  await page.getByRole('button', { name: /yourFinance/ }).click();
   await page.locator('#project-yourfinance').getByRole('link', { name: copy.labels.private }).click();
 
   await expectView(page, 'en', 'identity');
@@ -83,4 +84,18 @@ test('a collapsed project is inert until it is opened', async ({ page }) => {
   await page.getByRole('button', { name: /aria-er/ }).click();
   await expect(panel).toHaveAttribute('inert', '');
   await expect(panel).toHaveCSS('height', '0px');
+});
+
+test('every project starts collapsed and opens one at a time', async ({ page }) => {
+  await gotoView(page, 'en', 'projects');
+  const buttons = page.locator('main button[aria-expanded]');
+  await expect(buttons).toHaveCount(shared.projects.length);
+  for (const button of await buttons.all()) await expect(button).toHaveAttribute('aria-expanded', 'false');
+  for (const project of shared.projects) await expect(page.locator(`#project-${project.id}`)).toHaveAttribute('inert', '');
+
+  await buttons.nth(0).click();
+  await expect(buttons.nth(0)).toHaveAttribute('aria-expanded', 'true');
+  await buttons.nth(1).click();
+  await expect(buttons.nth(1)).toHaveAttribute('aria-expanded', 'true');
+  await expect(buttons.nth(0)).toHaveAttribute('aria-expanded', 'false');
 });

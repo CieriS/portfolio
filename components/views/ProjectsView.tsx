@@ -14,7 +14,8 @@ type ProjectsCopy = PortfolioView['content']['projects'];
 export function ProjectsView({ data }: ViewProps) {
   const copy = data.content.projects;
   const { projects } = data.shared;
-  const [openId, setOpenId] = useState<string | null>(projects[0]?.id ?? null);
+  // Every project starts collapsed: the list reads as an index, and a panel opens on request.
+  const [openId, setOpenId] = useState<string | null>(null);
 
   return (
     <div className="px-frame pt-10 pb-28 md:pt-16">
