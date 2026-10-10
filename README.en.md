@@ -4,8 +4,6 @@
 
 Personal portfolio of **Samuele Cieri**, a Software Developer transitioning to Data Engineering. It is a minimal Single Page Application built with Next.js: the layout is locked to `100dvh`, views swap without reloading the page, and a 3D particle field keeps running in the background. Every view still has its own prerendered, indexable URL, in English, Italian, French and German.
 
-The `next-migration` branch replaces the previous PHP site, which is kept in [`legacy/`](legacy/).
-
 ## Contents
 
 - [Features](#features)
@@ -24,8 +22,9 @@ The `next-migration` branch replaces the previous PHP site, which is kept in [`l
 - [Extending the project](#extending-the-project)
 - [Project structure](#project-structure)
 - [Code quality](#code-quality)
+- [Workflow](#workflow)
 - [Deploying to Vercel](#deploying-to-vercel)
-- [Legacy site](#legacy-site)
+- [Previous site](#previous-site)
 - [Troubleshooting](#troubleshooting)
 - [Contact](#contact)
 - [License](#license)
@@ -69,7 +68,6 @@ End-to-end tests run with Playwright on Chromium, WebKit and a mobile profile, a
 ```bash
 git clone https://github.com/CieriS/portfolio.git
 cd portfolio
-git checkout next-migration
 npm install
 npm run dev
 ```
@@ -85,7 +83,7 @@ To try it on a phone on the same network, open the *Network* address printed by 
 | `npm run dev` | Development server with hot reload at http://localhost:3000 |
 | `npm run build` | Production build: prerenders pages, Open Graph images, sitemap and robots |
 | `npm start` | Serves the production build locally |
-| `npm run lint` | ESLint across the project (`legacy/` and build output excluded) |
+| `npm run lint` | ESLint across the project (build output excluded) |
 | `npm run format` | Formats the project with Prettier (`.prettierrc.json`, with Tailwind class sorting) |
 | `npm run format:check` | Checks formatting without writing, as CI does |
 | `npm run typecheck` | Generates route types (`next typegen`) and type-checks with `tsc --noEmit` |
@@ -185,9 +183,9 @@ Every URL is prerendered with its own content. An address that matches no view s
 ## SEO
 
 - **Per-view metadata** (`lib/seo.ts`): title, description, canonical, hreflang (`en`, `it`, `fr`, `de`, `x-default`), Open Graph `profile` and a `summary_large_image` Twitter card. For the index, `x-default` points to `/`, which detects the language; for the other views it points to the English version.
-- **Open Graph images** at 1200 × 630, generated at build time for every language and view (`opengraph-image.tsx`, `lib/og.tsx`), featuring the legacy site's icon.
+- **Open Graph images** at 1200 × 630, generated at build time for every language and view (`opengraph-image.tsx`, `lib/og.tsx`), featuring the site's long-standing icon.
 - **JSON-LD** `@graph` (`lib/structuredData.ts`): `WebSite`, `Person` (with `alternateName`, `address`, `knowsAbout` and `sameAs`; `url` is the site root in every language), `ProfilePage`, `BreadcrumbList` on inner views and an `ItemList` of `SoftwareSourceCode` on the projects view.
-- **`sitemap.xml`** with hreflang alternates, **`robots.txt`**, **`manifest.webmanifest`**, plus a favicon and icons derived from the legacy `iconRed.ico`.
+- **`sitemap.xml`** with hreflang alternates, **`robots.txt`**, **`manifest.webmanifest`**, plus a favicon and icons derived from the previous site's icon.
 - **Controlled indexing**: only production is indexable (see [Environment variables](#environment-variables)). The `robots` meta is set per page, not in the layout, so the 404 carries only Next's `noindex`.
 - **Project content always in the HTML**: collapsed accordion panels stay mounted (zero height, `inert`), so every project's copy and repository link is in the prerendered page without any interaction.
 - **Page structure**: a single `h1` per URL, real links in the navigation, `rel="me"` on social profiles, `X-Powered-By` header disabled.
@@ -327,7 +325,6 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 ├── store/            viewStore (per instance) · useSceneStore (scene, transient)
 ├── e2e/              Playwright suite · helpers.ts (locales, views, waits)
 ├── .github/workflows/ci.yml   lint, typecheck, build and tests on every PR
-├── legacy/           previous PHP site (not served)
 ├── proxy.ts          language detection (next-intl middleware)
 ├── next.config.ts    next-intl plugin, 301 redirects, allowed dev origins
 ├── eslint.config.mjs · postcss.config.mjs · tsconfig.json · playwright.config.ts
@@ -342,19 +339,29 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 - `npm run typecheck` first runs `next typegen`, which generates the global route types (`PageProps`, `LayoutProps`).
 - Vitest unit tests next to the modules (`lib/**/*.test.ts`): slugs and URLs, timeline arithmetic (segments, gaps, phases, axis), formatting, the content schema and cross-checks, including the real files.
 - End-to-end tests in `e2e/` with Playwright, run against the production build on Chromium, WebKit and a mobile profile. They cover every language's URLs and metadata, navigation and history, the language switch, SEO, security headers, accessibility (axe) and the site's resilience to a WebGL failure.
-- CI in `.github/workflows/ci.yml`: formatting, lint, typecheck, unit tests, build and end-to-end tests on every pull request.
+- CI in `.github/workflows/ci.yml`: formatting, lint, typecheck, unit tests, build and end-to-end tests on every pull request and on every push to `development`. Its two jobs are required checks for merging (see [Workflow](#workflow)).
 - Dependabot (`.github/dependabot.yml`) opens one grouped weekly PR against `development` for npm dependencies and one for GitHub Actions. Major bumps of `eslint` and `typescript` are ignored until `eslint-config-next` supports them.
 - `.mailmap` folds the early commits signed with a hostname-derived email into one identity, without rewriting history.
-- `legacy/` is excluded from TypeScript and ESLint.
 - `reactStrictMode` is on, and Next's dev indicator is off because it would sit on top of the navigation.
+
+## Workflow
+
+`development` is the production branch and it is protected: changes reach it only through a pull request.
+
+1. One branch per piece of work, created from `development`: `features/<descriptive-name>`.
+2. Before pushing, locally: `npm run format:check && npm run lint && npm run typecheck && npm run test:unit && npm test`.
+3. Push the branch and open a pull request against `development`. The PR triggers CI (the same commands) and a non-indexable preview deployment on Vercel.
+4. Merging requires both CI checks to pass, and it is the production deployment. "Create a merge commit" is used, so the history keeps the branch's commits.
+5. The branch is deleted after the merge.
+
+Issues and pull requests are written in English; commit messages in Italian.
 
 ## Deploying to Vercel
 
-1. Push the branch to GitHub: `git push -u origin next-migration`.
-2. On vercel.com → **Add New → Project** → import `CieriS/portfolio`. Next.js is detected automatically (build `npm run build`, install `npm install`).
-3. **Settings → Git → Production Branch**: `next-migration` (or `development` after merging).
-4. Optional variables in **Settings → Environment Variables**: `GOOGLE_SITE_VERIFICATION` and `SITE_URL` (custom domain only).
-5. Deploy: the site is live at `https://<project>.vercel.app`. Every push to the production branch redeploys automatically; other branches and PRs produce non-indexable previews.
+1. On vercel.com → **Add New → Project** → import `CieriS/portfolio`. Next.js is detected automatically (build `npm run build`, install `npm install`).
+2. **Settings → Git → Production Branch**: `development`.
+3. Optional variables in **Settings → Environment Variables**: `GOOGLE_SITE_VERIFICATION` and `SITE_URL` (custom domain only).
+4. The site is live at `https://<project>.vercel.app`. Every merge into `development` is deployed automatically; other branches and PRs produce non-indexable previews.
 
 Alternatively, from the terminal: `npx vercel login`, then `npx vercel` (preview) and `npx vercel --prod` (production).
 
@@ -365,15 +372,12 @@ npm run build
 npm start
 ```
 
-## Legacy site
+## Previous site
 
-`legacy/` holds the previous portfolio, hosted on Altervista: PHP and MySQL, HTML, CSS and JavaScript, Font Awesome 6.4 and a collection of projects in `projDev/`. Its original README is [`legacy/readMe.md`](legacy/readMe.md).
+The portfolio used to be a PHP and MySQL site hosted on Altervista. Its code is no longer in this repository (it remains in the git history); what is left of that site today:
 
-- Next.js does not serve it: the project has no `public/` folder, so no file in `legacy/` is reachable from the published site.
-- It is excluded from lint and type-checking.
-- Its main URLs are 301-redirected (see [SEO](#seo)).
-- `legacy/.htaccess` 301-redirects the whole Altervista domain to Vercel, preserving the path: replace `<progetto>.vercel.app` with the production URL and upload the file to the Altervista site root.
-- The new site's icons derive from `legacy/img/icon/iconRed.ico`.
+- the 301 redirects from its main URLs to the new views (see [SEO](#seo));
+- the icon, from which this site's favicon and icons derive.
 
 ## Troubleshooting
 
@@ -393,4 +397,4 @@ npm start
 
 ## License
 
-Code and content are the author's property, all rights reserved: see [`LICENSE`](LICENSE). Font Awesome Free, in `legacy/`, is distributed under its own license ([`LICENSE.txt`](legacy/fontawesome-free-6.4.0-web/LICENSE.txt)).
+Code and content are the author's property, all rights reserved: see [`LICENSE`](LICENSE).
