@@ -64,9 +64,9 @@
     "cta": "Explore"
   },
   "identity": {
-    "kicker": "Operating principle",
-    "statement": "Software is an instrument. Every language, schema and abstraction is chosen for its measurable contribution to an objective — never by habit or taste.",
-    "statementEmphasis": "instrument",
+    "title": "Software is an instrument.",
+    "titleEmphasis": "instrument",
+    "subtitle": "Every language, schema and abstraction is chosen for its measurable contribution to an objective — never by habit or taste.",
     "principlesTitle": "Principles",
     "principles": [
       {

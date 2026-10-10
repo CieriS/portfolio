@@ -64,9 +64,9 @@
     "cta": "Esplora"
   },
   "identity": {
-    "kicker": "Principio operativo",
-    "statement": "Il software è uno strumento. Ogni linguaggio, schema e astrazione è scelto per il suo contributo misurabile a un obiettivo — mai per abitudine o gusto.",
-    "statementEmphasis": "strumento",
+    "title": "Il software è uno strumento.",
+    "titleEmphasis": "strumento",
+    "subtitle": "Ogni linguaggio, schema e astrazione è scelto per il suo contributo misurabile a un obiettivo — mai per abitudine o gusto.",
     "principlesTitle": "Principi",
     "principles": [
       {

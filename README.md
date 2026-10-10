@@ -118,7 +118,7 @@ GOOGLE_SITE_VERIFICATION=il-tuo-token
 | # | Vista (ID) | EN | IT | FR | DE | Contenuto |
 | --- | --- | --- | --- | --- | --- | --- |
 | 01 | Indice (`hero`) | `/en` | `/it` | `/fr` | `/de` | Nome in grande formato, ruolo, presentazione, un paragrafo con datore di lavoro, studi, stack e progetti (i fatti che un motore di ricerca deve leggere già nella home) e invito a esplorare. |
-| 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Dichiarazione d'intenti, quattro principi di ingegneria e contatti (GitHub, LinkedIn, GitLab). |
+| 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Titolo che è la prima frase della dichiarazione d'intenti (il resto ne è il sottotitolo), quattro principi di ingegneria e contatti (GitHub, LinkedIn, GitLab). |
 | 03 | Esecuzione (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Timeline a tre corsie (industria, percorso accademico e studio autonomo del Data Engineering) su un asse temporale condiviso, con uptime in tempo reale e fasi con il relativo stack. |
 | 04 | Sistemi (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Progetti in un accordion: sintesi, scelte di ingegneria, architettura a livelli, legame con la Data Engineering e link al repository (o ai contatti, se il codice è privato). Oggi: yourFinance (privato) e aria-er (pubblico). |
 | 05 | Ottimizzazione (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | Il metodo oltre il codice: programma di calisthenics (metriche e sessioni) e meccanica del suono (chitarra acustica, formati lossless, pipeline audio). |
@@ -227,12 +227,12 @@ I contenuti stanno in [`data/shared.json`](data/shared.json) e in un file per li
 
 ```
 data/shared.json        dati indipendenti dalla lingua
-├── name, handle
+├── name, handle, alternateNames, address
 ├── contacts[]          id, label, handle, url
 ├── timeline.threads[]  corsie: id, kind (work | education), entity, segments[], fasi
 ├── projects[]          id, name, source, stack, layers
 └── discipline          biological (metriche, sessioni) · acoustic (formati, pipeline)
-data/locales/<lingua>.json   en · it · fr
+data/locales/<lingua>.json   en · it · fr · de
 ├── ui                  messages di next-intl: meta (SEO), notFound, nav, theme, locale, shell
 ├── hero
 ├── identity
