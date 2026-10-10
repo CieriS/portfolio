@@ -59,6 +59,7 @@
     "role": "Software Developer",
     "transition": "In transizione verso il Data Engineering",
     "lead": "Costruisco il percorso dalle interfacce ai sistemi: backend tipizzati, storage relazionale e pipeline che muovono dati con uno scopo.",
+    "detail": "Dal 2022 sviluppo in Tas con Angular e TypeScript e studio Ingegneria Informatica all'Università di Bologna. Nei progetti personali uso Rust, PostgreSQL e dbt: yourFinance, piattaforma di finanza personale, e aria-er, pipeline dati sulla qualità dell'aria.",
     "hint": "Muovi il cursore — ogni nodo è un'unità di calcolo",
     "cta": "Esplora"
   },

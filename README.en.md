@@ -117,7 +117,7 @@ GOOGLE_SITE_VERIFICATION=your-token
 
 | # | View (ID) | EN | IT | FR | DE | Content |
 | --- | --- | --- | --- | --- | --- | --- |
-| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Large-format name, role, introduction and a call to explore. |
+| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Large-format name, role, introduction, a paragraph naming employer, studies, stack and projects (the facts a search engine should read on the home page itself) and a call to explore. |
 | 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Mission statement, four engineering principles and contacts (GitHub, LinkedIn, GitLab). |
 | 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
 | 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Projects in an accordion: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
@@ -198,7 +198,14 @@ Every URL is prerendered with its own content. An address that matches no view s
 | `/projDev/*` | `/it/sistemi` |
 | `/projProd/*` | `/it/sistemi` |
 
-After the first deploy: Google Search Console → add a URL-prefix property → submit `/sitemap.xml`.
+### Google Search Console
+
+1. Add a "URL prefix" property and pick the HTML tag verification.
+2. Set `GOOGLE_SITE_VERIFICATION` on Vercel (token or whole tag) and **redeploy**: the variable is read at build time. Check the result with `curl -s https://<site>/en | grep google-site-verification`, then press "Verify".
+3. Under "Sitemaps" submit `sitemap.xml`. On a new property the status "Couldn't fetch" with an empty "Last read" only means Google has not read it yet: it can take a couple of days.
+4. Manual indexing requests are limited to a few per day. Spend them on the URLs with a language (`/en`, `/it`, `/en/systems`, …): the root `/` answers with a redirect and is never indexed as a page.
+
+With a custom domain, prefer a "Domain" property verified through DNS.
 
 ## Accessibility
 

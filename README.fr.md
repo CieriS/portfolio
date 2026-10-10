@@ -119,7 +119,7 @@ GOOGLE_SITE_VERIFICATION=votre-jeton
 
 | # | Vue (ID) | EN | IT | FR | DE | Contenu |
 | --- | --- | --- | --- | --- | --- | --- |
-| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Nom en très grand format, rôle, présentation et invitation à explorer. |
+| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Nom en très grand format, rôle, présentation, un paragraphe citant employeur, études, stack et projets (les faits qu'un moteur de recherche doit lire dès la page d'accueil) et invitation à explorer. |
 | 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Déclaration d'intention, quatre principes d'ingénierie et contacts (GitHub, LinkedIn, GitLab). |
 | 03 | Exécution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Frise chronologique à trois couloirs (industrie, parcours universitaire et étude en autonomie du Data Engineering) sur un axe temporel commun, avec un compteur d'uptime en temps réel et des phases accompagnées de leur stack. |
 | 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Projets présentés en accordéon : résumé, choix d'ingénierie, architecture en couches, lien avec la Data Engineering et lien vers le dépôt (ou vers les contacts si le code est privé). Actuellement : yourFinance (privé) et aria-er (public). |
@@ -200,7 +200,14 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 | `/projDev/*` | `/it/sistemi` |
 | `/projProd/*` | `/it/sistemi` |
 
-Après le premier déploiement : Google Search Console → ajouter une propriété de type préfixe d'URL → envoyer `/sitemap.xml`.
+### Google Search Console
+
+1. Ajoutez une propriété de type « Préfixe d'URL » et choisissez la validation par balise HTML.
+2. Définissez `GOOGLE_SITE_VERIFICATION` sur Vercel (jeton ou balise entière) et **redéployez** : la variable est lue au build. Vérifiez le résultat avec `curl -s https://<site>/en | grep google-site-verification`, puis cliquez sur « Valider ».
+3. Dans « Sitemaps », envoyez `sitemap.xml`. Sur une propriété neuve, l'état « Impossible de récupérer » avec « Dernière lecture » vide signifie seulement que Google ne l'a pas encore lu : cela peut prendre quelques jours.
+4. Les demandes d'indexation manuelles sont limitées à quelques-unes par jour. Réservez-les aux URL avec la langue (`/en`, `/it`, `/en/systems`, …) : la racine `/` répond par une redirection et n'est jamais indexée comme page.
+
+Avec un domaine personnalisé, préférez une propriété de type « Domaine », validée par DNS.
 
 ## Accessibilité
 

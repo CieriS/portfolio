@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { LOCALES } from '../lib/routes';
-import { shared } from './content';
+import { locales, shared } from './content';
 import { ALL_PAGES, pathFor } from './helpers';
 
 async function jsonLd(page: import('@playwright/test').Page) {
@@ -28,6 +28,19 @@ test('the index carries WebSite, Person and ProfilePage', async ({ page }) => {
     addressLocality: shared.address.locality,
     addressCountry: shared.address.country,
   });
+});
+
+test('the home page states employer, studies and projects in its served HTML', async ({ request }) => {
+  // No browser: the page that ranks for the name must carry these facts as plain text.
+  const decode = (html: string) => html.replace(/&#x27;/g, "'").replace(/&amp;/g, '&');
+
+  for (const locale of LOCALES) {
+    const html = decode(await (await request.get(pathFor(locale, 'hero'))).text());
+    const { lead, detail } = locales[locale].hero;
+    expect(html).toContain(lead);
+    expect(html).toContain(detail);
+    for (const fact of ['Tas', 'Angular', 'Rust', 'PostgreSQL', 'yourFinance', 'aria-er']) expect(detail).toContain(fact);
+  }
 });
 
 test('the Person keeps one url in every language', async ({ page, baseURL }) => {

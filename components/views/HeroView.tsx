@@ -30,13 +30,16 @@ export function HeroView({ data }: ViewProps) {
           <br />
           <span className="text-muted">{copy.transition}</span>
         </motion.p>
-        <motion.p
+        {/* The lead keeps the voice; the detail names employer, studies, stack and projects, so the
+            page that ranks for the name also says in plain text what the others elaborate. */}
+        <motion.div
           variants={fade}
-          className="intro-fade max-w-md text-[15px] leading-relaxed text-muted md:col-span-4"
+          className="intro-fade max-w-md space-y-3 text-[15px] leading-relaxed text-muted md:col-span-4"
           style={introStyle(4)}
         >
-          {copy.lead}
-        </motion.p>
+          <p>{copy.lead}</p>
+          <p>{copy.detail}</p>
+        </motion.div>
         <motion.div variants={fade} className="intro-fade md:col-span-2 md:justify-self-end" style={introStyle(5)}>
           <ViewLink view="identity" className="group inline-flex items-center gap-4 text-[15px] select-none">
             <span className="link-underline">{copy.cta}</span>
