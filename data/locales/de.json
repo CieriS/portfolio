@@ -64,9 +64,9 @@
     "cta": "Erkunden"
   },
   "identity": {
-    "kicker": "Arbeitsprinzip",
-    "statement": "Software ist ein Instrument. Jede Sprache, jedes Schema und jede Abstraktion wird nach ihrem messbaren Beitrag zu einem Ziel gewählt — nie aus Gewohnheit oder Vorliebe.",
-    "statementEmphasis": "Instrument",
+    "title": "Software ist ein Instrument.",
+    "titleEmphasis": "Instrument",
+    "subtitle": "Jede Sprache, jedes Schema und jede Abstraktion wird nach ihrem messbaren Beitrag zu einem Ziel gewählt — nie aus Gewohnheit oder Vorliebe.",
     "principlesTitle": "Prinzipien",
     "principles": [
       {

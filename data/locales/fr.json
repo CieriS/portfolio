@@ -64,9 +64,9 @@
     "cta": "Explorer"
   },
   "identity": {
-    "kicker": "Principe opérationnel",
-    "statement": "Le logiciel est un instrument. Chaque langage, schéma et abstraction est choisi pour sa contribution mesurable à un objectif — jamais par habitude ou par goût.",
-    "statementEmphasis": "instrument",
+    "title": "Le logiciel est un instrument.",
+    "titleEmphasis": "instrument",
+    "subtitle": "Chaque langage, schéma et abstraction est choisi pour sa contribution mesurable à un objectif — jamais par habitude ou par goût.",
     "principlesTitle": "Principes",
     "principles": [
       {

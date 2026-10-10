@@ -1,9 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { fade, Line } from '@/components/motion/Reveal';
+import { fade } from '@/components/motion/Reveal';
 import { pad } from '@/lib/format';
-import { Emphasis, Meta, type ViewProps } from './atoms';
+import { Meta, SectionHead, type ViewProps } from './atoms';
 
 export function IdentityView({ data }: ViewProps) {
   const copy = data.content.identity;
@@ -12,23 +12,9 @@ export function IdentityView({ data }: ViewProps) {
 
   return (
     <div className="px-frame pt-10 pb-28 md:pt-16">
-      <div className="grid gap-y-8 md:grid-cols-12 md:gap-x-6">
-        <motion.div variants={fade} className="flex gap-[0.5em] md:col-span-3">
-          {/* The index is decoration: keep it out of the page's h1. */}
-          <Meta as="span">(02)</Meta>
-          <Meta as="h1">{label}</Meta>
-        </motion.div>
-        <div className="md:col-span-9">
-          <motion.div variants={fade}>
-            <Meta>{copy.kicker}</Meta>
-          </motion.div>
-          <p className="mt-6 text-[clamp(1.9rem,4.2vw,4.25rem)] leading-[1.05] tracking-[-0.04em] text-balance">
-            <Line>
-              <Emphasis text={copy.statement} emphasis={copy.statementEmphasis} />
-            </Line>
-          </p>
-        </div>
-      </div>
+      {/* The title is the statement's own first sentence, so this view opens like the others
+          without a generic heading in front of the manifesto. */}
+      <SectionHead index={2} label={label} title={copy.title} emphasis={copy.titleEmphasis} subtitle={copy.subtitle} />
 
       <div className="mt-24 grid gap-y-10 md:mt-36 md:grid-cols-12 md:gap-x-6">
         <motion.div variants={fade} className="md:col-span-3">

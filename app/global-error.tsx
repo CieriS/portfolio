@@ -2,6 +2,7 @@
 
 import { routing } from '@/i18n/routing';
 import { getPortfolioBundle } from '@/lib/portfolio';
+import { THEME } from '@/lib/theme';
 
 /**
  * Last resort: this replaces the root layout, so it has to ship its own <html> and <body>
@@ -22,8 +23,8 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
           justifyContent: 'center',
           gap: '1.5rem',
           padding: '2rem',
-          background: '#0b0b0b',
-          color: '#ecebe7',
+          background: THEME.dark.paper,
+          color: THEME.dark.ink,
           font: '15px/1.5 ui-sans-serif, system-ui, sans-serif',
         }}
       >

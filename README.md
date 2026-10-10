@@ -118,7 +118,7 @@ GOOGLE_SITE_VERIFICATION=il-tuo-token
 | # | Vista (ID) | EN | IT | FR | DE | Contenuto |
 | --- | --- | --- | --- | --- | --- | --- |
 | 01 | Indice (`hero`) | `/en` | `/it` | `/fr` | `/de` | Nome in grande formato, ruolo, presentazione, un paragrafo con datore di lavoro, studi, stack e progetti (i fatti che un motore di ricerca deve leggere già nella home) e invito a esplorare. |
-| 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Dichiarazione d'intenti, quattro principi di ingegneria e contatti (GitHub, LinkedIn, GitLab). |
+| 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Titolo che è la prima frase della dichiarazione d'intenti (il resto ne è il sottotitolo), quattro principi di ingegneria e contatti (GitHub, LinkedIn, GitLab). |
 | 03 | Esecuzione (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Timeline a tre corsie (industria, percorso accademico e studio autonomo del Data Engineering) su un asse temporale condiviso, con uptime in tempo reale e fasi con il relativo stack. |
 | 04 | Sistemi (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Progetti in un accordion: sintesi, scelte di ingegneria, architettura a livelli, legame con la Data Engineering e link al repository (o ai contatti, se il codice è privato). Oggi: yourFinance (privato) e aria-er (pubblico). |
 | 05 | Ottimizzazione (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | Il metodo oltre il codice: programma di calisthenics (metriche e sessioni) e meccanica del suono (chitarra acustica, formati lossless, pipeline audio). |
@@ -166,7 +166,7 @@ Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corris
 - Ogni vista ha una modalità in `components/scene/modes.ts` (ampiezza, frequenza, velocità, flusso, raggio e forza del puntatore, presenza, posizione della camera). Al cambio vista i parametri vengono interpolati in modo graduale.
 - `PerformanceMonitor` riduce il device pixel ratio a 1 quando il frame rate cala e lo riporta fino a 1,75 quando migliora.
 - Con `prefers-reduced-motion: reduce` il canvas passa a `frameloop="demand"` e ridisegna solo quando cambiano vista o tema.
-- La palette segue il tema risolto (chiaro o scuro).
+- La palette segue il tema risolto (chiaro o scuro) e porta con sé anche la dimensione dei punti: nel tema chiaro il punto è più scuro e più grande del 25% circa, perché punti scuri su fondo chiaro appaiono più sottili di punti chiari su fondo scuro a parità di contrasto.
 
 ### Motion
 
@@ -177,6 +177,8 @@ Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corris
 ### Tema e tipografia
 
 - Token CSS in `app/globals.css` (`--paper`, `--ink`, `--muted`, `--line`, `--accent`), ridefiniti sotto `.dark` ed esposti a Tailwind v4 con `@theme inline`.
+- Il tema chiaro è una carta color panna (`#ede7db`), non un bianco da schermo: meno abbagliante, e lascia leggere il campo di punti sullo sfondo.
+- `lib/theme.ts` ripete carta e inchiostro per ciò che non può leggere le custom property (scena WebGL, `theme-color`, manifest, immagini Open Graph). `lib/theme.test.ts` fa fallire i test se CSS e TypeScript divergono, se il testo scende sotto i contrasti AA/AAA o se i punti della scena diventano invisibili o più forti del testo.
 - Utility personalizzate: `px-frame`, `no-scrollbar`, `fade-edges`, `link-underline`, `bg-dashed`.
 - Font caricati con `next/font` e `display: swap`: Geist per il testo, Geist Mono per le etichette, Instrument Serif corsivo per le parole in enfasi.
 
@@ -225,12 +227,12 @@ I contenuti stanno in [`data/shared.json`](data/shared.json) e in un file per li
 
 ```
 data/shared.json        dati indipendenti dalla lingua
-├── name, handle
+├── name, handle, alternateNames, address
 ├── contacts[]          id, label, handle, url
 ├── timeline.threads[]  corsie: id, kind (work | education), entity, segments[], fasi
 ├── projects[]          id, name, source, stack, layers
 └── discipline          biological (metriche, sessioni) · acoustic (formati, pipeline)
-data/locales/<lingua>.json   en · it · fr
+data/locales/<lingua>.json   en · it · fr · de
 ├── ui                  messages di next-intl: meta (SEO), notFound, nav, theme, locale, shell
 ├── hero
 ├── identity
@@ -320,7 +322,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 │   ├── shared.json                  dati indipendenti dalla lingua
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, stringhe UI, metadata SEO
 ├── i18n/             routing.ts (lingue) · request.ts (messages di next-intl)
-├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, theme, og, format, hooks, cn
 │   └── content/      schema (zod) · validate (verifiche incrociate)
 ├── store/            viewStore (per istanza) · useSceneStore (scena, transiente)
 ├── e2e/              suite Playwright · helpers.ts (lingue, viste, attese)

@@ -82,9 +82,10 @@ export function DataGrid({ still }: { still: boolean }) {
     }
 
     if (palette !== s.palette) {
-      o.bg.set(palette.bg);
-      o.dim.set(palette.dim);
+      o.bg.set(palette.paper);
+      o.dim.set(palette.dot);
       o.ink.set(palette.ink);
+      (points.material as THREE.PointsMaterial).size = palette.pointSize;
       s.palette = palette;
     }
 
@@ -175,7 +176,8 @@ export function DataGrid({ still }: { still: boolean }) {
           <bufferAttribute attach="attributes-position" args={[buffers.position, 3]} usage={THREE.DynamicDrawUsage} />
           <bufferAttribute attach="attributes-color" args={[buffers.color, 3]} usage={THREE.DynamicDrawUsage} />
         </bufferGeometry>
-        <pointsMaterial size={0.034} sizeAttenuation vertexColors depthWrite={false} />
+        {/* The point size comes from the palette, applied with the colours in the frame loop. */}
+        <pointsMaterial sizeAttenuation vertexColors depthWrite={false} />
       </points>
     </group>
   );

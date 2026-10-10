@@ -118,7 +118,7 @@ GOOGLE_SITE_VERIFICATION=your-token
 | # | View (ID) | EN | IT | FR | DE | Content |
 | --- | --- | --- | --- | --- | --- | --- |
 | 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Large-format name, role, introduction, a paragraph naming employer, studies, stack and projects (the facts a search engine should read on the home page itself) and a call to explore. |
-| 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Mission statement, four engineering principles and contacts (GitHub, LinkedIn, GitLab). |
+| 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | A title that is the first sentence of the mission statement (the rest is its subtitle), four engineering principles and contacts (GitHub, LinkedIn, GitLab). |
 | 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
 | 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Projects in an accordion: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
 | 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | The method beyond code: a calisthenics programme (metrics and sessions) and sound mechanics (acoustic guitar, lossless formats, audio pipeline). |
@@ -166,7 +166,7 @@ Every URL is prerendered with its own content. An address that matches no view s
 - Each view has a mode in `components/scene/modes.ts` (amplitude, frequency, speed, flow, pointer radius and force, presence, camera position). On a view change the parameters ease smoothly to the new values.
 - `PerformanceMonitor` drops the device pixel ratio to 1 when the frame rate falls and raises it back up to 1.75 when it recovers.
 - With `prefers-reduced-motion: reduce` the canvas switches to `frameloop="demand"` and repaints only when the view or theme changes.
-- The palette follows the resolved theme (light or dark).
+- The palette follows the resolved theme (light or dark) and carries the point size too: in the light theme the point is darker and about 25% larger, because dark points on a bright ground look thinner than light points on a dark one at the same contrast.
 
 ### Motion
 
@@ -177,6 +177,8 @@ Every URL is prerendered with its own content. An address that matches no view s
 ### Theme and typography
 
 - CSS tokens in `app/globals.css` (`--paper`, `--ink`, `--muted`, `--line`, `--accent`), redefined under `.dark` and exposed to Tailwind v4 with `@theme inline`.
+- The light theme is a cream paper (`#ede7db`), not display white: less glare, and the point field behind the content stays readable.
+- `lib/theme.ts` repeats paper and ink for whatever cannot read custom properties (WebGL scene, `theme-color`, manifest, Open Graph images). `lib/theme.test.ts` fails when CSS and TypeScript drift apart, when text drops below AA/AAA contrast, or when the scene points become invisible or stronger than text.
 - Custom utilities: `px-frame`, `no-scrollbar`, `fade-edges`, `link-underline`, `bg-dashed`.
 - Fonts loaded with `next/font` and `display: swap`: Geist for body text, Geist Mono for labels, italic Instrument Serif for emphasised words.
 
@@ -225,12 +227,12 @@ Content lives in [`data/shared.json`](data/shared.json) and in one file per lang
 
 ```
 data/shared.json        language-independent data
-├── name, handle
+├── name, handle, alternateNames, address
 ├── contacts[]          id, label, handle, url
 ├── timeline.threads[]  lanes: id, kind (work | education), entity, segments[], phases
 ├── projects[]          id, name, source, stack, layers
 └── discipline          biological (metrics, sessions) · acoustic (formats, pipeline)
-data/locales/<language>.json   en · it · fr
+data/locales/<language>.json   en · it · fr · de
 ├── ui                  next-intl messages: meta (SEO), notFound, nav, theme, locale, shell
 ├── hero
 ├── identity
@@ -320,7 +322,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   ├── shared.json                  language-independent data
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, UI strings, SEO metadata
 ├── i18n/             routing.ts (languages) · request.ts (next-intl messages)
-├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, theme, og, format, hooks, cn
 │   └── content/      schema (zod) · validate (cross-checks)
 ├── store/            viewStore (per instance) · useSceneStore (scene, transient)
 ├── e2e/              Playwright suite · helpers.ts (locales, views, waits)

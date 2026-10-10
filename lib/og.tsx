@@ -4,6 +4,7 @@ import { ImageResponse } from 'next/og';
 import { routing, type Locale } from '@/i18n/routing';
 import { pad } from '@/lib/format';
 import { getPortfolioBundle } from '@/lib/portfolio';
+import { THEME } from '@/lib/theme';
 import { VIEW_IDS, type ViewId } from '@/lib/views';
 
 /**
@@ -13,8 +14,8 @@ import { VIEW_IDS, type ViewId } from '@/lib/views';
  */
 export const OG_ALT = getPortfolioBundle().contents[routing.defaultLocale].ui.meta.views.hero.title;
 
-const PAPER = '#0b0b0b';
-const INK = '#ecebe7';
+// Share cards are always drawn in the dark theme.
+const { paper: PAPER, ink: INK } = THEME.dark;
 const MUTED = '#8c8b86';
 const LINE = 'rgba(236, 235, 231, 0.14)';
 

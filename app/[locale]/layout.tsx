@@ -8,6 +8,7 @@ import { SceneLayer } from '@/components/scene/SceneLayer';
 import { routing } from '@/i18n/routing';
 import { getPortfolioBundle } from '@/lib/portfolio';
 import { SITE_URL } from '@/lib/site';
+import { THEME } from '@/lib/theme';
 import { googleVerificationToken } from '@/lib/verification';
 import '../globals.css';
 
@@ -23,8 +24,8 @@ const serif = Instrument_Serif({
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f3f2ee' },
-    { media: '(prefers-color-scheme: dark)', color: '#0b0b0b' },
+    { media: '(prefers-color-scheme: light)', color: THEME.light.paper },
+    { media: '(prefers-color-scheme: dark)', color: THEME.dark.paper },
   ],
 };
 
