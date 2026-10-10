@@ -129,7 +129,7 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 
 ## Navigation et interactions
 
-- **Liens en bas de page** (`01`–`05`) : ce sont de vrais `<a href>`, donc le clic du milieu, « ouvrir dans un nouvel onglet » et les robots d'indexation fonctionnent. Le clic principal change la vue sur place.
+- **Liens en bas de page** (`01`–`05`) : ce sont de vrais `<a href>`, donc le clic du milieu, « ouvrir dans un nouvel onglet » et les robots d'indexation fonctionnent. Le clic principal change la vue sur place. À côté de l'entrée active figure le mot courant pour cette vue (« Exécution · Expérience »), qui fait aussi partie du nom accessible de chaque lien.
 - **Clavier** : `1`–`5` accèdent directement à une vue, `←` et `→` les parcourent en boucle. Les touches sont ignorées si une touche de modification est enfoncée ou si le focus est dans un champ de saisie.
 - **Tactile** : un balayage horizontal (plus de 70 px et majoritairement horizontal) passe à la vue précédente ou suivante.
 - **Flèches et compteur** dans le pied de page, sur les écrans moyens et grands.
