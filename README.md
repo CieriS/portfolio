@@ -127,7 +127,7 @@ Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corris
 
 ## Navigazione e interazione
 
-- **Link in basso** (`01`–`05`): sono veri `<a href>`, quindi funzionano anche con il clic centrale, con "apri in nuova scheda" e per i crawler. Il clic principale cambia vista sul posto.
+- **Link in basso** (`01`–`05`): sono veri `<a href>`, quindi funzionano anche con il clic centrale, con "apri in nuova scheda" e per i crawler. Il clic principale cambia vista sul posto. Accanto alla voce attiva compare la parola di uso comune per quella vista ("Esecuzione · Esperienza"), che fa parte anche del nome accessibile di ogni link.
 - **Tastiera**: `1`–`5` saltano a una vista, `←` e `→` scorrono in modo circolare. I tasti vengono ignorati se è premuto un modificatore o se il focus è in un campo di testo.
 - **Touch**: uno swipe orizzontale (oltre 70 px e prevalentemente orizzontale) passa alla vista precedente o successiva.
 - **Frecce e contatore** nel footer, su schermi medi e grandi.
@@ -233,7 +233,7 @@ data/shared.json        dati indipendenti dalla lingua
 ├── projects[]          id, name, source, stack, layers
 └── discipline          biological (metriche, sessioni) · acoustic (formati, pipeline)
 data/locales/<lingua>.json   en · it · fr · de
-├── ui                  messages di next-intl: meta (SEO), notFound, nav, theme, locale, shell
+├── ui                  messages di next-intl: meta (SEO), notFound, nav, navPlain, theme, locale, shell
 ├── hero
 ├── identity
 ├── timeline

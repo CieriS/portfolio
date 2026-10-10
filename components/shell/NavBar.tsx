@@ -11,11 +11,12 @@ import { ViewLink } from './ViewLink';
 export function NavBar() {
   const active = useViewStore((state) => state.active);
   const t = useTranslations('nav');
+  const plain = useTranslations('navPlain');
   const shell = useTranslations('shell');
 
   return (
     <nav aria-label={shell('nav')} className="select-none">
-      <ul className="flex items-center gap-4 md:gap-8">
+      <ul className="flex items-center gap-3 min-[400px]:gap-4 md:gap-8">
         {VIEW_IDS.map((id, index) => {
           const isActive = id === active;
           return (
@@ -23,7 +24,8 @@ export function NavBar() {
               <ViewLink
                 view={id}
                 aria-current={isActive ? 'page' : undefined}
-                aria-label={t(id)}
+                // The system name plus its everyday word: "Execution — Experience".
+                aria-label={`${t(id)} — ${plain(id)}`}
                 className="group relative flex items-baseline gap-2 py-2 text-[13px] select-none"
               >
                 <span
@@ -43,6 +45,8 @@ export function NavBar() {
                 >
                   {t(id)}
                 </span>
+                {/* The view names are a naming system; the plain word says what the view holds. */}
+                {isActive && <span className="font-mono text-[11px] whitespace-nowrap text-muted">· {plain(id)}</span>}
                 {isActive && (
                   <motion.span
                     layoutId="nav-underline"

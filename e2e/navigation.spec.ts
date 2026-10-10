@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { expectView, gotoView, navLabel, pathFor } from './helpers';
+import { locales } from './content';
+import { expectView, gotoView, LOCALES, navLinkName, pathFor, VIEWS } from './helpers';
 
 /** Marks the document so a full page reload can be told apart from a client-side swap. */
 async function markNoReload(page: import('@playwright/test').Page) {
@@ -14,7 +15,7 @@ test('a nav link swaps the view without reloading', async ({ page }) => {
   await gotoView(page, 'en', 'hero');
   await markNoReload(page);
 
-  await page.getByRole('link', { name: navLabel('en', 'projects'), exact: true }).click();
+  await page.getByRole('link', { name: navLinkName('en', 'projects'), exact: true }).click();
 
   await expectView(page, 'en', 'projects');
   expect(new URL(page.url()).pathname).toBe(pathFor('en', 'projects'));
@@ -80,8 +81,29 @@ test('Shift+Arrow extends a selection instead of changing view', async ({ page }
 
 test('nav links are real hrefs, so they survive a middle click or a crawler', async ({ page }) => {
   await gotoView(page, 'en', 'hero');
-  await expect(page.getByRole('link', { name: navLabel('en', 'timeline'), exact: true })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: navLinkName('en', 'timeline'), exact: true })).toHaveAttribute(
     'href',
     pathFor('en', 'timeline'),
   );
+});
+
+test('every nav link names its view in plain words, and the active one shows them', async ({ page }) => {
+  // The narrowest phones still in use: the bar must fit without scrolling sideways.
+  await page.setViewportSize({ width: 360, height: 740 });
+  for (const locale of LOCALES) {
+    for (const view of VIEWS) {
+      await page.goto(pathFor(locale, view));
+      const nav = page.locator('footer nav');
+      // All five links carry the everyday word in their name, whichever is active.
+      for (const other of VIEWS)
+        await expect(nav.getByRole('link', { name: navLinkName(locale, other), exact: true })).toHaveCount(1);
+
+      const active = nav.locator('a[aria-current="page"]');
+      const { nav: names, navPlain } = locales[locale].ui;
+      await expect(active).toContainText(names[view]);
+      await expect(active).toContainText(navPlain[view]);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+      expect(await nav.evaluate((el) => el.getBoundingClientRect().right <= window.innerWidth)).toBe(true);
+    }
+  }
 });

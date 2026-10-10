@@ -235,7 +235,7 @@ data/shared.json        données indépendantes de la langue
 ├── projects[]          id, name, source, stack, layers
 └── discipline          biological (mesures, séances) · acoustic (formats, pipeline)
 data/locales/<langue>.json   en · it · fr · de
-├── ui                  messages next-intl : meta (SEO), notFound, nav, theme, locale, shell
+├── ui                  messages next-intl : meta (SEO), notFound, nav, navPlain, theme, locale, shell
 ├── hero
 ├── identity
 ├── timeline
