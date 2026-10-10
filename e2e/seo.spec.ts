@@ -103,6 +103,19 @@ test('the manifest is complete', async ({ request }) => {
   expect(manifest.icons.length).toBeGreaterThan(0);
 });
 
+test('every manifest icon is served at the size it declares', async ({ request }) => {
+  const manifest = await (await request.get('/manifest.webmanifest')).json();
+  expect(manifest.icons.map((icon: { sizes: string }) => icon.sizes)).toContain('512x512');
+
+  for (const icon of manifest.icons as { src: string; sizes: string }[]) {
+    const response = await request.get(icon.src);
+    expect(response.status(), icon.src).toBe(200);
+    // A PNG stores width and height as two big-endian integers right after the IHDR tag.
+    const body = await response.body();
+    expect(`${body.readUInt32BE(16)}x${body.readUInt32BE(20)}`, icon.src).toBe(icon.sizes);
+  }
+});
+
 test('legacy PHP URLs still redirect', async ({ request }) => {
   for (const [from, to] of [
     ['/index.php', '/'],
