@@ -3,7 +3,8 @@
 import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
 import { useEffect } from 'react';
-import { DARK_PALETTE, LIGHT_PALETTE, releasePointer, snapPointer, useSceneStore, writePointer } from '@/store/useSceneStore';
+import { THEME } from '@/lib/theme';
+import { releasePointer, snapPointer, useSceneStore, writePointer } from '@/store/useSceneStore';
 import { SceneErrorBoundary } from './SceneErrorBoundary';
 
 const DataField = dynamic(() => import('./DataField'), { ssr: false });
@@ -12,7 +13,7 @@ export function SceneLayer() {
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
-    useSceneStore.getState().setPalette(resolvedTheme === 'light' ? LIGHT_PALETTE : DARK_PALETTE);
+    useSceneStore.getState().setPalette(resolvedTheme === 'light' ? THEME.light : THEME.dark);
   }, [resolvedTheme]);
 
   useEffect(() => {

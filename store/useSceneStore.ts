@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { THEME, type ThemeColors } from '@/lib/theme';
 import type { ViewId } from '@/lib/views';
 
 /**
@@ -6,10 +7,8 @@ import type { ViewId } from '@/lib/views';
  * `touch` marks finger input; `snap` asks the next frame to jump to the pointer instead of easing.
  */
 export type ScenePointer = { x: number; y: number; active: boolean; touch: boolean; snap: boolean };
-export type ScenePalette = { bg: string; dim: string; ink: string };
-
-export const DARK_PALETTE: ScenePalette = { bg: '#0b0b0b', dim: '#3f3f3c', ink: '#ecebe7' };
-export const LIGHT_PALETTE: ScenePalette = { bg: '#f3f2ee', dim: '#b9b8b2', ink: '#121212' };
+/** The scene paints with the active theme's colours; `lib/theme.ts` is their single source. */
+export type ScenePalette = ThemeColors;
 
 type SceneState = {
   pointer: ScenePointer;
@@ -22,7 +21,7 @@ type SceneState = {
 export const useSceneStore = create<SceneState>()((set, get) => ({
   pointer: { x: 0, y: 0, active: false, touch: false, snap: false },
   mode: 'hero',
-  palette: DARK_PALETTE,
+  palette: THEME.dark,
   setMode: (mode) => {
     if (get().mode !== mode) set({ mode });
   },

@@ -166,7 +166,7 @@ Every URL is prerendered with its own content. An address that matches no view s
 - Each view has a mode in `components/scene/modes.ts` (amplitude, frequency, speed, flow, pointer radius and force, presence, camera position). On a view change the parameters ease smoothly to the new values.
 - `PerformanceMonitor` drops the device pixel ratio to 1 when the frame rate falls and raises it back up to 1.75 when it recovers.
 - With `prefers-reduced-motion: reduce` the canvas switches to `frameloop="demand"` and repaints only when the view or theme changes.
-- The palette follows the resolved theme (light or dark).
+- The palette follows the resolved theme (light or dark) and carries the point size too: in the light theme the point is darker and about 25% larger, because dark points on a bright ground look thinner than light points on a dark one at the same contrast.
 
 ### Motion
 
@@ -177,6 +177,8 @@ Every URL is prerendered with its own content. An address that matches no view s
 ### Theme and typography
 
 - CSS tokens in `app/globals.css` (`--paper`, `--ink`, `--muted`, `--line`, `--accent`), redefined under `.dark` and exposed to Tailwind v4 with `@theme inline`.
+- The light theme is a cream paper (`#ede7db`), not display white: less glare, and the point field behind the content stays readable.
+- `lib/theme.ts` repeats paper and ink for whatever cannot read custom properties (WebGL scene, `theme-color`, manifest, Open Graph images). `lib/theme.test.ts` fails when CSS and TypeScript drift apart, when text drops below AA/AAA contrast, or when the scene points become invisible or stronger than text.
 - Custom utilities: `px-frame`, `no-scrollbar`, `fade-edges`, `link-underline`, `bg-dashed`.
 - Fonts loaded with `next/font` and `display: swap`: Geist for body text, Geist Mono for labels, italic Instrument Serif for emphasised words.
 
@@ -320,7 +322,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   ├── shared.json                  language-independent data
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, UI strings, SEO metadata
 ├── i18n/             routing.ts (languages) · request.ts (next-intl messages)
-├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, theme, og, format, hooks, cn
 │   └── content/      schema (zod) · validate (cross-checks)
 ├── store/            viewStore (per instance) · useSceneStore (scene, transient)
 ├── e2e/              Playwright suite · helpers.ts (locales, views, waits)

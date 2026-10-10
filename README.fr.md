@@ -168,7 +168,7 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 - Chaque vue possède un mode dans `components/scene/modes.ts` (amplitude, fréquence, vitesse, flux, rayon et force du pointeur, présence, position de la caméra). Lors d'un changement de vue, les paramètres évoluent progressivement vers les nouvelles valeurs.
 - `PerformanceMonitor` ramène le device pixel ratio à 1 lorsque la fréquence d'images baisse et le remonte jusqu'à 1,75 lorsqu'elle s'améliore.
 - Avec `prefers-reduced-motion: reduce`, le canvas passe en `frameloop="demand"` et ne se redessine que lorsque la vue ou le thème change.
-- La palette suit le thème résolu (clair ou sombre).
+- La palette suit le thème résolu (clair ou sombre) et porte aussi la taille des points : en thème clair le point est plus foncé et environ 25 % plus grand, car des points sombres sur fond clair paraissent plus fins que des points clairs sur fond sombre à contraste égal.
 
 ### Animations
 
@@ -179,6 +179,8 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 ### Thème et typographie
 
 - Tokens CSS dans `app/globals.css` (`--paper`, `--ink`, `--muted`, `--line`, `--accent`), redéfinis sous `.dark` et exposés à Tailwind v4 via `@theme inline`.
+- Le thème clair est un papier crème (`#ede7db`), pas un blanc d'écran : moins éblouissant, et le champ de points derrière le contenu reste lisible.
+- `lib/theme.ts` répète papier et encre pour ce qui ne peut pas lire les custom properties (scène WebGL, `theme-color`, manifest, images Open Graph). `lib/theme.test.ts` échoue si CSS et TypeScript divergent, si le texte passe sous les contrastes AA/AAA ou si les points de la scène deviennent invisibles ou plus forts que le texte.
 - Utilitaires personnalisés : `px-frame`, `no-scrollbar`, `fade-edges`, `link-underline`, `bg-dashed`.
 - Polices chargées avec `next/font` et `display: swap` : Geist pour le texte, Geist Mono pour les étiquettes, Instrument Serif en italique pour les mots mis en valeur.
 
@@ -322,7 +324,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   ├── shared.json                  données indépendantes de la langue
 │   └── locales/                     en.json · it.json · fr.json · de.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)
-├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, theme, og, format, hooks, cn
 │   └── content/      schema (zod) · validate (contrôles croisés)
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)
 ├── e2e/              suite Playwright · helpers.ts (langues, vues, attentes)

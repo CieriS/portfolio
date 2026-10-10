@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { routing } from '@/i18n/routing';
 import { getPortfolioBundle } from '@/lib/portfolio';
+import { THEME } from '@/lib/theme';
 
 export default function manifest(): MetadataRoute.Manifest {
   const meta = getPortfolioBundle().contents[routing.defaultLocale].ui.meta;
@@ -16,8 +17,8 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     scope: '/',
     display: 'standalone',
-    background_color: '#0b0b0b',
-    theme_color: '#0b0b0b',
+    background_color: THEME.dark.paper,
+    theme_color: THEME.dark.paper,
     icons: [
       { src: '/icon.png', sizes: '256x256', type: 'image/png' },
       { src: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
