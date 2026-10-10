@@ -131,6 +131,7 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 - **Clavier** : `1`–`5` accèdent directement à une vue, `←` et `→` les parcourent en boucle. Les touches sont ignorées si une touche de modification est enfoncée ou si le focus est dans un champ de saisie.
 - **Tactile** : un balayage horizontal (plus de 70 px et majoritairement horizontal) passe à la vue précédente ou suivante.
 - **Flèches et compteur** dans le pied de page, sur les écrans moyens et grands.
+- **Indicateur de défilement** : les barres de défilement sont masquées ; une vue plus haute que l'écran affiche donc sur le bord droit une fine ligne dont le curseur suit le défilement. Il n'apparaît que s'il y a du contenu sous la ligne de flottaison (mesuré avec `ResizeObserver` ; géométrie dans `lib/scroll.ts`) et il est masqué aux technologies d'assistance.
 - **Historique** : chaque changement de vue appelle `pushState`, donc les boutons précédent et suivant du navigateur fonctionnent. Le titre du document suit la vue active.
 - **Langue** : l'en-tête n'affiche que la langue active ; le bouton ouvre un menu animé (`listbox`) listant chaque langue par son nom natif, utilisable à la souris, au toucher et au clavier (flèches, Début/Fin, Entrée/Espace, Échap, clic à l'extérieur ; le focus revient au bouton). Choisir une langue remplace l'URL par le slug traduit (`replaceState`), met à jour `lang` et le titre, et enregistre le cookie `NEXT_LOCALE` pour un an, sans navigation. Le canvas et la vue active restent intacts.
 - **Détection de la langue** : sur `/` et sur les chemins sans préfixe, `proxy.ts` (le middleware next-intl) choisit la langue d'après le cookie `NEXT_LOCALE` ou l'en-tête `Accept-Language`. La langue par défaut est l'anglais et le préfixe est toujours présent.
@@ -323,7 +324,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   ├── shared.json                  données indépendantes de la langue
 │   └── locales/                     en.json · it.json · fr.json · de.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)
-├── lib/              routes, views, portfolio, timeline, seo, site, verification, structuredData, theme, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, format, hooks, cn
 │   └── content/      schema (zod) · validate (contrôles croisés)
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)
 ├── e2e/              suite Playwright · helpers.ts (langues, vues, attentes)
