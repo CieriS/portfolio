@@ -27,7 +27,7 @@ export function ProjectsView({ data }: ViewProps) {
         subtitle={copy.subtitle}
       />
 
-      <motion.ul variants={fade} className="group/list mt-20 border-b border-line md:mt-32">
+      <motion.ul variants={fade} className="mt-20 border-b border-line md:mt-32">
         {projects.map((project, index) => (
           <ProjectRow
             key={project.id}
@@ -56,7 +56,7 @@ function ProjectRow({ project, index, copy, open, onToggle }: ProjectRowProps) {
   const panelId = `project-${project.id}`;
 
   return (
-    <li className="border-t border-line transition-opacity duration-500 md:group-hover/list:opacity-40 md:hover:opacity-100!">
+    <li className="border-t border-line">
       <h2>
         <button
           type="button"
