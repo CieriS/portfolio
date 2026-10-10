@@ -32,11 +32,6 @@
       "body": "Questo indirizzo non corrisponde a nessuna vista. Il processo potrebbe essere stato spostato o non essere mai esistito.",
       "cta": "Torna all'indice"
     },
-    "error": {
-      "title": "Processo interrotto",
-      "body": "Qualcosa ha interrotto questa vista. Il resto del sito è ancora in esecuzione.",
-      "cta": "Riprova"
-    },
     "nav": {
       "hero": "Indice",
       "identity": "Identità",

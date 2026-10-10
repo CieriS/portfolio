@@ -32,11 +32,6 @@
       "body": "Diese Adresse entspricht keiner Ansicht. Der Prozess wurde vielleicht verschoben oder hat nie existiert.",
       "cta": "Zurück zum Index"
     },
-    "error": {
-      "title": "Prozess unterbrochen",
-      "body": "Etwas hat diese Ansicht unterbrochen. Der Rest der Website funktioniert weiterhin.",
-      "cta": "Erneut versuchen"
-    },
     "nav": {
       "hero": "Index",
       "identity": "Identität",

@@ -1,7 +1,7 @@
 'use client';
 
 import { routing } from '@/i18n/routing';
-import { getPortfolioBundle } from '@/lib/portfolio';
+import { errorCopy } from '@/lib/errorCopy';
 import { THEME } from '@/lib/theme';
 
 /**
@@ -10,7 +10,7 @@ import { THEME } from '@/lib/theme';
  * with inline styles, so it still renders when the stylesheet is the thing that failed.
  */
 export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
-  const copy = getPortfolioBundle().contents[routing.defaultLocale].ui.error;
+  const copy = errorCopy(routing.defaultLocale);
 
   return (
     <html lang={routing.defaultLocale}>
