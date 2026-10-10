@@ -3,7 +3,3 @@ Copyright (c) 2023-2026 Samuele Cieri. All rights reserved.
 The source code, text, images and other content in this repository are the
 property of the author. No license is granted to copy, modify, distribute or
 use them, in whole or in part, without prior written permission.
-
-Third-party components keep their own licenses. In particular, Font Awesome
-Free, bundled under legacy/, is distributed under the terms in
-legacy/fontawesome-free-6.4.0-web/LICENSE.txt.

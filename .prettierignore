@@ -1,6 +1,5 @@
 .next/
 node_modules/
-legacy/
 playwright-report/
 test-results/
 package-lock.json
