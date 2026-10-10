@@ -1,0 +1,7 @@
+/* Applied only while a reference screenshot is taken: everything that never looks the same twice. */
+canvas {
+  visibility: hidden !important;
+}
+* {
+  caret-color: transparent !important;
+}

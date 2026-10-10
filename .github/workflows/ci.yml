@@ -61,6 +61,18 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
+      # After a failure, regenerate the visual references on this same runner and publish them.
+      # If the failure was an intended visual change, these are the files to review and commit
+      # under e2e/__screenshots__/ (README, "Visual regression").
+      - if: ${{ failure() }}
+        run: npx playwright test e2e/visual.spec.ts --project=chromium --update-snapshots --retries=0
+      - if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: visual-references
+          path: e2e/__screenshots__/
+          retention-days: 14
+
   lighthouse:
     name: Lighthouse budget
     runs-on: ubuntu-latest

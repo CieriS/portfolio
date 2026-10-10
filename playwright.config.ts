@@ -16,6 +16,10 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? [['html', { open: 'never' }], ['github']] : 'list',
+  // One set of reference screenshots (Chromium on Linux, see e2e/visual.spec.ts). On CI a
+  // missing reference must fail: the default would write it, and the retry would then pass.
+  snapshotPathTemplate: '{testDir}/__screenshots__/{arg}{ext}',
+  updateSnapshots: process.env.CI ? 'none' : 'missing',
 
   use: {
     baseURL: BASE_URL,
