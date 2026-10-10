@@ -118,7 +118,7 @@ export function DataGrid({ still }: { still: boolean }) {
     const P = points.geometry.attributes.position.array as Float32Array;
     const C = points.geometry.attributes.color.array as Float32Array;
     const r2 = p.radius * p.radius;
-    const presence = p.presence;
+    const presence = Math.min(1, p.presence * (s.palette?.presenceScale ?? 1));
     const glowScale = 0.35 + 0.65 * presence;
     const baseR = o.bg.r + (o.dim.r - o.bg.r) * presence;
     const baseG = o.bg.g + (o.dim.g - o.bg.g) * presence;
