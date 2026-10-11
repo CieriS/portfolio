@@ -54,6 +54,16 @@ test('back and forward retrace the view history', async ({ page }) => {
   await expectView(page, 'en', 'projects');
 });
 
+test('a sideways trackpad scroll cannot turn into history navigation', async ({ page }) => {
+  await gotoView(page, 'en', 'projects');
+
+  // The gesture itself is browser chrome and cannot be driven from a test: assert the rule that disables it.
+  for (const selector of ['html', 'body']) {
+    await expect(page.locator(selector)).toHaveCSS('overscroll-behavior-x', 'none');
+  }
+  await expect(page.locator('html')).toHaveCSS('overscroll-behavior-y', 'none');
+});
+
 test('a held arrow key does not flood the history', async ({ page }) => {
   await gotoView(page, 'en', 'hero');
   const before = await page.evaluate(() => history.length);

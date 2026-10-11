@@ -60,7 +60,7 @@ export function ViewFrame({ children, label }: { children: ReactNode; label: str
       initial="enter"
       animate="center"
       exit="exit"
-      className="absolute inset-0 no-scrollbar overflow-y-auto overscroll-y-contain fade-edges"
+      className="absolute inset-0 no-scrollbar overflow-y-auto overscroll-contain fade-edges"
     >
       {thumb && (
         // Zero-height sticky anchor: the indicator stays put while the content scrolls under it.

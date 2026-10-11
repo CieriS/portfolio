@@ -39,8 +39,8 @@
   body {
     height: 100dvh;
     overflow: hidden;
-    /* Vertical only: `none` on the X axis disables the trackpad back/forward swipe. */
-    overscroll-behavior-y: none;
+    /* Both axes: on X this stops a sideways trackpad swipe from navigating back or forward. */
+    overscroll-behavior: none;
   }
 
   body {

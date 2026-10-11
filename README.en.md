@@ -137,6 +137,7 @@ Every URL is prerendered with its own content. An address that matches no view s
 - **Bottom links** (`01`–`05`): real `<a href>` elements, so middle-click, "open in new tab" and crawlers all work. A primary click swaps the view in place. Next to the active item sits the everyday word for that view ("Execution · Experience"), which is also part of every link's accessible name.
 - **Keyboard**: `1`–`5` jump to a view, `←` and `→` cycle through them. Keys are ignored while a modifier is held or when focus is in a text field.
 - **Touch**: a horizontal swipe (over 70 px and mostly horizontal) moves to the previous or next view.
+- **Trackpad**: a sideways two-finger scroll does not go back or forward in the history (`overscroll-behavior: none` on the root), because it fired by accident while scrolling a view. This holds in Chromium and Firefox; Safari handles that gesture itself and may ignore the rule. Browser buttons and keyboard shortcuts are unchanged.
 - **Arrows and counter** in the footer on medium and large screens.
 - **Scroll indicator**: scrollbars are hidden, so a view taller than the screen shows a thin line on the right edge with a thumb that follows the scroll. It appears only where there is content below the fold (measured with `ResizeObserver`; geometry in `lib/scroll.ts`) and is hidden from assistive technology.
 - **History**: every view change calls `pushState`, so the browser's back and forward buttons work. The document title follows the active view.
