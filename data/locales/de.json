@@ -55,6 +55,25 @@
       "next": "Nächste Ansicht",
       "skip": "Zum Inhalt springen",
       "unknown": "—"
+    },
+    "cv": {
+      "label": "Lebenslauf",
+      "handle": "PDF · auf Anfrage",
+      "title": "Lebenslauf",
+      "note": "Der Lebenslauf enthält meine persönlichen Kontaktdaten und ist deshalb nicht öffentlich. Hinterlassen Sie eine E-Mail-Adresse, dorthin kommt der Download-Link.",
+      "byEmail": "Link per E-Mail",
+      "byPassword": "Passwort",
+      "email": "E-Mail-Adresse",
+      "password": "Passwort",
+      "send": "Link senden",
+      "download": "Herunterladen",
+      "pending": "Einen Moment…",
+      "sent": "Link gesendet: Schauen Sie in Ihr Postfach. Er funktioniert {hours} Stunden lang.",
+      "downloaded": "Download gestartet.",
+      "invalid": "Prüfen Sie Ihre Eingabe und versuchen Sie es erneut.",
+      "denied": "Falsches Passwort.",
+      "unavailable": "Gerade nicht verfügbar: Schreiben Sie mir auf LinkedIn.",
+      "failed": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal."
     }
   },
   "hero": {

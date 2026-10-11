@@ -1,0 +1,58 @@
+{
+  "en": {
+    "pdf": {
+      "experience": "Experience",
+      "education": "Education",
+      "projects": "Projects",
+      "present": "present",
+      "privateSource": "Private source, walkthrough on request",
+      "generated": "Generated on {date} from {site}"
+    },
+    "email": {
+      "subject": "{name} — curriculum vitae",
+      "body": "Hello,\n\nhere is the link to download my CV. It works for {hours} hours:\n\n{link}\n\nIf you did not ask for it, you can ignore this email.\n\n{name}"
+    }
+  },
+  "it": {
+    "pdf": {
+      "experience": "Esperienza",
+      "education": "Formazione",
+      "projects": "Progetti",
+      "present": "oggi",
+      "privateSource": "Codice privato, demo su richiesta",
+      "generated": "Generato il {date} da {site}"
+    },
+    "email": {
+      "subject": "{name} — curriculum vitae",
+      "body": "Ciao,\n\necco il link per scaricare il mio CV. Funziona per {hours} ore:\n\n{link}\n\nSe non l'hai chiesto tu, puoi ignorare questa email.\n\n{name}"
+    }
+  },
+  "fr": {
+    "pdf": {
+      "experience": "Expérience",
+      "education": "Formation",
+      "projects": "Projets",
+      "present": "aujourd'hui",
+      "privateSource": "Code privé, démonstration sur demande",
+      "generated": "Généré le {date} depuis {site}"
+    },
+    "email": {
+      "subject": "{name} — curriculum vitae",
+      "body": "Bonjour,\n\nvoici le lien pour télécharger mon CV. Il fonctionne pendant {hours} heures :\n\n{link}\n\nSi vous ne l'avez pas demandé, vous pouvez ignorer cet e-mail.\n\n{name}"
+    }
+  },
+  "de": {
+    "pdf": {
+      "experience": "Berufserfahrung",
+      "education": "Ausbildung",
+      "projects": "Projekte",
+      "present": "heute",
+      "privateSource": "Privater Code, Vorführung auf Anfrage",
+      "generated": "Erstellt am {date} von {site}"
+    },
+    "email": {
+      "subject": "{name} — Lebenslauf",
+      "body": "Hallo,\n\nhier ist der Link zum Herunterladen meines Lebenslaufs. Er funktioniert {hours} Stunden lang:\n\n{link}\n\nFalls Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.\n\n{name}"
+    }
+  }
+}

@@ -55,6 +55,25 @@
       "next": "Next view",
       "skip": "Skip to content",
       "unknown": "—"
+    },
+    "cv": {
+      "label": "Curriculum",
+      "handle": "PDF · on request",
+      "title": "Curriculum vitae",
+      "note": "The CV carries my personal contact details, so it is not public. Leave an email address and a download link reaches you there.",
+      "byEmail": "Email link",
+      "byPassword": "Password",
+      "email": "Email address",
+      "password": "Password",
+      "send": "Send link",
+      "download": "Download",
+      "pending": "One moment…",
+      "sent": "Link sent: check your inbox. It works for {hours} hours.",
+      "downloaded": "Download started.",
+      "invalid": "Check what you typed and try again.",
+      "denied": "Wrong password.",
+      "unavailable": "Not available right now: write to me on LinkedIn.",
+      "failed": "Something went wrong. Try again in a moment."
     }
   },
   "hero": {

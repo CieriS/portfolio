@@ -55,6 +55,25 @@
       "next": "Vue suivante",
       "skip": "Aller au contenu",
       "unknown": "—"
+    },
+    "cv": {
+      "label": "Curriculum",
+      "handle": "PDF · sur demande",
+      "title": "Curriculum vitae",
+      "note": "Le CV contient mes coordonnées personnelles, il n'est donc pas public. Laissez une adresse e-mail et un lien de téléchargement vous y parviendra.",
+      "byEmail": "Lien par e-mail",
+      "byPassword": "Mot de passe",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "send": "Envoyer le lien",
+      "download": "Télécharger",
+      "pending": "Un instant…",
+      "sent": "Lien envoyé : consultez votre boîte de réception. Il fonctionne pendant {hours} heures.",
+      "downloaded": "Téléchargement lancé.",
+      "invalid": "Vérifiez votre saisie et réessayez.",
+      "denied": "Mot de passe incorrect.",
+      "unavailable": "Indisponible pour le moment : écrivez-moi sur LinkedIn.",
+      "failed": "Une erreur est survenue. Réessayez dans un instant."
     }
   },
   "hero": {

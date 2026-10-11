@@ -55,6 +55,25 @@
       "next": "Vista successiva",
       "skip": "Vai al contenuto",
       "unknown": "—"
+    },
+    "cv": {
+      "label": "Curriculum",
+      "handle": "PDF · su richiesta",
+      "title": "Curriculum vitae",
+      "note": "Il CV contiene i miei recapiti personali, quindi non è pubblico. Lascia un indirizzo email e ti arriverà lì il link per scaricarlo.",
+      "byEmail": "Link via email",
+      "byPassword": "Password",
+      "email": "Indirizzo email",
+      "password": "Password",
+      "send": "Invia il link",
+      "download": "Scarica",
+      "pending": "Un momento…",
+      "sent": "Link inviato: controlla la posta. Funziona per {hours} ore.",
+      "downloaded": "Download avviato.",
+      "invalid": "Controlla quello che hai scritto e riprova.",
+      "denied": "Password errata.",
+      "unavailable": "Non disponibile in questo momento: scrivimi su LinkedIn.",
+      "failed": "Qualcosa è andato storto. Riprova tra poco."
     }
   },
   "hero": {

@@ -43,7 +43,12 @@ export default defineConfig({
     // falls back to a hardcoded localhost:3000 and would not match the port under test.
     // The verification variable is given as the whole tag Search Console hands out, the form
     // that used to be published escaped inside `content`: seo.spec.ts expects the bare token.
-    env: { SITE_URL: BASE_URL, GOOGLE_SITE_VERIFICATION: '<meta name="google-site-verification" content="e2e-token" />' },
+    // cv.spec.ts downloads the CV with this password; email links stay unconfigured on purpose.
+    env: {
+      SITE_URL: BASE_URL,
+      GOOGLE_SITE_VERIFICATION: '<meta name="google-site-verification" content="e2e-token" />',
+      CV_ADMIN_PASSWORD: 'e2e-admin-password-0001',
+    },
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

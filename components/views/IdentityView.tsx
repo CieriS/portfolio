@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { fade } from '@/components/motion/Reveal';
 import { pad } from '@/lib/format';
 import { Meta, SectionHead, type ViewProps } from './atoms';
+import { CvRequest } from './CvRequest';
 
 export function IdentityView({ data }: ViewProps) {
   const copy = data.content.identity;
@@ -62,6 +63,7 @@ export function IdentityView({ data }: ViewProps) {
               </a>
             </li>
           ))}
+          <CvRequest data={data} />
         </motion.ul>
       </div>
     </div>
