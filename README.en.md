@@ -125,7 +125,7 @@ GOOGLE_SITE_VERIFICATION=your-token
 | # | View (ID) | EN | IT | FR | DE | Content |
 | --- | --- | --- | --- | --- | --- | --- |
 | 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Large-format name, role, introduction, a paragraph naming employer, studies, stack and projects (the facts a search engine should read on the home page itself) and a call to explore. |
-| 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | A title that is the first sentence of the mission statement (the rest is its subtitle), four engineering principles and contacts (GitHub, LinkedIn, GitLab). |
+| 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | A title that is the first sentence of the mission statement (the rest is its subtitle), four engineering principles and contacts (GitHub, LinkedIn, Instagram). |
 | 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
 | 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Projects in an accordion, all collapsed when the view opens: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
 | 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | Training and music beyond the code: strength and power (method, metrics, weekly plan) and music and video production (acoustic guitar, software, workflow). |
@@ -423,7 +423,6 @@ The portfolio used to be a PHP and MySQL site hosted on Altervista. Its code is 
 
 - GitHub: [@CieriS](https://github.com/CieriS/)
 - LinkedIn: [in/samuelecieri](https://www.linkedin.com/in/samuelecieri/)
-- GitLab: [@CieriS](https://gitlab.com/CieriS/)
 
 ## License
 
