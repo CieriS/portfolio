@@ -4,6 +4,7 @@ import { ImageResponse } from 'next/og';
 import { routing, type Locale } from '@/i18n/routing';
 import { getCaseStudy } from '@/lib/caseStudy';
 import { pad } from '@/lib/format';
+import { OG_ICON_FILE, OG_ICON_SIZE } from '@/lib/ogIcon';
 import { getPortfolioBundle } from '@/lib/portfolio';
 import { THEME } from '@/lib/theme';
 import { VIEW_IDS, type CaseStudyId, type ViewId } from '@/lib/views';
@@ -19,6 +20,9 @@ export const OG_ALT = getPortfolioBundle().contents[routing.defaultLocale].ui.me
 const { paper: PAPER, ink: INK } = THEME.dark;
 const MUTED = '#8c8b86';
 const LINE = 'rgba(236, 235, 231, 0.14)';
+
+// Read once: every card of a build shares the same few kilobytes.
+const ICON_SRC = readFile(join(process.cwd(), OG_ICON_FILE)).then((icon) => `data:image/png;base64,${icon.toString('base64')}`);
 
 type Card = { locale: Locale; label: string; title: string; titleSize: number; subtitle: string };
 
@@ -52,8 +56,7 @@ export async function renderCaseStudyOgImage(locale: Locale, id: CaseStudyId): P
 async function renderCard({ locale, label, title, titleSize, subtitle }: Card): Promise<ImageResponse> {
   const { shared, contents } = getPortfolioBundle();
   const { ui } = contents[locale];
-  const icon = await readFile(join(process.cwd(), 'app/icon.png'));
-  const iconSrc = `data:image/png;base64,${icon.toString('base64')}`;
+  const iconSrc = await ICON_SRC;
 
   return new ImageResponse(
     <div
@@ -71,7 +74,7 @@ async function renderCard({ locale, label, title, titleSize, subtitle }: Card): 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           {/* eslint-disable-next-line @next/next/no-img-element -- next/og renders plain <img> only */}
-          <img src={iconSrc} width={56} height={56} alt="" />
+          <img src={iconSrc} width={OG_ICON_SIZE} height={OG_ICON_SIZE} alt="" />
           <span style={{ fontSize: 28 }}>{shared.name}</span>
         </div>
         <span style={{ fontSize: 22, color: MUTED, letterSpacing: 4 }}>{label}</span>
