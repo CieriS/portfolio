@@ -330,7 +330,8 @@ Configurazione, una volta sola, in **Settings → Secrets and variables → Acti
 
 | Secret | Valore |
 | --- | --- |
-| `VERSIONS_TOKEN` | Token personale *fine-grained* limitato a questo repository e a quelli dei progetti privati. Permessi: su questo repository **Contents** e **Pull requests** in lettura e scrittura; sui repository dei progetti **Contents** in sola lettura. |
+| `VERSIONS_TOKEN` | Token personale *fine-grained* limitato a **questo** repository. Permessi: **Contents** e **Pull requests** in lettura e scrittura. |
+| `VERSION_SOURCES_TOKEN` | Solo per i progetti privati: un secondo token *fine-grained*, limitato ai loro repository, con **Contents** in sola lettura. Sono due token perché un token *fine-grained* dà gli stessi permessi su tutti i repository che include: uno solo avrebbe potuto scrivere anche nei progetti privati. |
 | `VERSION_SOURCES` | Solo per i progetti privati: `{"<id del progetto>":"proprietario/repository"}`. |
 
 Serve un token personale e non quello del workflow: una pull request aperta con `GITHUB_TOKEN` non fa partire altri workflow, quindi i controlli obbligatori non girerebbero mai. Il token scade: quando succede il workflow fallisce con un messaggio che lo dice, e va rigenerato. Senza il secret il workflow si ferma subito con un errore chiaro.

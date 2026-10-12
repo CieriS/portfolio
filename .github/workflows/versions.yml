@@ -22,8 +22,11 @@ jobs:
     env:
       # A fine-grained personal access token, not the workflow's own token: a pull request
       # opened with GITHUB_TOKEN starts no other workflow, so its required checks would never
-      # run. It reads the releases of the projects and writes one branch and one pull request here.
+      # run. Limited to this repository: it writes one branch and one pull request here.
       GH_TOKEN: ${{ secrets.VERSIONS_TOKEN }}
+      # A second token, read-only, limited to the repositories of the private projects. Kept
+      # apart because a fine-grained token gives the same permissions on all its repositories.
+      SOURCES_TOKEN: ${{ secrets.VERSION_SOURCES_TOKEN }}
       # {"<project id>":"owner/repo"} for projects whose repository is private. A secret, so
       # the repository name is masked in the logs.
       VERSION_SOURCES: ${{ secrets.VERSION_SOURCES }}
