@@ -54,9 +54,9 @@ const nextConfig: NextConfig = {
   // "Network" URL (e.g. http://192.168.1.69:3000) renders the HTML but never hydrates.
   // Development only — production builds are unaffected.
   allowedDevOrigins: ['192.168.*.*', '10.**', '*.local'],
-  // OG image routes read app/icon.png from disk: ship it with their serverless bundle
+  // OG image routes read their icon from disk: ship it with their serverless bundle
   // in case a route is ever regenerated at request time.
-  outputFileTracingIncludes: { '/**/opengraph-image*': ['./app/icon.png'] },
+  outputFileTracingIncludes: { '/**/opengraph-image*': ['./lib/og-icon.png'] },
   async headers() {
     return [{ source: '/:path*', headers: SECURITY_HEADERS }];
   },
