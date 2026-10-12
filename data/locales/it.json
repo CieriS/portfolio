@@ -131,20 +131,23 @@
         "label": "Industria",
         "role": "Software Developer",
         "entityLabel": "Organizzazione",
-        "summary": "Attività lavorativa dal 23/02/2022: tirocinio, apprendistato, oggi tempo indeterminato, full remote. Sviluppo frontend e full-stack su un framework proprietario, ora in migrazione verso Angular con generazione di codice assistita da AI. Il lavoro quotidiano sono le interfacce, in ambienti riproducibili con Docker; Rust e PostgreSQL appartengono al percorso di Data Engineering che studio in parallelo.",
+        "summary": "In Tas da febbraio 2022: tirocinio, poi apprendistato, oggi a tempo indeterminato e full remote. Sviluppo frontend e full-stack su un framework proprietario, ora in migrazione verso Angular con generazione di codice assistita da AI. Il lavoro quotidiano sono le interfacce, in ambienti con Docker e Kubernetes (Helm, Rancher); Rust e PostgreSQL appartengono al percorso di Data Engineering che studio in parallelo.",
         "phases": {
           "interface": {
             "title": "Livello interfaccia",
             "body": "Interfacce web, rendering lato server, primo contatto con schemi relazionali; oggi un framework proprietario in migrazione verso Angular e TypeScript."
           },
-          "environments": { "title": "Ambienti", "body": "Ambienti di sviluppo riproducibili con Docker." }
+          "environments": {
+            "title": "Ambienti",
+            "body": "Ambienti di sviluppo riproducibili con Docker; cluster Kubernetes con Helm e Rancher."
+          }
         }
       },
       "academic": {
         "label": "Accademico",
         "role": "Ingegneria Informatica",
         "entityLabel": "Ateneo",
-        "summary": "Laurea triennale in Ingegneria Informatica all'Università di Bologna, part-time. Sospesa dal 2023 a fine 2024 per concentrarmi sul lavoro a tempo pieno, poi ripresa: un processo in pausa, non abbandonato.",
+        "summary": "Laurea triennale in Ingegneria Informatica all'Università di Bologna, part-time. Sospesa dal 2023 a fine 2024 per concentrarmi sul lavoro a tempo pieno, poi ripresa.",
         "phases": {
           "foundations": {
             "title": "Fondamenti formali",

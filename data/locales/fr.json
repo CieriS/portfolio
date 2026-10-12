@@ -131,20 +131,23 @@
         "label": "Industrie",
         "role": "Software Developer",
         "entityLabel": "Organisation",
-        "summary": "Activité professionnelle depuis le 23/02/2022 : stage, apprentissage, aujourd'hui en CDI, en télétravail complet. Développement frontend et full-stack sur un framework propriétaire, en cours de migration vers Angular avec génération de code assistée par IA. Le quotidien, ce sont les interfaces, dans des environnements Docker reproductibles ; Rust et PostgreSQL relèvent du parcours Data Engineering que j'étudie en parallèle.",
+        "summary": "Chez Tas depuis février 2022 : stage, puis apprentissage, aujourd'hui en CDI, en télétravail complet. Développement frontend et full-stack sur un framework propriétaire, en cours de migration vers Angular avec génération de code assistée par IA. Le quotidien, ce sont les interfaces, dans des environnements Docker et Kubernetes (Helm, Rancher) ; Rust et PostgreSQL relèvent du parcours Data Engineering que j'étudie en parallèle.",
         "phases": {
           "interface": {
             "title": "Couche interface",
             "body": "Interfaces web, rendu côté serveur, premier contact avec les schémas relationnels ; aujourd'hui un framework propriétaire en migration vers Angular et TypeScript."
           },
-          "environments": { "title": "Environnements", "body": "Environnements de développement reproductibles avec Docker." }
+          "environments": {
+            "title": "Environnements",
+            "body": "Environnements de développement reproductibles avec Docker ; clusters Kubernetes avec Helm et Rancher."
+          }
         }
       },
       "academic": {
         "label": "Académique",
         "role": "Ingénierie informatique",
         "entityLabel": "Établissement",
-        "summary": "Licence en ingénierie informatique à l'Université de Bologne, à temps partiel. Suspendue de 2023 à fin 2024 pour me concentrer sur le travail à plein temps, puis reprise : un processus mis en pause, non abandonné.",
+        "summary": "Licence en ingénierie informatique à l'Université de Bologne, à temps partiel. Suspendue de 2023 à fin 2024 pour me concentrer sur le travail à plein temps, puis reprise.",
         "phases": {
           "foundations": {
             "title": "Fondements formels",

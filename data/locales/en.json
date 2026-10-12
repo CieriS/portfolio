@@ -128,20 +128,23 @@
         "label": "Industry",
         "role": "Software Developer",
         "entityLabel": "Organization",
-        "summary": "Professional activity since 23/02/2022: internship, apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. The day job is interfaces, in reproducible Docker environments; Rust and PostgreSQL belong to the Data Engineering path I study alongside it.",
+        "summary": "At Tas since February 2022: internship, then apprenticeship, now a permanent role, fully remote. Frontend and full-stack development on a proprietary framework, now migrating to Angular with AI-assisted code generation. The day job is interfaces, in environments built on Docker and Kubernetes (Helm, Rancher); Rust and PostgreSQL belong to the Data Engineering path I study alongside it.",
         "phases": {
           "interface": {
             "title": "Interface layer",
             "body": "Web interfaces, server-side rendering, first contact with relational schemas; today a proprietary framework migrating to Angular and TypeScript."
           },
-          "environments": { "title": "Environments", "body": "Reproducible development environments with Docker." }
+          "environments": {
+            "title": "Environments",
+            "body": "Reproducible development environments with Docker; Kubernetes clusters with Helm and Rancher."
+          }
         }
       },
       "academic": {
         "label": "Academic",
         "role": "Computer Engineering",
         "entityLabel": "Institution",
-        "summary": "Bachelor's degree in Computer Engineering at the University of Bologna, part-time. Suspended from 2023 to late 2024 to concentrate on full-time work, then resumed: a paused process, not an abandoned one.",
+        "summary": "Bachelor's degree in Computer Engineering at the University of Bologna, part-time. Suspended from 2023 to late 2024 to concentrate on full-time work, then resumed.",
         "phases": {
           "foundations": {
             "title": "Formal foundations",
