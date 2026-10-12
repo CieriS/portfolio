@@ -9,8 +9,14 @@ const cv: CvDocument = {
   contact: ['ada@example.com', 'Bologna, IT'],
   summary: 'Università, perché, Größe, señal → ok',
   sections: [
-    { title: 'Experience', entries: [{ heading: 'Developer', meta: 'Acme · 01/2020 – present', body: 'Body', tags: ['Rust'] }] },
+    { title: 'Skills', entries: [], lines: ['Languages: Rust, SQL'] },
+    {
+      title: 'Experience',
+      entries: [{ heading: 'Developer', meta: 'Acme · 01/2020 – present', body: 'Body', tags: ['Rust'] }],
+      lines: [],
+    },
   ],
+  consent: 'Consent line',
   footer: 'Generated on 10/10/2026 from example.com',
 };
 
@@ -32,8 +38,24 @@ describe('renderCvPdf', () => {
       body: 'word '.repeat(80),
       tags: ['A'],
     }));
-    const bytes = await renderCvPdf({ ...cv, sections: [{ title: 'Long', entries }] }, 'Long');
+    const bytes = await renderCvPdf({ ...cv, sections: [{ title: 'Long', entries, lines: [] }] }, 'Long');
     expect((await PDFDocument.load(bytes)).getPageCount()).toBeGreaterThan(1);
+  });
+
+  it('moves a section title to the next page rather than leaving it alone at the foot', async () => {
+    // Fourteen short entries stop about 90 pt above the bottom margin: room for a title, but for nothing under it.
+    const filler = Array.from({ length: 14 }, (_, i) => ({ heading: `Entry ${i}`, meta: 'meta', body: '', tags: [] }));
+    const bare = { ...cv, consent: '', footer: '' };
+    const pages = async (sections: CvDocument['sections']) =>
+      (await PDFDocument.load(await renderCvPdf({ ...bare, sections }, 'x'))).getPageCount();
+
+    expect(await pages([{ title: 'Filler', entries: filler, lines: [] }])).toBe(1);
+    expect(
+      await pages([
+        { title: 'Filler', entries: filler, lines: [] },
+        { title: 'Next', entries: [], lines: [] },
+      ]),
+    ).toBe(2);
   });
 
   it('survives characters the standard fonts cannot encode', async () => {

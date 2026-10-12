@@ -11,6 +11,9 @@ const MARGIN = 56;
 const WIDTH = PAGE.width - 2 * MARGIN;
 const INK = rgb(0.1, 0.1, 0.1);
 const MUTED = rgb(0.42, 0.42, 0.42);
+/** The coral of the site icon, darkened until it reads on white (contrast above 4.5:1). */
+const ACCENT = rgb(0.76, 0.25, 0.18);
+const RULE = rgb(0.85, 0.85, 0.85);
 
 type Style = { size: number; font: 'regular' | 'bold'; color?: typeof INK; gap?: number };
 
@@ -46,7 +49,13 @@ export async function renderCvPdf(cv: CvDocument, title: string): Promise<Uint8A
 
   for (const section of cv.sections) {
     y -= 8;
-    write(section.title.toUpperCase(), { size: 9, font: 'bold', color: MUTED, gap: 4 });
+    // A title never stays alone at the foot of a page.
+    if (y < MARGIN + 60) y = MARGIN;
+    write(section.title.toUpperCase(), { size: 9, font: 'bold', color: ACCENT, gap: 4 });
+    page.drawLine({ start: { x: MARGIN, y }, end: { x: MARGIN + WIDTH, y }, thickness: 0.5, color: RULE });
+    y -= 4;
+    for (const line of section.lines) write(line, { size: 10, font: 'regular', gap: 1 });
+    if (section.lines.length > 0) y -= 6;
     for (const entry of section.entries) {
       write(entry.heading, { size: 11, font: 'bold' });
       if (entry.meta) write(entry.meta, { size: 9, font: 'regular', color: MUTED, gap: 2 });
@@ -56,6 +65,8 @@ export async function renderCvPdf(cv: CvDocument, title: string): Promise<Uint8A
     }
   }
 
+  y -= 8;
+  write(cv.consent, { size: 8, font: 'regular', color: MUTED });
   write(cv.footer, { size: 8, font: 'regular', color: MUTED });
   return pdf.save();
 }

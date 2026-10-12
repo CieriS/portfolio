@@ -198,6 +198,7 @@ Every URL is prerendered with its own content. An address that matches no view s
 - `lib/cv/service.ts` holds the two rules, free of HTTP and PDF: right password → PDF; valid email → signed link sent to that address (plus a notice to the owner). A hidden honeypot field stops bots without telling them.
 - `lib/cv/token.ts`: the link carries email, language and expiry (24 hours, `lib/cv/common.ts`), signed with HMAC-SHA256. No database is needed, and a tampered or expired link is refused. Passwords are compared in constant time.
 - `lib/cv/document.ts` builds the CV as plain data from `data/shared.json` and the chosen language; `lib/cv/pdf.ts` lays it out on A4 with the standard fonts (no font file to ship). PDF and email copy live in `data/cv.json`, outside the locale files that reach the browser.
+- The CV adds what the site does not show, from `data/cv-profile.json` (`lib/cv/profile.ts`): grouped skills, spoken languages with their level, certifications and which profiles to list. Sections run skills, experience, education, certifications, projects, languages; the data-processing consent closes the page. It stays single-column and image-free so that applicant tracking systems (ATS) read it in order: the only colour is on the section titles. Course names are translated through `terms` in `data/cv.json`; a test fails when a technology from work or projects is missing from the skills.
 - `lib/cv/mailer.ts` is the outbound port for email, with an adapter for Resend's REST API over `fetch` (no SDK). Sending by SMS would be another adapter.
 - Known limits: there is no per-address request limit, since it would need shared state; on Vercel, set a Firewall rate-limiting rule on `/api/cv`. The owner password must be long precisely because attempts are not counted.
 
@@ -341,11 +342,12 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 ├── data/
 │   ├── shared.json                  language-independent data
 │   ├── cv.json                      CV PDF and email copy (server only)
+│   ├── cv-profile.json              CV skills, languages and certifications (server only)
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, UI strings, SEO metadata
 ├── i18n/             routing.ts (languages) · request.ts (next-intl messages)
 ├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, format, hooks, cn
 │   ├── content/      schema (zod) · validate (cross-checks)
-│   └── cv/           service, token, config, document, pdf, mailer, copy, common (CV on request)
+│   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV on request)
 ├── store/            viewStore (per instance) · useSceneStore (scene, transient)
 ├── e2e/              Playwright suite · helpers.ts (locales, views, waits)
 ├── .github/workflows/ci.yml   lint, typecheck, build and tests on every PR
