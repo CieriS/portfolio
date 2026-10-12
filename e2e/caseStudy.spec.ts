@@ -75,9 +75,33 @@ test('the accordion links to the case study, and the page leads back to the proj
   await expect(page).toHaveURL(new RegExp(`${caseStudyPath('it', 'yourfinance')}$`));
   await expect(page.locator('h1')).toHaveText('yourFinance');
 
-  await page.getByRole('link', { name: study.copy.it.back }).click();
+  await page.locator('main').getByRole('link', { name: study.copy.it.back }).click();
   await expect(page).toHaveURL(new RegExp(`${pathFor('it', 'projects')}$`));
   await expectView(page, 'it', 'projects');
+});
+
+test('the way back stays on screen however far the page is scrolled', async ({ page }) => {
+  await page.goto(caseStudyPath('it', 'yourfinance'));
+  const back = page.locator('header a[data-back]');
+  await expect(back).toBeInViewport();
+  await expect(back).toHaveAttribute('href', pathFor('it', 'projects'));
+
+  // Halfway down and at the very end: the header does not scroll with the page.
+  const main = page.locator('main');
+  for (const fraction of [0.5, 1]) {
+    await main.evaluate((element, part) => element.scrollTo(0, element.scrollHeight * part), fraction);
+    await expect(back).toBeInViewport();
+  }
+
+  await back.click();
+  await expect(page).toHaveURL(new RegExp(`${pathFor('it', 'projects')}$`));
+  await expectView(page, 'it', 'projects');
+});
+
+test('the header link names where it leads, in full where there is room', async ({ page, isMobile }) => {
+  await page.goto(caseStudyPath('en', 'yourfinance'));
+  const back = page.locator('header a[data-back]');
+  await expect(back).toHaveAccessibleName(isMobile ? locales.en.ui.nav.projects : study.copy.en.back);
 });
 
 test('only projects with a case study link to one', async ({ page }) => {

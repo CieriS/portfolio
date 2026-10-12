@@ -133,7 +133,7 @@ GOOGLE_SITE_VERIFICATION=il-tuo-token
 
 Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corrisponde a nessuna vista mostra una pagina 404 localizzata e non indicizzabile.
 
-Sotto la vista Sistemi c'è una pagina in più per i progetti che hanno un caso di studio: `/en/systems/yourfinance`, `/it/sistemi/yourfinance`, `/fr/systemes/yourfinance`, `/de/systeme/yourfinance`. È un documento con link veri, non una sesta vista: ci si arriva dal progetto aperto nell'accordion e uscirne è una navigazione.
+Sotto la vista Sistemi c'è una pagina in più per i progetti che hanno un caso di studio: `/en/systems/yourfinance`, `/it/sistemi/yourfinance`, `/fr/systemes/yourfinance`, `/de/systeme/yourfinance`. È un documento con link veri, non una sesta vista: ci si arriva dal progetto aperto nell'accordion e uscirne è una navigazione. Il link per tornare alla vista dei progetti sta nell'intestazione, che non scorre con la pagina, oltre che in fondo.
 
 ## Navigazione e interazione
 
