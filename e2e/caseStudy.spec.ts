@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import study from '../data/case-studies/yourfinance.json';
 import { caseStudyPath, LOCALES } from '../lib/routes';
-import { locales } from './content';
+import { locales, shared } from './content';
 import { CASE_STUDY_PAGES, expectView, gotoView, pathFor } from './helpers';
 
 /**
@@ -49,6 +49,14 @@ for (const { locale, path } of CASE_STUDY_PAGES) {
     await expect(page.locator('a[data-source="private"]')).toHaveAttribute('href', pathFor(locale, 'identity'));
   });
 }
+
+test("the version in the case study is the project's own, with the month it came out", async ({ page }) => {
+  const project = shared.projects.find((item) => item.id === 'yourfinance');
+  await page.goto(caseStudyPath('it', 'yourfinance'));
+  const fact = page.locator('[data-fact="version"] dd');
+  await expect(fact).toContainText(`${project?.version},`);
+  await expect(fact).toContainText(/\d{4}$/);
+});
 
 test('every screenshot is described and loads', async ({ page }) => {
   await page.goto(caseStudyPath('en', 'yourfinance'));

@@ -5,6 +5,19 @@ export function versionLabel(project: Pick<Project, 'version'>): string | null {
   return project.version ? `v${project.version}` : null;
 }
 
+/** `2026-10-11` → `October 2026`, in the language of the page. */
+export function releaseMonth(iso: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(
+    new Date(`${iso}T00:00:00Z`),
+  );
+}
+
+/** `1.2.0, October 2026`: the version with the month it came out, when both are known. */
+export function versionWithDate(project: Pick<Project, 'version' | 'released'>, locale: string): string | null {
+  if (!project.version) return null;
+  return project.released ? `${project.version}, ${releaseMonth(project.released, locale)}` : project.version;
+}
+
 /**
  * Where the released version can be seen: the tag's page in a public repository. A private
  * project has a version and no address, so its version is shown as plain text.

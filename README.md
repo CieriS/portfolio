@@ -301,7 +301,7 @@ Ogni fase accetta uno `start` facoltativo. Senza, le fasi sono distribuite sul t
 
 ### Aggiungere un progetto
 
-1. Aggiungi un elemento a `shared.projects` con `id`, `name`, `source` (pubblico con `url` o privato), `stack` e `layers` (`id`, `tech`). `version` è facoltativo (`0.9.0`, senza `v`): compare nel pannello del progetto, nel CV e nel JSON-LD, e per un progetto pubblico porta alla pagina del tag su GitHub. Va aggiornato a mano a ogni release del progetto.
+1. Aggiungi un elemento a `shared.projects` con `id`, `name`, `source` (pubblico con `url` o privato), `stack` e `layers` (`id`, `tech`). `version` è facoltativo (`0.9.0`, senza `v`): compare nel pannello del progetto, nel CV e nel JSON-LD, e per un progetto pubblico porta alla pagina del tag su GitHub. Insieme a `released` (la data di pubblicazione) lo tiene aggiornato un workflow: vedi [Versioni dei progetti](#versioni-dei-progetti).
 2. In **ogni** lingua aggiungi `projects.items[<id>]` con `summary`, `bridge`, `highlights` (elenco delle scelte di ingegneria) e `layers` (una descrizione per ogni `id` di livello).
 3. Se necessario, aggiorna title e description in `ui.meta.views.projects`.
 
@@ -314,6 +314,25 @@ La vista e il JSON-LD `ItemList` si aggiornano automaticamente.
 3. Metti le schermate in `data/case-studies/<id>/` e importale in `lib/caseStudyImages.ts`, con le stesse chiavi di `screens`.
 
 Link dall'accordion, sitemap, metadata e immagine Open Graph seguono da soli; TypeScript segnala i punti rimasti da toccare.
+
+### Versioni dei progetti
+
+`version` e `released` di ogni progetto in `data/shared.json` seguono le release dei progetti stessi, senza scriverle a mano.
+
+- `.github/workflows/versions.yml` gira ogni giorno, e a richiesta dalla scheda Actions. `scripts/sync-versions.mjs` legge l'ultima release di ogni progetto che dichiara una versione e, se è più recente, riscrive le due righe; la logica è in `lib/versions.ts`, pura e testata.
+- Il workflow non scrive mai su `development`: apre una pull request dal branch `features/versioni-dei-progetti` (o aggiorna quella già aperta), i controlli girano come per ogni altra e il merge resta una decisione.
+- Contano anche le pre-release; le bozze no. Non si torna mai indietro: una versione uguale o più vecchia viene ignorata.
+- Se nella pull request un controllo fallisce, un testo dipende dalla versione (per esempio la scheda di aria-er, che fino alla 1.0.0 deve dire cosa manca): si corregge il testo in quel branch e poi si unisce.
+- Un progetto pubblico è cercato nel repository del suo `source.url`. Uno privato non ha indirizzo nei dati, di proposito: il suo repository arriva dal secret `VERSION_SOURCES` e non compare né nei file né nei log; un test fallisce se il nome finisce in un file.
+
+Configurazione, una volta sola, in **Settings → Secrets and variables → Actions**:
+
+| Secret | Valore |
+| --- | --- |
+| `VERSIONS_TOKEN` | Token personale *fine-grained* limitato a questo repository e a quelli dei progetti privati. Permessi: su questo repository **Contents** e **Pull requests** in lettura e scrittura; sui repository dei progetti **Contents** in sola lettura. |
+| `VERSION_SOURCES` | Solo per i progetti privati: `{"<id del progetto>":"proprietario/repository"}`. |
+
+Serve un token personale e non quello del workflow: una pull request aperta con `GITHUB_TOKEN` non fa partire altri workflow, quindi i controlli obbligatori non girerebbero mai. Il token scade: quando succede il workflow fallisce con un messaggio che lo dice, e va rigenerato. Senza il secret il workflow si ferma subito con un errore chiaro.
 
 ### Aggiungere un contatto
 
@@ -371,12 +390,14 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 │   ├── case-studies/                un JSON per caso di studio + cartella con le schermate (solo server)
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, stringhe UI, metadata SEO
 ├── i18n/             routing.ts (lingue) · request.ts (messages di next-intl)
-├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, sceneField, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, sceneField, projects, versions, format, hooks, cn
 │   ├── content/      schema (zod) · validate (verifiche incrociate)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV su richiesta)
 ├── store/            viewStore (per istanza) · useSceneStore (scena, transiente)
 ├── e2e/              suite Playwright · helpers.ts (lingue, viste, attese)
 ├── .github/workflows/ci.yml   lint, typecheck, build e test su ogni PR
+├── .github/workflows/versions.yml   versioni dei progetti allineate alle loro release (PR automatica)
+├── scripts/          sync-versions.mjs (usato dal workflow delle versioni)
 ├── proxy.ts          rilevamento lingua (middleware di next-intl)
 ├── next.config.ts    plugin next-intl, redirect 301, origini ammesse in sviluppo
 ├── eslint.config.mjs · postcss.config.mjs · tsconfig.json · playwright.config.ts

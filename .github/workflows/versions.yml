@@ -1,0 +1,78 @@
+name: Project versions
+
+# Reads the latest release of each project shown on the site and, when one is newer than the
+# version written in data/shared.json, opens a pull request with the new number. It never
+# pushes to development: the pull request runs the usual checks and a person merges it.
+on:
+  schedule:
+    - cron: '23 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: project-versions
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Compare with the latest releases
+    runs-on: ubuntu-latest
+    env:
+      # A fine-grained personal access token, not the workflow's own token: a pull request
+      # opened with GITHUB_TOKEN starts no other workflow, so its required checks would never
+      # run. It reads the releases of the projects and writes one branch and one pull request here.
+      GH_TOKEN: ${{ secrets.VERSIONS_TOKEN }}
+      # {"<project id>":"owner/repo"} for projects whose repository is private. A secret, so
+      # the repository name is masked in the logs.
+      VERSION_SOURCES: ${{ secrets.VERSION_SOURCES }}
+      BRANCH: features/versioni-dei-progetti
+    steps:
+      - name: Stop without the token
+        if: env.GH_TOKEN == ''
+        run: |
+          echo "::error::The VERSIONS_TOKEN secret is missing. See the README, 'Project versions', for how to create it."
+          exit 1
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Compare
+        id: sync
+        run: node scripts/sync-versions.mjs
+
+      - name: Open or update the pull request
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          TITLE: ${{ steps.sync.outputs.title }}
+          MESSAGE: ${{ steps.sync.outputs.message }}
+          BODY: ${{ steps.sync.outputs.body }}
+        run: |
+          set -euo pipefail
+          repo="$GITHUB_REPOSITORY"
+          file=data/shared.json
+
+          # The branch starts from development the first time and is reused while its pull request is open.
+          base="$(gh api "repos/$repo/git/ref/heads/development" -q .object.sha)"
+          gh api "repos/$repo/git/refs" -f ref="refs/heads/$BRANCH" -f sha="$base" >/dev/null 2>&1 || true
+
+          # Written through the API, so the commit belongs to the owner of the token. Skipped when
+          # the branch already holds this content: a daily run must not add a commit a day.
+          remote="$(gh api "repos/$repo/contents/$file?ref=$BRANCH" -q .sha)"
+          if [ "$remote" != "$(git hash-object "$file")" ]; then
+            gh api -X PUT "repos/$repo/contents/$file" \
+              -f message="$MESSAGE" -f branch="$BRANCH" -f sha="$remote" \
+              -f content="$(base64 -w0 "$file")" >/dev/null
+          fi
+
+          if [ -z "$(gh pr list --repo "$repo" --head "$BRANCH" --state open --json number -q '.[].number')" ]; then
+            gh pr create --repo "$repo" --base development --head "$BRANCH" --title "$TITLE" --body-file "$BODY"
+          else
+            gh pr edit "$BRANCH" --repo "$repo" --title "$TITLE" --body-file "$BODY"
+          fi
