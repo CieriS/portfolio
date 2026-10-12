@@ -46,3 +46,24 @@ describe('project versions', () => {
     for (const locale of LOCALES) expect(copy[locale].facts.version.value, locale).toContain(project?.version);
   });
 });
+
+describe('aria-er', () => {
+  const { shared, contents } = getPortfolioBundle();
+  const project = shared.projects.find((item) => item.id === 'ariaer');
+  // How each language says that the Google Cloud run has not happened yet.
+  const pending = { en: 'still to do', it: 'ancora da fare', fr: 'reste à faire', de: 'steht noch aus' };
+
+  it('declares a released version and links it to the tag in its own repository', () => {
+    expect(project?.source.visibility).toBe('public');
+    expect(project?.version).toMatch(/^\d+\.\d+\.\d+$/);
+    expect(project && releaseUrl(project)).toBe(`https://github.com/CieriS/aria-er/releases/tag/v${project?.version}`);
+  });
+
+  it.each(LOCALES)('%s: the entry and the version tell the same story about the cloud run', (locale) => {
+    // 1.0.0 is the version that has run on Google Cloud: before it the entry says the run is
+    // pending, from it on that sentence has to go. Bumping the number alone fails here.
+    const released = Number(project?.version?.split('.')[0]) >= 1;
+    const summary = contents[locale].projects.items.ariaer.summary;
+    expect(summary.includes(pending[locale]), summary).toBe(!released);
+  });
+});
