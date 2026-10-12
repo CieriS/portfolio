@@ -67,6 +67,42 @@ test('the password can be shown while typing and is hidden again by default', as
   await expect(page.getByLabel('Password', { exact: true })).toHaveAttribute('type', 'password');
 });
 
+test('an empty or malformed field is explained by the page, not by the browser', async ({ page }) => {
+  await openCvPanel(page);
+  const email = page.getByLabel('Email address');
+  // The browser's own validation is off: nothing of its "fill in this field" bubble is left.
+  await expect(page.locator('form')).toHaveAttribute('novalidate', '');
+  await expect(email).not.toHaveAttribute('required', '');
+
+  await page.getByRole('button', { name: 'Send link' }).click();
+  await expect(page.getByRole('status')).toHaveText('Write the address the link should be sent to.');
+  await expect(email).toHaveAttribute('aria-invalid', 'true');
+  await expect(email).toBeFocused();
+
+  await email.fill('visitor@example');
+  await expect(page.getByRole('status')).toHaveText('');
+  await expect(email).not.toHaveAttribute('aria-invalid', 'true');
+  await page.getByRole('button', { name: 'Send link' }).click();
+  await expect(page.getByRole('status')).toHaveText('This does not look like an email address: check the part after the @.');
+
+  await page.getByRole('button', { name: 'Password', exact: true }).click();
+  await page.getByRole('button', { name: 'Download' }).click();
+  await expect(page.getByRole('status')).toHaveText('Write the password.');
+  await expect(page.getByLabel('Password', { exact: true })).toBeFocused();
+});
+
+test('nothing is sent while the field is empty', async ({ page }) => {
+  let requests = 0;
+  await page.route('**/api/cv', (route) => {
+    requests += 1;
+    return route.continue();
+  });
+  await openCvPanel(page);
+  await page.getByRole('button', { name: 'Send link' }).click();
+  await expect(page.getByRole('status')).not.toHaveText('');
+  expect(requests).toBe(0);
+});
+
 test('typing digits in the form does not change view', async ({ page }) => {
   await openCvPanel(page);
   await page.getByLabel('Email address').pressSequentially('123');
