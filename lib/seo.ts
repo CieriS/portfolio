@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { routing, type Locale } from '@/i18n/routing';
 import { getPortfolioBundle } from '@/lib/portfolio';
 import { absoluteUrl, IS_INDEXABLE } from '@/lib/site';
-import { pathFor, type ViewId } from '@/lib/views';
+import { getCaseStudy } from '@/lib/caseStudy';
+import { caseStudyPath, pathFor, type CaseStudyId, type ViewId } from '@/lib/views';
 
 const OG_LOCALE: Record<Locale, string> = { en: 'en_US', it: 'it_IT', fr: 'fr_FR', de: 'de_DE' };
 
@@ -13,6 +14,16 @@ export function languageAlternates(view: ViewId): Record<string, string> {
     'x-default': view === 'hero' ? absoluteUrl('/') : absoluteUrl(pathFor(routing.defaultLocale, view)),
   };
 }
+
+// Set per page rather than in the layout: the not-found boundary inherits layout metadata,
+// and would otherwise carry `index, follow` next to the `noindex` Next adds for it.
+const ROBOTS: Metadata['robots'] = IS_INDEXABLE
+  ? {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
+    }
+  : { index: false, follow: false };
 
 export function buildViewMetadata(locale: Locale, view: ViewId): Metadata {
   const { shared, contents } = getPortfolioBundle();
@@ -25,15 +36,7 @@ export function buildViewMetadata(locale: Locale, view: ViewId): Metadata {
     title: view === 'hero' ? { absolute: title } : title,
     description,
     alternates: { canonical: url, languages: languageAlternates(view) },
-    // Set per page rather than in the layout: the not-found boundary inherits layout metadata,
-    // and would otherwise carry `index, follow` next to the `noindex` Next adds for it.
-    robots: IS_INDEXABLE
-      ? {
-          index: true,
-          follow: true,
-          googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
-        }
-      : { index: false, follow: false },
+    robots: ROBOTS,
     openGraph: {
       type: 'profile',
       firstName,
@@ -41,6 +44,38 @@ export function buildViewMetadata(locale: Locale, view: ViewId): Metadata {
       username: shared.handle,
       url,
       siteName: meta.siteName,
+      title,
+      description,
+      locale: OG_LOCALE[locale],
+      alternateLocale: routing.locales.filter((other) => other !== locale).map((other) => OG_LOCALE[other]),
+    },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
+
+/** hreflang map for a case study: every locale, with English as x-default. */
+export function caseStudyAlternates(id: CaseStudyId): Record<string, string> {
+  return {
+    ...Object.fromEntries(routing.locales.map((locale) => [locale, absoluteUrl(caseStudyPath(locale, id))])),
+    'x-default': absoluteUrl(caseStudyPath(routing.defaultLocale, id)),
+  };
+}
+
+export function buildCaseStudyMetadata(locale: Locale, id: CaseStudyId): Metadata {
+  const { shared, contents } = getPortfolioBundle();
+  const { title, description } = getCaseStudy(id).copy[locale].meta;
+  const url = absoluteUrl(caseStudyPath(locale, id));
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url, languages: caseStudyAlternates(id) },
+    robots: ROBOTS,
+    openGraph: {
+      type: 'article',
+      authors: [shared.name],
+      url,
+      siteName: contents[locale].ui.meta.siteName,
       title,
       description,
       locale: OG_LOCALE[locale],

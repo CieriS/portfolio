@@ -42,6 +42,7 @@ Le site est disponible en anglais, en italien, en français et en allemand.
 - **Accessibilité** : vrais liens, un seul `h1` par URL, attributs ARIA, focus visible et respect de `prefers-reduced-motion` en CSS, dans Framer Motion et dans la scène 3D.
 - **Contenus centralisés et validés** : un fichier JSON partagé plus un par langue, contrôlés par les types, un schéma zod et des contrôles croisés — un contenu incohérent fait échouer le build.
 - **CV sur demande** : le PDF est généré à chaque téléchargement à partir des mêmes contenus que le site, avec les coordonnées privées lues dans des variables d'environnement. Il n'est pas public : le visiteur laisse une adresse e-mail et reçoit un lien signé qui expire ; le propriétaire le télécharge tout de suite avec un mot de passe.
+- **Étude de cas** : yourFinance a sa propre page sous la vue des projets (`/fr/systemes/yourfinance`) : problème, contraintes, architecture, choix, mesures et captures d'écran avec des données de démonstration. Le code reste privé et la page n'y renvoie jamais.
 
 ## Stack technique
 
@@ -134,6 +135,8 @@ GOOGLE_SITE_VERIFICATION=votre-jeton
 
 Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspond à aucune vue affiche une page 404 localisée et non indexable.
 
+Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étude de cas : `/en/systems/yourfinance`, `/it/sistemi/yourfinance`, `/fr/systemes/yourfinance`, `/de/systeme/yourfinance`. C'est un document avec de vrais liens, pas une sixième vue : on y arrive depuis le projet ouvert dans l'accordéon, et en sortir est une navigation.
+
 ## Navigation et interactions
 
 - **Liens en bas de page** (`01`–`05`) : ce sont de vrais `<a href>`, donc le clic du milieu, « ouvrir dans un nouvel onglet » et les robots d'indexation fonctionnent. Le clic principal change la vue sur place. À côté de l'entrée active figure le mot courant pour cette vue (« Exécution · Expérience »), qui fait aussi partie du nom accessible de chaque lien.
@@ -204,6 +207,14 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 - Le CV ajoute ce que le site ne montre pas, à partir de `data/cv-profile.json` (`lib/cv/profile.ts`) : compétences regroupées, langues parlées avec leur niveau, certifications et profils à citer. Les sections se suivent ainsi : compétences, expérience, formation, certifications, projets, langues ; le consentement au traitement des données ferme la page. Il reste sur une colonne et sans image, pour que les logiciels de tri des candidatures (ATS) le lisent dans l'ordre : la seule couleur est celle des titres de section. Les noms des cours sont traduits via `terms` dans `data/cv.json` ; un test échoue si une technologie du travail ou des projets manque aux compétences.
 - `lib/cv/mailer.ts` est le port de sortie pour l'e-mail, avec un adaptateur pour l'API REST de Resend via `fetch` (sans SDK). Un envoi par SMS serait un autre adaptateur.
 - Limites connues : pas de limite de requêtes par adresse, car il faudrait un état partagé ; sur Vercel, on configure une règle de rate limiting du Firewall sur `/api/cv`. Le mot de passe du propriétaire doit être long justement parce que les tentatives ne sont pas comptées.
+
+### Études de cas
+
+- `app/[locale]/[view]/[study]/page.tsx` pré-rend la page uniquement sous le slug de la vue des projets et uniquement pour les identifiants de `CASE_STUDY_IDS` (`lib/routes.ts`) ; le reste est une 404.
+- `components/case-study/CaseStudyPage.tsx` est un composant serveur : tout le texte est dans le HTML et la page ne charge pas la bibliothèque d'animation. Il utilise les primitives de texte de `components/ui/text.tsx`, partagées avec les vues.
+- Les contenus sont dans `data/case-studies/<id>.json` (structure et textes dans les quatre langues), hors des fichiers de langue envoyés au navigateur. `lib/caseStudy.ts` les valide avec zod et des contrôles croisés : un identifiant sans texte dans une langue, un `alt` vide ou une description de plus de 160 caractères font échouer le build.
+- Les captures d'écran sont des imports statiques (`lib/caseStudyImages.ts`) servis par `next/image`. Elles doivent provenir **uniquement du profil de démonstration**.
+- Chaque page a son canonical, ses hreflang, son image Open Graph, son entrée dans le sitemap et un JSON-LD `TechArticle` avec `BreadcrumbList`. Pour un projet privé, `codeRepository` n'est jamais émis, et un test E2E vérifie que la page ne contient aucun lien vers le dépôt.
 
 ## SEO
 
@@ -296,6 +307,14 @@ Chaque phase accepte un `start` facultatif. Sans lui, les phases sont réparties
 
 La vue et le JSON-LD `ItemList` se mettent à jour automatiquement.
 
+### Ajouter une étude de cas
+
+1. Ajoutez l'identifiant du projet à `CASE_STUDY_IDS` dans `lib/routes.ts`.
+2. Créez `data/case-studies/<id>.json` sur le modèle de `yourfinance.json` et importez-le dans `lib/caseStudy.ts`.
+3. Placez les captures d'écran dans `data/case-studies/<id>/` et importez-les dans `lib/caseStudyImages.ts`, avec les mêmes clés que `screens`.
+
+Le lien dans l'accordéon, le sitemap, les métadonnées et l'image Open Graph suivent d'eux-mêmes ; TypeScript signale ce qu'il reste à modifier.
+
 ### Ajouter un contact
 
 Ajoutez `{ id, label, handle, url }` à `shared.contacts` : le contact apparaît dans la vue Identity et dans le champ `sameAs` du JSON-LD.
@@ -329,7 +348,8 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   │   ├── opengraph-image.tsx      image Open Graph de l'index
 │   │   └── [view]/
 │   │       ├── page.tsx             vues internes (slugs localisés)
-│   │       └── opengraph-image.tsx  image Open Graph par vue
+│   │       ├── opengraph-image.tsx  image Open Graph par vue
+│   │       └── [study]/             étude de cas d'un projet (page + image Open Graph)
 │   ├── api/cv/route.ts              téléchargement du CV (seule route dynamique)
 │   ├── globals.css                  tokens de couleur, utilitaires Tailwind, intro CSS
 │   ├── sitemap.ts · robots.ts · manifest.ts
@@ -338,17 +358,20 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   ├── motion/       ViewFrame (conteneur de vue), Reveal (variantes, line mask, intro)
 │   ├── providers/    ThemeProvider (next-themes)
 │   ├── scene/        SceneLayer → DataField (Canvas, lazy) → DataGrid (useFrame) · modes
+│   ├── case-study/   CaseStudyPage (composant serveur), SceneMode
 │   ├── seo/          PortfolioPage (JSON-LD + application)
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
 │   │                 useViewNavigation, useViewUrlSync
+│   ├── ui/           text (Meta, Emphasis : primitives sans code client)
 │   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, DisciplineView, CvRequest, atoms
 ├── data/
 │   ├── shared.json                  données indépendantes de la langue
 │   ├── cv.json                      textes du PDF et de l'e-mail du CV (serveur uniquement)
 │   ├── cv-profile.json              compétences, langues et certifications du CV (serveur uniquement)
+│   ├── case-studies/                un JSON par étude de cas + un dossier avec ses captures d'écran (serveur uniquement)
 │   └── locales/                     en.json · it.json · fr.json · de.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)
-├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, format, hooks, cn
 │   ├── content/      schema (zod) · validate (contrôles croisés)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV sur demande)
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { LOCALES } from '../lib/routes';
 import { locales, shared } from './content';
-import { ALL_PAGES, pathFor } from './helpers';
+import { ALL_PAGES, CASE_STUDY_PAGES, pathFor } from './helpers';
 
 async function jsonLd(page: import('@playwright/test').Page) {
   const raw = await page.locator('script[type="application/ld+json"]').textContent();
@@ -81,7 +81,7 @@ test('the sitemap lists exactly the pages this suite knows about', async ({ requ
   const xml = await response.text();
 
   const listed = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname).sort();
-  const expected = ALL_PAGES.map((p) => p.path).sort();
+  const expected = [...ALL_PAGES, ...CASE_STUDY_PAGES].map((p) => p.path).sort();
 
   // Guards the hardcoded slug table in helpers.ts: a locale or view added to the app
   // without updating it shows up here rather than quietly going untested.

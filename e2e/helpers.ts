@@ -1,5 +1,5 @@
 import { locales } from './content';
-import { LOCALE_NAMES, LOCALES, pathFor, VIEW_IDS, type Locale, type ViewId } from '../lib/routes';
+import { CASE_STUDY_IDS, caseStudyPath, LOCALE_NAMES, LOCALES, pathFor, VIEW_IDS, type Locale, type ViewId } from '../lib/routes';
 
 /**
  * Locales, views and slugs come from the app's own framework-free `lib/routes.ts`, so the
@@ -9,6 +9,11 @@ export { LOCALES, VIEW_IDS as VIEWS, pathFor, type Locale, type ViewId } from '.
 
 /** Every locale × view pair, as the app prerenders them. */
 export const ALL_PAGES = LOCALES.flatMap((locale) => VIEW_IDS.map((view) => ({ locale, view, path: pathFor(locale, view) })));
+
+/** Every locale × case study: pages below the projects view, outside the view carousel. */
+export const CASE_STUDY_PAGES = LOCALES.flatMap((locale) =>
+  CASE_STUDY_IDS.map((id) => ({ locale, id, path: caseStudyPath(locale, id) })),
+);
 
 /** The label the shell puts on the active view's <section>, straight from the content file. */
 export function navLabel(locale: Locale, view: ViewId): string {
