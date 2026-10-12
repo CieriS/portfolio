@@ -40,6 +40,8 @@ export const ProjectSchema = z.object({
     .string()
     .regex(/^\d+\.\d+\.\d+$/, 'version is MAJOR.MINOR.PATCH')
     .optional(),
+  /** The day that version was published. Written, with the version, by `scripts/sync-versions.mjs`. */
+  released: isoDate.optional(),
   stack: z.array(z.string().min(1)).min(1),
   layers: z.array(z.object({ id, tech: z.string().min(1) })).min(1),
 });

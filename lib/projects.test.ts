@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { getCaseStudy } from './caseStudy';
 import { ProjectSchema } from './content/schema';
 import { getPortfolioBundle } from './portfolio';
-import { releaseUrl, versionLabel } from './projects';
+import { releaseMonth, releaseUrl, versionLabel, versionWithDate } from './projects';
 import { CASE_STUDY_IDS, LOCALES } from './routes';
 
 const open = { visibility: 'public' as const, url: 'https://example.com/me/tool' };
@@ -39,11 +39,38 @@ describe('project versions', () => {
     }
   });
 
-  it.each(CASE_STUDY_IDS)('the case study of %s states the same version as the project', (id) => {
+  it.each(CASE_STUDY_IDS)('the case study of %s takes its version from the project, not from its own copy', (id) => {
     const { data, copy } = getCaseStudy(id);
     const project = getPortfolioBundle().shared.projects.find((item) => item.id === data.project);
     expect(project?.version).toBeDefined();
-    for (const locale of LOCALES) expect(copy[locale].facts.version.value, locale).toContain(project?.version);
+    for (const locale of LOCALES) expect(Object.keys(copy[locale].facts.version), locale).toEqual(['label']);
+  });
+});
+
+describe('versionWithDate', () => {
+  it('adds the month of the release in the language of the page', () => {
+    const project = { version: '1.2.0', released: '2026-10-11' };
+    expect(versionWithDate(project, 'en')).toBe('1.2.0, October 2026');
+    expect(versionWithDate(project, 'it')).toBe('1.2.0, ottobre 2026');
+    expect(versionWithDate(project, 'fr')).toBe('1.2.0, octobre 2026');
+    expect(versionWithDate(project, 'de')).toBe('1.2.0, Oktober 2026');
+  });
+
+  it('does not slip into the previous month west of Greenwich', () => {
+    expect(releaseMonth('2026-11-01', 'en')).toBe('November 2026');
+  });
+
+  it('gives the bare version without a date, and nothing without a version', () => {
+    expect(versionWithDate({ version: '0.9.0' }, 'en')).toBe('0.9.0');
+    expect(versionWithDate({ released: '2026-10-11' }, 'en')).toBeNull();
+  });
+});
+
+describe('released dates', () => {
+  it('every project that states a version also states when it came out', () => {
+    for (const project of getPortfolioBundle().shared.projects) {
+      if (project.version) expect(project.released, project.id).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
   });
 });
 

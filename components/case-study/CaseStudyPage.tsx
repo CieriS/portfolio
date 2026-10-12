@@ -9,6 +9,7 @@ import { CASE_STUDY_IMAGES } from '@/lib/caseStudyImages';
 import { cn } from '@/lib/cn';
 import { pad, pick } from '@/lib/format';
 import { getPortfolioBundle } from '@/lib/portfolio';
+import { versionWithDate } from '@/lib/projects';
 import { buildCaseStudyJsonLd } from '@/lib/structuredData';
 import { caseStudyPath, pathFor, VIEW_IDS, type CaseStudyId } from '@/lib/views';
 import { SceneMode } from './SceneMode';
@@ -28,7 +29,15 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
   const { data, copy } = getCaseStudy(id);
   const text = copy[locale];
   const images = CASE_STUDY_IMAGES[id];
-  const name = shared.projects.find((project) => project.id === data.project)?.name ?? data.project;
+  const project = shared.projects.find((item) => item.id === data.project);
+  const name = project?.name ?? data.project;
+  // The version is the project's own (`shared.json`), never restated in the case study.
+  const facts = [
+    { key: 'started', ...text.facts.started },
+    { key: 'version', label: text.facts.version.label, value: (project && versionWithDate(project, locale)) ?? ui.shell.unknown },
+    { key: 'team', ...text.facts.team },
+    { key: 'source', ...text.facts.source },
+  ];
   const projectsPath = pathFor(locale, 'projects');
   const json = JSON.stringify(buildCaseStudyJsonLd(locale, id)).replace(/</g, '\\u003c');
 
@@ -106,8 +115,8 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
 
             <Section>
               <dl className="grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-5 md:col-span-9 md:col-start-4 md:grid-cols-4">
-                {Object.entries(text.facts).map(([key, fact]) => (
-                  <div key={key}>
+                {facts.map((fact) => (
+                  <div key={fact.key} data-fact={fact.key}>
                     <Meta as="dt">{fact.label}</Meta>
                     <dd className="mt-3 text-[15px]">{fact.value}</dd>
                   </div>
