@@ -301,7 +301,7 @@ Ogni fase accetta uno `start` facoltativo. Senza, le fasi sono distribuite sul t
 
 ### Aggiungere un progetto
 
-1. Aggiungi un elemento a `shared.projects` con `id`, `name`, `source` (pubblico con `url` o privato), `stack` e `layers` (`id`, `tech`).
+1. Aggiungi un elemento a `shared.projects` con `id`, `name`, `source` (pubblico con `url` o privato), `stack` e `layers` (`id`, `tech`). `version` è facoltativo (`0.9.0`, senza `v`): compare nel pannello del progetto, nel CV e nel JSON-LD, e per un progetto pubblico porta alla pagina del tag su GitHub. Va aggiornato a mano a ogni release del progetto.
 2. In **ogni** lingua aggiungi `projects.items[<id>]` con `summary`, `bridge`, `highlights` (elenco delle scelte di ingegneria) e `layers` (una descrizione per ogni `id` di livello).
 3. Se necessario, aggiorna title e description in `ui.meta.views.projects`.
 

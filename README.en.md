@@ -301,7 +301,7 @@ Each phase takes an optional `start`. Without it, phases are spread over the lan
 
 ### Adding a project
 
-1. Add an entry to `shared.projects` with `id`, `name`, `source` (public with a `url`, or private), `stack` and `layers` (`id`, `tech`).
+1. Add an entry to `shared.projects` with `id`, `name`, `source` (public with a `url`, or private), `stack` and `layers` (`id`, `tech`). `version` is optional (`0.9.0`, no `v`): it shows in the project panel, in the CV and in the JSON-LD, and for a public project it links to the tag's page on GitHub. It has to be updated by hand at each release of the project.
 2. In **every** language, add `projects.items[<id>]` with `summary`, `bridge`, `highlights` (the list of engineering decisions) and `layers` (one description per layer `id`).
 3. If needed, update the title and description in `ui.meta.views.projects`.
 
