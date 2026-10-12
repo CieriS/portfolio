@@ -1,5 +1,5 @@
 {
-  "profiles": ["linkedin", "github", "gitlab"],
+  "profiles": ["linkedin", "github"],
   "skills": [
     { "id": "languages", "items": ["TypeScript", "JavaScript", "Rust", "SQL", "PHP", "HTML", "CSS"] },
     { "id": "frontend", "items": ["Angular", "Tailwind", "React Native"] },

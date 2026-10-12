@@ -33,7 +33,7 @@ describe('buildCv', () => {
   });
 
   it('lists only the profiles the CV asks for, in its order', () => {
-    expect(cv.contact.some((line) => line.includes('instagram'))).toBe(false);
+    for (const leftOut of ['instagram', 'gitlab']) expect(cv.contact.some((line) => line.includes(leftOut))).toBe(false);
     const onlyGitlab = buildCv({ ...source, profile: { ...cvProfile, profiles: ['gitlab', 'missing'] } });
     expect(onlyGitlab.contact.slice(2)).toEqual(['Bologna, IT', 'gitlab.com/CieriS']);
   });
