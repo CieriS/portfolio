@@ -4,11 +4,14 @@
 // this file only talks to GitHub and to the disk. Run by .github/workflows/versions.yml,
 // which turns a change into a pull request.
 //
-// Usage: GH_TOKEN=<token> [VERSION_SOURCES='{"<project id>":"owner/repo"}'] node scripts/sync-versions.mjs [--dry-run]
+// Usage: GH_TOKEN=<token> [SOURCES_TOKEN=<token>] [VERSION_SOURCES='{"<project id>":"owner/repo"}'] \\
+//          node scripts/sync-versions.mjs [--dry-run]
 //
 // A public project is looked up in the repository of its `source.url`. A private one has no
 // address in the data, on purpose: its repository comes from VERSION_SOURCES, a secret, and is
-// never printed. Needs Node 22.18 or later, which runs the TypeScript module as it is.
+// never printed. Its releases are read with SOURCES_TOKEN when given: a fine-grained token has
+// one set of permissions for all its repositories, so reading private code and writing here
+// are kept in two tokens, each with the least it needs. Needs Node 22.18 or later, which runs the TypeScript module as it is.
 import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -17,6 +20,7 @@ import { applyVersions, latestRelease, repositoryOf } from '../lib/versions.ts';
 const FILE = new URL('../data/shared.json', import.meta.url);
 const dryRun = process.argv.includes('--dry-run');
 const token = process.env.GH_TOKEN ?? '';
+const sourcesToken = process.env.SOURCES_TOKEN || token;
 
 /** Project id → repository, for projects whose repository is not in the data. */
 function privateSources() {
@@ -29,12 +33,12 @@ function privateSources() {
   }
 }
 
-async function releasesOf(id, repository) {
+async function releasesOf(id, repository, auth) {
   const response = await fetch(`https://api.github.com/repos/${repository}/releases?per_page=100`, {
     headers: {
       Accept: 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(auth ? { Authorization: `Bearer ${auth}` } : {}),
     },
   });
   if (!response.ok) {
@@ -67,7 +71,8 @@ for (const project of projects) {
     continue;
   }
   // Pre-releases count: a project whose only release so far is one is still worth showing.
-  const found = latestRelease(await releasesOf(project.id, repository), { prereleases: true });
+  const auth = hidden[project.id] ? sourcesToken : token;
+  const found = latestRelease(await releasesOf(project.id, repository, auth), { prereleases: true });
   if (!found) {
     notes.push(`${project.name}: no release with a vMAJOR.MINOR.PATCH tag, left at ${project.version}`);
     continue;

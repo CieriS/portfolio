@@ -330,7 +330,8 @@ Configuration, once, in **Settings → Secrets and variables → Actions**:
 
 | Secret | Value |
 | --- | --- |
-| `VERSIONS_TOKEN` | A fine-grained personal access token limited to this repository and to those of the private projects. Permissions: on this repository **Contents** and **Pull requests**, read and write; on the project repositories **Contents**, read-only. |
+| `VERSIONS_TOKEN` | A fine-grained personal access token limited to **this** repository. Permissions: **Contents** and **Pull requests**, read and write. |
+| `VERSION_SOURCES_TOKEN` | Only for private projects: a second fine-grained token, limited to their repositories, with **Contents** read-only. Two tokens because a fine-grained token gives the same permissions on every repository it includes: a single one could also have written to the private projects. |
 | `VERSION_SOURCES` | Only for private projects: `{"<project id>":"owner/repository"}`. |
 
 A personal token is needed, not the workflow's own: a pull request opened with `GITHUB_TOKEN` starts no other workflow, so the required checks would never run. The token expires: when it does the workflow fails with a message that says so, and it has to be regenerated. Without the secret the workflow stops at once with a clear error.

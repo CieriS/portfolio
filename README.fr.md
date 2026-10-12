@@ -332,7 +332,8 @@ Configuration, une seule fois, dans **Settings → Secrets and variables → Act
 
 | Secret | Valeur |
 | --- | --- |
-| `VERSIONS_TOKEN` | Jeton personnel *fine-grained* limité à ce dépôt et à ceux des projets privés. Autorisations : sur ce dépôt, **Contents** et **Pull requests** en lecture et écriture ; sur les dépôts des projets, **Contents** en lecture seule. |
+| `VERSIONS_TOKEN` | Jeton personnel *fine-grained* limité à **ce** dépôt. Autorisations : **Contents** et **Pull requests** en lecture et écriture. |
+| `VERSION_SOURCES_TOKEN` | Uniquement pour les projets privés : un second jeton *fine-grained*, limité à leurs dépôts, avec **Contents** en lecture seule. Deux jetons parce qu'un jeton *fine-grained* donne les mêmes autorisations sur tous les dépôts qu'il inclut : un seul aurait pu écrire aussi dans les projets privés. |
 | `VERSION_SOURCES` | Uniquement pour les projets privés : `{"<id du projet>":"propriétaire/dépôt"}`. |
 
 Il faut un jeton personnel et non celui du workflow : une pull request ouverte avec `GITHUB_TOKEN` ne déclenche aucun autre workflow, donc les contrôles obligatoires ne s'exécuteraient jamais. Le jeton expire : le workflow échoue alors avec un message qui le dit, et il faut le régénérer. Sans le secret, le workflow s'arrête aussitôt avec une erreur claire.
