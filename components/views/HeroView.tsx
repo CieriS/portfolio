@@ -2,7 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { fade, introStyle, Line } from '@/components/motion/Reveal';
+import { ProjectLink } from '@/components/shell/ProjectLink';
 import { ViewLink } from '@/components/shell/ViewLink';
+import { splitByNames } from '@/lib/projects';
 import { Meta, type ViewProps } from './atoms';
 
 export function HeroView({ data }: ViewProps) {
@@ -38,7 +40,22 @@ export function HeroView({ data }: ViewProps) {
           style={introStyle(4)}
         >
           <p>{copy.lead}</p>
-          <p>{copy.detail}</p>
+          <p>
+            {/* Each project named here leads straight to it: the evidence is one click from the home. */}
+            {splitByNames(copy.detail, data.shared.projects).map((segment) =>
+              segment.id ? (
+                <ProjectLink
+                  key={segment.id}
+                  project={segment.id}
+                  className="text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-ink"
+                >
+                  {segment.text}
+                </ProjectLink>
+              ) : (
+                segment.text
+              ),
+            )}
+          </p>
         </motion.div>
         <motion.div variants={fade} className="intro-fade md:col-span-2 md:justify-self-end" style={introStyle(5)}>
           <ViewLink view="identity" className="group inline-flex items-center gap-4 text-[15px] select-none">

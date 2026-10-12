@@ -47,6 +47,14 @@ export function caseStudyPath(locale: Locale, id: CaseStudyId): string {
   return `${pathFor(locale, 'projects')}/${id}`;
 }
 
+/**
+ * Where a project is told: its case study when it has one, otherwise the projects view with
+ * that project's panel open (`/it/sistemi#ariaer`).
+ */
+export function projectPath(locale: Locale, projectId: string): string {
+  return isCaseStudyId(projectId) ? caseStudyPath(locale, projectId) : `${pathFor(locale, 'projects')}#${projectId}`;
+}
+
 /** `/it/sistemi` → `projects`. The slug is resolved against the locale written in the path. */
 export function viewFromPath(pathname: string): ViewId | null {
   const [, locale, slug] = pathname.split('/');

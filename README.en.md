@@ -138,6 +138,7 @@ Below the Systems view there is one more page for the projects that have a case 
 ## Navigation and interaction
 
 - **Bottom links** (`01`–`05`): real `<a href>` elements, so middle-click, "open in new tab" and crawlers all work. A primary click swaps the view in place. Next to the active item sits the everyday word for that view ("Execution · Experience"), which is also part of every link's accessible name.
+- **Projects from the home**: in the home paragraph the project names are links (`ProjectLink`, derived from `shared.projects` with `splitByNames`). They lead to the case study when there is one, otherwise to the projects view with the panel already open: the address is `/en/systems#<id>`, which also works pasted or shared. Without a fragment every project starts collapsed.
 - **Keyboard**: `1`–`5` jump to a view, `←` and `→` cycle through them. Keys are ignored while a modifier is held or when focus is in a text field.
 - **Touch**: a horizontal swipe (over 70 px and mostly horizontal) moves to the previous or next view.
 - **Trackpad**: a sideways two-finger scroll does not go back or forward in the history (`overscroll-behavior: none` on the root), because it fired by accident while scrolling a view. This holds in Chromium and Firefox; Safari handles that gesture itself and may ignore the rule. Browser buttons and keyboard shortcuts are unchanged.

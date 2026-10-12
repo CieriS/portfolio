@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { EASE_OUT, fade } from '@/components/motion/Reveal';
 import { ViewLink } from '@/components/shell/ViewLink';
 import { cn } from '@/lib/cn';
@@ -17,7 +17,24 @@ export function ProjectsView({ data }: ViewProps) {
   const copy = data.content.projects;
   const { projects } = data.shared;
   // Every project starts collapsed: the list reads as an index, and a panel opens on request.
-  const [openId, setOpenId] = useState<string | null>(null);
+  // The one exception is an address that names a project (`/systems#ariaer`, as the home links
+  // do): that panel starts open, until the visitor opens or closes one by hand.
+  const fragment = useSyncExternalStore(subscribeToHash, readHash, () => '');
+  const [chosen, setChosen] = useState<string | null | undefined>(undefined);
+  const named = projects.some((project) => project.id === fragment) ? fragment : null;
+  const openId = chosen === undefined ? named : chosen;
+
+  // Arriving by such an address: bring the project into view and hand it the keyboard. Deferred
+  // by a task, so it comes after the view frame has taken focus for the view change.
+  useEffect(() => {
+    const id = readHash();
+    const timer = setTimeout(() => {
+      const row = id ? document.getElementById(id) : null;
+      row?.scrollIntoView({ block: 'start' });
+      row?.querySelector('button')?.focus({ preventScroll: true });
+    });
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="px-frame pt-10 pb-28 md:pt-16">
@@ -38,12 +55,19 @@ export function ProjectsView({ data }: ViewProps) {
             locale={data.locale}
             copy={copy}
             open={openId === project.id}
-            onToggle={() => setOpenId(openId === project.id ? null : project.id)}
+            onToggle={() => setChosen(openId === project.id ? null : project.id)}
           />
         ))}
       </motion.ul>
     </div>
   );
+}
+
+const readHash = () => decodeURIComponent(window.location.hash.slice(1));
+
+function subscribeToHash(notify: () => void) {
+  window.addEventListener('hashchange', notify);
+  return () => window.removeEventListener('hashchange', notify);
 }
 
 type ProjectRowProps = {
@@ -60,7 +84,7 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
   const panelId = `project-${project.id}`;
 
   return (
-    <li className="border-t border-line">
+    <li id={project.id} className="border-t border-line">
       <h2>
         <button
           type="button"
