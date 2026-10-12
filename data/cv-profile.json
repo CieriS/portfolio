@@ -1,0 +1,16 @@
+{
+  "profiles": ["linkedin", "github", "gitlab"],
+  "skills": [
+    { "id": "languages", "items": ["TypeScript", "JavaScript", "Rust", "SQL", "PHP", "HTML", "CSS"] },
+    { "id": "frontend", "items": ["Angular", "Tailwind", "React Native"] },
+    { "id": "data", "items": ["PostgreSQL", "dbt", "DuckDB", "BigQuery", "Dagster", "Parquet"] },
+    { "id": "infrastructure", "items": ["Docker", "Kubernetes", "Helm", "Rancher", "Terraform"] },
+    { "id": "method", "items": ["Scrum"] }
+  ],
+  "spokenLanguages": [
+    { "code": "it", "level": "native" },
+    { "code": "en", "level": "B2" },
+    { "code": "fr", "level": "B1" }
+  ],
+  "certifications": [{ "id": "csm", "name": "Certified ScrumMaster (CSM)", "entity": "Tas" }]
+}

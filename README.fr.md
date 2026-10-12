@@ -200,6 +200,8 @@ Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspon
 - `lib/cv/service.ts` contient les deux règles, sans HTTP ni PDF : bon mot de passe → PDF ; e-mail valide → lien signé envoyé à cette adresse (et avis au propriétaire). Un champ caché (honeypot) arrête les robots sans le leur faire savoir.
 - `lib/cv/token.ts` : le lien transporte e-mail, langue et expiration (24 heures, `lib/cv/common.ts`), signés en HMAC-SHA256. Aucune base de données n'est nécessaire, et un lien modifié ou expiré est refusé. Les mots de passe sont comparés en temps constant.
 - `lib/cv/document.ts` construit le CV en données pures à partir de `data/shared.json` et de la langue choisie ; `lib/cv/pdf.ts` le met en page en A4 avec les polices standard (aucun fichier de police à distribuer). Les textes du PDF et de l'e-mail sont dans `data/cv.json`, hors des fichiers de langue envoyés au navigateur.
+- Dans le formulaire, le champ du mot de passe a un bouton pour l'afficher ou le masquer : la comparaison est exacte, donc une espace collée par erreur le fait refuser. Changer de méthode le masque à nouveau.
+- Le CV ajoute ce que le site ne montre pas, à partir de `data/cv-profile.json` (`lib/cv/profile.ts`) : compétences regroupées, langues parlées avec leur niveau, certifications et profils à citer. Les sections se suivent ainsi : compétences, expérience, formation, certifications, projets, langues ; le consentement au traitement des données ferme la page. Il reste sur une colonne et sans image, pour que les logiciels de tri des candidatures (ATS) le lisent dans l'ordre : la seule couleur est celle des titres de section. Les noms des cours sont traduits via `terms` dans `data/cv.json` ; un test échoue si une technologie du travail ou des projets manque aux compétences.
 - `lib/cv/mailer.ts` est le port de sortie pour l'e-mail, avec un adaptateur pour l'API REST de Resend via `fetch` (sans SDK). Un envoi par SMS serait un autre adaptateur.
 - Limites connues : pas de limite de requêtes par adresse, car il faudrait un état partagé ; sur Vercel, on configure une règle de rate limiting du Firewall sur `/api/cv`. Le mot de passe du propriétaire doit être long justement parce que les tentatives ne sont pas comptées.
 
@@ -343,11 +345,12 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 ├── data/
 │   ├── shared.json                  données indépendantes de la langue
 │   ├── cv.json                      textes du PDF et de l'e-mail du CV (serveur uniquement)
+│   ├── cv-profile.json              compétences, langues et certifications du CV (serveur uniquement)
 │   └── locales/                     en.json · it.json · fr.json · de.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)
 ├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, format, hooks, cn
 │   ├── content/      schema (zod) · validate (contrôles croisés)
-│   └── cv/           service, token, config, document, pdf, mailer, copy, common (CV sur demande)
+│   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV sur demande)
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)
 ├── e2e/              suite Playwright · helpers.ts (langues, vues, attentes)
 ├── .github/workflows/ci.yml   lint, typecheck, build et tests sur chaque PR

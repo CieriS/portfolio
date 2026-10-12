@@ -4,6 +4,7 @@ import { cvCopy } from '@/lib/cv/copy';
 import { buildCv } from '@/lib/cv/document';
 import { resendMailer } from '@/lib/cv/mailer';
 import { renderCvPdf } from '@/lib/cv/pdf';
+import { cvProfile } from '@/lib/cv/profile';
 import { openLink, requestCv, type CvOutcome } from '@/lib/cv/service';
 import { getPortfolioBundle } from '@/lib/portfolio';
 import type { Locale } from '@/lib/routes';
@@ -61,6 +62,7 @@ async function pdfResponse(locale: Locale): Promise<Response> {
     shared,
     content: contents[locale],
     copy: cvCopy(locale).pdf,
+    profile: cvProfile,
     contact: config.contact,
     today: new Date().toISOString().slice(0, 10),
     site: SITE_URL,

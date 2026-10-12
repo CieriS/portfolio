@@ -2,6 +2,7 @@ import { pick } from '@/lib/format';
 import type { LocaleContent, Segment, SharedData, Thread } from '@/lib/portfolio';
 import type { CvCopy } from './copy';
 import { fill } from './copy';
+import type { CvProfile } from './profile';
 
 /**
  * The CV as plain data, built from the same content the site renders: whatever the site
@@ -9,7 +10,8 @@ import { fill } from './copy';
  * Rendering it to PDF is a separate step (`pdf.ts`), so this part stays pure and testable.
  */
 export type CvEntry = { heading: string; meta: string; body: string; tags: string[] };
-export type CvSection = { title: string; entries: CvEntry[] };
+/** `entries` for dated items, `lines` for what reads better as a compact list (skills, languages). */
+export type CvSection = { title: string; entries: CvEntry[]; lines: string[] };
 export type CvDocument = {
   name: string;
   headline: string;
@@ -17,6 +19,8 @@ export type CvDocument = {
   contact: string[];
   summary: string;
   sections: CvSection[];
+  /** Data-processing consent, expected on a CV in Italy. */
+  consent: string;
   footer: string;
 };
 
@@ -24,14 +28,17 @@ export type CvSource = {
   shared: SharedData;
   content: LocaleContent;
   copy: CvCopy['pdf'];
+  profile: CvProfile;
   contact: { email: string | null; phone: string | null };
   /** ISO date of the download, printed in the footer. */
   today: string;
   site: string;
 };
 
-export function buildCv({ shared, content, copy, contact, today, site }: CvSource): CvDocument {
+export function buildCv({ shared, content, copy, profile, contact, today, site }: CvSource): CvDocument {
   const threads = shared.timeline.threads;
+  const entries = (title: string, list: CvEntry[]): CvSection => ({ title, entries: list, lines: [] });
+  const lines = (title: string, list: string[]): CvSection => ({ title, entries: [], lines: list });
   return {
     name: shared.name,
     headline: `${content.hero.role} — ${content.hero.transition}`,
@@ -39,22 +46,50 @@ export function buildCv({ shared, content, copy, contact, today, site }: CvSourc
       contact.email,
       contact.phone,
       `${shared.address.locality}, ${shared.address.country}`,
-      ...shared.contacts.map((link) => link.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')),
+      ...profile.profiles
+        .map((id) => shared.contacts.find((link) => link.id === id))
+        .filter((link) => link !== undefined)
+        .map((link) => link.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')),
     ].filter((line): line is string => Boolean(line)),
     summary: content.hero.detail,
     sections: [
-      { title: copy.experience, entries: threads.filter((t) => t.kind === 'work').map((t) => threadEntry(t, content, copy)) },
-      { title: copy.education, entries: threads.filter((t) => t.kind === 'education').map((t) => threadEntry(t, content, copy)) },
-      {
-        title: copy.projects,
-        entries: shared.projects.map((project) => ({
+      lines(
+        copy.skills,
+        profile.skills.map((group) => `${pick(copy.skillGroups, group.id) ?? group.id}: ${group.items.join(', ')}`),
+      ),
+      entries(
+        copy.experience,
+        threads.filter((t) => t.kind === 'work').map((t) => threadEntry(t, content, copy)),
+      ),
+      entries(
+        copy.education,
+        threads.filter((t) => t.kind === 'education').map((t) => threadEntry(t, content, copy)),
+      ),
+      entries(
+        copy.certifications,
+        profile.certifications.map((item) => ({
+          heading: item.name,
+          meta: fill(copy.obtainedAt, { entity: item.entity }),
+          body: '',
+          tags: [],
+        })),
+      ),
+      entries(
+        copy.projects,
+        shared.projects.map((project) => ({
           heading: project.name,
           meta: project.source.visibility === 'public' ? project.source.url : copy.privateSource,
           body: pick(content.projects.items, project.id)?.summary ?? '',
           tags: project.stack,
         })),
-      },
-    ].filter((section) => section.entries.length > 0),
+      ),
+      lines(copy.languages, [
+        profile.spokenLanguages
+          .map(({ code, level }) => `${pick(copy.languageNames, code) ?? code} (${level === 'native' ? copy.native : level})`)
+          .join(' · '),
+      ]),
+    ].filter((section) => section.entries.length > 0 || section.lines.some(Boolean)),
+    consent: copy.consent,
     footer: fill(copy.generated, { date: formatDay(today), site: site.replace(/^https?:\/\//, '') }),
   };
 }
@@ -66,7 +101,8 @@ function threadEntry(thread: Thread, content: LocaleContent, copy: CvCopy['pdf']
     heading: threadCopy?.role ?? thread.id,
     meta: [entity, thread.segments.map((segment) => formatSegment(segment, copy.present)).join(', ')].filter(Boolean).join(' · '),
     body: threadCopy?.summary ?? '',
-    tags: [...new Set(thread.phases.flatMap((phase) => phase.stack))],
+    // Course names are translated where the locale has a term; technology names stay as they are.
+    tags: [...new Set(thread.phases.flatMap((phase) => phase.stack))].map((tag) => pick<string>(copy.terms, tag) ?? tag),
   };
 }
 

@@ -6,7 +6,26 @@
       "projects": "Projects",
       "present": "present",
       "privateSource": "Private source, walkthrough on request",
-      "generated": "Generated on {date} from {site}"
+      "generated": "Generated on {date} from {site}",
+      "skills": "Skills",
+      "certifications": "Certifications",
+      "languages": "Languages",
+      "skillGroups": {
+        "languages": "Languages",
+        "frontend": "Frontend",
+        "data": "Data",
+        "infrastructure": "Infrastructure",
+        "method": "Method"
+      },
+      "languageNames": {
+        "it": "Italian",
+        "en": "English",
+        "fr": "French"
+      },
+      "native": "native",
+      "obtainedAt": "Obtained at {entity}",
+      "consent": "I authorise the processing of my personal data under Regulation (EU) 2016/679 (GDPR).",
+      "terms": {}
     },
     "email": {
       "subject": "{name} — curriculum vitae",
@@ -20,7 +39,39 @@
       "projects": "Progetti",
       "present": "oggi",
       "privateSource": "Codice privato, demo su richiesta",
-      "generated": "Generato il {date} da {site}"
+      "generated": "Generato il {date} da {site}",
+      "skills": "Competenze",
+      "certifications": "Certificazioni",
+      "languages": "Lingue",
+      "skillGroups": {
+        "languages": "Linguaggi",
+        "frontend": "Frontend",
+        "data": "Dati",
+        "infrastructure": "Infrastruttura",
+        "method": "Metodo"
+      },
+      "languageNames": {
+        "it": "Italiano",
+        "en": "Inglese",
+        "fr": "Francese"
+      },
+      "native": "madrelingua",
+      "obtainedAt": "Conseguita in {entity}",
+      "consent": "Autorizzo il trattamento dei miei dati personali ai sensi del Regolamento (UE) 2016/679 (GDPR).",
+      "terms": {
+        "Calculus": "Analisi matematica",
+        "Linear Algebra": "Algebra lineare",
+        "Physics": "Fisica",
+        "Circuit Theory": "Teoria dei circuiti",
+        "C Programming": "Programmazione in C",
+        "Digital Logic": "Reti logiche",
+        "Computer Architecture": "Architettura dei calcolatori",
+        "Operating Systems": "Sistemi operativi",
+        "Databases": "Basi di dati",
+        "Computer Networks": "Reti di calcolatori",
+        "Web Technologies": "Tecnologie web",
+        "Statistics": "Statistica"
+      }
     },
     "email": {
       "subject": "{name} — curriculum vitae",
@@ -34,7 +85,39 @@
       "projects": "Projets",
       "present": "aujourd'hui",
       "privateSource": "Code privé, démonstration sur demande",
-      "generated": "Généré le {date} depuis {site}"
+      "generated": "Généré le {date} depuis {site}",
+      "skills": "Compétences",
+      "certifications": "Certifications",
+      "languages": "Langues",
+      "skillGroups": {
+        "languages": "Langages",
+        "frontend": "Frontend",
+        "data": "Données",
+        "infrastructure": "Infrastructure",
+        "method": "Méthode"
+      },
+      "languageNames": {
+        "it": "Italien",
+        "en": "Anglais",
+        "fr": "Français"
+      },
+      "native": "langue maternelle",
+      "obtainedAt": "Obtenue chez {entity}",
+      "consent": "J'autorise le traitement de mes données personnelles conformément au règlement (UE) 2016/679 (RGPD).",
+      "terms": {
+        "Calculus": "Analyse",
+        "Linear Algebra": "Algèbre linéaire",
+        "Physics": "Physique",
+        "Circuit Theory": "Théorie des circuits",
+        "C Programming": "Programmation en C",
+        "Digital Logic": "Logique numérique",
+        "Computer Architecture": "Architecture des ordinateurs",
+        "Operating Systems": "Systèmes d'exploitation",
+        "Databases": "Bases de données",
+        "Computer Networks": "Réseaux informatiques",
+        "Web Technologies": "Technologies web",
+        "Statistics": "Statistiques"
+      }
     },
     "email": {
       "subject": "{name} — curriculum vitae",
@@ -48,7 +131,39 @@
       "projects": "Projekte",
       "present": "heute",
       "privateSource": "Privater Code, Vorführung auf Anfrage",
-      "generated": "Erstellt am {date} von {site}"
+      "generated": "Erstellt am {date} von {site}",
+      "skills": "Kenntnisse",
+      "certifications": "Zertifizierungen",
+      "languages": "Sprachen",
+      "skillGroups": {
+        "languages": "Programmiersprachen",
+        "frontend": "Frontend",
+        "data": "Daten",
+        "infrastructure": "Infrastruktur",
+        "method": "Methode"
+      },
+      "languageNames": {
+        "it": "Italienisch",
+        "en": "Englisch",
+        "fr": "Französisch"
+      },
+      "native": "Muttersprache",
+      "obtainedAt": "Erworben bei {entity}",
+      "consent": "Ich willige in die Verarbeitung meiner personenbezogenen Daten gemäß der Verordnung (EU) 2016/679 (DSGVO) ein.",
+      "terms": {
+        "Calculus": "Analysis",
+        "Linear Algebra": "Lineare Algebra",
+        "Physics": "Physik",
+        "Circuit Theory": "Schaltungstheorie",
+        "C Programming": "C-Programmierung",
+        "Digital Logic": "Digitale Logik",
+        "Computer Architecture": "Rechnerarchitektur",
+        "Operating Systems": "Betriebssysteme",
+        "Databases": "Datenbanken",
+        "Computer Networks": "Rechnernetze",
+        "Web Technologies": "Webtechnologien",
+        "Statistics": "Statistik"
+      }
     },
     "email": {
       "subject": "{name} — Lebenslauf",
