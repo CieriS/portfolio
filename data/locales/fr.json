@@ -198,7 +198,8 @@
       "highlights": "Choix d’ingénierie",
       "repo": "Dépôt",
       "private": "Code privé — démo sur demande",
-      "caseStudy": "Lire l'étude de cas"
+      "caseStudy": "Lire l'étude de cas",
+      "version": "Version"
     },
     "items": {
       "yourfinance": {

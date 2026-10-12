@@ -195,7 +195,8 @@
       "highlights": "Engineering decisions",
       "repo": "Repository",
       "private": "Private source — walkthrough on request",
-      "caseStudy": "Read the case study"
+      "caseStudy": "Read the case study",
+      "version": "Version"
     },
     "items": {
       "yourfinance": {

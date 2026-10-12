@@ -43,6 +43,21 @@ test('a public project links to its repository in a new tab', async ({ page }) =
   await expect(repo).toHaveAttribute('target', '_blank');
 });
 
+test('a released version is shown, linked to its tag only where the code is public', async ({ page }) => {
+  await gotoView(page, 'en', 'projects');
+
+  await page.getByRole('button', { name: /aria-er/ }).click();
+  const open = shared.projects.find((project) => project.id === 'ariaer');
+  const release = page.locator('#project-ariaer [data-version] a');
+  await expect(release).toHaveText(new RegExp(`v${open?.version}`));
+  await expect(release).toHaveAttribute('href', `https://github.com/CieriS/aria-er/releases/tag/v${open?.version}`);
+
+  await page.getByRole('button', { name: /yourFinance/ }).click();
+  const closed = shared.projects.find((project) => project.id === 'yourfinance');
+  await expect(page.locator('#project-yourfinance [data-version]')).toContainText(`v${closed?.version}`);
+  await expect(page.locator('#project-yourfinance [data-version] a')).toHaveCount(0);
+});
+
 test('the served HTML carries every project in full, collapsed ones included', async ({ request }) => {
   // No browser, no JavaScript: this is what a crawler receives before rendering anything.
   const decode = (html: string) =>
@@ -64,7 +79,8 @@ test('the served HTML carries every project in full, collapsed ones included', a
 test('a collapsed project is inert until it is opened', async ({ page }) => {
   await gotoView(page, 'en', 'projects');
   const panel = page.locator('#project-ariaer');
-  const repo = panel.locator('a[href*="github.com"]');
+  // The repository link itself: the panel also links to the release of the current version.
+  const repo = panel.locator('a[href$="/aria-er"]');
 
   // In the DOM for crawlers, out of reach for keyboard and assistive tech.
   await expect(repo).toHaveCount(1);

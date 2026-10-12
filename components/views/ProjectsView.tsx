@@ -7,6 +7,7 @@ import { ViewLink } from '@/components/shell/ViewLink';
 import { cn } from '@/lib/cn';
 import { pad, pick } from '@/lib/format';
 import type { PortfolioView, Project } from '@/lib/portfolio';
+import { releaseUrl, versionLabel } from '@/lib/projects';
 import { caseStudyPath, isCaseStudyId, type Locale } from '@/lib/routes';
 import { Meta, SectionHead, type ViewProps } from './atoms';
 
@@ -137,6 +138,7 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
                 <Meta as="h3">{copy.labels.bridge}</Meta>
                 <p className="mt-5 text-[15px] leading-relaxed text-muted">{item.bridge}</p>
               </div>
+              <Version project={project} label={copy.labels.version} />
               <SourceLink project={project} copy={copy} />
               {/* A page of its own, outside the view carousel: a plain link, so it navigates. */}
               {isCaseStudyId(project.id) && (
@@ -150,6 +152,29 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
         </motion.div>
       )}
     </li>
+  );
+}
+
+/** The released version: a link to its tag for public code, plain text for private code. */
+function Version({ project, label }: { project: Project; label: string }) {
+  const version = versionLabel(project);
+  if (!version) return null;
+  const release = releaseUrl(project);
+
+  return (
+    <div data-version>
+      <Meta as="h3">{label}</Meta>
+      <p className="mt-5 text-[15px] tabular-nums">
+        {release ? (
+          <a href={release} target="_blank" rel="noopener noreferrer" className={LINK_CLASS}>
+            <span className="link-underline group-hover/link:bg-[length:100%_1px]">{version}</span>
+            <span aria-hidden>↗</span>
+          </a>
+        ) : (
+          version
+        )}
+      </p>
+    </div>
   );
 }
 

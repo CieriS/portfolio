@@ -52,6 +52,7 @@
       "id": "yourfinance",
       "name": "yourFinance",
       "source": { "visibility": "private" },
+      "version": "1.2.0",
       "stack": ["Rust", "PostgreSQL", "React Native", "Docker"],
       "layers": [
         { "id": "clients", "tech": "Expo · Tauri" },
@@ -64,6 +65,7 @@
       "id": "ariaer",
       "name": "aria-er",
       "source": { "visibility": "public", "url": "https://github.com/CieriS/aria-er" },
+      "version": "0.9.0",
       "stack": ["Rust", "dbt", "Dagster", "DuckDB", "BigQuery", "Terraform"],
       "layers": [
         { "id": "ingestion", "tech": "Rust" },

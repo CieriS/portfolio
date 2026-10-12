@@ -198,7 +198,8 @@
       "highlights": "Engineering-Entscheidungen",
       "repo": "Repository",
       "private": "Privater Code — Demo auf Anfrage",
-      "caseStudy": "Fallstudie lesen"
+      "caseStudy": "Fallstudie lesen",
+      "version": "Version"
     },
     "items": {
       "yourfinance": {

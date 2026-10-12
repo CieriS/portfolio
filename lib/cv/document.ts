@@ -1,4 +1,5 @@
 import { pick } from '@/lib/format';
+import { versionLabel } from '@/lib/projects';
 import type { LocaleContent, Segment, SharedData, Thread } from '@/lib/portfolio';
 import type { CvCopy } from './copy';
 import { fill } from './copy';
@@ -78,7 +79,9 @@ export function buildCv({ shared, content, copy, profile, contact, today, site }
         copy.projects,
         shared.projects.map((project) => ({
           heading: project.name,
-          meta: project.source.visibility === 'public' ? project.source.url : copy.privateSource,
+          meta: [project.source.visibility === 'public' ? project.source.url : copy.privateSource, versionLabel(project)]
+            .filter(Boolean)
+            .join(' · '),
           body: pick(content.projects.items, project.id)?.summary ?? '',
           tags: project.stack,
         })),

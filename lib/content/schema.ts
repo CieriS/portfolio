@@ -35,6 +35,11 @@ export const ProjectSchema = z.object({
   id,
   name: z.string().min(1),
   source: ProjectSourceSchema,
+  /** Latest released version, without the leading `v`; left out until there is a release. */
+  version: z
+    .string()
+    .regex(/^\d+\.\d+\.\d+$/, 'version is MAJOR.MINOR.PATCH')
+    .optional(),
   stack: z.array(z.string().min(1)).min(1),
   layers: z.array(z.object({ id, tech: z.string().min(1) })).min(1),
 });

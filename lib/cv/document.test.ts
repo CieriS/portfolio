@@ -60,8 +60,12 @@ describe('buildCv', () => {
 
   it('links public projects and labels private ones', () => {
     const projects = section(cv, 'Projects').entries;
-    expect(projects.find((entry) => entry.heading === 'aria-er')?.meta).toBe('https://github.com/CieriS/aria-er');
-    expect(projects.find((entry) => entry.heading === 'yourFinance')?.meta).toBe(cvCopy('en').pdf.privateSource);
+    expect(projects.find((entry) => entry.heading === 'aria-er')?.meta).toMatch(
+      /^https:\/\/github\.com\/CieriS\/aria-er · v\d+\.\d+\.\d+$/,
+    );
+    expect(projects.find((entry) => entry.heading === 'yourFinance')?.meta).toMatch(
+      new RegExp(`^${cvCopy('en').pdf.privateSource} · v\\d+\\.\\d+\\.\\d+$`),
+    );
   });
 
   it('lists each technology once per entry', () => {
