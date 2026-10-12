@@ -135,7 +135,7 @@ GOOGLE_SITE_VERIFICATION=votre-jeton
 
 Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspond à aucune vue affiche une page 404 localisée et non indexable.
 
-Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étude de cas : `/en/systems/yourfinance`, `/it/sistemi/yourfinance`, `/fr/systemes/yourfinance`, `/de/systeme/yourfinance`. C'est un document avec de vrais liens, pas une sixième vue : on y arrive depuis le projet ouvert dans l'accordéon, et en sortir est une navigation.
+Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étude de cas : `/en/systems/yourfinance`, `/it/sistemi/yourfinance`, `/fr/systemes/yourfinance`, `/de/systeme/yourfinance`. C'est un document avec de vrais liens, pas une sixième vue : on y arrive depuis le projet ouvert dans l'accordéon, et en sortir est une navigation. Le lien de retour vers la vue des projets se trouve dans l'en-tête, qui ne défile pas avec la page, ainsi qu'à la fin.
 
 ## Navigation et interactions
 

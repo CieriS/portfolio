@@ -44,9 +44,22 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
           {ui.shell.skip}
         </a>
         <header className="relative z-20 flex items-center justify-between gap-6 px-frame pt-4 pb-3 select-none md:pt-6">
-          <a href={pathFor(locale, 'hero')} className="group/link text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap">
-            <span className={UNDERLINE}>{shared.name}</span>
-          </a>
+          <div className="flex min-w-0 items-center gap-6">
+            <a
+              href={pathFor(locale, 'hero')}
+              className="group/link hidden text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap sm:block"
+            >
+              <span className={UNDERLINE}>{shared.name}</span>
+            </a>
+            {/* The header stays put while the page scrolls: the way back is always on screen. */}
+            <a href={projectsPath} data-back className="group/link flex items-center gap-2 text-[15px] whitespace-nowrap">
+              <span aria-hidden>←</span>
+              <span className={UNDERLINE}>
+                <span className="sm:hidden">{ui.nav.projects}</span>
+                <span className="hidden sm:inline">{text.back}</span>
+              </span>
+            </a>
+          </div>
           <div className="flex items-center gap-6">
             <nav aria-label={ui.locale.label}>
               <ul className="flex gap-3 font-mono text-[11px] tracking-[0.14em] uppercase">

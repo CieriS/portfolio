@@ -133,7 +133,7 @@ GOOGLE_SITE_VERIFICATION=your-token
 
 Every URL is prerendered with its own content. An address that matches no view shows a localised, non-indexable 404 page.
 
-Below the Systems view there is one more page for the projects that have a case study: `/en/systems/yourfinance`, `/it/sistemi/yourfinance`, `/fr/systemes/yourfinance`, `/de/systeme/yourfinance`. It is a document with real links, not a sixth view: it is reached from the open project in the accordion, and leaving it is a navigation.
+Below the Systems view there is one more page for the projects that have a case study: `/en/systems/yourfinance`, `/it/sistemi/yourfinance`, `/fr/systemes/yourfinance`, `/de/systeme/yourfinance`. It is a document with real links, not a sixth view: it is reached from the open project in the accordion, and leaving it is a navigation. The link back to the projects view sits in the header, which does not scroll with the page, as well as at the end.
 
 ## Navigation and interaction
 
