@@ -65,6 +65,8 @@
       "byPassword": "Passwort",
       "email": "E-Mail-Adresse",
       "password": "Passwort",
+      "showPassword": "Anzeigen",
+      "hidePassword": "Verbergen",
       "send": "Link senden",
       "download": "Herunterladen",
       "pending": "Einen Moment…",

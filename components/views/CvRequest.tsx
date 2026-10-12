@@ -20,7 +20,10 @@ export function CvRequest({ data }: { data: PortfolioView }) {
   const [open, setOpen] = useState(false);
   const [method, setMethod] = useState<Method>('email');
   const [status, setStatus] = useState<Status>('idle');
+  // The owner can check what was typed: a pasted password with a stray space is refused as wrong.
+  const [revealed, setRevealed] = useState(false);
   const panelId = useId();
+  const fieldId = useId();
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -87,6 +90,7 @@ export function CvRequest({ data }: { data: PortfolioView }) {
               aria-pressed={method === option}
               onClick={() => {
                 setMethod(option);
+                setRevealed(false);
                 setStatus('idle');
               }}
               className={cn(
@@ -100,20 +104,33 @@ export function CvRequest({ data }: { data: PortfolioView }) {
         </div>
 
         <form onSubmit={submit} className="mt-6 flex max-w-xl flex-col gap-3 sm:flex-row sm:items-end">
-          <label className="flex flex-1 flex-col gap-2">
-            <span className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
+          <div className="flex flex-1 flex-col gap-2">
+            <label htmlFor={fieldId} className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
               {method === 'email' ? copy.email : copy.password}
-            </span>
-            <input
-              key={method}
-              name={method}
-              type={method}
-              required
-              autoComplete={method === 'email' ? 'email' : 'current-password'}
-              maxLength={method === 'email' ? 254 : 256}
-              className="border-b border-line bg-transparent py-2 text-lg outline-none focus-visible:border-ink"
-            />
-          </label>
+            </label>
+            <div className="flex items-end gap-4 border-b border-line focus-within:border-ink">
+              <input
+                key={method}
+                id={fieldId}
+                name={method}
+                type={method === 'password' && revealed ? 'text' : method}
+                required
+                autoComplete={method === 'email' ? 'email' : 'current-password'}
+                maxLength={method === 'email' ? 254 : 256}
+                className="min-w-0 flex-1 bg-transparent py-2 text-lg outline-none"
+              />
+              {method === 'password' && (
+                <button
+                  type="button"
+                  onClick={() => setRevealed((value) => !value)}
+                  aria-controls={fieldId}
+                  className="pb-2.5 font-mono text-[11px] tracking-[0.14em] text-muted uppercase transition-colors hover:text-ink"
+                >
+                  {revealed ? copy.hidePassword : copy.showPassword}
+                </button>
+              )}
+            </div>
+          </div>
           {method === 'email' && (
             // Honeypot: off-screen and out of the tab order, so only bots fill it in.
             <div aria-hidden className="absolute -left-[9999px]">

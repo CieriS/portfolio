@@ -43,6 +43,30 @@ test('a wrong password is refused', async ({ page }) => {
   await expect(page.getByRole('status')).toHaveText('Wrong password.');
 });
 
+test('the password can be shown while typing and is hidden again by default', async ({ page }) => {
+  await openCvPanel(page);
+  // The email field has nothing to reveal.
+  await expect(page.getByRole('button', { name: 'Show', exact: true })).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Password', exact: true }).click();
+  const field = page.getByLabel('Password', { exact: true });
+  await field.fill('typed in the open');
+  await expect(field).toHaveAttribute('type', 'password');
+
+  await page.getByRole('button', { name: 'Show', exact: true }).click();
+  await expect(field).toHaveAttribute('type', 'text');
+  await expect(field).toHaveValue('typed in the open');
+
+  await page.getByRole('button', { name: 'Hide', exact: true }).click();
+  await expect(field).toHaveAttribute('type', 'password');
+
+  // Leaving and coming back never leaves a password in the clear.
+  await page.getByRole('button', { name: 'Show', exact: true }).click();
+  await page.getByRole('button', { name: 'Email link' }).click();
+  await page.getByRole('button', { name: 'Password', exact: true }).click();
+  await expect(page.getByLabel('Password', { exact: true })).toHaveAttribute('type', 'password');
+});
+
 test('typing digits in the form does not change view', async ({ page }) => {
   await openCvPanel(page);
   await page.getByLabel('Email address').pressSequentially('123');
