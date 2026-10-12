@@ -44,10 +44,18 @@ export default defineConfig({
     // The verification variable is given as the whole tag Search Console hands out, the form
     // that used to be published escaped inside `content`: seo.spec.ts expects the bare token.
     // cv.spec.ts downloads the CV with this password; email links stay unconfigured on purpose.
+    // The other CV variables are blanked, not left out: Next also reads a local `.env`, and
+    // real values there would make the suite send actual emails and print private details.
     env: {
       SITE_URL: BASE_URL,
       GOOGLE_SITE_VERIFICATION: '<meta name="google-site-verification" content="e2e-token" />',
       CV_ADMIN_PASSWORD: 'e2e-admin-password-0001',
+      CV_LINK_SECRET: '',
+      RESEND_API_KEY: '',
+      CV_MAIL_FROM: '',
+      CV_NOTIFY_EMAIL: '',
+      CV_EMAIL: '',
+      CV_PHONE: '',
     },
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
