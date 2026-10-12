@@ -178,6 +178,7 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 - `SceneLayer` vit dans le layout, au-dessus de chaque changement de vue, et n'est jamais démonté.
 - `DataField` est chargé avec `next/dynamic` et `ssr: false` : three.js n'entre jamais dans le bundle serveur.
 - `DataGrid` dessine une grille de 96 × 56 points ; une ligne sur cinq transporte des « paquets de données » en mouvement.
+- La grille est envoyée au GPU une seule fois (`lib/sceneField.ts`). La hauteur de chaque point, l'onde autour du pointeur, les paquets et la couleur sont calculés par le vertex shader (`components/scene/fieldShader.ts`) ; à chaque image, `useFrame` interpole les paramètres et transmet au shader une douzaine de nombres, quel que soit le nombre de points. Les phases de l'onde et du flux arrivent déjà ramenées dans leur période, car les nombres du GPU sont sur 32 bits.
 - Chaque vue possède un mode dans `components/scene/modes.ts` (amplitude, fréquence, vitesse, flux, rayon et force du pointeur, présence, position de la caméra). Lors d'un changement de vue, les paramètres évoluent progressivement vers les nouvelles valeurs.
 - `PerformanceMonitor` ramène le device pixel ratio à 1 lorsque la fréquence d'images baisse et le remonte jusqu'à 1,75 lorsqu'elle s'améliore.
 - Avec `prefers-reduced-motion: reduce`, le canvas passe en `frameloop="demand"` et ne se redessine que lorsque la vue ou le thème change.
@@ -357,7 +358,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 ├── components/
 │   ├── motion/       ViewFrame (conteneur de vue), Reveal (variantes, line mask, intro)
 │   ├── providers/    ThemeProvider (next-themes)
-│   ├── scene/        SceneLayer → DataField (Canvas, lazy) → DataGrid (useFrame) · modes
+│   ├── scene/        SceneLayer → DataField (Canvas, lazy) → DataGrid (useFrame) · fieldShader · modes
 │   ├── case-study/   CaseStudyPage (composant serveur), SceneMode
 │   ├── seo/          PortfolioPage (JSON-LD + application)
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
@@ -371,7 +372,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   ├── case-studies/                un JSON par étude de cas + un dossier avec ses captures d'écran (serveur uniquement)
 │   └── locales/                     en.json · it.json · fr.json · de.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)
-├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, sceneField, format, hooks, cn
 │   ├── content/      schema (zod) · validate (contrôles croisés)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV sur demande)
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)

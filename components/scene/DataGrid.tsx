@@ -3,40 +3,36 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
+import { buildFieldAttributes, FIELD, wrap, WAVE_PERIOD } from '@/lib/sceneField';
 import { useSceneStore, type ScenePalette } from '@/store/useSceneStore';
+import { FIELD_FRAGMENT, FIELD_VERTEX } from './fieldShader';
 import { PARAM_KEYS, SCENE_MODES } from './modes';
 
-const COLS = 96;
-const ROWS = 56;
-const GAP = 0.26;
-const LANE_EVERY = 5; // every Nth row carries travelling data packets
-const PACKET_SPAN = 48;
-const PACKET_TAIL = 12;
-
-function buildGrid(): Float32Array {
-  const grid = new Float32Array(COLS * ROWS * 2);
-  for (let r = 0; r < ROWS; r++) {
-    for (let c = 0; c < COLS; c++) {
-      const i = r * COLS + c;
-      grid[i * 2] = (c - (COLS - 1) / 2) * GAP;
-      grid[i * 2 + 1] = (r - (ROWS - 1) / 2) * GAP;
-    }
-  }
-  return grid;
-}
+const createUniforms = () => ({
+  uWave: { value: 0 },
+  uFlow: { value: 0 },
+  uHeat: { value: 0 },
+  uPointer: { value: new THREE.Vector2() },
+  uRadius: { value: 1 },
+  uAmplitude: { value: 0 },
+  uFrequency: { value: 0 },
+  uForce: { value: 0 },
+  uPulse: { value: 0 },
+  uGlowScale: { value: 1 },
+  uSize: { value: 1 },
+  uScale: { value: 1 },
+  uBase: { value: new THREE.Color() },
+  uInk: { value: new THREE.Color() },
+});
+type FieldUniforms = ReturnType<typeof createUniforms>;
 
 export function DataGrid({ still }: { still: boolean }) {
-  const grid = useMemo(() => buildGrid(), []);
-  const buffers = useMemo(
-    () => ({
-      position: new Float32Array(COLS * ROWS * 3),
-      color: new Float32Array(COLS * ROWS * 3),
-    }),
-    [],
-  );
+  // Uploaded once: the points never move on the CPU. Everything else is a uniform.
+  const attributes = useMemo(() => buildFieldAttributes(), []);
+  const uniforms = useMemo(() => createUniforms(), []);
 
   const groupRef = useRef<THREE.Group>(null);
-  const pointsRef = useRef<THREE.Points>(null);
+  const materialRef = useRef<THREE.ShaderMaterial>(null);
 
   // Mutable simulation state: never part of React state.
   const sim = useRef({
@@ -64,8 +60,10 @@ export function DataGrid({ still }: { still: boolean }) {
 
   useFrame((state, delta) => {
     const group = groupRef.current;
-    const points = pointsRef.current;
-    if (!group || !points) return;
+    const material = materialRef.current;
+    if (!group || !material) return;
+    // Written through the scene graph ref, so the uniforms stay out of React's data flow.
+    const u = material.uniforms as FieldUniforms;
 
     const s = sim.current;
     const o = scratch.current;
@@ -85,7 +83,7 @@ export function DataGrid({ still }: { still: boolean }) {
       o.bg.set(palette.paper);
       o.dim.set(palette.dot);
       o.ink.set(palette.ink);
-      (points.material as THREE.PointsMaterial).size = palette.pointSize;
+      u.uInk.value.copy(o.ink);
       s.palette = palette;
     }
 
@@ -114,70 +112,35 @@ export function DataGrid({ still }: { still: boolean }) {
     }
     s.heat += ((pointer.active && hit ? 1 : 0) - s.heat) * ease;
 
-    // Write through the scene graph ref so the buffers stay out of React's data flow.
-    const P = points.geometry.attributes.position.array as Float32Array;
-    const C = points.geometry.attributes.color.array as Float32Array;
-    const r2 = p.radius * p.radius;
-    const presence = Math.min(1, p.presence * (s.palette?.presenceScale ?? 1));
-    const glowScale = 0.35 + 0.65 * presence;
-    const baseR = o.bg.r + (o.dim.r - o.bg.r) * presence;
-    const baseG = o.bg.g + (o.dim.g - o.bg.g) * presence;
-    const baseB = o.bg.b + (o.dim.b - o.bg.b) * presence;
-
-    for (let r = 0; r < ROWS; r++) {
-      const lane = r % LANE_EVERY === 0 ? r / LANE_EVERY : -1;
-      const forward = lane % 2 === 0;
-      const head = s.flow + lane * 17.3;
-
-      for (let c = 0; c < COLS; c++) {
-        const i = r * COLS + c;
-        const x = grid[i * 2];
-        const z = grid[i * 2 + 1];
-
-        const dx = x - s.px;
-        const dz = z - s.pz;
-        const d2 = dx * dx + dz * dz;
-        const influence = s.heat * Math.exp(-d2 / r2);
-
-        const y =
-          p.amplitude * Math.sin(x * p.frequency + s.wave) * Math.cos(z * p.frequency * 0.8 - s.wave * 0.7) +
-          p.amplitude * 0.35 * Math.sin((x + z) * p.frequency * 0.5 + s.wave * 0.45) +
-          influence * (p.force + 0.22 * Math.sin(Math.sqrt(d2) * 3.2 - s.wave * 4));
-
-        P[i * 3] = x;
-        P[i * 3 + 1] = y;
-        P[i * 3 + 2] = z;
-
-        let pulse = 0;
-        if (lane >= 0) {
-          const cell = forward ? c : COLS - 1 - c;
-          const u = (((head - cell) % PACKET_SPAN) + PACKET_SPAN) % PACKET_SPAN;
-          if (u < PACKET_TAIL) {
-            const k = 1 - u / PACKET_TAIL;
-            pulse = k * k * p.pulse;
-          }
-        }
-
-        const glow = Math.min(1, influence * 1.3 + Math.max(0, y) * 0.12 + pulse) * glowScale;
-        C[i * 3] = baseR + (o.ink.r - baseR) * glow;
-        C[i * 3 + 1] = baseG + (o.ink.g - baseG) * glow;
-        C[i * 3 + 2] = baseB + (o.ink.b - baseB) * glow;
-      }
-    }
-
-    points.geometry.attributes.position.needsUpdate = true;
-    points.geometry.attributes.color.needsUpdate = true;
+    // The frame's whole cost: a dozen numbers handed to the shader, whatever the point count.
+    const presence = Math.min(1, p.presence * palette.presenceScale);
+    u.uWave.value = wrap(s.wave, WAVE_PERIOD);
+    u.uFlow.value = wrap(s.flow, FIELD.packetSpan);
+    u.uHeat.value = s.heat;
+    u.uPointer.value.set(s.px, s.pz);
+    u.uRadius.value = p.radius;
+    u.uAmplitude.value = p.amplitude;
+    u.uFrequency.value = p.frequency;
+    u.uForce.value = p.force;
+    u.uPulse.value = p.pulse;
+    u.uGlowScale.value = 0.35 + 0.65 * presence;
+    u.uBase.value.copy(o.bg).lerp(o.dim, presence);
+    u.uSize.value = palette.pointSize * state.viewport.dpr;
+    u.uScale.value = state.size.height * 0.5;
   });
 
   return (
     <group ref={groupRef}>
-      <points ref={pointsRef} frustumCulled={false}>
+      <points frustumCulled={false}>
         <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[buffers.position, 3]} usage={THREE.DynamicDrawUsage} />
-          <bufferAttribute attach="attributes-color" args={[buffers.color, 3]} usage={THREE.DynamicDrawUsage} />
+          <bufferAttribute attach="attributes-position" args={[attributes.position, 3]} />
+          <bufferAttribute attach="attributes-aCell" args={[attributes.cell, 2]} />
         </bufferGeometry>
-        {/* The point size comes from the palette, applied with the colours in the frame loop. */}
-        <pointsMaterial sizeAttenuation vertexColors depthWrite={false} />
+        <shaderMaterial
+          ref={materialRef}
+          args={[{ uniforms, vertexShader: FIELD_VERTEX, fragmentShader: FIELD_FRAGMENT }]}
+          depthWrite={false}
+        />
       </points>
     </group>
   );
