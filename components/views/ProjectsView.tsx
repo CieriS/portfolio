@@ -7,6 +7,7 @@ import { ViewLink } from '@/components/shell/ViewLink';
 import { cn } from '@/lib/cn';
 import { pad, pick } from '@/lib/format';
 import type { PortfolioView, Project } from '@/lib/portfolio';
+import { caseStudyPath, isCaseStudyId, type Locale } from '@/lib/routes';
 import { Meta, SectionHead, type ViewProps } from './atoms';
 
 type ProjectsCopy = PortfolioView['content']['projects'];
@@ -33,6 +34,7 @@ export function ProjectsView({ data }: ViewProps) {
             key={project.id}
             project={project}
             index={index}
+            locale={data.locale}
             copy={copy}
             open={openId === project.id}
             onToggle={() => setOpenId(openId === project.id ? null : project.id)}
@@ -46,12 +48,13 @@ export function ProjectsView({ data }: ViewProps) {
 type ProjectRowProps = {
   project: Project;
   index: number;
+  locale: Locale;
   copy: ProjectsCopy;
   open: boolean;
   onToggle: () => void;
 };
 
-function ProjectRow({ project, index, copy, open, onToggle }: ProjectRowProps) {
+function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRowProps) {
   const item = pick(copy.items, project.id);
   const panelId = `project-${project.id}`;
 
@@ -135,6 +138,13 @@ function ProjectRow({ project, index, copy, open, onToggle }: ProjectRowProps) {
                 <p className="mt-5 text-[15px] leading-relaxed text-muted">{item.bridge}</p>
               </div>
               <SourceLink project={project} copy={copy} />
+              {/* A page of its own, outside the view carousel: a plain link, so it navigates. */}
+              {isCaseStudyId(project.id) && (
+                <a href={caseStudyPath(locale, project.id)} className={LINK_CLASS} data-case-study>
+                  <span className="link-underline group-hover/link:bg-[length:100%_1px]">{copy.labels.caseStudy}</span>
+                  <span aria-hidden>→</span>
+                </a>
+              )}
             </div>
           </div>
         </motion.div>

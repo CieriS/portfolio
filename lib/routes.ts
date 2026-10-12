@@ -35,6 +35,18 @@ export function viewFromSlug(locale: Locale, slug: string | undefined): ViewId |
   return VIEW_IDS.find((id) => id !== 'hero' && VIEW_SLUGS[locale][id] === slug) ?? null;
 }
 
+/** Projects with a page of their own, one level below the projects view: `/it/sistemi/yourfinance`. */
+export const CASE_STUDY_IDS = ['yourfinance'] as const;
+export type CaseStudyId = (typeof CASE_STUDY_IDS)[number];
+
+export function isCaseStudyId(value: string | undefined): value is CaseStudyId {
+  return CASE_STUDY_IDS.some((id) => id === value);
+}
+
+export function caseStudyPath(locale: Locale, id: CaseStudyId): string {
+  return `${pathFor(locale, 'projects')}/${id}`;
+}
+
 /** `/it/sistemi` → `projects`. The slug is resolved against the locale written in the path. */
 export function viewFromPath(pathname: string): ViewId | null {
   const [, locale, slug] = pathname.split('/');

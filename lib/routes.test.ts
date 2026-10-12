@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { LOCALES, pathFor, VIEW_IDS, VIEW_SLUGS, viewFromPath, viewFromSlug } from './routes';
+import {
+  CASE_STUDY_IDS,
+  caseStudyPath,
+  isCaseStudyId,
+  LOCALES,
+  pathFor,
+  VIEW_IDS,
+  VIEW_SLUGS,
+  viewFromPath,
+  viewFromSlug,
+} from './routes';
 
 describe('pathFor', () => {
   it('puts the hero at the locale root and inner views under their slug', () => {
@@ -39,5 +49,22 @@ describe('viewFromPath', () => {
   it('rejects unknown locales and slugs', () => {
     expect(viewFromPath('/de/systems')).toBeNull();
     expect(viewFromPath('/en/nope')).toBeNull();
+  });
+});
+
+describe('case studies', () => {
+  it('live one level below the projects view of each locale', () => {
+    expect(caseStudyPath('it', 'yourfinance')).toBe('/it/sistemi/yourfinance');
+    expect(caseStudyPath('de', 'yourfinance')).toBe('/de/systeme/yourfinance');
+  });
+
+  it('are recognised by id, and nothing else is', () => {
+    for (const id of CASE_STUDY_IDS) expect(isCaseStudyId(id)).toBe(true);
+    expect(isCaseStudyId('ariaer')).toBe(false);
+    expect(isCaseStudyId(undefined)).toBe(false);
+  });
+
+  it('do not shadow a view: the page keeps resolving its own view', () => {
+    expect(viewFromPath('/it/sistemi/yourfinance')).toBe('projects');
   });
 });

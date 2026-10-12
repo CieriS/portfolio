@@ -2,7 +2,8 @@ import { routing, type Locale } from '@/i18n/routing';
 import { pick } from '@/lib/format';
 import { getPortfolioBundle, type Thread } from '@/lib/portfolio';
 import { absoluteUrl } from '@/lib/site';
-import { pathFor, type ViewId } from '@/lib/views';
+import { getCaseStudy } from '@/lib/caseStudy';
+import { caseStudyPath, pathFor, type CaseStudyId, type ViewId } from '@/lib/views';
 
 type Node = Record<string, unknown>;
 
@@ -107,4 +108,54 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
   }
 
   return { '@context': 'https://schema.org', '@graph': graph };
+}
+
+/**
+ * schema.org graph of a case-study page: the article, the software it is about and the
+ * breadcrumb down from the projects view. The source is never linked for a private project.
+ */
+export function buildCaseStudyJsonLd(locale: Locale, id: CaseStudyId): Node {
+  const { shared, contents } = getPortfolioBundle();
+  const content = contents[locale];
+  const { data, copy } = getCaseStudy(id);
+  const text = copy[locale];
+  const project = shared.projects.find((item) => item.id === data.project);
+  const siteUrl = absoluteUrl('/');
+  const pageUrl = absoluteUrl(caseStudyPath(locale, id));
+  const personId = `${siteUrl}#person`;
+  const name = project?.name ?? data.project;
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'Person', '@id': personId, name: shared.name, url: siteUrl },
+      {
+        '@type': 'TechArticle',
+        '@id': `${pageUrl}#article`,
+        url: pageUrl,
+        headline: text.title,
+        description: text.meta.description,
+        inLanguage: locale,
+        author: { '@id': personId },
+        isPartOf: { '@id': `${siteUrl}#website` },
+        breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
+        about: {
+          '@type': 'SoftwareSourceCode',
+          name,
+          programmingLanguage: data.stack,
+          author: { '@id': personId },
+          ...(project?.source.visibility === 'public' ? { codeRepository: project.source.url } : {}),
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${pageUrl}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: shared.name, item: absoluteUrl(pathFor(locale, 'hero')) },
+          { '@type': 'ListItem', position: 2, name: content.ui.nav.projects, item: absoluteUrl(pathFor(locale, 'projects')) },
+          { '@type': 'ListItem', position: 3, name, item: pageUrl },
+        ],
+      },
+    ],
+  };
 }

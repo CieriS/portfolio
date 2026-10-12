@@ -3,33 +3,12 @@
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
 import { fade, Line } from '@/components/motion/Reveal';
-import { cn } from '@/lib/cn';
+import { DISPLAY_TITLE, Emphasis, Meta } from '@/components/ui/text';
 import { pad } from '@/lib/format';
 import type { PortfolioView } from '@/lib/portfolio';
 
+export { Emphasis, Meta };
 export type ViewProps = { data: PortfolioView };
-
-type MetaProps = { children: ReactNode; className?: string; as?: 'p' | 'span' | 'h1' | 'h2' | 'h3' };
-
-/** Small mono label. `as` keeps the visual style while carrying heading semantics where needed. */
-export function Meta({ children, className, as: Tag = 'p' }: MetaProps) {
-  return (
-    <Tag className={cn('font-mono text-[11px] tracking-[0.14em] text-muted uppercase select-none', className)}>{children}</Tag>
-  );
-}
-
-/** Renders `emphasis` (first occurrence inside `text`) in the italic display serif. */
-export function Emphasis({ text, emphasis }: { text: string; emphasis?: string }) {
-  const at = emphasis ? text.indexOf(emphasis) : -1;
-  if (!emphasis || at < 0) return <>{text}</>;
-  return (
-    <>
-      {text.slice(0, at)}
-      <em className="font-serif text-[1.08em] font-normal tracking-[-0.01em] italic">{emphasis}</em>
-      {text.slice(at + emphasis.length)}
-    </>
-  );
-}
 
 export function Pulse() {
   return (
@@ -59,7 +38,7 @@ export function SectionHead({ index, label, title, emphasis, subtitle, aside }: 
         </Meta>
       </motion.div>
       <div className="md:col-span-9">
-        <h1 className="text-[clamp(2.5rem,6.4vw,6.75rem)] leading-[0.95] font-medium tracking-[-0.045em] text-balance hyphens-auto select-none">
+        <h1 className={DISPLAY_TITLE}>
           <Line>
             <Emphasis text={title} emphasis={emphasis} />
           </Line>

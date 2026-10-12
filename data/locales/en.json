@@ -191,7 +191,8 @@
       "bridge": "Data bridge",
       "highlights": "Engineering decisions",
       "repo": "Repository",
-      "private": "Private source — walkthrough on request"
+      "private": "Private source — walkthrough on request",
+      "caseStudy": "Read the case study"
     },
     "items": {
       "yourfinance": {
