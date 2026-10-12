@@ -131,20 +131,23 @@
         "label": "Industrie",
         "role": "Software Developer",
         "entityLabel": "Organisation",
-        "summary": "Berufstätig seit dem 23.02.2022: Praktikum, Ausbildung, heute unbefristet angestellt, vollständig remote. Frontend- und Full-Stack-Entwicklung auf einem proprietären Framework, das mit KI-gestützter Codegenerierung zu Angular migriert wird. Der Arbeitsalltag besteht aus Oberflächen, in reproduzierbaren Docker-Umgebungen; Rust und PostgreSQL gehören zum Data-Engineering-Weg, den ich parallel dazu lerne.",
+        "summary": "Bei Tas seit Februar 2022: Praktikum, dann Ausbildung, heute unbefristet angestellt, vollständig remote. Frontend- und Full-Stack-Entwicklung auf einem proprietären Framework, das mit KI-gestützter Codegenerierung zu Angular migriert wird. Der Arbeitsalltag besteht aus Oberflächen, in Umgebungen mit Docker und Kubernetes (Helm, Rancher); Rust und PostgreSQL gehören zum Data-Engineering-Weg, den ich parallel dazu lerne.",
         "phases": {
           "interface": {
             "title": "Oberflächenschicht",
             "body": "Weboberflächen, serverseitiges Rendering, erster Kontakt mit relationalen Schemata; heute ein proprietäres Framework in Migration zu Angular und TypeScript."
           },
-          "environments": { "title": "Umgebungen", "body": "Reproduzierbare Entwicklungsumgebungen mit Docker." }
+          "environments": {
+            "title": "Umgebungen",
+            "body": "Reproduzierbare Entwicklungsumgebungen mit Docker; Kubernetes-Cluster mit Helm und Rancher."
+          }
         }
       },
       "academic": {
         "label": "Akademisch",
         "role": "Technische Informatik",
         "entityLabel": "Hochschule",
-        "summary": "Bachelor in Technischer Informatik an der Universität Bologna, in Teilzeit. Von 2023 bis Ende 2024 pausiert, um mich auf die Vollzeitarbeit zu konzentrieren, dann wieder aufgenommen: ein angehaltener Prozess, kein abgebrochener.",
+        "summary": "Bachelor in Technischer Informatik an der Universität Bologna, in Teilzeit. Von 2023 bis Ende 2024 pausiert, um mich auf die Vollzeitarbeit zu konzentrieren, dann wieder aufgenommen.",
         "phases": {
           "foundations": {
             "title": "Formale Grundlagen",
