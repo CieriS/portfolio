@@ -140,6 +140,7 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 ## Navigation et interactions
 
 - **Liens en bas de page** (`01`–`05`) : ce sont de vrais `<a href>`, donc le clic du milieu, « ouvrir dans un nouvel onglet » et les robots d'indexation fonctionnent. Le clic principal change la vue sur place. À côté de l'entrée active figure le mot courant pour cette vue (« Exécution · Expérience »), qui fait aussi partie du nom accessible de chaque lien.
+- **Projets depuis l'accueil** : dans le paragraphe de l'accueil, les noms des projets sont des liens (`ProjectLink`, dérivés de `shared.projects` avec `splitByNames`). Ils mènent à l'étude de cas quand elle existe, sinon à la vue des projets avec le panneau déjà ouvert : l'adresse est `/fr/systemes#<id>`, qui fonctionne aussi collée ou partagée. Sans fragment, tous les projets démarrent fermés.
 - **Clavier** : `1`–`5` accèdent directement à une vue, `←` et `→` les parcourent en boucle. Les touches sont ignorées si une touche de modification est enfoncée ou si le focus est dans un champ de saisie.
 - **Tactile** : un balayage horizontal (plus de 70 px et majoritairement horizontal) passe à la vue précédente ou suivante.
 - **Trackpad** : le défilement latéral à deux doigts ne fait ni reculer ni avancer dans l'historique (`overscroll-behavior: none` sur la racine), car il se déclenchait par erreur pendant le défilement d'une vue. Valable dans Chromium et Firefox ; Safari gère ce geste lui-même et peut ignorer la règle. Les boutons du navigateur et les raccourcis clavier ne changent pas.

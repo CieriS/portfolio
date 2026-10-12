@@ -5,6 +5,7 @@ import {
   isCaseStudyId,
   LOCALES,
   pathFor,
+  projectPath,
   VIEW_IDS,
   VIEW_SLUGS,
   viewFromPath,
@@ -66,5 +67,18 @@ describe('case studies', () => {
 
   it('do not shadow a view: the page keeps resolving its own view', () => {
     expect(viewFromPath('/it/sistemi/yourfinance')).toBe('projects');
+  });
+});
+
+describe('projectPath', () => {
+  it('leads to the case study when the project has one', () => {
+    expect(projectPath('it', 'yourfinance')).toBe('/it/sistemi/yourfinance');
+  });
+
+  it('otherwise names the project as a fragment of the projects view', () => {
+    expect(projectPath('en', 'ariaer')).toBe('/en/systems#ariaer');
+    expect(projectPath('de', 'ariaer')).toBe('/de/systeme#ariaer');
+    // The fragment is not part of the path: the address still resolves to the projects view.
+    expect(viewFromPath(new URL(projectPath('fr', 'ariaer'), 'https://example.com').pathname)).toBe('projects');
   });
 });

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { getCaseStudy } from './caseStudy';
 import { ProjectSchema } from './content/schema';
 import { getPortfolioBundle } from './portfolio';
-import { releaseMonth, releaseUrl, versionLabel, versionWithDate } from './projects';
+import { releaseMonth, releaseUrl, splitByNames, versionLabel, versionWithDate } from './projects';
 import { CASE_STUDY_IDS, LOCALES } from './routes';
 
 const open = { visibility: 'public' as const, url: 'https://example.com/me/tool' };
@@ -92,5 +92,55 @@ describe('aria-er', () => {
     const released = Number(project?.version?.split('.')[0]) >= 1;
     const summary = contents[locale].projects.items.ariaer.summary;
     expect(summary.includes(pending[locale]), summary).toBe(!released);
+  });
+});
+
+describe('splitByNames', () => {
+  const items = [
+    { id: 'a', name: 'Alpha' },
+    { id: 'b', name: 'beta-two' },
+  ];
+
+  it('cuts the sentence around each name, in the order they occur', () => {
+    expect(splitByNames('Built beta-two, then Alpha.', items)).toEqual([
+      { text: 'Built ' },
+      { text: 'beta-two', id: 'b' },
+      { text: ', then ' },
+      { text: 'Alpha', id: 'a' },
+      { text: '.' },
+    ]);
+  });
+
+  it('loses no character, whatever it finds', () => {
+    for (const text of ['Alpha', 'no names here', 'Alpha and Alpha again', '', 'beta-twoAlpha']) {
+      expect(
+        splitByNames(text, items)
+          .map((segment) => segment.text)
+          .join(''),
+      ).toBe(text);
+    }
+  });
+
+  it('marks only the first occurrence of a name, and nothing when the name is absent', () => {
+    expect(splitByNames('Alpha and Alpha', items).filter((segment) => segment.id)).toHaveLength(1);
+    expect(splitByNames('nothing', items)).toEqual([{ text: 'nothing' }]);
+    expect(splitByNames('', items)).toEqual([]);
+  });
+
+  it('gives a name contained in a longer one to whichever starts first', () => {
+    const nested = [
+      { id: 'short', name: 'Finance' },
+      { id: 'long', name: 'yourFinance' },
+    ];
+    expect(splitByNames('see yourFinance', nested)).toEqual([{ text: 'see ' }, { text: 'yourFinance', id: 'long' }]);
+  });
+});
+
+describe('the home paragraph', () => {
+  const { shared, contents } = getPortfolioBundle();
+
+  it.each(LOCALES)('%s: names every project, so each gets its link', (locale) => {
+    const linked = splitByNames(contents[locale].hero.detail, shared.projects).flatMap((segment) => segment.id ?? []);
+    expect(linked.sort()).toEqual(shared.projects.map((project) => project.id).sort());
   });
 });

@@ -6,6 +6,7 @@ export {
   caseStudyPath,
   isCaseStudyId,
   pathFor,
+  projectPath,
   VIEW_IDS,
   VIEW_SLUGS,
   viewFromPath,
