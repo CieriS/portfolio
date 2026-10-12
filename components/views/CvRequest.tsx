@@ -1,12 +1,15 @@
 'use client';
 
-import { useId, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent } from 'react';
 import { cn } from '@/lib/cn';
-import { fileNameFrom, LINK_HOURS } from '@/lib/cv/common';
+import { checkCvInput, fileNameFrom, LINK_HOURS, type CvInputProblem } from '@/lib/cv/common';
 import type { PortfolioView } from '@/lib/portfolio';
 
 type Method = 'email' | 'password';
-type Status = 'idle' | 'pending' | 'sent' | 'downloaded' | 'invalid' | 'denied' | 'unavailable' | 'failed';
+type Status = 'idle' | 'pending' | 'sent' | 'downloaded' | 'invalid' | 'denied' | 'unavailable' | 'failed' | CvInputProblem;
+
+/** Problems of the field itself, found before sending: they mark the field, not just the message. */
+const FIELD_PROBLEMS: ReadonlySet<Status> = new Set<Status>(['emptyEmail', 'badEmail', 'emptyPassword']);
 
 /** What the API answers (see app/api/cv/route.ts), mapped to the message shown. */
 const STATUS_BY_CODE: Record<number, Status> = { 202: 'sent', 400: 'invalid', 403: 'denied', 503: 'unavailable' };
@@ -24,14 +27,24 @@ export function CvRequest({ data }: { data: PortfolioView }) {
   const [revealed, setRevealed] = useState(false);
   const panelId = useId();
   const fieldId = useId();
+  const statusId = useId();
+  const fieldRef = useRef<HTMLInputElement>(null);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
+    const value = String(form.get(method) ?? '');
+    // Checked here, in the page's own words and language, instead of by the browser's bubble.
+    const problem = checkCvInput(method, value);
+    if (problem) {
+      setStatus(problem);
+      fieldRef.current?.focus();
+      return;
+    }
     const body =
       method === 'email'
-        ? { method, locale: data.locale, email: form.get('email'), website: form.get('website') }
-        : { method, locale: data.locale, password: form.get('password') };
+        ? { method, locale: data.locale, email: value.trim(), website: form.get('website') }
+        : { method, locale: data.locale, password: value };
 
     setStatus('pending');
     try {
@@ -103,7 +116,7 @@ export function CvRequest({ data }: { data: PortfolioView }) {
           ))}
         </div>
 
-        <form onSubmit={submit} className="mt-6 flex max-w-xl flex-col gap-3 sm:flex-row sm:items-end">
+        <form onSubmit={submit} noValidate className="mt-6 flex max-w-xl flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex flex-1 flex-col gap-2">
             <label htmlFor={fieldId} className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
               {method === 'email' ? copy.email : copy.password}
@@ -113,8 +126,12 @@ export function CvRequest({ data }: { data: PortfolioView }) {
                 key={method}
                 id={fieldId}
                 name={method}
+                ref={fieldRef}
                 type={method === 'password' && revealed ? 'text' : method}
-                required
+                aria-required
+                aria-invalid={FIELD_PROBLEMS.has(status) || undefined}
+                aria-describedby={statusId}
+                onChange={() => FIELD_PROBLEMS.has(status) && setStatus('idle')}
                 autoComplete={method === 'email' ? 'email' : 'current-password'}
                 maxLength={method === 'email' ? 254 : 256}
                 className="min-w-0 flex-1 bg-transparent py-2 text-lg outline-none"
@@ -146,7 +163,7 @@ export function CvRequest({ data }: { data: PortfolioView }) {
           </button>
         </form>
 
-        <p role="status" className="mt-4 min-h-6 text-[15px]">
+        <p id={statusId} role="status" className="mt-4 min-h-6 text-[15px]">
           {message}
         </p>
       </div>

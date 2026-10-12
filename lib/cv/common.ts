@@ -20,3 +20,20 @@ export function cvFileName(name: string): string {
 export function fileNameFrom(disposition: string | null): string {
   return disposition?.match(/filename="([^"]+)"/)?.[1] ?? 'CV.pdf';
 }
+
+export type CvInputProblem = 'emptyEmail' | 'badEmail' | 'emptyPassword';
+
+/** Something before the at sign, something after it, and a dot in the domain: the rest is the server's call. */
+const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * What is wrong with the field before anything is sent, or `null`. It replaces the browser's
+ * own bubble ("Please fill in this field"), which cannot say what the field is for and speaks
+ * the browser's language rather than the page's.
+ */
+export function checkCvInput(method: 'email' | 'password', value: string): CvInputProblem | null {
+  if (method === 'password') return value.trim() === '' ? 'emptyPassword' : null;
+  const email = value.trim();
+  if (email === '') return 'emptyEmail';
+  return EMAIL_SHAPE.test(email) ? null : 'badEmail';
+}
