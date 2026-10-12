@@ -85,7 +85,7 @@
     "role": "Software Developer",
     "transition": "In transizione verso il Data Engineering",
     "lead": "Costruisco il percorso dalle interfacce ai sistemi: backend tipizzati, storage relazionale e pipeline che muovono dati con uno scopo.",
-    "detail": "Dal 2022 sviluppo in Tas con Angular e TypeScript e studio Ingegneria Informatica all'Università di Bologna. Nei progetti personali uso Rust, PostgreSQL e dbt: yourFinance, piattaforma di finanza personale, e aria-er, pipeline dati sulla qualità dell'aria.",
+    "detail": "Dal 2022 sviluppo in Tas, frontend e full-stack, oggi con Angular e TypeScript, e studio Ingegneria Informatica all'Università di Bologna. Nei progetti personali uso Rust, PostgreSQL e dbt: yourFinance, piattaforma di finanza personale, e aria-er, pipeline dati sulla qualità dell'aria.",
     "hint": "Muovi il cursore — ogni nodo è un'unità di calcolo",
     "cta": "Esplora"
   },
@@ -220,7 +220,7 @@
         }
       },
       "ariaer": {
-        "summary": "Piattaforma dati end-to-end sulla qualità dell’aria in Emilia-Romagna, sugli open data ARPAE arricchiti con il meteo di Open-Meteo: ingestion in Rust verso Parquet partizionato, modelli dbt su DuckDB in locale e BigQuery su GCP, orchestrazione con Dagster. In corso: l’esplorazione dei dati è completata.",
+        "summary": "Piattaforma dati end-to-end sulla qualità dell’aria in Emilia-Romagna, sugli open data ARPAE arricchiti con il meteo di Open-Meteo: ingestion in Rust verso Parquet partizionato, modelli dbt su DuckDB in locale e BigQuery su GCP, orchestrazione con Dagster. Gira in locale con Docker, dashboard e CI comprese; l’esecuzione su Google Cloud è ancora da fare.",
         "bridge": "Un progetto di data engineering puro: misure provvisorie riviste dopo la validazione, buchi e formati incoerenti nella sorgente, trasformati in un dataset storicizzato e testato che risponde su superamenti dei limiti di legge, trend degli inquinanti e correlazione con il meteo.",
         "highlights": [
           "Ingestion incrementale e idempotente: riprocessamento a finestra mobile e upsert sulla chiave naturale",

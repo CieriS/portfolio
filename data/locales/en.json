@@ -85,7 +85,7 @@
     "role": "Software Developer",
     "transition": "Transitioning to Data Engineering",
     "lead": "Building the path from interfaces to systems: typed backends, relational storage, and pipelines that move data with intent.",
-    "detail": "Since 2022 I have been developing at Tas with Angular and TypeScript, while studying Computer Engineering at the University of Bologna. My personal projects run on Rust, PostgreSQL and dbt: yourFinance, a personal finance platform, and aria-er, an air-quality data pipeline.",
+    "detail": "Since 2022 I have been developing at Tas, frontend and full-stack, today with Angular and TypeScript, while studying Computer Engineering at the University of Bologna. My personal projects run on Rust, PostgreSQL and dbt: yourFinance, a personal finance platform, and aria-er, an air-quality data pipeline.",
     "hint": "Move the cursor — every node is a unit of computation",
     "cta": "Explore"
   },
@@ -217,7 +217,7 @@
         }
       },
       "ariaer": {
-        "summary": "End-to-end data platform for Emilia-Romagna air quality on ARPAE open data, enriched with Open-Meteo weather: Rust ingestion into partitioned Parquet, dbt models on DuckDB locally and BigQuery on GCP, Dagster orchestration. Work in progress: data exploration is done.",
+        "summary": "End-to-end data platform for Emilia-Romagna air quality on ARPAE open data, enriched with Open-Meteo weather: Rust ingestion into partitioned Parquet, dbt models on DuckDB locally and BigQuery on GCP, Dagster orchestration. It runs locally with Docker, dashboard and CI included; the run on Google Cloud is still to do.",
         "bridge": "A pure data engineering project: provisional measurements revised after validation, gaps and inconsistent formats in the source, turned into a historized, tested dataset that answers legal-limit exceedances, pollutant trends and weather correlation.",
         "highlights": [
           "Idempotent incremental ingestion: rolling-window reprocessing and upserts on the natural key",
