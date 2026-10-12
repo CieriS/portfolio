@@ -85,7 +85,7 @@
     "role": "Software Developer",
     "transition": "Auf dem Weg ins Data Engineering",
     "lead": "Ich baue den Weg von Oberflächen zu Systemen: typisierte Backends, relationale Speicherung und Pipelines, die Daten mit klarem Zweck bewegen.",
-    "detail": "Seit 2022 entwickle ich bei Tas mit Angular und TypeScript und studiere Technische Informatik an der Universität Bologna. Meine eigenen Projekte bauen auf Rust, PostgreSQL und dbt: yourFinance, eine Plattform für persönliche Finanzen, und aria-er, eine Datenpipeline zur Luftqualität.",
+    "detail": "Seit 2022 entwickle ich bei Tas, Frontend und Full-Stack, heute mit Angular und TypeScript, und studiere Technische Informatik an der Universität Bologna. Meine eigenen Projekte bauen auf Rust, PostgreSQL und dbt: yourFinance, eine Plattform für persönliche Finanzen, und aria-er, eine Datenpipeline zur Luftqualität.",
     "hint": "Bewege den Cursor — jeder Knoten ist eine Recheneinheit",
     "cta": "Erkunden"
   },
@@ -220,7 +220,7 @@
         }
       },
       "ariaer": {
-        "summary": "End-to-End-Datenplattform zur Luftqualität in der Emilia-Romagna, auf Basis der Open Data von ARPAE, angereichert mit Wetterdaten von Open-Meteo: Ingestion in Rust zu partitioniertem Parquet, dbt-Modelle auf DuckDB lokal und BigQuery auf GCP, Orchestrierung mit Dagster. In Arbeit: Die Datenexploration ist abgeschlossen.",
+        "summary": "End-to-End-Datenplattform zur Luftqualität in der Emilia-Romagna, auf Basis der Open Data von ARPAE, angereichert mit Wetterdaten von Open-Meteo: Ingestion in Rust zu partitioniertem Parquet, dbt-Modelle auf DuckDB lokal und BigQuery auf GCP, Orchestrierung mit Dagster. Sie läuft lokal mit Docker, einschließlich Dashboard und CI; der Lauf auf Google Cloud steht noch aus.",
         "bridge": "Ein reines Data-Engineering-Projekt: vorläufige Messwerte, die nach der Validierung revidiert werden, Lücken und uneinheitliche Formate in der Quelle, verwandelt in einen historisierten, getesteten Datensatz, der Fragen zu Grenzwertüberschreitungen, Schadstofftrends und Wetterkorrelation beantwortet.",
         "highlights": [
           "Inkrementelle, idempotente Ingestion: Neuverarbeitung über ein gleitendes Fenster und Upserts auf dem natürlichen Schlüssel",

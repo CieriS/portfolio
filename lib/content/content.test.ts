@@ -100,3 +100,25 @@ describe('findEmphasisIssues', () => {
     ]);
   });
 });
+
+describe('facts the home repeats by hand', () => {
+  // The home paragraph and the project summaries restate, per language, facts that live in the
+  // timeline and in the projects themselves. Two of them drifted once; these keep them honest.
+  const copies = { en, it: it_, fr, de };
+  const today = { en: 'today', it: 'oggi', fr: "aujourd'hui", de: 'heute' };
+  const stale = { en: 'exploration', it: 'esplorazione', fr: 'exploration', de: 'exploration' };
+
+  it.each(Object.keys(copies) as Array<keyof typeof copies>)('%s: Angular is the present, not "since 2022"', (locale) => {
+    const sentence = copies[locale].hero.detail.split('. ')[0];
+    expect(sentence).toContain('2022');
+    // The work at Tas began on a proprietary framework: Angular is where it is going now.
+    expect(sentence).toMatch(new RegExp(`${today[locale]}[^,.]*Angular`));
+  });
+
+  it.each(Object.keys(copies) as Array<keyof typeof copies>)('%s: aria-er is not described as still exploring', (locale) => {
+    const summary = copies[locale].projects.items.ariaer.summary;
+    expect(summary.toLowerCase()).not.toContain(stale[locale]);
+    expect(summary).toContain('Docker');
+    expect(summary).toContain('Google Cloud');
+  });
+});
