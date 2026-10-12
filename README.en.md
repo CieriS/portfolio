@@ -176,6 +176,7 @@ Below the Systems view there is one more page for the projects that have a case 
 - `SceneLayer` lives in the layout, above every view swap, and is never unmounted.
 - `DataField` is loaded with `next/dynamic` and `ssr: false`: three.js never reaches the server bundle.
 - `DataGrid` draws a 96 × 56 point grid; every fifth row carries moving "data packets".
+- The grid is uploaded to the GPU once (`lib/sceneField.ts`). Each point's height, the ripple around the pointer, the packets and the colour are computed by the vertex shader (`components/scene/fieldShader.ts`); on every frame `useFrame` eases the parameters and hands the shader a dozen numbers, whatever the point count. The wave and flow phases arrive already wrapped into their period, because numbers on the GPU are 32-bit.
 - Each view has a mode in `components/scene/modes.ts` (amplitude, frequency, speed, flow, pointer radius and force, presence, camera position). On a view change the parameters ease smoothly to the new values.
 - `PerformanceMonitor` drops the device pixel ratio to 1 when the frame rate falls and raises it back up to 1.75 when it recovers.
 - With `prefers-reduced-motion: reduce` the canvas switches to `frameloop="demand"` and repaints only when the view or theme changes.
@@ -355,7 +356,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 ├── components/
 │   ├── motion/       ViewFrame (view container), Reveal (variants, line mask, intro)
 │   ├── providers/    ThemeProvider (next-themes)
-│   ├── scene/        SceneLayer → DataField (Canvas, lazy) → DataGrid (useFrame) · modes
+│   ├── scene/        SceneLayer → DataField (Canvas, lazy) → DataGrid (useFrame) · fieldShader · modes
 │   ├── case-study/   CaseStudyPage (server component), SceneMode
 │   ├── seo/          PortfolioPage (JSON-LD + app)
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
@@ -369,7 +370,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   ├── case-studies/                one JSON per case study + a folder with its screenshots (server only)
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, UI strings, SEO metadata
 ├── i18n/             routing.ts (languages) · request.ts (next-intl messages)
-├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, sceneField, format, hooks, cn
 │   ├── content/      schema (zod) · validate (cross-checks)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV on request)
 ├── store/            viewStore (per instance) · useSceneStore (scene, transient)

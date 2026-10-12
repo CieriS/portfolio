@@ -176,6 +176,7 @@ Sotto la vista Sistemi c'è una pagina in più per i progetti che hanno un caso 
 - `SceneLayer` vive nel layout, sopra ogni cambio vista, e non viene mai smontato.
 - `DataField` è caricato con `next/dynamic` e `ssr: false`: three.js non entra mai nel bundle server.
 - `DataGrid` disegna una griglia di 96 × 56 punti; una riga ogni cinque trasporta "pacchetti di dati" in movimento.
+- La griglia è caricata sulla GPU una volta sola (`lib/sceneField.ts`). Altezza, onda attorno al puntatore, pacchetti e colore di ogni punto li calcola il vertex shader (`components/scene/fieldShader.ts`); a ogni frame `useFrame` interpola i parametri e passa allo shader una dozzina di numeri, qualunque sia il numero di punti. Le fasi di onda e flusso arrivano già riportate entro il loro periodo, perché sulla GPU i numeri sono a 32 bit.
 - Ogni vista ha una modalità in `components/scene/modes.ts` (ampiezza, frequenza, velocità, flusso, raggio e forza del puntatore, presenza, posizione della camera). Al cambio vista i parametri vengono interpolati in modo graduale.
 - `PerformanceMonitor` riduce il device pixel ratio a 1 quando il frame rate cala e lo riporta fino a 1,75 quando migliora.
 - Con `prefers-reduced-motion: reduce` il canvas passa a `frameloop="demand"` e ridisegna solo quando cambiano vista o tema.
@@ -355,7 +356,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 ├── components/
 │   ├── motion/       ViewFrame (contenitore della vista), Reveal (varianti, line mask, intro)
 │   ├── providers/    ThemeProvider (next-themes)
-│   ├── scene/        SceneLayer → DataField (Canvas, lazy) → DataGrid (useFrame) · modes
+│   ├── scene/        SceneLayer → DataField (Canvas, lazy) → DataGrid (useFrame) · fieldShader · modes
 │   ├── case-study/   CaseStudyPage (componente server), SceneMode
 │   ├── seo/          PortfolioPage (JSON-LD + app)
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
@@ -369,7 +370,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 │   ├── case-studies/                un JSON per caso di studio + cartella con le schermate (solo server)
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, stringhe UI, metadata SEO
 ├── i18n/             routing.ts (lingue) · request.ts (messages di next-intl)
-├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, format, hooks, cn
+├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, sceneField, format, hooks, cn
 │   ├── content/      schema (zod) · validate (verifiche incrociate)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV su richiesta)
 ├── store/            viewStore (per istanza) · useSceneStore (scena, transiente)
