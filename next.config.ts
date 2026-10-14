@@ -1,5 +1,7 @@
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
+import { aliasRedirects } from './lib/aliases';
+import { SITE_URL } from './lib/site';
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
@@ -68,6 +70,8 @@ const nextConfig: NextConfig = {
       { source: '/error', destination: '/', permanent: true },
       { source: '/projDev/:path*', destination: '/it/sistemi', permanent: true },
       { source: '/projProd/:path*', destination: '/it/sistemi', permanent: true },
+      // The other *.vercel.app hosts of this project, so search engines index one copy (#67).
+      ...aliasRedirects(SITE_URL),
     ];
   },
 };

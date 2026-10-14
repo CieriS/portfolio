@@ -235,6 +235,8 @@ Sotto la vista Sistemi c'è una pagina in più per i progetti che hanno un caso 
 | `/projDev/*` | `/it/sistemi` |
 | `/projProd/*` | `/it/sistemi` |
 
+- **Un solo host indicizzato**: gli altri alias `*.vercel.app` del progetto (`cieri`, `samuelecieri`) rispondono con un redirect permanente (308) allo stesso percorso su `SITE_URL`. Il canonical da solo non bastava: Google aveva indicizzato un alias. Gli host sono elencati uno per uno in `lib/aliases.ts`, così le anteprime, localhost e il server dei test non vengono toccati. Un alias nuovo aggiunto su Vercel va aggiunto anche lì.
+
 ### Google Search Console
 
 1. Aggiungi una proprietà di tipo "Prefisso URL" e scegli la verifica con tag HTML.
