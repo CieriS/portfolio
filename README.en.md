@@ -235,6 +235,8 @@ Below the Systems view there is one more page for the projects that have a case 
 | `/projDev/*` | `/it/sistemi` |
 | `/projProd/*` | `/it/sistemi` |
 
+- **One indexed host**: the project's other `*.vercel.app` aliases (`cieri`, `samuelecieri`) answer with a permanent redirect (308) to the same path on `SITE_URL`. The canonical tag alone was not enough: Google had indexed an alias. The hosts are listed one by one in `lib/aliases.ts`, so previews, localhost and the test server are never caught. A new alias added on Vercel must be added there too.
+
 ### Google Search Console
 
 1. Add a "URL prefix" property and pick the HTML tag verification.

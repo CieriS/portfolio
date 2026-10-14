@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { ALIAS_HOSTS } from '../lib/aliases';
 import { LOCALES } from '../lib/routes';
 import { locales, shared } from './content';
 import { ALL_PAGES, CASE_STUDY_PAGES, pathFor } from './helpers';
@@ -125,4 +126,16 @@ test('legacy PHP URLs still redirect', async ({ request }) => {
     expect(response.status()).toBe(308);
     expect(response.headers()['location']).toBe(to);
   }
+});
+
+test('the other vercel.app hosts redirect to the same path on the site (#67)', async ({ request, baseURL }) => {
+  for (const host of ALIAS_HOSTS) {
+    for (const path of ['/', pathFor('it', 'timeline'), '/sitemap.xml']) {
+      const response = await request.get(path, { headers: { host }, maxRedirects: 0 });
+      expect(response.status(), `${host}${path}`).toBe(308);
+      expect(response.headers()['location'], `${host}${path}`).toBe(`${baseURL}${path === '/' ? '' : path}`);
+    }
+  }
+  // The site's own host is served, not redirected.
+  expect((await request.get(pathFor('it', 'timeline'), { maxRedirects: 0 })).status()).toBe(200);
 });
