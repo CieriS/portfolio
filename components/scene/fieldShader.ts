@@ -71,13 +71,55 @@ void main() {
 }
 `;
 
-/** Flat square points; tone mapping and output colour space as in three's built-in materials. */
+/**
+ * Declarations three.js used to prepend to every shader. Kept out of `FIELD_VERTEX` so that
+ * the field's own code stays as it was; `fieldRenderer.ts` joins the two.
+ */
+export const VERTEX_PRELUDE = /* glsl */ `
+precision highp float;
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+attribute vec3 position;
+`;
+
+/**
+ * Flat square points, then what three applied to its built-in materials by default: ACES
+ * filmic tone mapping (exposure 1) and the linear → sRGB transfer for the screen. Copied from
+ * three r186 (`tonemapping_pars_fragment`, `colorspace_pars_fragment`) so the colours match.
+ */
 export const FIELD_FRAGMENT = /* glsl */ `
+precision highp float;
 varying vec3 vColor;
 
+vec3 RRTAndODTFit(vec3 v) {
+  vec3 a = v * (v + 0.0245786) - 0.000090537;
+  vec3 b = v * (0.983729 * v + 0.4329510) + 0.238081;
+  return a / b;
+}
+
+vec3 ACESFilmicToneMapping(vec3 color) {
+  const mat3 ACESInputMat = mat3(
+    vec3(0.59719, 0.07600, 0.02840),
+    vec3(0.35458, 0.90834, 0.13383),
+    vec3(0.04823, 0.01566, 0.83777)
+  );
+  const mat3 ACESOutputMat = mat3(
+    vec3(1.60475, -0.10208, -0.00327),
+    vec3(-0.53108, 1.10813, -0.07276),
+    vec3(-0.07367, -0.00605, 1.07602)
+  );
+  color *= 1.0 / 0.6;
+  color = ACESInputMat * color;
+  color = RRTAndODTFit(color);
+  color = ACESOutputMat * color;
+  return clamp(color, 0.0, 1.0);
+}
+
+vec3 sRGBTransferOETF(vec3 value) {
+  return mix(pow(value, vec3(0.41666)) * 1.055 - vec3(0.055), value * 12.92, vec3(lessThanEqual(value, vec3(0.0031308))));
+}
+
 void main() {
-  gl_FragColor = vec4(vColor, 1.0);
-  #include <tonemapping_fragment>
-  #include <colorspace_fragment>
+  gl_FragColor = vec4(sRGBTransferOETF(ACESFilmicToneMapping(vColor)), 1.0);
 }
 `;

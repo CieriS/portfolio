@@ -33,7 +33,7 @@ Personal portfolio of **Samuele Cieri**, a Software Developer transitioning to D
 
 - **SPA with real URLs**: each view is a static page (SSG) with its own content and metadata. After the first load, view changes happen on the client without a reload, updating the URL and title through the History API.
 - **Four languages (EN/IT/FR/DE)**: translated slugs, automatic language detection and an instant language switch that keeps the view, the canvas and the state.
-- **Persistent 3D scene**: a 5,376-point grid (three.js) that changes shape and camera angle for each view and reacts to the pointer. It loads on the client only and adapts to the device's performance.
+- **Persistent 3D scene**: a 5,376-point grid (WebGL) that changes shape and camera angle for each view and reacts to the pointer. It loads on the client only and adapts to the device's performance.
 - **Light, dark or automatic theme** with next-themes, with no flash on load.
 - **Considered motion**: a CSS intro on first paint (before hydration), then Framer Motion for view transitions, line masks and the animated navigation underline.
 - **Complete SEO**: canonical, hreflang, Open Graph with images per language and view, JSON-LD, sitemap, robots, manifest and 301 redirects from the old PHP URLs.
@@ -51,7 +51,7 @@ Personal portfolio of **Samuele Cieri**, a Software Developer transitioning to D
 | Styling | Tailwind CSS v4 (`@tailwindcss/postcss`) · next-themes (light / dark / system) |
 | Typography | Geist · Geist Mono · Instrument Serif (`next/font/google`) |
 | Motion | Framer Motion (`AnimatePresence`, `layoutId`, `MotionConfig`, mask reveal) |
-| 3D | three · @react-three/fiber · @react-three/drei (lazy, client-only) |
+| 3D | plain WebGL, no library (lazy, client-only) |
 | State | Zustand (per-instance view store via context + transient scene store) |
 | i18n | next-intl (`/en`, `/it`, `/fr`, language detection via `proxy.ts`, client-side language switch) |
 | Data | `data/shared.json` + `data/locales/*.json` (single source: content, UI strings, SEO metadata), validated with zod |
@@ -175,12 +175,12 @@ Below the Systems view there is one more page for the projects that have a case 
 ### 3D scene
 
 - `SceneLayer` lives in the layout, above every view swap, and is never unmounted.
-- `DataField` is loaded with `next/dynamic` and `ssr: false`: three.js never reaches the server bundle.
-- `DataGrid` draws a 96 × 56 point grid; every fifth row carries moving "data packets".
-- The grid is uploaded to the GPU once (`lib/sceneField.ts`). Each point's height, the ripple around the pointer, the packets and the colour are computed by the vertex shader (`components/scene/fieldShader.ts`); on every frame `useFrame` eases the parameters and hands the shader a dozen numbers, whatever the point count. The wave and flow phases arrive already wrapped into their period, because numbers on the GPU are 32-bit.
-- Each view has a mode in `components/scene/modes.ts` (amplitude, frequency, speed, flow, pointer radius and force, presence, camera position). On a view change the parameters ease smoothly to the new values.
-- `PerformanceMonitor` drops the device pixel ratio to 1 when the frame rate falls and raises it back up to 1.75 when it recovers.
-- With `prefers-reduced-motion: reduce` the canvas switches to `frameloop="demand"` and repaints only when the view or theme changes.
+- `DataField` is loaded with `next/dynamic` and `ssr: false` and draws with plain WebGL (`components/scene/fieldRenderer.ts`): one program, two static buffers, a single draw call. Up to 2.4 the scene ran on three.js and react-three-fiber: ~230 KB gzip and a long start-up task, nearly all of the desktop Total Blocking Time (issue #64). ACES tone mapping and the sRGB conversion are three's, copied into the shader, so the colours did not change.
+- The grid has 96 × 56 points; every fifth row carries moving "data packets".
+- The grid is uploaded to the GPU once (`lib/sceneField.ts`). Each point's height, the ripple around the pointer, the packets and the colour are computed by the vertex shader (`components/scene/fieldShader.ts`); on every frame `stepSim` (`lib/sceneSim.ts`, pure and tested, with the camera maths in `lib/sceneMath.ts`) eases the parameters and hands the shader a dozen numbers, whatever the point count. The wave and flow phases arrive already wrapped into their period, because numbers on the GPU are 32-bit.
+- Each view has a mode in `lib/sceneModes.ts` (amplitude, frequency, speed, flow, pointer radius and force, presence, camera position). On a view change the parameters ease smoothly to the new values.
+- `lib/sceneMonitor.ts` (same thresholds as the drei `PerformanceMonitor` it replaces) drops the device pixel ratio to 1 when the frame rate falls and raises it back up to 1.75 when it recovers.
+- With `prefers-reduced-motion: reduce` the canvas has no frame loop and repaints only when the view or theme changes.
 - The palette follows the resolved theme (light or dark) and carries the point size too: in the light theme the point is darker and about 25% larger, because dark points on a bright ground look thinner than light points on a dark one at the same contrast. On the inner views, where the field is dimmed to keep the text readable, the light theme keeps more of it (`presenceScale`), or it would all but vanish on the cream paper.
 
 ### Motion
@@ -345,7 +345,7 @@ Add `{ id, label, handle, url }` to `shared.contacts`: it appears in the Identit
 ### Adding a view
 
 1. `lib/routes.ts`: add the ID to `VIEW_IDS` and its slug for each language in `VIEW_SLUGS`.
-2. `components/scene/modes.ts`: add the scene mode to `SCENE_MODES`.
+2. `lib/sceneModes.ts`: add the scene mode to `SCENE_MODES`.
 3. `components/views/`: create the component and register it in `RENDER` in `components/shell/AppShell.tsx`.
 4. `data/locales/*.json`: add `ui.nav.<id>`, `ui.meta.views.<id>` and the view's copy in every language.
 
@@ -380,7 +380,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 ├── components/
 │   ├── motion/       ViewFrame (view container), Reveal (variants, line mask, intro)
 │   ├── providers/    ThemeProvider (next-themes)
-│   ├── scene/        SceneLayer → DataField (Canvas, lazy) → DataGrid (useFrame) · fieldShader · modes
+│   ├── scene/        SceneLayer → DataField (lazy) → fieldRenderer (WebGL) · fieldShader
 │   ├── case-study/   CaseStudyPage (server component), SceneMode
 │   ├── seo/          PortfolioPage (JSON-LD + app)
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
@@ -418,7 +418,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 - End-to-end tests in `e2e/` with Playwright, run against the production build on Chromium, WebKit and a mobile profile. They cover every language's URLs and metadata, navigation and history, the language switch, SEO, security headers, accessibility (axe) and the site's resilience to a WebGL failure.
 - CI in `.github/workflows/ci.yml`: formatting, lint, typecheck, unit tests, build and end-to-end tests on every pull request and on every push to `development`. Its three jobs (this one, the end-to-end tests and the performance budget) are required checks for merging (see [Workflow](#workflow)).
 - **Visual regression** (`e2e/visual.spec.ts`): nine reference screenshots in `e2e/__screenshots__/` (the five views in the light theme, two in the dark theme, two on a phone) compared on every run. To be repeatable they pin the clock and hide the WebGL scene. They are valid for Chromium on Linux, that is for CI: locally on macOS the tests are skipped, as they would fail on antialiasing alone. After an intended visual change CI fails, regenerates the references on the same runner and publishes them as the `visual-references` artifact: `gh run download <id> -n visual-references -D e2e/__screenshots__`, review the images and commit them.
-- **Performance budget** (`lighthouserc.json`): a third CI job runs Lighthouse three times, in mobile emulation, on the home, timeline and projects pages of the production build, and fails when the median leaves the thresholds: accessibility and SEO at 100, best practices ≥ 95, LCP ≤ 4 s, CLS ≤ 0.02, page weight ≤ 700 KB. The performance score (≥ 80) and TBT (≤ 500 ms) are reported as warnings only: they depend on the runner's speed, which changes from one run to the next (TBT from 360 to 750 ms on the same code), and as errors they would fail CI at random. The thresholds capture the current state on the CI runners, which are slower than a laptop and have no GPU (the WebGL scene costs more there), with a small margin: they exist to stop regressions and should be tightened with every improvement. Locally: `npm run build && npx @lhci/cli@0.15.1 autorun`.
+- **Performance budget** (`lighthouserc.json`): a third CI job runs Lighthouse three times, in mobile emulation, on the home, timeline and projects pages of the production build, and fails when the median leaves the thresholds: accessibility and SEO at 100, best practices ≥ 95, LCP ≤ 4 s, CLS ≤ 0.02, page weight ≤ 450 KB (700 before three.js was removed). The performance score (≥ 80) and TBT (≤ 300 ms) are reported as warnings only: they depend on the runner's speed, which changes from one run to the next (TBT from 360 to 750 ms on the same code), and as errors they would fail CI at random. The thresholds capture the current state on the CI runners, which are slower than a laptop and have no GPU (the WebGL scene costs more there), with a small margin: they exist to stop regressions and should be tightened with every improvement. Locally: `npm run build && npx @lhci/cli@0.15.1 autorun`.
 - Dependabot (`.github/dependabot.yml`) opens one grouped weekly PR against `development` for npm dependencies and one for GitHub Actions. Major bumps of `eslint` and `typescript` are ignored until `eslint-config-next` supports them.
 - GitHub Actions are pinned to a commit SHA, with the version in a comment (`uses: actions/checkout@<sha> # v7.0.1`): a tag can be moved, a SHA cannot. Dependabot reads the comment and keeps proposing updates; `lib/ci.test.ts` fails if a workflow goes back to a tag or a branch.
 - `.mailmap` folds the early commits signed with a hostname-derived email into one identity, without rewriting history.
