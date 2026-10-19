@@ -1,10 +1,11 @@
 /**
- * Other hosts that serve this same Vercel project. The canonical tag points them to `SITE_URL`,
- * but it is only a hint: Google indexed `cieri.vercel.app` anyway (issue #67). A permanent
- * redirect is a directive. Exact hosts only — a rule like "any host but SITE_URL" would also
- * catch preview deployments, localhost and the test server.
+ * Every production host of this Vercel project. Whichever one `SITE_URL` names is served; the
+ * others redirect to it, so moving the site between them only means changing `SITE_URL` (issue #69).
+ * The canonical tag alone is only a hint: Google indexed `cieri.vercel.app` anyway (issue #67).
+ * A permanent redirect is a directive. Exact hosts only — a rule like "any host but SITE_URL"
+ * would also catch preview deployments, localhost and the test server.
  */
-export const ALIAS_HOSTS = ['cieri.vercel.app', 'samuelecieri.vercel.app'] as const;
+export const ALIAS_HOSTS = ['cieri.vercel.app', 'cierisamuele.vercel.app', 'samuelecieri.vercel.app'] as const;
 
 export type HostRedirect = {
   source: string;
