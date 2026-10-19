@@ -1,30 +1,89 @@
 'use client';
 
-import { PerformanceMonitor } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
-import { DataGrid } from './DataGrid';
+import { createFpsMonitor } from '@/lib/sceneMonitor';
+import { createSim, stepSim } from '@/lib/sceneSim';
+import { useSceneStore } from '@/store/useSceneStore';
+import { createFieldRenderer } from './fieldRenderer';
 
 const MAX_DPR = 1.75;
 
-// Loaded only on the client through next/dynamic: three.js never touches the server bundle.
+// Loaded only on the client through next/dynamic, after the page is interactive.
 export default function DataField() {
-  const [still] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const [dpr, setDpr] = useState(() => Math.min(window.devicePixelRatio, MAX_DPR));
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
 
+  useEffect(() => {
+    const canvas = canvasRef.current!;
+    // Throws without WebGL: the error reaches SceneErrorBoundary, which drops the canvas.
+    const renderer = createFieldRenderer(canvas);
+    const sim = createSim();
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const monitor = createFpsMonitor();
+    const size = { width: 1, height: 1, dpr: Math.min(window.devicePixelRatio, MAX_DPR) };
+    let last: number | null = null;
+    let frame = 0;
+
+    const draw = (now: number) => {
+      const delta = last === null ? 0 : (now - last) / 1000;
+      last = now;
+      const { mode, palette, pointer } = useSceneStore.getState();
+      renderer.draw(stepSim(sim, { mode, palette, pointer, delta, still, ...size }));
+    };
+
+    const resize = () => {
+      size.width = Math.max(1, canvas.clientWidth);
+      size.height = Math.max(1, canvas.clientHeight);
+      renderer.resize(size.width, size.height, size.dpr);
+    };
+
+    const setDpr = (dpr: number) => {
+      if (dpr === size.dpr) return;
+      size.dpr = dpr;
+      resize();
+    };
+
+    const loop = (now: number) => {
+      draw(now);
+      const verdict = monitor(now);
+      if (verdict === 'decline') setDpr(1);
+      if (verdict === 'incline') setDpr(Math.min(window.devicePixelRatio, MAX_DPR));
+      frame = requestAnimationFrame(loop);
+    };
+
+    // Reduced motion: repaint only when the view, the palette or the size change.
+    const paint = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(draw);
+    };
+
+    resize();
+    const observer = new ResizeObserver(() => {
+      resize();
+      if (still) paint();
+    });
+    observer.observe(canvas);
+    const unsubscribe = still ? useSceneStore.subscribe(paint) : () => {};
+    frame = requestAnimationFrame((now) => {
+      if (still) draw(now);
+      else loop(now);
+      setReady(true);
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      unsubscribe();
+      // No forced context loss: in development React mounts effects twice on the same canvas,
+      // and a lost context cannot be taken back. The GPU objects go with the canvas.
+    };
+  }, []);
+
   return (
-    <Canvas
-      className={cn('transition-opacity duration-1000', ready ? 'opacity-100' : 'opacity-0')}
-      dpr={dpr}
-      frameloop={still ? 'demand' : 'always'}
-      gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
-      camera={{ position: [0, 5.2, 10.5], fov: 40, near: 0.1, far: 80 }}
-      onCreated={() => setReady(true)}
-    >
-      <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => setDpr(Math.min(window.devicePixelRatio, MAX_DPR))} />
-      <DataGrid still={still} />
-    </Canvas>
+    <canvas
+      ref={canvasRef}
+      className={cn('block h-full w-full transition-opacity duration-1000', ready ? 'opacity-100' : 'opacity-0')}
+    />
   );
 }

@@ -33,7 +33,7 @@ Portfolio personale di **Samuele Cieri**, Software Developer in transizione vers
 
 - **SPA con URL reali**: ogni vista è una pagina statica (SSG) con contenuti e metadata propri. Dopo il primo caricamento il cambio vista avviene sul client, senza ricaricare, e aggiorna URL e titolo con la History API.
 - **Quattro lingue (EN/IT/FR/DE)**: slug tradotti, rilevamento automatico della lingua e cambio lingua istantaneo che conserva vista, canvas e stato.
-- **Scena 3D persistente**: una griglia di 5.376 punti (three.js) che cambia forma e inquadratura a ogni vista e reagisce al puntatore. Viene caricata solo sul client e si adatta alle prestazioni del dispositivo.
+- **Scena 3D persistente**: una griglia di 5.376 punti (WebGL) che cambia forma e inquadratura a ogni vista e reagisce al puntatore. Viene caricata solo sul client e si adatta alle prestazioni del dispositivo.
 - **Tema chiaro, scuro o automatico** con next-themes, senza flash al caricamento.
 - **Animazioni curate**: intro in CSS al primo paint (prima dell'idratazione), poi Framer Motion per le transizioni tra viste, le line mask e la sottolineatura animata della navigazione.
 - **SEO completa**: canonical, hreflang, Open Graph con immagini per lingua e vista, JSON-LD, sitemap, robots, manifest e redirect 301 dai vecchi URL PHP.
@@ -51,7 +51,7 @@ Portfolio personale di **Samuele Cieri**, Software Developer in transizione vers
 | Styling | Tailwind CSS v4 (`@tailwindcss/postcss`) · next-themes (light / dark / system) |
 | Tipografia | Geist · Geist Mono · Instrument Serif (`next/font/google`) |
 | Motion | Framer Motion (`AnimatePresence`, `layoutId`, `MotionConfig`, mask reveal) |
-| 3D | three · @react-three/fiber · @react-three/drei (lazy, solo client) |
+| 3D | WebGL senza librerie (lazy, solo client) |
 | Stato | Zustand (store della vista per istanza via context + store della scena transiente) |
 | i18n | next-intl (`/en`, `/it`, `/fr`, rilevamento lingua via `proxy.ts`, cambio lingua lato client) |
 | Dati | `data/shared.json` + `data/locales/*.json` (unica sorgente: contenuti, stringhe UI, metadata SEO), validati con zod |
@@ -175,12 +175,12 @@ Sotto la vista Sistemi c'è una pagina in più per i progetti che hanno un caso 
 ### Scena 3D
 
 - `SceneLayer` vive nel layout, sopra ogni cambio vista, e non viene mai smontato.
-- `DataField` è caricato con `next/dynamic` e `ssr: false`: three.js non entra mai nel bundle server.
-- `DataGrid` disegna una griglia di 96 × 56 punti; una riga ogni cinque trasporta "pacchetti di dati" in movimento.
-- La griglia è caricata sulla GPU una volta sola (`lib/sceneField.ts`). Altezza, onda attorno al puntatore, pacchetti e colore di ogni punto li calcola il vertex shader (`components/scene/fieldShader.ts`); a ogni frame `useFrame` interpola i parametri e passa allo shader una dozzina di numeri, qualunque sia il numero di punti. Le fasi di onda e flusso arrivano già riportate entro il loro periodo, perché sulla GPU i numeri sono a 32 bit.
-- Ogni vista ha una modalità in `components/scene/modes.ts` (ampiezza, frequenza, velocità, flusso, raggio e forza del puntatore, presenza, posizione della camera). Al cambio vista i parametri vengono interpolati in modo graduale.
-- `PerformanceMonitor` riduce il device pixel ratio a 1 quando il frame rate cala e lo riporta fino a 1,75 quando migliora.
-- Con `prefers-reduced-motion: reduce` il canvas passa a `frameloop="demand"` e ridisegna solo quando cambiano vista o tema.
+- `DataField` è caricato con `next/dynamic` e `ssr: false` e disegna con WebGL senza librerie (`components/scene/fieldRenderer.ts`): un programma, due buffer statici e una sola chiamata di disegno. Fino alla 2.4 la scena usava three.js e react-three-fiber: ~230 KB gzip e un task lungo all'avvio, la causa quasi intera del Total Blocking Time su desktop (issue #64). Tone mapping ACES e conversione sRGB sono quelli di three, copiati nello shader, così i colori non sono cambiati.
+- La griglia ha 96 × 56 punti; una riga ogni cinque trasporta "pacchetti di dati" in movimento.
+- La griglia è caricata sulla GPU una volta sola (`lib/sceneField.ts`). Altezza, onda attorno al puntatore, pacchetti e colore di ogni punto li calcola il vertex shader (`components/scene/fieldShader.ts`); a ogni frame `stepSim` (`lib/sceneSim.ts`, logica pura e testata, con la camera di `lib/sceneMath.ts`) interpola i parametri e passa allo shader una dozzina di numeri, qualunque sia il numero di punti. Le fasi di onda e flusso arrivano già riportate entro il loro periodo, perché sulla GPU i numeri sono a 32 bit.
+- Ogni vista ha una modalità in `lib/sceneModes.ts` (ampiezza, frequenza, velocità, flusso, raggio e forza del puntatore, presenza, posizione della camera). Al cambio vista i parametri vengono interpolati in modo graduale.
+- `lib/sceneMonitor.ts` (stesse soglie del `PerformanceMonitor` di drei che sostituisce) riduce il device pixel ratio a 1 quando il frame rate cala e lo riporta fino a 1,75 quando migliora.
+- Con `prefers-reduced-motion: reduce` il canvas non ha un ciclo di frame e ridisegna solo quando cambiano vista o tema.
 - La palette segue il tema risolto (chiaro o scuro) e porta con sé anche la dimensione dei punti: nel tema chiaro il punto è più scuro e più grande del 25% circa, perché punti scuri su fondo chiaro appaiono più sottili di punti chiari su fondo scuro a parità di contrasto. Nelle viste interne, dove il campo è attenuato per lasciar leggere il testo, il tema chiaro ne conserva di più (`presenceScale`), altrimenti sulla carta panna quasi sparirebbe.
 
 ### Motion
@@ -345,7 +345,7 @@ Aggiungi `{ id, label, handle, url }` a `shared.contacts`: il contatto compare n
 ### Aggiungere una vista
 
 1. `lib/routes.ts`: aggiungi l'ID a `VIEW_IDS` e lo slug di ogni lingua in `VIEW_SLUGS`.
-2. `components/scene/modes.ts`: aggiungi la modalità della scena in `SCENE_MODES`.
+2. `lib/sceneModes.ts`: aggiungi la modalità della scena in `SCENE_MODES`.
 3. `components/views/`: crea il componente e registralo in `RENDER` in `components/shell/AppShell.tsx`.
 4. `data/locales/*.json`: aggiungi `ui.nav.<id>`, `ui.meta.views.<id>` e il copy della vista in ogni lingua.
 
@@ -380,7 +380,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 ├── components/
 │   ├── motion/       ViewFrame (contenitore della vista), Reveal (varianti, line mask, intro)
 │   ├── providers/    ThemeProvider (next-themes)
-│   ├── scene/        SceneLayer → DataField (Canvas, lazy) → DataGrid (useFrame) · fieldShader · modes
+│   ├── scene/        SceneLayer → DataField (lazy) → fieldRenderer (WebGL) · fieldShader
 │   ├── case-study/   CaseStudyPage (componente server), SceneMode
 │   ├── seo/          PortfolioPage (JSON-LD + app)
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
@@ -418,7 +418,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 - Test end-to-end in `e2e/` con Playwright, eseguiti sulla build di produzione su Chromium, WebKit e un profilo mobile. Coprono URL e metadata di ogni lingua, navigazione e cronologia, cambio lingua, SEO, header di sicurezza, accessibilità (axe) e la tenuta del sito a un fallimento WebGL.
 - CI in `.github/workflows/ci.yml`: formattazione, lint, typecheck, test unitari, build e test end-to-end su ogni pull request e a ogni push su `development`. I suoi tre job (questo, i test end-to-end e il budget di prestazioni) sono controlli obbligatori per il merge (vedi [Flusso di lavoro](#flusso-di-lavoro)).
 - **Regressione visiva** (`e2e/visual.spec.ts`): nove screenshot di riferimento in `e2e/__screenshots__/` (le cinque viste nel tema chiaro, due nel tema scuro, due su telefono) confrontati a ogni esecuzione. Per essere ripetibili fermano l'orologio e nascondono la scena WebGL. Valgono per Chromium su Linux, cioè per la CI: in locale su macOS i test sono saltati, perché fallirebbero per il solo antialiasing. Dopo una modifica visiva voluta la CI fallisce, rigenera i riferimenti sullo stesso runner e li pubblica nell'artefatto `visual-references`: `gh run download <id> -n visual-references -D e2e/__screenshots__`, si guardano le immagini e si committano.
-- **Budget di prestazioni** (`lighthouserc.json`): un terzo job della CI esegue Lighthouse tre volte, in emulazione mobile, su home, timeline e progetti della build di produzione e fallisce se la mediana esce dalle soglie: accessibilità e SEO a 100, buone pratiche ≥ 95, LCP ≤ 4 s, CLS ≤ 0,02, peso della pagina ≤ 700 KB. Punteggio di prestazioni (≥ 80) e TBT (≤ 500 ms) sono solo segnalati: dipendono dalla potenza del runner, che cambia da un'esecuzione all'altra (TBT da 360 a 750 ms sullo stesso codice), e come errori farebbero fallire la CI a caso. Le soglie fotografano lo stato attuale sui runner della CI, più lenti di un portatile e senza GPU (lì la scena WebGL pesa di più), con un piccolo margine: servono a bloccare i regressi e vanno strette a ogni miglioramento. In locale: `npm run build && npx @lhci/cli@0.15.1 autorun`.
+- **Budget di prestazioni** (`lighthouserc.json`): un terzo job della CI esegue Lighthouse tre volte, in emulazione mobile, su home, timeline e progetti della build di produzione e fallisce se la mediana esce dalle soglie: accessibilità e SEO a 100, buone pratiche ≥ 95, LCP ≤ 4 s, CLS ≤ 0,02, peso della pagina ≤ 450 KB (era 700 prima di togliere three.js). Punteggio di prestazioni (≥ 80) e TBT (≤ 300 ms) sono solo segnalati: dipendono dalla potenza del runner, che cambia da un'esecuzione all'altra (TBT da 360 a 750 ms sullo stesso codice), e come errori farebbero fallire la CI a caso. Le soglie fotografano lo stato attuale sui runner della CI, più lenti di un portatile e senza GPU (lì la scena WebGL pesa di più), con un piccolo margine: servono a bloccare i regressi e vanno strette a ogni miglioramento. In locale: `npm run build && npx @lhci/cli@0.15.1 autorun`.
 - Dependabot (`.github/dependabot.yml`) apre ogni settimana una PR raggruppata verso `development` per le dipendenze npm e una per le GitHub Actions. Le major di `eslint` e `typescript` sono ignorate finché `eslint-config-next` non le supporta.
 - Le GitHub Actions sono fissate allo SHA del commit, con la versione in un commento (`uses: actions/checkout@<sha> # v7.0.1`): un tag può essere spostato, uno SHA no. Dependabot legge il commento e continua a proporre gli aggiornamenti; `lib/ci.test.ts` fallisce se un workflow torna a puntare a un tag o a un branch.
 - `.mailmap` unifica sotto un'unica identità i commit iniziali firmati con l'email generata dal nome host, senza riscrivere la cronologia.

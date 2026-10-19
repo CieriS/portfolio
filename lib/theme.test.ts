@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { SCENE_MODES } from '../components/scene/modes';
+import { SCENE_MODES } from './sceneModes';
 import { THEME, type ThemeName } from './theme';
 
 const css = readFileSync(new URL('../app/globals.css', import.meta.url), 'utf8');

@@ -75,18 +75,19 @@ describe('field shader', () => {
     expect(FIELD_VERTEX).toContain(`const float PACKET_TAIL = ${FIELD.packetTail}.0;`);
   });
 
-  it('keeps tone mapping and the output colour space of the built-in materials', () => {
-    expect(FIELD_FRAGMENT).toContain('#include <tonemapping_fragment>');
-    expect(FIELD_FRAGMENT).toContain('#include <colorspace_fragment>');
+  it('keeps the tone mapping and output colour space three.js applied to the scene', () => {
+    expect(FIELD_FRAGMENT).toContain('gl_FragColor = vec4(sRGBTransferOETF(ACESFilmicToneMapping(vColor)), 1.0);');
   });
 });
 
-describe('DataGrid', () => {
-  const source = readFileSync(fileURLToPath(new URL('../components/scene/DataGrid.tsx', import.meta.url)), 'utf8');
+describe('field renderer', () => {
+  const read = (path: string) => readFileSync(fileURLToPath(new URL(path, import.meta.url)), 'utf8');
+  const renderer = read('../components/scene/fieldRenderer.ts');
+  const draw = renderer.slice(renderer.indexOf('draw(u'), renderer.indexOf('export type FieldRenderer'));
 
-  it('does no per-point work on the CPU: no buffer is rewritten or re-uploaded', () => {
-    expect(source).not.toContain('needsUpdate');
-    expect(source).not.toContain('DynamicDrawUsage');
-    expect(source).not.toMatch(/for \(let (r|c|i|row|col) = 0/);
+  it('does no per-point work on the CPU: buffers are uploaded once, never in a frame', () => {
+    expect(renderer.match(/bufferData\(/g)).toHaveLength(1);
+    expect(draw).not.toMatch(/buffer(Sub)?Data/);
+    expect(read('./sceneSim.ts')).not.toMatch(/FIELD_POINTS|for \(let/);
   });
 });
