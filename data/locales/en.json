@@ -110,7 +110,8 @@
       }
     ],
     "contactsTitle": "Contact",
-    "contactsNote": "Repositories and direct channels."
+    "contactsNote": "Repositories and direct channels.",
+    "sponsor": "Support my work"
   },
   "timeline": {
     "title": "Multi-thread execution",

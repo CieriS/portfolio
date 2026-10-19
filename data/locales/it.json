@@ -113,7 +113,8 @@
       }
     ],
     "contactsTitle": "Contatti",
-    "contactsNote": "Repository e canali diretti."
+    "contactsNote": "Repository e canali diretti.",
+    "sponsor": "Sostieni il mio lavoro"
   },
   "timeline": {
     "title": "Esecuzione multi-thread",

@@ -128,7 +128,7 @@ GOOGLE_SITE_VERIFICATION=votre-jeton
 | # | Vue (ID) | EN | IT | FR | DE | Contenu |
 | --- | --- | --- | --- | --- | --- | --- |
 | 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Nom en très grand format, rôle, présentation, un paragraphe citant employeur, études, stack et projets (les faits qu'un moteur de recherche doit lire dès la page d'accueil) et invitation à explorer. |
-| 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Un titre qui est la première phrase de la déclaration d'intention (le reste en est le sous-titre), quatre principes d'ingénierie et contacts (GitHub, LinkedIn, Instagram). |
+| 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Un titre qui est la première phrase de la déclaration d'intention (le reste en est le sous-titre), quatre principes d'ingénierie et contacts (GitHub, LinkedIn, Instagram) et un lien pour me soutenir sur GitHub Sponsors. |
 | 03 | Exécution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Frise chronologique à trois couloirs (industrie, parcours universitaire et étude en autonomie du Data Engineering) sur un axe temporel commun, avec un compteur d'uptime en temps réel et des phases accompagnées de leur stack. |
 | 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Projets présentés en accordéon, tous fermés à l'ouverture de la vue : résumé, choix d'ingénierie, architecture en couches, lien avec la Data Engineering et lien vers le dépôt (ou vers les contacts si le code est privé). Actuellement : yourFinance (privé) et aria-er (public). |
 | 05 | Optimisation (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | Entraînement et musique au-delà du code : force et explosivité (méthode, mesures, programme hebdomadaire) et production de musique et de vidéo (guitare acoustique, logiciels, étapes). |
@@ -268,6 +268,7 @@ Les contenus se trouvent dans [`data/shared.json`](data/shared.json) et dans un 
 data/shared.json        données indépendantes de la langue
 ├── name, handle, alternateNames, address
 ├── contacts[]          id, label, handle, url
+├── sponsor             label, url (GitHub Sponsors : hors de contacts, donc ni sameAs ni CV)
 ├── timeline.threads[]  couloirs : id, kind (work | education), entity, segments[], phases
 ├── projects[]          id, name, source, stack, layers
 └── discipline          biological (mesures, séances) · acoustic (formats, pipeline)

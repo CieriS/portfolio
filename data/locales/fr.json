@@ -113,7 +113,8 @@
       }
     ],
     "contactsTitle": "Contact",
-    "contactsNote": "Dépôts et canaux directs."
+    "contactsNote": "Dépôts et canaux directs.",
+    "sponsor": "Soutenir mon travail"
   },
   "timeline": {
     "title": "Exécution multi-thread",
