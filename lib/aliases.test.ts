@@ -2,14 +2,20 @@ import { describe, expect, it } from 'vitest';
 import { ALIAS_HOSTS, aliasRedirects } from './aliases';
 
 describe('aliasRedirects', () => {
-  it('sends every alias to the same path on the site origin, permanently', () => {
+  it('sends every other production host to the same path on the site origin, permanently', () => {
     const rules = aliasRedirects('https://cierisamuele.vercel.app');
-    expect(rules).toHaveLength(ALIAS_HOSTS.length);
+    expect(rules).toHaveLength(ALIAS_HOSTS.length - 1);
     for (const rule of rules) {
       expect(rule.source).toBe('/:path*');
       expect(rule.destination).toBe('https://cierisamuele.vercel.app/:path*');
       expect(rule.permanent).toBe(true);
     }
+  });
+
+  it.each(ALIAS_HOSTS)('serves only %s when SITE_URL names it', (site) => {
+    const redirected = aliasRedirects(`https://${site}`).map((rule) => rule.has[0]!.value);
+    const expected = ALIAS_HOSTS.filter((host) => host !== site).map((host) => `^${host.replace(/\./g, '\\.')}$`);
+    expect(redirected).toEqual(expected);
   });
 
   it('matches each host exactly, dots included', () => {

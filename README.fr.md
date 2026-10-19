@@ -237,7 +237,7 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 | `/projDev/*` | `/it/sistemi` |
 | `/projProd/*` | `/it/sistemi` |
 
-- **Un seul hôte indexé** : les autres alias `*.vercel.app` du projet (`cieri`, `samuelecieri`) répondent par une redirection permanente (308) vers le même chemin sur `SITE_URL`. La balise canonical seule ne suffisait pas : Google avait indexé un alias. Les hôtes sont listés un par un dans `lib/aliases.ts`, pour ne jamais toucher les aperçus, localhost ni le serveur de test. Un nouvel alias ajouté sur Vercel doit aussi être ajouté là.
+- **Un seul hôte indexé** : des trois hôtes `*.vercel.app` du projet (`cieri`, `cierisamuele`, `samuelecieri`, listés dans `lib/aliases.ts`) seul celui de `SITE_URL` est servi ; les autres répondent par une redirection permanente (308) vers le même chemin sur `SITE_URL`. La balise canonical seule ne suffisait pas : Google avait indexé un alias. Les hôtes sont listés un par un dans `lib/aliases.ts`, pour ne jamais toucher les aperçus, localhost ni le serveur de test. Un nouvel alias ajouté sur Vercel doit aussi être ajouté là.
 
 ### Google Search Console
 
