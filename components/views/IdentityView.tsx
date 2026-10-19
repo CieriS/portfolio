@@ -9,7 +9,7 @@ import { CvRequest } from './CvRequest';
 export function IdentityView({ data }: ViewProps) {
   const copy = data.content.identity;
   const label = data.content.ui.nav.identity;
-  const { contacts } = data.shared;
+  const { contacts, sponsor } = data.shared;
 
   return (
     <div className="px-frame pt-10 pb-28 md:pt-16">
@@ -39,33 +39,40 @@ export function IdentityView({ data }: ViewProps) {
         </motion.div>
         <motion.ul variants={fade} className="border-b border-line md:col-span-9">
           {contacts.map((contact) => (
-            <li key={contact.id} className="border-t border-line">
-              <a
-                href={contact.url}
-                target="_blank"
-                rel="noopener noreferrer me"
-                className="group flex items-center justify-between gap-6 py-5 md:py-7"
-              >
-                <span className="text-[clamp(1.75rem,4vw,3.75rem)] leading-none font-medium tracking-[-0.04em] transition-transform duration-700 ease-out-expo select-none group-hover:translate-x-3">
-                  {contact.label}
-                </span>
-                <span className="flex items-center gap-5">
-                  <span className="hidden font-mono text-[11px] tracking-[0.14em] text-muted uppercase sm:inline">
-                    {contact.handle}
-                  </span>
-                  <span
-                    aria-hidden
-                    className="grid size-10 place-items-center rounded-full border border-line transition-all duration-500 ease-out-expo select-none group-hover:rotate-45 group-hover:border-ink group-hover:bg-ink group-hover:text-paper"
-                  >
-                    ↑
-                  </span>
-                </span>
-              </a>
-            </li>
+            <LinkRow
+              key={contact.id}
+              href={contact.url}
+              label={contact.label}
+              detail={contact.handle}
+              rel="noopener noreferrer me"
+            />
           ))}
+          <LinkRow href={sponsor.url} label={copy.sponsor} detail={sponsor.label} rel="noopener noreferrer" />
           <CvRequest data={data} />
         </motion.ul>
       </div>
     </div>
+  );
+}
+
+/** One large outbound link: name on the left, a short detail and the arrow on the right. */
+function LinkRow({ href, label, detail, rel }: { href: string; label: string; detail: string; rel: string }) {
+  return (
+    <li className="border-t border-line">
+      <a href={href} target="_blank" rel={rel} className="group flex items-center justify-between gap-6 py-5 md:py-7">
+        <span className="text-[clamp(1.75rem,4vw,3.75rem)] leading-none font-medium tracking-[-0.04em] transition-transform duration-700 ease-out-expo select-none group-hover:translate-x-3">
+          {label}
+        </span>
+        <span className="flex items-center gap-5">
+          <span className="hidden font-mono text-[11px] tracking-[0.14em] text-muted uppercase sm:inline">{detail}</span>
+          <span
+            aria-hidden
+            className="grid size-10 place-items-center rounded-full border border-line transition-all duration-500 ease-out-expo select-none group-hover:rotate-45 group-hover:border-ink group-hover:bg-ink group-hover:text-paper"
+          >
+            ↑
+          </span>
+        </span>
+      </a>
+    </li>
   );
 }

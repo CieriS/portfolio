@@ -57,6 +57,8 @@ export const SharedSchema = z.object({
   /** `country` is an ISO 3166-1 alpha-2 code. */
   address: z.object({ locality: z.string().min(1), country: z.string().regex(/^[A-Z]{2}$/, 'country is a two-letter ISO code') }),
   contacts: z.array(ContactSchema),
+  /** Where people can support the work with money. Kept out of `contacts`: it is not a profile of the person (no `sameAs`, not in the CV). */
+  sponsor: z.object({ label: z.string().min(1), url: z.url() }),
   timeline: z.object({ threads: z.array(ThreadSchema).min(1) }),
   projects: z.array(ProjectSchema),
   discipline: z.object({
