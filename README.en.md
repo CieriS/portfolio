@@ -285,10 +285,11 @@ data/locales/<language>.json   en · it · fr · de
 - Copy is linked to shared data by `id` (for example `shared.projects[].id` → `projects.items[id]` in every language).
 - `*Emphasis` fields name the word rendered in italic serif and must appear in the text they refer to.
 - Dates use ISO `YYYY-MM-DD` and are displayed as `DD.MM.YYYY`.
-- Content goes through three checks before prerendering, and any failure fails the build:
+- Content goes through four checks before prerendering, and any failure fails the build:
   1. **types**: every language is assigned to the shape of `en.json`, so a missing or renamed key fails `npm run typecheck`;
   2. **schema** (`lib/content/schema.ts`): `shared.json` is parsed with zod (enums, real ISO dates, segments ending after they start, URLs, the `source` union); the domain types are inferred from the schema;
-  3. **cross-checks** (`lib/content/validate.ts`): every thread, phase, project and layer id has copy in every language, every language has its `ui.locale` label, and every `*Emphasis` occurs in its text. All problems are listed at once, with their path.
+  3. **copy values** (`lib/content/copy.ts`): every language is parsed with zod against the shape of `en.json` (same keys, same lists, same `{…}` placeholders); no empty text or stray whitespace at the edges, meta descriptions ≤ 160 characters, titles ≤ 65 as the tab shows them (with the site name), no text of 60 characters or more identical to English (untranslated);
+  4. **cross-checks** (`lib/content/validate.ts`): every thread, phase, project and layer id has copy in every language, every language has its `ui.locale` label, and every `*Emphasis` occurs in its text. All problems are listed at once, with their path.
 
 `alternateNames` (other spellings and handles the same person is searched by) and `address` (`locality` and `country`, a two-letter ISO code) feed the `alternateName` and `address` of the JSON-LD `Person`; an invalid country code fails the build.
 

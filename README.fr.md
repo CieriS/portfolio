@@ -287,10 +287,11 @@ data/locales/<langue>.json   en · it · fr · de
 - Les textes sont reliés aux données partagées par `id` (par exemple `shared.projects[].id` → `projects.items[id]` de chaque langue).
 - Les champs `*Emphasis` désignent le mot affiché en serif italique et doivent figurer dans le texte auquel ils se rapportent.
 - Les dates sont au format ISO `YYYY-MM-DD` et s'affichent sous la forme `DD.MM.YYYY`.
-- Les contenus passent trois contrôles avant le prérendu, et toute erreur fait échouer le build :
+- Les contenus passent quatre contrôles avant le prérendu, et toute erreur fait échouer le build :
   1. **types** : chaque langue est affectée à la forme de `en.json`, donc une clé manquante ou renommée fait échouer `npm run typecheck` ;
   2. **schéma** (`lib/content/schema.ts`) : `shared.json` est validé avec zod (enums, dates ISO existantes, segments qui finissent après leur début, URL, union `source`) ; les types du domaine sont dérivés du schéma ;
-  3. **contrôles croisés** (`lib/content/validate.ts`) : chaque id de couloir, phase, projet et couche a ses textes dans chaque langue, chaque langue a son libellé dans `ui.locale` et chaque `*Emphasis` apparaît dans son texte. Tous les problèmes sont listés ensemble, avec leur chemin.
+  3. **valeurs des textes** (`lib/content/copy.ts`) : chaque langue est validée avec zod contre la forme de `en.json` (mêmes clés, mêmes listes, mêmes paramètres `{…}`) ; aucun texte vide ou avec des espaces aux bords, meta descriptions ≤ 160 caractères, titres ≤ 65 tels que l'onglet les affiche (avec le nom du site), aucun texte de 60 caractères ou plus identique à l'anglais (non traduit) ;
+  4. **contrôles croisés** (`lib/content/validate.ts`) : chaque id de couloir, phase, projet et couche a ses textes dans chaque langue, chaque langue a son libellé dans `ui.locale` et chaque `*Emphasis` apparaît dans son texte. Tous les problèmes sont listés ensemble, avec leur chemin.
 
 `alternateNames` (autres graphies et identifiants sous lesquels la même personne est recherchée) et `address` (`locality` et `country`, code ISO à deux lettres) alimentent `alternateName` et `address` du `Person` dans le JSON-LD ; un code pays invalide fait échouer le build.
 

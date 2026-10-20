@@ -5,6 +5,7 @@ import fr from '@/data/locales/fr.json';
 import it from '@/data/locales/it.json';
 import rawShared from '@/data/shared.json';
 import { SharedSchema, type SharedData } from '@/lib/content/schema';
+import { findCopyIssues } from '@/lib/content/copy';
 import { findContentIssues } from '@/lib/content/validate';
 import type { Locale } from '@/lib/routes';
 
@@ -29,16 +30,21 @@ export type PortfolioView = { locale: Locale; shared: SharedData; content: Local
 export type PortfolioBundle = { shared: SharedData; contents: Record<Locale, LocaleContent> };
 
 /**
- * Three layers of checks, all before the first page is prerendered — a broken content edit
+ * Four layers of checks, all before the first page is prerendered — a broken content edit
  * fails the build, never a visitor's page:
  * 1. types: a locale missing or renaming a key fails `npm run typecheck` on this assignment;
  * 2. schema: the shared data is parsed with zod (enums, ISO dates, URLs, the source union);
- * 3. cross-checks: copy keyed by shared ids, `*Emphasis` words present in their text.
+ * 3. copy values: every locale against English's shape, with no empty strings, the same
+ *    placeholders, meta lengths that fit a search result, no untranslated paragraphs;
+ * 4. cross-checks: copy keyed by shared ids, `*Emphasis` words present in their text.
  */
 const contents: Record<Locale, LocaleContent> = { en, it, fr, de, es };
 const shared: SharedData = SharedSchema.parse(rawShared);
 
-const issues = findContentIssues(shared, contents);
+const issues = [
+  ...Object.entries(contents).flatMap(([locale, copy]) => findCopyIssues(locale, copy, en)),
+  ...findContentIssues(shared, contents),
+];
 if (issues.length > 0) {
   throw new Error(`Invalid portfolio content:\n- ${issues.join('\n- ')}`);
 }
