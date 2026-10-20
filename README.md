@@ -137,7 +137,7 @@ Sotto la vista Sistemi c'è una pagina in più per i progetti che hanno un caso 
 
 ## Navigazione e interazione
 
-- **Link in basso** (`01`–`05`): sono veri `<a href>`, quindi funzionano anche con il clic centrale, con "apri in nuova scheda" e per i crawler. Il clic principale cambia vista sul posto. Accanto alla voce attiva compare la parola di uso comune per quella vista ("Esecuzione · Esperienza"), che fa parte anche del nome accessibile di ogni link.
+- **Link in basso** (`01`–`05`): sono veri `<a href>`, quindi funzionano anche con il clic centrale, con "apri in nuova scheda" e per i crawler. Il clic principale cambia vista sul posto. Accanto alla voce attiva compare la parola di uso comune per quella vista ("Esecuzione · Esperienza"), che fa parte anche del nome accessibile di ogni link: il nome viene dal testo del link (l'indice è nascosto ai lettori di schermo, la parola comune delle voci non attive è solo per loro), così ciò che si legge coincide con ciò che si vede.
 - **Progetti dalla home**: nel paragrafo della home i nomi dei progetti sono link (`ProjectLink`, ricavati da `shared.projects` con `splitByNames`). Portano al caso di studio se esiste, altrimenti alla vista dei progetti con il pannello già aperto: l'indirizzo è `/it/sistemi#<id>`, che funziona anche incollato o condiviso. Senza frammento i progetti partono tutti chiusi.
 - **Tastiera**: `1`–`5` saltano a una vista, `←` e `→` scorrono in modo circolare. I tasti vengono ignorati se è premuto un modificatore o se il focus è in un campo di testo.
 - **Touch**: uno swipe orizzontale (oltre 70 px e prevalentemente orizzontale) passa alla vista precedente o successiva.

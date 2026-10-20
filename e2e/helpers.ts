@@ -22,7 +22,7 @@ export function navLabel(locale: Locale, view: ViewId): string {
 
 /** Accessible name of a view's link in the navigation: system name plus its everyday word. */
 export function navLinkName(locale: Locale, view: ViewId): string {
-  return `${locales[locale].ui.nav[view]} — ${locales[locale].ui.navPlain[view]}`;
+  return `${locales[locale].ui.nav[view]} · ${locales[locale].ui.navPlain[view]}`;
 }
 
 /** The option's accessible name in the language menu: the language's own name. */

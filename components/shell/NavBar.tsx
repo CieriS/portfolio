@@ -24,11 +24,12 @@ export function NavBar() {
               <ViewLink
                 view={id}
                 aria-current={isActive ? 'page' : undefined}
-                // The system name plus its everyday word: "Execution — Experience".
-                aria-label={`${t(id)} — ${plain(id)}`}
                 className="group relative flex items-baseline gap-2 py-2 text-[13px] select-none"
               >
+                {/* The name comes from the content, so what is read matches what is shown: the
+                    index is decoration, the everyday word is there for every link. */}
                 <span
+                  aria-hidden
                   className={cn(
                     'font-mono text-[11px] tabular-nums transition-colors duration-300',
                     isActive ? 'text-ink' : 'text-muted group-hover:text-ink',
@@ -40,13 +41,14 @@ export function NavBar() {
                 <span
                   className={cn(
                     'transition-colors duration-300',
-                    isActive ? 'text-ink' : 'hidden text-muted group-hover:text-ink md:inline',
+                    isActive ? 'text-ink' : 'sr-only text-muted group-hover:text-ink md:not-sr-only',
                   )}
                 >
                   {t(id)}
                 </span>
-                {/* The view names are a naming system; the plain word says what the view holds. */}
-                {isActive && <span className="font-mono text-[11px] whitespace-nowrap text-muted">· {plain(id)}</span>}
+                {/* The view names are a naming system; the plain word says what the view holds.
+                    Shown next to the active view only, read out for every link. */}{' '}
+                <span className={isActive ? 'font-mono text-[11px] whitespace-nowrap text-muted' : 'sr-only'}>· {plain(id)}</span>
                 {isActive && (
                   <motion.span
                     layoutId="nav-underline"
