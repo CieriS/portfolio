@@ -103,7 +103,7 @@ describe('requestCv — invalid input', () => {
     {},
     { method: 'sms', locale: 'en', phone: '+39' },
     { method: 'password', locale: 'en', password: '' },
-    { method: 'password', locale: 'es', password: PASSWORD },
+    { method: 'password', locale: 'pt', password: PASSWORD },
     { method: 'password', locale: 'en', password: 'x'.repeat(257) },
     { method: 'email', locale: 'en', email: 'not-an-email' },
     { method: 'email', locale: 'en', email: `${'a'.repeat(250)}@x.io` },

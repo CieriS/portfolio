@@ -657,6 +657,154 @@
         "cta": "Kontakt aufnehmen"
       },
       "back": "Zurück zu Systeme"
+    },
+    "es": {
+      "meta": {
+        "title": "yourFinance — caso de estudio",
+        "description": "Cómo está hecho yourFinance: una API en Rust, triggers de PostgreSQL que gestionan los saldos y un solo cliente para iOS, Android, web y escritorio."
+      },
+      "label": "Caso de estudio",
+      "title": "Los saldos los garantiza la base de datos.",
+      "titleEmphasis": "garantiza",
+      "lead": "yourFinance es una app de finanzas personales multiusuario: una API en Rust, PostgreSQL y un solo cliente para iOS, Android, web y escritorio. El código es privado; esta página explica cómo está hecha y por qué.",
+      "facts": {
+        "started": {
+          "label": "Inicio",
+          "value": "Julio de 2025"
+        },
+        "version": {
+          "label": "Versión"
+        },
+        "team": {
+          "label": "Equipo",
+          "value": "Dos desarrolladores"
+        },
+        "source": {
+          "label": "Código",
+          "value": "Privado"
+        }
+      },
+      "problem": {
+        "title": "El problema",
+        "body": [
+          "Los datos de finanzas personales solo sirven si uno se puede fiar de los saldos. Varias personas usan la app desde varios dispositivos, y un error en un cliente o en un handler no puede dejar una cuenta con una cifra equivocada.",
+          "Además tiene que manejar más de una divisa, importar el historial completo de otra app (Money Manager) y mostrar estadísticas que nunca estén desfasadas."
+        ]
+      },
+      "constraints": {
+        "title": "Restricciones",
+        "items": [
+          "La API nunca escribe un saldo: cada cambio es un movimiento, también un ajuste de saldo.",
+          "Cada fila personal pertenece a un usuario, y PostgreSQL repite la regla con seguridad a nivel de fila en cada conexión del pool.",
+          "Un solo código para iOS, Android y web; la app de escritorio es la versión web dentro de Tauri.",
+          "Un cambio en el esquema o en la API tiene que romper la compilación, no la app en uso: el SQL se comprueba al compilar y los tipos del cliente se generan a partir del documento OpenAPI."
+        ]
+      },
+      "architecture": {
+        "title": "Arquitectura",
+        "body": "Tres niveles: el cliente solo muestra, la API autentica, valida y agrega, y la base de datos es la fuente de verdad. La API es un workspace de Cargo con crates por capas: cada uno depende solo de los que están por debajo, y la CI comprueba que el dominio no haga E/S.",
+        "crates": {
+          "api": "HTTP: rutas finas, autenticación, traducción de errores, OpenAPI.",
+          "worker": "Tareas en segundo plano: notificaciones push, resumen de alertas, movimientos recurrentes, conciliación de saldos.",
+          "runtime": "Lo que comparten los dos binarios: configuración, telemetría, ciclo de vida.",
+          "db": "Repositorios SQLx, ámbito de la seguridad a nivel de fila, escrituras en una sola transacción.",
+          "import": "Lectores de archivos de otras apps a un formato neutro, sin base de datos.",
+          "domain": "Modelos, contratos y reglas de negocio. Sin E/S."
+        },
+        "note": "Dos binarios, una imagen: API y worker se despliegan y escalan por separado."
+      },
+      "flow": {
+        "title": "Una petición, de principio a fin",
+        "intro": "Crear un movimiento:",
+        "steps": {
+          "client": {
+            "actor": "Cliente",
+            "text": "El formulario valida el borrador y lo envía con el token."
+          },
+          "api": {
+            "actor": "API",
+            "text": "Autentica el token, carga el usuario, valida el cuerpo e inserta el movimiento con sus repartos por cuenta y categoría en una sola transacción."
+          },
+          "database": {
+            "actor": "Base de datos",
+            "text": "Unos triggers diferidos comprueban que los repartos cuadren y que cuentas, categorías y etiquetas sean del usuario, y después actualizan los saldos. Si se incumple una regla se deshace todo y la respuesta es un 400 con un código de regla estable."
+          },
+          "refresh": {
+            "actor": "Cliente",
+            "text": "Si todo va bien, se recargan las listas, los totales y el panel."
+          }
+        }
+      },
+      "decisions": {
+        "title": "Decisiones y compromisos",
+        "items": {
+          "integrity": {
+            "title": "La integridad está en la base de datos",
+            "body": "Saldos, propiedad de los datos y reglas de las categorías se imponen con triggers. Supone escribir lógica en SQL en lugar de Rust; a cambio, ningún cliente ni ningún handler puede corromper los datos."
+          },
+          "postings": {
+            "title": "Saldos comprobables, no una contabilidad de partida doble completa",
+            "body": "Cada efecto sobre un saldo es un apunte con signo y una única definición, que usan tanto el trigger que escribe los saldos como la tarea que los concilia. Un libro mayor completo solo compensaría la reescritura si alguna función necesitara un balance."
+          },
+          "transfer": {
+            "title": "Una transferencia es un movimiento con dos importes",
+            "body": "Lo que salió de la cuenta de origen y lo que llegó a la de destino. La diferencia cubre tanto un cambio de divisa como una comisión, que por eso no aparece como gasto en las estadísticas."
+          },
+          "jobs": {
+            "title": "Sin cola de trabajos",
+            "body": "El worker toma las filas pendientes con FOR UPDATE SKIP LOCKED y el outbox de notificaciones se despierta con LISTEN/NOTIFY. Cada pasada es idempotente: ejecutarla dos veces, o en varias réplicas, da el mismo resultado."
+          },
+          "analytics": {
+            "title": "Estadísticas calculadas en cada petición",
+            "body": "El panel y las estadísticas agregan los movimientos en SQL cada vez: sin agregados precalculados ni caché, así que las cifras nunca están desfasadas. El precio es que las consultas tienen que ser rápidas por sí mismas."
+          }
+        }
+      },
+      "measures": {
+        "title": "Medido",
+        "body": "Al perfilar las consultas de estadísticas vi que dos crecían con todo el historial en lugar de con el periodo elegido. Con el plan genérico de una sentencia preparada, el planificador elegía un nested loop que repetía un join una vez por movimiento. Los índices no eran el problema: la solución fue reescribir la vista para que cada rama empiece por el movimiento.",
+        "columns": {
+          "query": "Consulta",
+          "before": "Antes",
+          "after": "Después"
+        },
+        "rows": {
+          "dailyFlows": "Flujos diarios (tendencia de las estadísticas)",
+          "essentialExpenses": "Gastos esenciales (resumen del panel)"
+        },
+        "note": "Perfil demo, un año de datos, planes genéricos, medido con EXPLAIN ANALYZE con el rol de la aplicación."
+      },
+      "screens": {
+        "title": "La app",
+        "items": {
+          "dashboard": {
+            "alt": "Panel de yourFinance en escritorio: patrimonio neto, número FIRE, tasa de ahorro, fondo de emergencia y un gráfico del patrimonio en doce meses.",
+            "caption": "Panel: seis métricas, patrimonio neto en doce meses, distribución de activos. Datos demo."
+          },
+          "statistics": {
+            "alt": "Pantalla de estadísticas: ingresos, gastos, saldo neto y tasa de ahorro de los últimos doce meses, con un gráfico de barras mensual.",
+            "caption": "Estadísticas: ingresos y gastos por mes, con filtros y desglose por categoría, cuenta o etiqueta. Datos demo."
+          },
+          "movements": {
+            "alt": "Lista de movimientos en un móvil: totales de ingresos y gastos y una tarjeta por movimiento.",
+            "caption": "El mismo código en un móvil: la lista de movimientos. Datos demo."
+          }
+        }
+      },
+      "next": {
+        "title": "Lo que viene",
+        "items": [
+          "Fecha de vencimiento en las cuentas, con un aviso antes de que llegue.",
+          "Amortización: un gasto repartido en varios meses en las estadísticas, mientras el saldo sigue reflejando la caja.",
+          "Un asistente que responde preguntas sobre estadísticas y cuentas con herramientas de solo lectura: el modelo elige la herramienta y el backend calcula cada número."
+        ]
+      },
+      "access": {
+        "title": "Código y demo",
+        "body": "El repositorio es privado. Si me lo pides, te enseño el código y la app en funcionamiento.",
+        "cta": "Escríbeme"
+      },
+      "back": "Volver a Sistemas"
     }
   }
 }

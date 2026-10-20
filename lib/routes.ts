@@ -3,12 +3,18 @@
  * path aliases): the app and the Playwright suite import this same module, so a slug can
  * never drift between what is served and what is tested.
  */
-export const LOCALES = ['en', 'it', 'fr', 'de'] as const;
+export const LOCALES = ['en', 'it', 'fr', 'de', 'es'] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = 'en';
 
 /** Each language's name in itself: the language menu shows it the same way whatever the active locale. */
-export const LOCALE_NAMES: Record<Locale, string> = { en: 'English', it: 'Italiano', fr: 'Français', de: 'Deutsch' };
+export const LOCALE_NAMES: Record<Locale, string> = {
+  en: 'English',
+  it: 'Italiano',
+  fr: 'Français',
+  de: 'Deutsch',
+  es: 'Español',
+};
 
 export const VIEW_IDS = ['hero', 'identity', 'timeline', 'projects', 'discipline'] as const;
 export type ViewId = (typeof VIEW_IDS)[number];
@@ -19,6 +25,7 @@ export const VIEW_SLUGS: Record<Locale, Record<ViewId, string>> = {
   it: { hero: '', identity: 'identita', timeline: 'esecuzione', projects: 'sistemi', discipline: 'ottimizzazione' },
   fr: { hero: '', identity: 'identite', timeline: 'execution', projects: 'systemes', discipline: 'optimisation' },
   de: { hero: '', identity: 'identitaet', timeline: 'ausfuehrung', projects: 'systeme', discipline: 'optimierung' },
+  es: { hero: '', identity: 'identidad', timeline: 'ejecucion', projects: 'sistemas', discipline: 'optimizacion' },
 };
 
 export function isLocale(value: string | undefined): value is Locale {

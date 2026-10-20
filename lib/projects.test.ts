@@ -78,7 +78,7 @@ describe('aria-er', () => {
   const { shared, contents } = getPortfolioBundle();
   const project = shared.projects.find((item) => item.id === 'ariaer');
   // How each language says that the Google Cloud run has not happened yet.
-  const pending = { en: 'still to do', it: 'ancora da fare', fr: 'reste à faire', de: 'steht noch aus' };
+  const pending = { en: 'still to do', it: 'ancora da fare', fr: 'reste à faire', de: 'steht noch aus', es: 'queda pendiente' };
 
   it('declares a released version and links it to the tag in its own repository', () => {
     expect(project?.source.visibility).toBe('public');

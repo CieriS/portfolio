@@ -31,7 +31,7 @@ describe('signLink / verifyLink', () => {
   });
 
   it('rejects correctly signed claims of the wrong shape', () => {
-    expect(verifyLink(signLink({ ...claims, locale: 'es' } as never, SECRET), SECRET, NOW)).toBeNull();
+    expect(verifyLink(signLink({ ...claims, locale: 'pt' } as never, SECRET), SECRET, NOW)).toBeNull();
     expect(verifyLink(signLink({ email: 'x@example.com' } as never, SECRET), SECRET, NOW)).toBeNull();
   });
 });

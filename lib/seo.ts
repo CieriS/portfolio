@@ -5,7 +5,7 @@ import { absoluteUrl, IS_INDEXABLE } from '@/lib/site';
 import { getCaseStudy } from '@/lib/caseStudy';
 import { caseStudyPath, pathFor, type CaseStudyId, type ViewId } from '@/lib/views';
 
-const OG_LOCALE: Record<Locale, string> = { en: 'en_US', it: 'it_IT', fr: 'fr_FR', de: 'de_DE' };
+const OG_LOCALE: Record<Locale, string> = { en: 'en_US', it: 'it_IT', fr: 'fr_FR', de: 'de_DE', es: 'es_ES' };
 
 /** hreflang map for one view: every locale plus x-default (auto-detecting root for the hero, English otherwise). */
 export function languageAlternates(view: ViewId): Record<string, string> {

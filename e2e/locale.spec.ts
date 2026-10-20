@@ -70,10 +70,11 @@ test('the menu works from the keyboard and returns focus to the trigger', async 
   await page.keyboard.press('ArrowDown');
   await expect(page.getByRole('option', { name: localeOptionName('it'), exact: true })).toBeFocused();
   await page.keyboard.press('End');
-  await expect(page.getByRole('option', { name: localeOptionName('de'), exact: true })).toBeFocused();
+  const last = LOCALES[LOCALES.length - 1]!;
+  await expect(page.getByRole('option', { name: localeOptionName(last), exact: true })).toBeFocused();
 
   await page.keyboard.press('Enter');
-  await expectView(page, 'de', 'projects');
+  await expectView(page, last, 'projects');
   await expect(page.getByRole('listbox')).toHaveCount(0);
   await expect(trigger).toBeFocused();
 });

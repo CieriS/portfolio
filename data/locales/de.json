@@ -47,7 +47,7 @@
       "discipline": "Freizeit"
     },
     "theme": { "label": "Design", "light": "Hell", "dark": "Dunkel", "system": "Auto" },
-    "locale": { "label": "Sprache", "en": "EN", "it": "IT", "fr": "FR", "de": "DE" },
+    "locale": { "label": "Sprache", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
     "shell": {
       "role": "Software Developer — Data Engineering",
       "nav": "Ansichten",

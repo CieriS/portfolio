@@ -47,7 +47,7 @@
       "discipline": "Free time"
     },
     "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "Auto" },
-    "locale": { "label": "Language", "en": "EN", "it": "IT", "fr": "FR", "de": "DE" },
+    "locale": { "label": "Language", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
     "shell": {
       "role": "Software Developer — Data Engineering",
       "nav": "Views",

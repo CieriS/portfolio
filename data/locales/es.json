@@ -1,0 +1,273 @@
+{
+  "ui": {
+    "meta": {
+      "title": "Samuele Cieri — Software Developer",
+      "description": "Software Developer en Bolonia, en transición hacia la ingeniería de datos. Angular y TypeScript en el trabajo; Rust, PostgreSQL y dbt en mis proyectos.",
+      "siteName": "Samuele Cieri",
+      "views": {
+        "hero": {
+          "title": "Samuele Cieri — Software Developer y Data Engineering",
+          "description": "Samuele Cieri, Software Developer en Bolonia camino de la ingeniería de datos: Angular en el trabajo; Rust, PostgreSQL y pipelines dbt en mis proyectos."
+        },
+        "identity": {
+          "title": "Identidad y principios de ingeniería",
+          "description": "Un enfoque del software como herramienta: objetivos medibles, los datos como referencia, flujo de control plano. GitHub y LinkedIn."
+        },
+        "timeline": {
+          "title": "Experiencia y formación",
+          "description": "Software Developer en Tas desde 2022, con Angular y TypeScript, junto a Ingeniería Informática en Bolonia y un recorrido de ingeniería de datos con Rust."
+        },
+        "projects": {
+          "title": "Proyectos: Rust, PostgreSQL y dbt",
+          "description": "yourFinance, una plataforma de finanzas personales con una API en Rust por capas sobre PostgreSQL, y aria-er, un pipeline de calidad del aire con Rust, dbt y Dagster."
+        },
+        "discipline": {
+          "title": "Entrenamiento y música fuera del código",
+          "description": "Cómo entreno y hago música: sesiones de cuerpo completo con calistenia lastrada, levantamientos con barra y pliometría; guitarra acústica, edición de audio y vídeo."
+        }
+      }
+    },
+    "notFound": {
+      "title": "No encontrado",
+      "body": "Esta dirección no corresponde a ninguna vista. Puede que el proceso se haya movido o que nunca existiera.",
+      "cta": "Volver al índice"
+    },
+    "nav": {
+      "hero": "Índice",
+      "identity": "Identidad",
+      "timeline": "Ejecución",
+      "projects": "Sistemas",
+      "discipline": "Optimización"
+    },
+    "navPlain": {
+      "hero": "Inicio",
+      "identity": "Sobre mí",
+      "timeline": "Experiencia",
+      "projects": "Proyectos",
+      "discipline": "Tiempo libre"
+    },
+    "theme": { "label": "Tema", "light": "Claro", "dark": "Oscuro", "system": "Auto" },
+    "locale": { "label": "Idioma", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
+    "shell": {
+      "role": "Software Developer — Data Engineering",
+      "nav": "Vistas",
+      "prev": "Vista anterior",
+      "next": "Vista siguiente",
+      "skip": "Ir al contenido",
+      "unknown": "—"
+    },
+    "cv": {
+      "label": "Currículum",
+      "handle": "PDF · a petición",
+      "title": "Currículum vitae",
+      "note": "El CV incluye mis datos de contacto personales, así que no es público. Deja una dirección de correo y te llegará un enlace para descargarlo.",
+      "byEmail": "Enlace por correo",
+      "byPassword": "Contraseña",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "showPassword": "Mostrar",
+      "hidePassword": "Ocultar",
+      "send": "Enviar enlace",
+      "download": "Descargar",
+      "pending": "Un momento…",
+      "sent": "Enlace enviado: revisa tu bandeja de entrada. Funciona durante {hours} horas.",
+      "downloaded": "Descarga iniciada.",
+      "emptyEmail": "Escribe la dirección a la que enviar el enlace.",
+      "badEmail": "No parece una dirección de correo: revisa la parte después de la @.",
+      "emptyPassword": "Escribe la contraseña.",
+      "invalid": "Revisa lo que has escrito y vuelve a intentarlo.",
+      "denied": "Contraseña incorrecta.",
+      "unavailable": "No está disponible ahora mismo: escríbeme por LinkedIn.",
+      "failed": "Algo ha fallado. Vuelve a intentarlo dentro de un momento."
+    }
+  },
+  "hero": {
+    "role": "Software Developer",
+    "transition": "En transición hacia la ingeniería de datos",
+    "lead": "Construyo el camino de las interfaces a los sistemas: backends tipados, almacenamiento relacional y pipelines que mueven los datos con un propósito.",
+    "detail": "Desde 2022 desarrollo en Tas, en frontend y full-stack, hoy con Angular y TypeScript, mientras estudio Ingeniería Informática en la Universidad de Bolonia. Mis proyectos personales usan Rust, PostgreSQL y dbt: yourFinance, una plataforma de finanzas personales, y aria-er, un pipeline de datos sobre la calidad del aire.",
+    "hint": "Mueve el cursor: cada nodo es una unidad de cálculo",
+    "cta": "Explorar"
+  },
+  "identity": {
+    "title": "El software es una herramienta.",
+    "titleEmphasis": "herramienta",
+    "subtitle": "Cada lenguaje, esquema y abstracción se elige por lo que aporta, de forma medible, a un objetivo; nunca por costumbre o por gusto.",
+    "principlesTitle": "Principios",
+    "principles": [
+      {
+        "title": "Racionalidad instrumental",
+        "body": "Los medios se valoran según los fines. Lo que no acerca al objetivo se elimina."
+      },
+      {
+        "title": "Ingeniería antes que adorno",
+        "body": "Especificar, medir y después construir. La forma es una consecuencia de las restricciones."
+      },
+      {
+        "title": "Los datos como referencia",
+        "body": "Las decisiones se apoyan en los datos. Un modelo es tan fiable como sus entradas."
+      },
+      {
+        "title": "Flujo de control plano",
+        "body": "Muchas funciones pequeñas, como mucho dos niveles de anidación y contratos explícitos entre ellas."
+      }
+    ],
+    "contactsTitle": "Contacto",
+    "contactsNote": "Repositorios y canales directos.",
+    "sponsor": "Apoya mi trabajo"
+  },
+  "timeline": {
+    "title": "Ejecución multihilo",
+    "titleEmphasis": "multihilo",
+    "subtitle": "Tres procesos concurrentes con un mismo reloj. Ninguno bloquea a los demás.",
+    "labels": {
+      "thread": "Hilo",
+      "start": "Inicio",
+      "running": "En ejecución",
+      "suspended": "Suspendido",
+      "periods": "Periodos activos",
+      "uptime": "Tiempo activo",
+      "days": "d",
+      "now": "Hoy"
+    },
+    "threads": {
+      "industry": {
+        "label": "Empresa",
+        "role": "Software Developer",
+        "entityLabel": "Organización",
+        "summary": "En Tas desde febrero de 2022: prácticas, después contrato de aprendizaje y ahora indefinido, en remoto. Desarrollo frontend y full-stack sobre un framework propio, hoy en migración a Angular con generación de código asistida por IA. En el día a día trabajo en interfaces, en entornos con Docker y Kubernetes (Helm, Rancher); Rust y PostgreSQL forman parte del recorrido de ingeniería de datos que estudio en paralelo.",
+        "phases": {
+          "interface": {
+            "title": "Capa de interfaz",
+            "body": "Interfaces web, renderizado en el servidor, primeros esquemas relacionales; hoy un framework propio en migración a Angular y TypeScript."
+          },
+          "environments": {
+            "title": "Entornos",
+            "body": "Entornos de desarrollo reproducibles con Docker; clústeres de Kubernetes con Helm y Rancher."
+          }
+        }
+      },
+      "academic": {
+        "label": "Universidad",
+        "role": "Ingeniería Informática",
+        "entityLabel": "Institución",
+        "summary": "Grado en Ingeniería Informática en la Universidad de Bolonia, a tiempo parcial. Lo dejé en pausa de 2023 a finales de 2024 para centrarme en el trabajo a jornada completa y después lo retomé.",
+        "phases": {
+          "foundations": {
+            "title": "Bases formales",
+            "body": "Modelos matemáticos, físicos y de circuitos sobre los que se apoya el cálculo."
+          },
+          "computing": {
+            "title": "Sistemas de cálculo",
+            "body": "Programación, lógica digital, arquitectura de computadores, sistemas operativos."
+          },
+          "information": {
+            "title": "Sistemas de información",
+            "body": "Bases de datos, redes, tecnologías web, razonamiento estadístico sobre datos."
+          }
+        }
+      },
+      "independent": {
+        "label": "Por mi cuenta",
+        "role": "Data Engineering",
+        "entityLabel": "Estudio autodidacta",
+        "summary": "Un recorrido de ingeniería de datos empezado en febrero de 2026, junto al trabajo y la universidad: aquí es donde uso Rust. Estudio a través de proyectos: ingesta, modelado y orquestación probados con datos reales.",
+        "phases": {
+          "systems": {
+            "title": "Capa de sistemas",
+            "body": "Propiedad de la memoria, rendimiento predecible y control a bajo nivel con Rust."
+          },
+          "modeling": {
+            "title": "Modelado de datos",
+            "body": "Modelado relacional en PostgreSQL, Parquet particionado, modelos dbt con tests sobre DuckDB y BigQuery."
+          },
+          "orchestration": {
+            "title": "Orquestación",
+            "body": "Pipelines programados con Dagster, infraestructura declarada con Terraform."
+          }
+        }
+      }
+    }
+  },
+  "projects": {
+    "title": "Sistemas y arquitectura",
+    "titleEmphasis": "arquitectura",
+    "subtitle": "Proyectos pensados como puentes hacia la ingeniería de datos.",
+    "labels": {
+      "architecture": "Topología",
+      "bridge": "Puente hacia los datos",
+      "highlights": "Decisiones de ingeniería",
+      "repo": "Repositorio",
+      "private": "Código privado: demo a petición",
+      "caseStudy": "Leer el caso de estudio",
+      "version": "Versión"
+    },
+    "items": {
+      "yourfinance": {
+        "summary": "Plataforma de finanzas personales multiusuario: un workspace de Rust por capas (dominio puro, capa de datos con SQLx, API con Axum, worker en segundo plano) sobre PostgreSQL, que sirve una app Expo para iOS, Android y web y una aplicación de escritorio con Tauri.",
+        "bridge": "La integridad la garantiza la base de datos: saldos mantenidos solo por triggers, seguridad a nivel de fila por usuario, funciones SQL de análisis para tendencias y presupuestos, importaciones idempotentes de exportaciones de terceros.",
+        "highlights": [
+          "Crates separados al estilo hexagonal: un dominio sin E/S, comprobado en la CI",
+          "Seguridad a nivel de fila aplicada en cada conexión del pool",
+          "Outbox transaccional para las notificaciones push, trabajos tomados con SKIP LOCKED",
+          "Refresh tokens rotativos, login con límite de intentos, códigos de error tipados",
+          "Métricas Prometheus, trazas OTLP, health checks, apagado ordenado",
+          "E2E con Playwright sobre el stack real, pruebas de carga con k6, SQL comprobado al compilar"
+        ],
+        "layers": {
+          "clients": "Móvil, web y escritorio",
+          "api": "API HTTP tipada, JWT",
+          "worker": "Tareas programadas",
+          "storage": "Triggers, RLS, análisis"
+        }
+      },
+      "ariaer": {
+        "summary": "Plataforma de datos completa sobre la calidad del aire en Emilia-Romaña, con los datos abiertos de ARPAE y el tiempo de Open-Meteo: ingesta en Rust a Parquet particionado, modelos dbt sobre DuckDB en local y BigQuery en GCP, orquestación con Dagster. Funciona en local con Docker, con dashboard y CI; queda pendiente ejecutarla en Google Cloud.",
+        "bridge": "Un proyecto de ingeniería de datos puro: medidas provisionales que se corrigen tras la validación, huecos y formatos incoherentes en la fuente, convertidos en un conjunto de datos histórico y con tests que responde sobre superaciones de los límites legales, tendencias de los contaminantes y relación con el tiempo.",
+        "highlights": [
+          "Ingesta incremental idempotente: reprocesado de una ventana móvil y upsert sobre la clave natural",
+          "Modelos dbt por capas (staging, intermediate, marts) con historial de estaciones SCD Type 2",
+          "Calidad de los datos como código: tests de unicidad, completitud y frescura",
+          "Completitud medida frente a una rejilla temporal esperada, nunca rellenando los datos brutos",
+          "Límites legales en un seed de dbt, nunca escritos en el código",
+          "Los mismos modelos sobre DuckDB y BigQuery, infraestructura con Terraform"
+        ],
+        "layers": {
+          "ingestion": "ARPAE y Open-Meteo, idempotente",
+          "lake": "Datos brutos particionados por año/mes",
+          "transform": "Staging, intermediate, marts",
+          "orchestration": "Programación, backfill, linaje"
+        }
+      }
+    }
+  },
+  "discipline": {
+    "title": "Fuera del código",
+    "titleEmphasis": "código",
+    "subtitle": "Entrenamiento y música, con el mismo método que uso en el trabajo: medir, planificar, ajustar.",
+    "biological": {
+      "title": "Fuerza y potencia",
+      "titleEmphasis": "potencia",
+      "summary": "Entreno en un gimnasio en el garaje con sesiones de cuerpo completo que se repiten cada semana: calistenia lastrada, levantamientos compuestos con barra, pliometría y habilidades con el propio peso (front lever, pino, muscle-up, bandera, plancha). Cada bloque dura cuatro semanas y cambia de método cada semana: repeticiones con pausa, trabajo lastrado, EMOM, series en pirámide. Después, una semana de descarga. El objetivo es el rendimiento, no la estética: salto, sprint y fuerza.",
+      "metrics": { "height": "Altura", "weight": "Peso", "frequency": "Sesiones" },
+      "units": { "height": "cm", "weight": "kg", "frequency": "por semana" },
+      "sessionsTitle": "Plan semanal",
+      "dayLabel": "Día",
+      "focus": { "squat": "Foco en sentadilla", "hinge": "Foco en peso muerto", "unilateral": "Foco unilateral" }
+    },
+    "acoustic": {
+      "title": "Música y vídeo",
+      "titleEmphasis": "vídeo",
+      "summary": "Lo hago todo yo: toco y grabo la guitarra acústica, edito el audio en GarageBand y Logic Pro, grabo el vídeo y lo monto en DaVinci Resolve.",
+      "instrumentLabel": "Instrumento",
+      "instrument": "Guitarra acústica",
+      "formatsLabel": "Software",
+      "pipelineTitle": "Proceso",
+      "pipeline": {
+        "capture": "Grabación — guitarra acústica",
+        "mix": "Audio — edición en GarageBand y Logic Pro",
+        "edit": "Vídeo — grabación y montaje en DaVinci Resolve con el audio final"
+      }
+    }
+  }
+}
