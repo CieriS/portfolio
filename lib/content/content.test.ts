@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import de from '@/data/locales/de.json';
 import en from '@/data/locales/en.json';
+import es from '@/data/locales/es.json';
 import fr from '@/data/locales/fr.json';
 import it_ from '@/data/locales/it.json';
 import rawShared from '@/data/shared.json';
@@ -10,7 +11,7 @@ import { findContentIssues, findEmphasisIssues, type CopyUnderCheck } from './va
 describe('the real content', () => {
   it('parses and passes every cross-check', () => {
     const shared = SharedSchema.parse(rawShared);
-    expect(findContentIssues(shared, { en, it: it_, fr, de })).toEqual([]);
+    expect(findContentIssues(shared, { en, it: it_, fr, de, es })).toEqual([]);
   });
 });
 
@@ -104,9 +105,9 @@ describe('findEmphasisIssues', () => {
 describe('facts the home repeats by hand', () => {
   // The home paragraph and the project summaries restate, per language, facts that live in the
   // timeline and in the projects themselves. Two of them drifted once; these keep them honest.
-  const copies = { en, it: it_, fr, de };
-  const today = { en: 'today', it: 'oggi', fr: "aujourd'hui", de: 'heute' };
-  const stale = { en: 'exploration', it: 'esplorazione', fr: 'exploration', de: 'exploration' };
+  const copies = { en, it: it_, fr, de, es };
+  const today = { en: 'today', it: 'oggi', fr: "aujourd'hui", de: 'heute', es: 'hoy' };
+  const stale = { en: 'exploration', it: 'esplorazione', fr: 'exploration', de: 'exploration', es: 'exploración' };
 
   it.each(Object.keys(copies) as Array<keyof typeof copies>)('%s: Angular is the present, not "since 2022"', (locale) => {
     const sentence = copies[locale].hero.detail.split('. ')[0];

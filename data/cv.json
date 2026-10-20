@@ -169,5 +169,51 @@
       "subject": "{name} — Lebenslauf",
       "body": "Hallo,\n\nhier ist der Link zum Herunterladen meines Lebenslaufs. Er funktioniert {hours} Stunden lang:\n\n{link}\n\nFalls Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.\n\n{name}"
     }
+  },
+  "es": {
+    "pdf": {
+      "experience": "Experiencia",
+      "education": "Formación",
+      "projects": "Proyectos",
+      "present": "actualidad",
+      "privateSource": "Código privado, demo a petición",
+      "generated": "Generado el {date} desde {site}",
+      "skills": "Competencias",
+      "certifications": "Certificaciones",
+      "languages": "Idiomas",
+      "skillGroups": {
+        "languages": "Lenguajes",
+        "frontend": "Frontend",
+        "data": "Datos",
+        "infrastructure": "Infraestructura",
+        "method": "Método"
+      },
+      "languageNames": {
+        "it": "Italiano",
+        "en": "Inglés",
+        "fr": "Francés"
+      },
+      "native": "nativo",
+      "obtainedAt": "Obtenida en {entity}",
+      "consent": "Autorizo el tratamiento de mis datos personales conforme al Reglamento (UE) 2016/679 (RGPD).",
+      "terms": {
+        "Calculus": "Cálculo",
+        "Linear Algebra": "Álgebra lineal",
+        "Physics": "Física",
+        "Circuit Theory": "Teoría de circuitos",
+        "C Programming": "Programación en C",
+        "Digital Logic": "Lógica digital",
+        "Computer Architecture": "Arquitectura de computadores",
+        "Operating Systems": "Sistemas operativos",
+        "Databases": "Bases de datos",
+        "Computer Networks": "Redes de computadores",
+        "Web Technologies": "Tecnologías web",
+        "Statistics": "Estadística"
+      }
+    },
+    "email": {
+      "subject": "{name} — currículum vitae",
+      "body": "Hola:\n\naquí tienes el enlace para descargar mi CV. Funciona durante {hours} horas:\n\n{link}\n\nSi no lo has pedido, puedes ignorar este correo.\n\n{name}"
+    }
   }
 }

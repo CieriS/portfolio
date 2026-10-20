@@ -56,6 +56,8 @@ export const SharedSchema = z.object({
   alternateNames: z.array(z.string().min(1)),
   /** `country` is an ISO 3166-1 alpha-2 code. */
   address: z.object({ locality: z.string().min(1), country: z.string().regex(/^[A-Z]{2}$/, 'country is a two-letter ISO code') }),
+  /** Languages the person speaks, for the JSON-LD `knowsLanguage`. Not the site's locales: the site can be in a language he does not speak. */
+  knowsLanguage: z.array(z.string().regex(/^[a-z]{2}$/, 'a two-letter ISO 639-1 code')).min(1),
   contacts: z.array(ContactSchema),
   /** Where people can support the work with money. Kept out of `contacts`: it is not a profile of the person (no `sameAs`, not in the CV). */
   sponsor: z.object({ label: z.string().min(1), url: z.url() }),

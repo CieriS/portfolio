@@ -3,6 +3,7 @@
   "handle": "CieriS",
   "alternateNames": ["Cieri Samuele", "CieriS", "samuelecierii"],
   "address": { "locality": "Bologna", "country": "IT" },
+  "knowsLanguage": ["en", "it", "fr", "de"],
   "contacts": [
     { "id": "github", "label": "GitHub", "handle": "@CieriS", "url": "https://github.com/CieriS/" },
     { "id": "linkedin", "label": "LinkedIn", "handle": "in/samuelecieri", "url": "https://www.linkedin.com/in/samuelecieri/" },

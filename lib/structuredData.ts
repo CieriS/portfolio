@@ -59,7 +59,7 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
       description: meta.description,
       address: { '@type': 'PostalAddress', addressLocality: shared.address.locality, addressCountry: shared.address.country },
       knowsAbout,
-      knowsLanguage: [...routing.locales],
+      knowsLanguage: shared.knowsLanguage,
       ...(worksFor ? { worksFor } : {}),
       ...(alumniOf ? { alumniOf } : {}),
       sameAs: shared.contacts.map((contact) => contact.url),

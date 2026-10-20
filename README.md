@@ -32,7 +32,7 @@ Portfolio personale di **Samuele Cieri**, Software Developer in transizione vers
 ## Caratteristiche
 
 - **SPA con URL reali**: ogni vista è una pagina statica (SSG) con contenuti e metadata propri. Dopo il primo caricamento il cambio vista avviene sul client, senza ricaricare, e aggiorna URL e titolo con la History API.
-- **Quattro lingue (EN/IT/FR/DE)**: slug tradotti, rilevamento automatico della lingua e cambio lingua istantaneo che conserva vista, canvas e stato.
+- **Cinque lingue (EN/IT/FR/DE/ES)**: slug tradotti, rilevamento automatico della lingua e cambio lingua istantaneo che conserva vista, canvas e stato.
 - **Scena 3D persistente**: una griglia di 5.376 punti (WebGL) che cambia forma e inquadratura a ogni vista e reagisce al puntatore. Viene caricata solo sul client e si adatta alle prestazioni del dispositivo.
 - **Tema chiaro, scuro o automatico** con next-themes, senza flash al caricamento.
 - **Animazioni curate**: intro in CSS al primo paint (prima dell'idratazione), poi Framer Motion per le transizioni tra viste, le line mask e la sottolineatura animata della navigazione.
@@ -123,13 +123,13 @@ GOOGLE_SITE_VERIFICATION=il-tuo-token
 
 ## Viste e URL
 
-| # | Vista (ID) | EN | IT | FR | DE | Contenuto |
-| --- | --- | --- | --- | --- | --- | --- |
-| 01 | Indice (`hero`) | `/en` | `/it` | `/fr` | `/de` | Nome in grande formato, ruolo, presentazione, un paragrafo con datore di lavoro, studi, stack e progetti (i fatti che un motore di ricerca deve leggere già nella home) e invito a esplorare. |
-| 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Titolo che è la prima frase della dichiarazione d'intenti (il resto ne è il sottotitolo), quattro principi di ingegneria e contatti (GitHub, LinkedIn, Instagram) e il link per sostenermi su GitHub Sponsors. |
-| 03 | Esecuzione (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Timeline a tre corsie (industria, percorso accademico e studio autonomo del Data Engineering) su un asse temporale condiviso, con uptime in tempo reale e fasi con il relativo stack. |
-| 04 | Sistemi (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Progetti in un accordion, tutti chiusi all'apertura della vista: sintesi, scelte di ingegneria, architettura a livelli, legame con la Data Engineering e link al repository (o ai contatti, se il codice è privato). Oggi: yourFinance (privato) e aria-er (pubblico). |
-| 05 | Ottimizzazione (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | Allenamento e musica oltre il codice: forza ed esplosività (metodo, metriche, programma settimanale) e produzione di musica e video (chitarra acustica, software, fasi di lavoro). |
+| # | Vista (ID) | EN | IT | FR | DE | ES | Contenuto |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 01 | Indice (`hero`) | `/en` | `/it` | `/fr` | `/de` | `/es` | Nome in grande formato, ruolo, presentazione, un paragrafo con datore di lavoro, studi, stack e progetti (i fatti che un motore di ricerca deve leggere già nella home) e invito a esplorare. |
+| 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | `/es/identidad` | Titolo che è la prima frase della dichiarazione d'intenti (il resto ne è il sottotitolo), quattro principi di ingegneria e contatti (GitHub, LinkedIn, Instagram) e il link per sostenermi su GitHub Sponsors. |
+| 03 | Esecuzione (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | `/es/ejecucion` | Timeline a tre corsie (industria, percorso accademico e studio autonomo del Data Engineering) su un asse temporale condiviso, con uptime in tempo reale e fasi con il relativo stack. |
+| 04 | Sistemi (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | `/es/sistemas` | Progetti in un accordion, tutti chiusi all'apertura della vista: sintesi, scelte di ingegneria, architettura a livelli, legame con la Data Engineering e link al repository (o ai contatti, se il codice è privato). Oggi: yourFinance (privato) e aria-er (pubblico). |
+| 05 | Ottimizzazione (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | `/es/optimizacion` | Allenamento e musica oltre il codice: forza ed esplosività (metodo, metriche, programma settimanale) e produzione di musica e video (chitarra acustica, software, fasi di lavoro). |
 
 Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corrisponde a nessuna vista mostra una pagina 404 localizzata e non indicizzabile.
 
@@ -213,7 +213,7 @@ Sotto la vista Sistemi c'è una pagina in più per i progetti che hanno un caso 
 
 - `app/[locale]/[view]/[study]/page.tsx` prerenderizza la pagina solo sotto lo slug della vista dei progetti e solo per gli id in `CASE_STUDY_IDS` (`lib/routes.ts`); il resto è un 404.
 - `components/case-study/CaseStudyPage.tsx` è un componente server: tutto il testo è nell'HTML e la pagina non carica la libreria delle animazioni. Usa le primitive di testo di `components/ui/text.tsx`, condivise con le viste.
-- I contenuti stanno in `data/case-studies/<id>.json` (struttura più testi nelle quattro lingue), fuori dai file di lingua che arrivano al browser. `lib/caseStudy.ts` li valida con zod e con verifiche incrociate: un id senza testo in una lingua, un `alt` vuoto o una description oltre 160 caratteri fanno fallire la build.
+- I contenuti stanno in `data/case-studies/<id>.json` (struttura più testi in ogni lingua), fuori dai file di lingua che arrivano al browser. `lib/caseStudy.ts` li valida con zod e con verifiche incrociate: un id senza testo in una lingua, un `alt` vuoto o una description oltre 160 caratteri fanno fallire la build.
 - Le schermate sono import statici (`lib/caseStudyImages.ts`) serviti da `next/image`. Vanno prese **solo dal profilo demo**.
 - Ogni pagina ha canonical, hreflang, immagine Open Graph, voce nella sitemap e un JSON-LD `TechArticle` con `BreadcrumbList`. Per un progetto privato `codeRepository` non viene mai emesso, e un test E2E verifica che la pagina non contenga link al repository.
 
@@ -265,6 +265,7 @@ I contenuti stanno in [`data/shared.json`](data/shared.json) e in un file per li
 ```
 data/shared.json        dati indipendenti dalla lingua
 ├── name, handle, alternateNames, address
+├── knowsLanguage[]     lingue che parlo (JSON-LD), non le lingue del sito
 ├── contacts[]          id, label, handle, url
 ├── sponsor             label, url (GitHub Sponsors: fuori da contacts, quindi niente sameAs né CV)
 ├── timeline.threads[]  corsie: id, kind (work | education), entity, segments[], fasi

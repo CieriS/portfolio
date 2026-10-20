@@ -18,5 +18,10 @@
     "title": "Prozess unterbrochen",
     "body": "Etwas hat diese Ansicht unterbrochen. Der Rest der Website funktioniert weiterhin.",
     "cta": "Erneut versuchen"
+  },
+  "es": {
+    "title": "Proceso interrumpido",
+    "body": "Algo ha interrumpido esta vista. El resto del sitio sigue funcionando.",
+    "cta": "Reintentar"
   }
 }

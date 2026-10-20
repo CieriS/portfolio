@@ -34,7 +34,7 @@ Le site est disponible en anglais, en italien, en français et en allemand.
 ## Fonctionnalités
 
 - **SPA avec de vraies URL** : chaque vue est une page statique (SSG) avec son propre contenu et ses propres métadonnées. Après le premier chargement, le changement de vue se fait côté client, sans rechargement, et met à jour l'URL et le titre via l'History API.
-- **Quatre langues (EN/IT/FR/DE)** : slugs traduits, détection automatique de la langue et changement de langue instantané qui conserve la vue, le canvas et l'état.
+- **Cinq langues (EN/IT/FR/DE/ES)** : slugs traduits, détection automatique de la langue et changement de langue instantané qui conserve la vue, le canvas et l'état.
 - **Scène 3D persistante** : une grille de 5 376 points (WebGL) qui change de forme et de cadrage à chaque vue et réagit au pointeur. Elle est chargée uniquement côté client et s'adapte aux performances de l'appareil.
 - **Thème clair, sombre ou automatique** avec next-themes, sans flash au chargement.
 - **Animations soignées** : intro en CSS au premier affichage (avant l'hydratation), puis Framer Motion pour les transitions entre vues, les line masks et le soulignement animé de la navigation.
@@ -125,13 +125,13 @@ GOOGLE_SITE_VERIFICATION=votre-jeton
 
 ## Vues et URL
 
-| # | Vue (ID) | EN | IT | FR | DE | Contenu |
-| --- | --- | --- | --- | --- | --- | --- |
-| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Nom en très grand format, rôle, présentation, un paragraphe citant employeur, études, stack et projets (les faits qu'un moteur de recherche doit lire dès la page d'accueil) et invitation à explorer. |
-| 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | Un titre qui est la première phrase de la déclaration d'intention (le reste en est le sous-titre), quatre principes d'ingénierie et contacts (GitHub, LinkedIn, Instagram) et un lien pour me soutenir sur GitHub Sponsors. |
-| 03 | Exécution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Frise chronologique à trois couloirs (industrie, parcours universitaire et étude en autonomie du Data Engineering) sur un axe temporel commun, avec un compteur d'uptime en temps réel et des phases accompagnées de leur stack. |
-| 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Projets présentés en accordéon, tous fermés à l'ouverture de la vue : résumé, choix d'ingénierie, architecture en couches, lien avec la Data Engineering et lien vers le dépôt (ou vers les contacts si le code est privé). Actuellement : yourFinance (privé) et aria-er (public). |
-| 05 | Optimisation (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | Entraînement et musique au-delà du code : force et explosivité (méthode, mesures, programme hebdomadaire) et production de musique et de vidéo (guitare acoustique, logiciels, étapes). |
+| # | Vue (ID) | EN | IT | FR | DE | ES | Contenu |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | `/es` | Nom en très grand format, rôle, présentation, un paragraphe citant employeur, études, stack et projets (les faits qu'un moteur de recherche doit lire dès la page d'accueil) et invitation à explorer. |
+| 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | `/es/identidad` | Un titre qui est la première phrase de la déclaration d'intention (le reste en est le sous-titre), quatre principes d'ingénierie et contacts (GitHub, LinkedIn, Instagram) et un lien pour me soutenir sur GitHub Sponsors. |
+| 03 | Exécution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | `/es/ejecucion` | Frise chronologique à trois couloirs (industrie, parcours universitaire et étude en autonomie du Data Engineering) sur un axe temporel commun, avec un compteur d'uptime en temps réel et des phases accompagnées de leur stack. |
+| 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | `/es/sistemas` | Projets présentés en accordéon, tous fermés à l'ouverture de la vue : résumé, choix d'ingénierie, architecture en couches, lien avec la Data Engineering et lien vers le dépôt (ou vers les contacts si le code est privé). Actuellement : yourFinance (privé) et aria-er (public). |
+| 05 | Optimisation (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | `/es/optimizacion` | Entraînement et musique au-delà du code : force et explosivité (méthode, mesures, programme hebdomadaire) et production de musique et de vidéo (guitare acoustique, logiciels, étapes). |
 
 Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspond à aucune vue affiche une page 404 localisée et non indexable.
 
@@ -215,7 +215,7 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 
 - `app/[locale]/[view]/[study]/page.tsx` pré-rend la page uniquement sous le slug de la vue des projets et uniquement pour les identifiants de `CASE_STUDY_IDS` (`lib/routes.ts`) ; le reste est une 404.
 - `components/case-study/CaseStudyPage.tsx` est un composant serveur : tout le texte est dans le HTML et la page ne charge pas la bibliothèque d'animation. Il utilise les primitives de texte de `components/ui/text.tsx`, partagées avec les vues.
-- Les contenus sont dans `data/case-studies/<id>.json` (structure et textes dans les quatre langues), hors des fichiers de langue envoyés au navigateur. `lib/caseStudy.ts` les valide avec zod et des contrôles croisés : un identifiant sans texte dans une langue, un `alt` vide ou une description de plus de 160 caractères font échouer le build.
+- Les contenus sont dans `data/case-studies/<id>.json` (structure et textes dans chaque langue), hors des fichiers de langue envoyés au navigateur. `lib/caseStudy.ts` les valide avec zod et des contrôles croisés : un identifiant sans texte dans une langue, un `alt` vide ou une description de plus de 160 caractères font échouer le build.
 - Les captures d'écran sont des imports statiques (`lib/caseStudyImages.ts`) servis par `next/image`. Elles doivent provenir **uniquement du profil de démonstration**.
 - Chaque page a son canonical, ses hreflang, son image Open Graph, son entrée dans le sitemap et un JSON-LD `TechArticle` avec `BreadcrumbList`. Pour un projet privé, `codeRepository` n'est jamais émis, et un test E2E vérifie que la page ne contient aucun lien vers le dépôt.
 
@@ -267,6 +267,7 @@ Les contenus se trouvent dans [`data/shared.json`](data/shared.json) et dans un 
 ```
 data/shared.json        données indépendantes de la langue
 ├── name, handle, alternateNames, address
+├── knowsLanguage[]     langues que je parle (JSON-LD), pas celles du site
 ├── contacts[]          id, label, handle, url
 ├── sponsor             label, url (GitHub Sponsors : hors de contacts, donc ni sameAs ni CV)
 ├── timeline.threads[]  couloirs : id, kind (work | education), entity, segments[], phases

@@ -32,7 +32,7 @@ Personal portfolio of **Samuele Cieri**, a Software Developer transitioning to D
 ## Features
 
 - **SPA with real URLs**: each view is a static page (SSG) with its own content and metadata. After the first load, view changes happen on the client without a reload, updating the URL and title through the History API.
-- **Four languages (EN/IT/FR/DE)**: translated slugs, automatic language detection and an instant language switch that keeps the view, the canvas and the state.
+- **Five languages (EN/IT/FR/DE/ES)**: translated slugs, automatic language detection and an instant language switch that keeps the view, the canvas and the state.
 - **Persistent 3D scene**: a 5,376-point grid (WebGL) that changes shape and camera angle for each view and reacts to the pointer. It loads on the client only and adapts to the device's performance.
 - **Light, dark or automatic theme** with next-themes, with no flash on load.
 - **Considered motion**: a CSS intro on first paint (before hydration), then Framer Motion for view transitions, line masks and the animated navigation underline.
@@ -123,13 +123,13 @@ GOOGLE_SITE_VERIFICATION=your-token
 
 ## Views and URLs
 
-| # | View (ID) | EN | IT | FR | DE | Content |
-| --- | --- | --- | --- | --- | --- | --- |
-| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | Large-format name, role, introduction, a paragraph naming employer, studies, stack and projects (the facts a search engine should read on the home page itself) and a call to explore. |
-| 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | A title that is the first sentence of the mission statement (the rest is its subtitle), four engineering principles and contacts (GitHub, LinkedIn, Instagram) and a link to support me on GitHub Sponsors. |
-| 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
-| 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | Projects in an accordion, all collapsed when the view opens: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
-| 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | Training and music beyond the code: strength and power (method, metrics, weekly plan) and music and video production (acoustic guitar, software, workflow). |
+| # | View (ID) | EN | IT | FR | DE | ES | Content |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | `/es` | Large-format name, role, introduction, a paragraph naming employer, studies, stack and projects (the facts a search engine should read on the home page itself) and a call to explore. |
+| 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | `/es/identidad` | A title that is the first sentence of the mission statement (the rest is its subtitle), four engineering principles and contacts (GitHub, LinkedIn, Instagram) and a link to support me on GitHub Sponsors. |
+| 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | `/es/ejecucion` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
+| 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | `/es/sistemas` | Projects in an accordion, all collapsed when the view opens: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
+| 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | `/es/optimizacion` | Training and music beyond the code: strength and power (method, metrics, weekly plan) and music and video production (acoustic guitar, software, workflow). |
 
 Every URL is prerendered with its own content. An address that matches no view shows a localised, non-indexable 404 page.
 
@@ -213,7 +213,7 @@ Below the Systems view there is one more page for the projects that have a case 
 
 - `app/[locale]/[view]/[study]/page.tsx` prerenders the page only under the slug of the projects view and only for the ids in `CASE_STUDY_IDS` (`lib/routes.ts`); anything else is a 404.
 - `components/case-study/CaseStudyPage.tsx` is a server component: all the text is in the HTML and the page does not load the animation library. It uses the text primitives of `components/ui/text.tsx`, shared with the views.
-- The content lives in `data/case-studies/<id>.json` (structure plus copy in the four languages), outside the locale files that reach the browser. `lib/caseStudy.ts` validates it with zod and cross-checks: an id with no copy in one language, an empty `alt` or a description over 160 characters fails the build.
+- The content lives in `data/case-studies/<id>.json` (structure plus copy in every language), outside the locale files that reach the browser. `lib/caseStudy.ts` validates it with zod and cross-checks: an id with no copy in one language, an empty `alt` or a description over 160 characters fails the build.
 - Screenshots are static imports (`lib/caseStudyImages.ts`) served by `next/image`. They must come **from the demo profile only**.
 - Each page has a canonical, hreflang, an Open Graph image, a sitemap entry and a `TechArticle` JSON-LD with a `BreadcrumbList`. For a private project `codeRepository` is never emitted, and an E2E test checks that the page holds no link to the repository.
 
@@ -265,6 +265,7 @@ Content lives in [`data/shared.json`](data/shared.json) and in one file per lang
 ```
 data/shared.json        language-independent data
 ├── name, handle, alternateNames, address
+├── knowsLanguage[]     languages I speak (JSON-LD), not the site's languages
 ├── contacts[]          id, label, handle, url
 ├── sponsor             label, url (GitHub Sponsors: kept out of contacts, so not in sameAs or the CV)
 ├── timeline.threads[]  lanes: id, kind (work | education), entity, segments[], phases
