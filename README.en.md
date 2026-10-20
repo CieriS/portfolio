@@ -137,7 +137,7 @@ Below the Systems view there is one more page for the projects that have a case 
 
 ## Navigation and interaction
 
-- **Bottom links** (`01`–`05`): real `<a href>` elements, so middle-click, "open in new tab" and crawlers all work. A primary click swaps the view in place. Next to the active item sits the everyday word for that view ("Execution · Experience"), which is also part of every link's accessible name.
+- **Bottom links** (`01`–`05`): real `<a href>` elements, so middle-click, "open in new tab" and crawlers all work. A primary click swaps the view in place. Next to the active item sits the everyday word for that view ("Execution · Experience"), which is also part of every link's accessible name: the name comes from the link's own text (the index is hidden from screen readers, the everyday word of inactive items is there for them only), so what is read matches what is shown.
 - **Projects from the home**: in the home paragraph the project names are links (`ProjectLink`, derived from `shared.projects` with `splitByNames`). They lead to the case study when there is one, otherwise to the projects view with the panel already open: the address is `/en/systems#<id>`, which also works pasted or shared. Without a fragment every project starts collapsed.
 - **Keyboard**: `1`–`5` jump to a view, `←` and `→` cycle through them. Keys are ignored while a modifier is held or when focus is in a text field.
 - **Touch**: a horizontal swipe (over 70 px and mostly horizontal) moves to the previous or next view.
