@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { CASE_STUDY_PAGES, ALL_PAGES } from '../e2e/helpers';
 import { DEFAULT_LOCALE } from '../lib/routes';
-import { deployExpectations, parseDeployEnvironment } from '../lib/smoke';
+import { deployExpectations, parseDeployEnvironment, robotsHeaderOn } from '../lib/smoke';
 
 /**
  * issue #82: what only the deployment decides, checked on the deployed URL. The full suite in
@@ -52,7 +52,7 @@ test.describe(`${expected.environment} deployment at ${baseURL}`, () => {
   test('headers: CSP on every page, X-Robots-Tag only where indexing is off', async ({ request }) => {
     const headers = (await request.get(`/${DEFAULT_LOCALE}`)).headers();
     expect(headers['content-security-policy']).toContain("default-src 'self'");
-    if (expected.indexable) expect(headers['x-robots-tag']).toBeUndefined();
+    if (robotsHeaderOn(expected, baseURL) === 'absent') expect(headers['x-robots-tag']).toBeUndefined();
     else expect(headers['x-robots-tag']).toContain('noindex');
   });
 
