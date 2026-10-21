@@ -26,7 +26,8 @@ test('the site declares no external origins it does not use', async ({ request }
   const csp = (await request.get(pathFor('en', 'hero'))).headers()['content-security-policy'];
   // next/font self-hosts Geist and Instrument Serif at build time, so no font CDN is needed.
   expect(csp).toContain("font-src 'self'");
-  expect(csp).toContain("connect-src 'self'");
+  // The one external origin: the data the aria-er case study reads (lib/liveResults.ts).
+  expect(csp).toContain("connect-src 'self' https://cieris.github.io;");
 });
 
 test('the CSP blocks nothing the page actually needs', async ({ page }) => {

@@ -73,6 +73,10 @@
       "device": "desktop"
     }
   ],
+  "live": {
+    "source": "https://cieris.github.io/aria-er/data/v1/",
+    "municipality": "BOLOGNA"
+  },
   "copy": {
     "en": {
       "meta": {
@@ -195,6 +199,24 @@
           "o3Bulletin": "Stations with the same ozone exceedance days in 2026"
         },
         "note": "Annual report on the 2025 data of the Bologna network, and daily bulletin of 12 October 2026."
+      },
+      "live": {
+        "title": "Results, live",
+        "intro": "The charts below read the export that aria-er publishes every morning on GitHub Pages: the same marts as the dashboard, refreshed by the pipeline itself.",
+        "exceedances": {
+          "title": "PM10 days above 50 µg/m³ in Bologna, per year",
+          "caption": "Each bar is a station; the current year counts up to the last published day.",
+          "allowed": "{n} allowed per year"
+        },
+        "trend": {
+          "title": "Annual mean in Bologna, µg/m³",
+          "caption": "Mean of the stations of the city; years with too little data are left out."
+        },
+        "loading": "Loading the latest data…",
+        "error": "The data could not be loaded right now. The charts are published every day at cieris.github.io/aria-er.",
+        "updated": "Data of {date}",
+        "stale": "Data of {date}: the daily refresh has not run since",
+        "credits": "Data: ARPAE Emilia-Romagna (CC BY), processed by aria-er; weather by Open-Meteo (CC BY 4.0)."
       },
       "screens": {
         "title": "Dashboard and pipeline",
@@ -350,6 +372,24 @@
         },
         "note": "Report annuale sui dati 2025 della rete di Bologna e bollettino giornaliero del 12 ottobre 2026."
       },
+      "live": {
+        "title": "Risultati dal vivo",
+        "intro": "I grafici qui sotto leggono l'export che aria-er pubblica ogni mattina su GitHub Pages: gli stessi mart della dashboard, aggiornati dalla pipeline stessa.",
+        "exceedances": {
+          "title": "Giorni di PM10 oltre 50 µg/m³ a Bologna, per anno",
+          "caption": "Ogni barra è una stazione; l'anno in corso conta fino all'ultimo giorno pubblicato.",
+          "allowed": "{n} ammessi per anno"
+        },
+        "trend": {
+          "title": "Media annua a Bologna, µg/m³",
+          "caption": "Media delle stazioni della città; gli anni con troppi pochi dati sono esclusi."
+        },
+        "loading": "Caricamento degli ultimi dati…",
+        "error": "Al momento non è stato possibile caricare i dati. I grafici sono pubblicati ogni giorno su cieris.github.io/aria-er.",
+        "updated": "Dati del {date}",
+        "stale": "Dati del {date}: l'aggiornamento giornaliero non è più girato da allora",
+        "credits": "Dati: ARPAE Emilia-Romagna (CC BY), elaborati da aria-er; meteo di Open-Meteo (CC BY 4.0)."
+      },
       "screens": {
         "title": "Dashboard e pipeline",
         "items": {
@@ -503,6 +543,24 @@
           "o3Bulletin": "Stations avec les mêmes jours de dépassement de l'ozone en 2026"
         },
         "note": "Rapport annuel sur les données 2025 du réseau de Bologne et bulletin quotidien du 12 octobre 2026."
+      },
+      "live": {
+        "title": "Résultats en direct",
+        "intro": "Les graphiques ci-dessous lisent l'export qu'aria-er publie chaque matin sur GitHub Pages : les mêmes marts que le tableau de bord, mis à jour par le pipeline lui-même.",
+        "exceedances": {
+          "title": "Jours de PM10 au-dessus de 50 µg/m³ à Bologne, par an",
+          "caption": "Chaque barre est une station ; l'année en cours compte jusqu'au dernier jour publié.",
+          "allowed": "{n} autorisés par an"
+        },
+        "trend": {
+          "title": "Moyenne annuelle à Bologne, µg/m³",
+          "caption": "Moyenne des stations de la ville ; les années avec trop peu de données sont écartées."
+        },
+        "loading": "Chargement des dernières données…",
+        "error": "Les données n'ont pas pu être chargées pour l'instant. Les graphiques sont publiés chaque jour sur cieris.github.io/aria-er.",
+        "updated": "Données du {date}",
+        "stale": "Données du {date} : la mise à jour quotidienne n'a plus tourné depuis",
+        "credits": "Données : ARPAE Émilie-Romagne (CC BY), traitées par aria-er ; météo d'Open-Meteo (CC BY 4.0)."
       },
       "screens": {
         "title": "Tableau de bord et pipeline",
@@ -658,6 +716,24 @@
         },
         "note": "Jahresbericht zu den Daten 2025 des Messnetzes Bologna und Tagesbulletin vom 12. Oktober 2026."
       },
+      "live": {
+        "title": "Ergebnisse, live",
+        "intro": "Die Diagramme unten lesen den Export, den aria-er jeden Morgen auf GitHub Pages veröffentlicht: dieselben Marts wie im Dashboard, von der Pipeline selbst aktualisiert.",
+        "exceedances": {
+          "title": "Tage mit PM10 über 50 µg/m³ in Bologna, pro Jahr",
+          "caption": "Jeder Balken ist eine Station; das laufende Jahr zählt bis zum letzten veröffentlichten Tag.",
+          "allowed": "{n} pro Jahr erlaubt"
+        },
+        "trend": {
+          "title": "Jahresmittel in Bologna, µg/m³",
+          "caption": "Mittel der Stationen der Stadt; Jahre mit zu wenigen Daten sind ausgelassen."
+        },
+        "loading": "Die neuesten Daten werden geladen…",
+        "error": "Die Daten konnten gerade nicht geladen werden. Die Diagramme werden täglich unter cieris.github.io/aria-er veröffentlicht.",
+        "updated": "Daten vom {date}",
+        "stale": "Daten vom {date}: Die tägliche Aktualisierung ist seitdem nicht gelaufen",
+        "credits": "Daten: ARPAE Emilia-Romagna (CC BY), verarbeitet von aria-er; Wetter von Open-Meteo (CC BY 4.0)."
+      },
       "screens": {
         "title": "Dashboard und Pipeline",
         "items": {
@@ -811,6 +887,24 @@
           "o3Bulletin": "Estaciones con los mismos días de superación de ozono en 2026"
         },
         "note": "Informe anual sobre los datos de 2025 de la red de Bolonia y boletín diario del 12 de octubre de 2026."
+      },
+      "live": {
+        "title": "Resultados en directo",
+        "intro": "Los gráficos de abajo leen la exportación que aria-er publica cada mañana en GitHub Pages: los mismos marts del dashboard, actualizados por el propio pipeline.",
+        "exceedances": {
+          "title": "Días de PM10 por encima de 50 µg/m³ en Bolonia, por año",
+          "caption": "Cada barra es una estación; el año en curso cuenta hasta el último día publicado.",
+          "allowed": "{n} permitidos por año"
+        },
+        "trend": {
+          "title": "Media anual en Bolonia, µg/m³",
+          "caption": "Media de las estaciones de la ciudad; se omiten los años con muy pocos datos."
+        },
+        "loading": "Cargando los últimos datos…",
+        "error": "Ahora mismo no se han podido cargar los datos. Los gráficos se publican cada día en cieris.github.io/aria-er.",
+        "updated": "Datos del {date}",
+        "stale": "Datos del {date}: la actualización diaria no se ha ejecutado desde entonces",
+        "credits": "Datos: ARPAE Emilia-Romaña (CC BY), procesados por aria-er; meteorología de Open-Meteo (CC BY 4.0)."
       },
       "screens": {
         "title": "Dashboard y pipeline",

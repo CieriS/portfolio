@@ -12,6 +12,7 @@ import { getPortfolioBundle } from '@/lib/portfolio';
 import { versionWithDate } from '@/lib/projects';
 import { buildCaseStudyJsonLd } from '@/lib/structuredData';
 import { caseStudyPath, pathFor, VIEW_IDS, type CaseStudyId } from '@/lib/views';
+import { LiveResults } from './LiveResults';
 import { SceneMode } from './SceneMode';
 
 const LINK = 'group/link inline-flex items-center gap-3 text-[15px]';
@@ -253,6 +254,24 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                       ))}
                     </tbody>
                   </table>
+                </div>
+              </Section>
+            )}
+
+            {data.live && text.live && (
+              <Section title={text.live.title}>
+                <div className="md:col-span-9">
+                  <Prose>
+                    <p>{text.live.intro}</p>
+                  </Prose>
+                  <div className="mt-10">
+                    <LiveResults
+                      source={data.live.source}
+                      municipality={data.live.municipality}
+                      locale={locale}
+                      copy={text.live}
+                    />
+                  </div>
                 </div>
               </Section>
             )}

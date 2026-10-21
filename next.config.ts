@@ -1,3 +1,4 @@
+import { DATA_ORIGINS } from './lib/liveResults';
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 import { aliasRedirects } from './lib/aliases';
@@ -17,13 +18,16 @@ const DEV = process.env.NODE_ENV !== 'production';
  * 'unsafe-eval' is added in development only: React rebuilds stack traces with eval() while
  * developing and never in production, and without it Next's overlay reports a permanent issue.
  */
+// Data the case studies read in the browser (lib/liveResults.ts).
+const CONNECT = ["'self'", ...DATA_ORIGINS].join(' ');
+
 const CSP = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${DEV ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  "connect-src 'self'",
+  `connect-src ${CONNECT}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

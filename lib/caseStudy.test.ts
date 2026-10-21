@@ -79,6 +79,14 @@ describe('findCaseStudyIssues', () => {
   });
 });
 
+describe('live results copy', () => {
+  it('is required in every language when the structure declares a source', () => {
+    const live = { ...data, live: { source: 'https://example.github.io/data/v1/', municipality: 'BOLOGNA' } };
+    expect(findCaseStudyIssues(live, { ...everywhere({ ...text, live: {} }), es: text })).toEqual(['es.live is missing']);
+    expect(findCaseStudyIssues(data, everywhere(text))).toEqual([]);
+  });
+});
+
 describe('CaseStudySchema', () => {
   it('rejects an unknown device and an empty dependency row', () => {
     expect(CaseStudySchema.safeParse({ ...data, screens: [{ id: 'home', device: 'watch' }] }).success).toBe(false);
