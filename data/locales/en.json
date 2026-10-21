@@ -223,7 +223,7 @@
         }
       },
       "ariaer": {
-        "summary": "End-to-end data platform for Emilia-Romagna air quality on ARPAE open data, enriched with Open-Meteo weather: Rust ingestion into partitioned Parquet, dbt models on DuckDB locally and BigQuery on GCP, Dagster orchestration. It runs locally with Docker, dashboard and CI included; the run on Google Cloud is still to do.",
+        "summary": "End-to-end data platform for Emilia-Romagna air quality on ARPAE open data, enriched with Open-Meteo weather: Rust ingestion into partitioned Parquet, dbt models on DuckDB locally and BigQuery on GCP, Dagster orchestration. It runs locally with Docker, dashboard and CI included, and the same models ran on BigQuery in a real Google Cloud project with results identical to DuckDB.",
         "bridge": "A pure data engineering project: provisional measurements revised after validation, gaps and inconsistent formats in the source, turned into a historized, tested dataset that answers legal-limit exceedances, pollutant trends and weather correlation.",
         "highlights": [
           "Idempotent incremental ingestion: rolling-window reprocessing and upserts on the natural key",

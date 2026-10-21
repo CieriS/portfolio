@@ -226,7 +226,7 @@
         }
       },
       "ariaer": {
-        "summary": "Plataforma de datos completa sobre la calidad del aire en Emilia-Romaña, con los datos abiertos de ARPAE y el tiempo de Open-Meteo: ingesta en Rust a Parquet particionado, modelos dbt sobre DuckDB en local y BigQuery en GCP, orquestación con Dagster. Funciona en local con Docker, con dashboard y CI; queda pendiente ejecutarla en Google Cloud.",
+        "summary": "Plataforma de datos completa sobre la calidad del aire en Emilia-Romaña, con los datos abiertos de ARPAE y el tiempo de Open-Meteo: ingesta en Rust a Parquet particionado, modelos dbt sobre DuckDB en local y BigQuery en GCP, orquestación con Dagster. Funciona en local con Docker, con dashboard y CI, y los mismos modelos se ejecutaron en BigQuery en un proyecto real de Google Cloud con resultados idénticos a DuckDB.",
         "bridge": "Un proyecto de ingeniería de datos puro: medidas provisionales que se corrigen tras la validación, huecos y formatos incoherentes en la fuente, convertidos en un conjunto de datos histórico y con tests que responde sobre superaciones de los límites legales, tendencias de los contaminantes y relación con el tiempo.",
         "highlights": [
           "Ingesta incremental idempotente: reprocesado de una ventana móvil y upsert sobre la clave natural",
