@@ -49,6 +49,24 @@ describe('schema', () => {
     expect(alternateNames.safeParse([]).success).toBe(true);
     expect(alternateNames.safeParse(['']).success).toBe(false);
   });
+
+  it('issue #49: accepts a certification only with a verification URL and an expiry after its issue date', () => {
+    const { certifications } = SharedSchema.shape;
+    const csm = {
+      id: 'csm',
+      name: 'Certified ScrumMaster (CSM)',
+      issuer: 'Scrum Alliance',
+      entity: 'Tas',
+      issued: '2025-11-05',
+      expires: '2027-11-05',
+      url: 'https://example.com/badge',
+    };
+    expect(certifications.safeParse([csm]).success).toBe(true);
+    expect(certifications.safeParse([{ ...csm, expires: '2025-11-05' }]).success).toBe(false);
+    expect(certifications.safeParse([{ ...csm, issued: '2025-11-31' }]).success).toBe(false);
+    expect(certifications.safeParse([{ ...csm, url: 'not a url' }]).success).toBe(false);
+    expect(certifications.safeParse([{ ...csm, issuer: '' }]).success).toBe(false);
+  });
 });
 
 describe('findContentIssues', () => {

@@ -144,6 +144,10 @@
           "environments": {
             "title": "Ambienti",
             "body": "Ambienti di sviluppo riproducibili con Docker; cluster Kubernetes con Helm e Rancher."
+          },
+          "method": {
+            "title": "Metodo",
+            "body": "Dall'inizio del 2025 sono Scrum Master del team front-end. Certified ScrumMaster (Scrum Alliance) da novembre 2025."
           }
         }
       },

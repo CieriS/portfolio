@@ -68,9 +68,10 @@ export function buildCv({ shared, content, copy, profile, contact, today, site }
       ),
       entries(
         copy.certifications,
-        profile.certifications.map((item) => ({
+        // From the site's data, so the CV and the page can never state two different credentials.
+        shared.certifications.map((item) => ({
           heading: item.name,
-          meta: fill(copy.obtainedAt, { entity: item.entity }),
+          meta: [fill(copy.obtainedAt, { entity: item.entity }), item.issuer, item.issued.slice(0, 4)].join(' · '),
           body: '',
           tags: [],
         })),
