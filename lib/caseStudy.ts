@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import ariaer from '@/data/case-studies/ariaer.json';
 import yourfinance from '@/data/case-studies/yourfinance.json';
 import { CASE_STUDY_IDS, LOCALES, type CaseStudyId, type Locale } from '@/lib/routes';
 
@@ -25,7 +26,19 @@ export const CaseStudySchema = z.object({
 });
 
 export type CaseStudyData = z.infer<typeof CaseStudySchema>;
-export type CaseStudyCopy = (typeof yourfinance)['copy']['en'];
+type Copy = (typeof yourfinance)['copy']['en'];
+/**
+ * The copy of one language. The keyed maps are typed by string rather than by the ids of the
+ * first case study, so another study can name its own crates, steps and screens; the
+ * cross-checks below make sure every id has its entry.
+ */
+export type CaseStudyCopy = Omit<Copy, 'architecture' | 'flow' | 'decisions' | 'measures' | 'screens'> & {
+  architecture: Omit<Copy['architecture'], 'crates'> & { crates: Record<string, string> };
+  flow: Omit<Copy['flow'], 'steps'> & { steps: Record<string, { actor: string; text: string }> };
+  decisions: Omit<Copy['decisions'], 'items'> & { items: Record<string, { title: string; body: string }> };
+  measures: Omit<Copy['measures'], 'rows'> & { rows: Record<string, string> };
+  screens: Omit<Copy['screens'], 'items'> & { items: Record<string, { alt: string; caption: string }> };
+};
 export type CaseStudy = { data: CaseStudyData; copy: Record<Locale, CaseStudyCopy> };
 
 /** The slice of the copy that the cross-checks read; structural, so tests can pass small fixtures. */
@@ -90,7 +103,7 @@ function load(raw: { copy: Record<Locale, CaseStudyCopy> }): CaseStudy {
   return { data, copy: raw.copy };
 }
 
-const CASE_STUDIES: Record<CaseStudyId, CaseStudy> = { yourfinance: load(yourfinance) };
+const CASE_STUDIES: Record<CaseStudyId, CaseStudy> = { yourfinance: load(yourfinance), ariaer: load(ariaer) };
 
 for (const key of CASE_STUDY_IDS) {
   if (CASE_STUDIES[key].data.project !== key)
