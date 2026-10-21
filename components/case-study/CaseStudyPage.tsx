@@ -267,6 +267,7 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                   <div className="mt-10">
                     <LiveResults
                       source={data.live.source}
+                      page={data.live.page}
                       municipality={data.live.municipality}
                       locale={locale}
                       copy={text.live}

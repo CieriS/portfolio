@@ -68,3 +68,18 @@ export function viewFromPath(pathname: string): ViewId | null {
   if (!isLocale(locale)) return null;
   return viewFromSlug(locale, slug);
 }
+
+/**
+ * The same address with the view segment in the language of its locale, or null when there is
+ * nothing to change. `/it/systems/ariaer` becomes `/it/sistemi/ariaer`, so a link written in one
+ * language works in every other: with the locale prefix that the proxy adds from the browser
+ * language, `/systems/ariaer` opens the case study in the reader's language.
+ */
+export function localizedPath(pathname: string): string | null {
+  const [locale, slug, ...rest] = pathname.split('/').filter(Boolean);
+  if (!isLocale(locale) || !slug) return null;
+  if (VIEW_IDS.some((id) => VIEW_SLUGS[locale][id] === slug)) return null;
+  const view = VIEW_IDS.find((id) => id !== 'hero' && LOCALES.some((other) => VIEW_SLUGS[other][id] === slug));
+  if (!view) return null;
+  return ['', locale, VIEW_SLUGS[locale][view], ...rest].join('/');
+}

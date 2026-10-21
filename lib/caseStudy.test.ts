@@ -81,7 +81,10 @@ describe('findCaseStudyIssues', () => {
 
 describe('live results copy', () => {
   it('is required in every language when the structure declares a source', () => {
-    const live = { ...data, live: { source: 'https://example.github.io/data/v1/', municipality: 'BOLOGNA' } };
+    const live = {
+      ...data,
+      live: { source: 'https://example.github.io/data/v1/', page: 'https://example.github.io/', municipality: 'BOLOGNA' },
+    };
     expect(findCaseStudyIssues(live, { ...everywhere({ ...text, live: {} }), es: text })).toEqual(['es.live is missing']);
     expect(findCaseStudyIssues(data, everywhere(text))).toEqual([]);
   });

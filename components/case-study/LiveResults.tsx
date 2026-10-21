@@ -41,11 +41,13 @@ async function load(source: string, municipality: string, signal: AbortSignal): 
  */
 export function LiveResults({
   source,
+  page,
   municipality,
   locale,
   copy,
 }: {
   source: string;
+  page: string;
   municipality: string;
   locale: string;
   copy: LiveCopy;
@@ -94,6 +96,12 @@ export function LiveResults({
       <ExceedancesFigure chart={state.exceedances} copy={copy} />
       <TrendFigure chart={state.trend} copy={copy} />
       <p className="text-sm text-muted">{copy.credits}</p>
+      <p>
+        <a href={page} className="group/link inline-flex items-center gap-3 text-[15px]" data-open-data>
+          <span className="link-underline group-hover/link:bg-[length:100%_1px]">{copy.data}</span>
+          <span aria-hidden>↗</span>
+        </a>
+      </p>
     </div>
   );
 }
