@@ -92,6 +92,7 @@ Per provarlo da smartphone sulla stessa rete, apri l'indirizzo *Network* stampat
 | `npm run typecheck` | Genera i tipi delle route (`next typegen`) e verifica i tipi con `tsc --noEmit` |
 | `npm run test:unit` | Test unitari Vitest della logica pura (`lib/**/*.test.ts`), in meno di un secondo |
 | `npm test` | Suite end-to-end Playwright; costruisce e avvia da sé la build di produzione |
+| `npm run test:smoke` | Smoke test Playwright su un sito già distribuito: `SMOKE_BASE_URL` (URL del deploy), `SMOKE_ENV` (`production` o `preview`), `SMOKE_SITE_URL` (il `SITE_URL` del deploy, per difetto la base) |
 | `npm run test:ui` | Stessa suite nella modalità interattiva di Playwright |
 
 Prima di una push conviene eseguire `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm run test:unit` e `npm test`. Sono gli stessi comandi della CI.
@@ -405,6 +406,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 ├── e2e/              suite Playwright · helpers.ts (lingue, viste, attese)
 ├── .github/workflows/ci.yml   lint, typecheck, build e test su ogni PR
 ├── .github/workflows/versions.yml   versioni dei progetti allineate alle loro release (PR automatica)
+├── .github/workflows/smoke.yml   smoke test su ogni deploy di Vercel (anteprime e produzione)
 ├── scripts/          sync-versions.mjs (usato dal workflow delle versioni)
 ├── proxy.ts          rilevamento lingua (middleware di next-intl)
 ├── next.config.ts    plugin next-intl, redirect 301, origini ammesse in sviluppo
@@ -447,6 +449,8 @@ Le issue e le pull request sono in inglese; i messaggi di commit in italiano.
 2. **Settings → Git → Production Branch**: `development`.
 3. Variabili opzionali in **Settings → Environment Variables**: `GOOGLE_SITE_VERIFICATION` e `SITE_URL` (solo con un dominio personalizzato). Per il CV: `CV_ADMIN_PASSWORD`, `CV_LINK_SECRET`, `RESEND_API_KEY`, `CV_MAIL_FROM`, `CV_NOTIFY_EMAIL`, `CV_EMAIL`, `CV_PHONE` (vedi [Variabili d'ambiente](#variabili-dambiente)).
 4. Il sito è su `https://<progetto>.vercel.app`. Ogni merge su `development` viene distribuito automaticamente; gli altri branch e le PR generano anteprime non indicizzabili.
+
+Dopo ogni deploy riuscito Vercel lo segnala a GitHub, e `.github/workflows/smoke.yml` lancia `npm run test:smoke` sull'URL distribuito, con il codice di quel commit: tutte le pagine (200, idratazione senza errori, canonical, `robots` dell'ambiente), redirect della radice, 404, intestazioni, `robots.txt` e sitemap, endpoint del CV (in produzione un token falso deve dare 403: 503 vuol dire variabili mancanti su Vercel) e, solo in produzione, il 308 degli altri alias. Le attese per ambiente stanno in `lib/smoke.ts`. Non è un controllo obbligatorio: la produzione si verifica dopo il merge.
 
 In alternativa, da terminale: `npx vercel login`, poi `npx vercel` (anteprima) e `npx vercel --prod` (produzione).
 

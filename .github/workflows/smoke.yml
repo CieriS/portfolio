@@ -1,0 +1,48 @@
+name: Smoke
+
+# issue #82: a short suite against what Vercel actually deployed, previews and production alike.
+# Vercel reports each deployment to GitHub; the run checks out the deployed commit, so the
+# suite always matches the code it is checking. Not a required check: production runs after merge.
+on: deployment_status
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.deployment.id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Smoke tests on the deployment
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SMOKE_BASE_URL: ${{ github.event.deployment_status.environment_url }}
+      SMOKE_ENV: ${{ github.event.deployment.environment }}
+      # The SITE_URL set on Vercel for every environment: canonical tags and sitemap point there.
+      # Update it together with SITE_URL when the site moves to its own domain.
+      SMOKE_SITE_URL: https://cieri.vercel.app
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # A key of its own: the CI cache also holds WebKit, this one only Chromium.
+      - id: playwright-version
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-smoke-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+      - if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      - run: npm run test:smoke
