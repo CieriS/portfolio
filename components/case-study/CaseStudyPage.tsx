@@ -39,6 +39,11 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
     { key: 'source', ...text.facts.source },
   ];
   const projectsPath = pathFor(locale, 'projects');
+  // A public project leads to its repository; a private one to the contact view, as in the accordion.
+  const source =
+    project?.source.visibility === 'public'
+      ? { href: project.source.url, kind: 'public' }
+      : { href: pathFor(locale, 'identity'), kind: 'private' };
   const json = JSON.stringify(buildCaseStudyJsonLd(locale, id)).replace(/</g, '\\u003c');
 
   return (
@@ -224,7 +229,11 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                       <tr className="border-b border-line">
                         {[text.measures.columns.query, text.measures.columns.before, text.measures.columns.after].map(
                           (column, index) => (
-                            <th key={column} scope="col" className={cn('py-3 font-normal', index > 0 && 'pl-6 text-right')}>
+                            <th
+                              key={column}
+                              scope="col"
+                              className={cn('py-3 font-normal', index > 0 && 'pl-6 text-right whitespace-nowrap')}
+                            >
                               <Meta as="span">{column}</Meta>
                             </th>
                           ),
@@ -288,7 +297,7 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                   <p>{text.access.body}</p>
                 </Prose>
                 <p className="mt-8 flex flex-wrap gap-x-10 gap-y-4">
-                  <a href={pathFor(locale, 'identity')} className={LINK} data-source="private">
+                  <a href={source.href} className={LINK} data-source={source.kind}>
                     <span className={UNDERLINE}>{text.access.cta}</span>
                     <span aria-hidden>→</span>
                   </a>
