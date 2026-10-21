@@ -40,7 +40,7 @@ Personal portfolio of **Samuele Cieri**, a Software Developer transitioning to D
 - **Accessibility**: real links, a single `h1` per URL, ARIA attributes, visible focus, and `prefers-reduced-motion` honoured in CSS, in Framer Motion and in the 3D scene.
 - **Centralised, validated content**: one shared JSON file plus one per language, checked by types, a zod schema and cross-checks — inconsistent content fails the build.
 - **CV on request**: the PDF is generated on every download from the same content as the site, with the private contact details read from environment variables. It is not public: visitors leave an email address and receive a signed, expiring link; the owner downloads it at once with a password.
-- **Case study**: yourFinance has a page of its own below the projects view (`/en/systems/yourfinance`): problem, constraints, architecture, decisions, measures and screenshots with demo data. The code stays private and the page never links to it.
+- **Case studies**: yourFinance and aria-er have a page of their own below the projects view (`/en/systems/yourfinance`, `/en/systems/ariaer`): problem, constraints, architecture, decisions, measures and screenshots. yourFinance's code stays private and its page never links to it; aria-er's page leads to its public repository and compares its results with ARPAE's figures.
 
 ## Stack
 
@@ -215,8 +215,8 @@ Below the Systems view there is one more page for the projects that have a case 
 - `app/[locale]/[view]/[study]/page.tsx` prerenders the page only under the slug of the projects view and only for the ids in `CASE_STUDY_IDS` (`lib/routes.ts`); anything else is a 404.
 - `components/case-study/CaseStudyPage.tsx` is a server component: all the text is in the HTML and the page does not load the animation library. It uses the text primitives of `components/ui/text.tsx`, shared with the views.
 - The content lives in `data/case-studies/<id>.json` (structure plus copy in every language), outside the locale files that reach the browser. `lib/caseStudy.ts` validates it with zod and cross-checks: an id with no copy in one language, an empty `alt` or a description over 160 characters fails the build.
-- Screenshots are static imports (`lib/caseStudyImages.ts`) served by `next/image`. They must come **from the demo profile only**.
-- Each page has a canonical, hreflang, an Open Graph image, a sitemap entry and a `TechArticle` JSON-LD with a `BreadcrumbList`. For a private project `codeRepository` is never emitted, and an E2E test checks that the page holds no link to the repository.
+- Screenshots are static imports (`lib/caseStudyImages.ts`) served by `next/image`. For a private project they must come **from the demo profile only**; aria-er's come from its own dashboard, on public data.
+- Each page has a canonical, hreflang, an Open Graph image, a sitemap entry and a `TechArticle` JSON-LD with a `BreadcrumbList`. For a private project `codeRepository` is never emitted, and an E2E test checks that the page holds no link to the repository. For a public project the closing link leads to the repository (`data-source="public"`) and the JSON-LD has `codeRepository`.
 
 ## SEO
 

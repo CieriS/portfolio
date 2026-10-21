@@ -61,7 +61,7 @@ describe('case studies', () => {
 
   it('are recognised by id, and nothing else is', () => {
     for (const id of CASE_STUDY_IDS) expect(isCaseStudyId(id)).toBe(true);
-    expect(isCaseStudyId('ariaer')).toBe(false);
+    expect(isCaseStudyId('another-project')).toBe(false);
     expect(isCaseStudyId(undefined)).toBe(false);
   });
 
@@ -76,9 +76,9 @@ describe('projectPath', () => {
   });
 
   it('otherwise names the project as a fragment of the projects view', () => {
-    expect(projectPath('en', 'ariaer')).toBe('/en/systems#ariaer');
-    expect(projectPath('de', 'ariaer')).toBe('/de/systeme#ariaer');
+    expect(projectPath('en', 'demo')).toBe('/en/systems#demo');
+    expect(projectPath('de', 'demo')).toBe('/de/systeme#demo');
     // The fragment is not part of the path: the address still resolves to the projects view.
-    expect(viewFromPath(new URL(projectPath('fr', 'ariaer'), 'https://example.com').pathname)).toBe('projects');
+    expect(viewFromPath(new URL(projectPath('fr', 'demo'), 'https://example.com').pathname)).toBe('projects');
   });
 });

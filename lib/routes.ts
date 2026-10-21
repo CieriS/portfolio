@@ -43,7 +43,7 @@ export function viewFromSlug(locale: Locale, slug: string | undefined): ViewId |
 }
 
 /** Projects with a page of their own, one level below the projects view: `/it/sistemi/yourfinance`. */
-export const CASE_STUDY_IDS = ['yourfinance'] as const;
+export const CASE_STUDY_IDS = ['yourfinance', 'ariaer'] as const;
 export type CaseStudyId = (typeof CASE_STUDY_IDS)[number];
 
 export function isCaseStudyId(value: string | undefined): value is CaseStudyId {
@@ -56,7 +56,7 @@ export function caseStudyPath(locale: Locale, id: CaseStudyId): string {
 
 /**
  * Where a project is told: its case study when it has one, otherwise the projects view with
- * that project's panel open (`/it/sistemi#ariaer`).
+ * that project's panel open (`/it/sistemi#<id>`).
  */
 export function projectPath(locale: Locale, projectId: string): string {
   return isCaseStudyId(projectId) ? caseStudyPath(locale, projectId) : `${pathFor(locale, 'projects')}#${projectId}`;

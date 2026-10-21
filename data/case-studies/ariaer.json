@@ -1,0 +1,848 @@
+{
+  "project": "ariaer",
+  "stack": ["Rust", "dbt", "DuckDB", "BigQuery", "Dagster", "Streamlit", "Terraform", "Docker"],
+  "crates": [
+    [
+      {
+        "id": "dashboard",
+        "name": "dashboard"
+      },
+      {
+        "id": "orchestration",
+        "name": "orchestration"
+      }
+    ],
+    [
+      {
+        "id": "transform",
+        "name": "transform"
+      }
+    ],
+    [
+      {
+        "id": "ingestor",
+        "name": "aq-ingest"
+      }
+    ],
+    [
+      {
+        "id": "raw",
+        "name": "raw/"
+      }
+    ]
+  ],
+  "flow": ["schedule", "ingest", "transform", "check", "dashboard"],
+  "decisions": ["partitions", "rules", "flags", "warehouses", "streaming"],
+  "measures": [
+    {
+      "id": "pm10Report",
+      "query": "mart_exceedances_yearly",
+      "before": "20",
+      "after": "20"
+    },
+    {
+      "id": "o3Report",
+      "query": "mart_exceedances_yearly",
+      "before": "54",
+      "after": "54"
+    },
+    {
+      "id": "pm10Bulletin",
+      "query": "mart_exceedances_yearly",
+      "before": "64",
+      "after": "64"
+    },
+    {
+      "id": "o3Bulletin",
+      "query": "mart_exceedances_yearly",
+      "before": "43",
+      "after": "43"
+    }
+  ],
+  "screens": [
+    {
+      "id": "exceedances",
+      "device": "desktop"
+    },
+    {
+      "id": "traffic",
+      "device": "desktop"
+    },
+    {
+      "id": "lineage",
+      "device": "desktop"
+    }
+  ],
+  "copy": {
+    "en": {
+      "meta": {
+        "title": "aria-er — case study",
+        "description": "How aria-er is built: Rust ingestion, dbt on DuckDB and BigQuery, Dagster, and exceedances checked against ARPAE's own figures."
+      },
+      "label": "Case study",
+      "title": "The numbers match ARPAE's.",
+      "titleEmphasis": "match",
+      "lead": "aria-er is a data platform on air quality in Emilia-Romagna: ARPAE open data and Open-Meteo weather, from ingestion to dashboard. This page shows how it is built and how its results were checked.",
+      "facts": {
+        "started": {
+          "label": "Started",
+          "value": "September 2026"
+        },
+        "version": {
+          "label": "Version"
+        },
+        "team": {
+          "label": "Team",
+          "value": "One developer"
+        },
+        "source": {
+          "label": "Code",
+          "value": "Public, MIT"
+        }
+      },
+      "problem": {
+        "title": "The problem",
+        "body": [
+          "ARPAE publishes the air quality measurements of Emilia-Romagna as open data, but not in a form you can ask questions of: hourly and daily values spread over several services, provisional for weeks and then corrected, station ids that change from one file to the next.",
+          "The questions are simple: how often each station exceeded the legal limits, whether the air is getting better, how much traffic adds to background pollution, how wind and rain drive PM10. Answering them with numbers that can be trusted is the work."
+        ]
+      },
+      "constraints": {
+        "title": "Constraints",
+        "items": [
+          "Recent values are corrected for weeks: every run reprocesses a 30-day window and upserts by station, pollutant and hour. Running the same window twice gives the same files.",
+          "Timestamps are stored in UTC; days and years are counted in UTC+1 all year round, as ARPAE does.",
+          "Legal limits live in a seed, never in the SQL of a model.",
+          "Negative or impossible values are flagged, not dropped.",
+          "The same models run on DuckDB on a laptop and on BigQuery in the cloud."
+        ]
+      },
+      "architecture": {
+        "title": "Architecture",
+        "body": "Four components, each with one job, joined by files and tables rather than calls: a Rust binary writes partitioned Parquet, dbt turns it into tested marts, Dagster schedules and checks both, and a dashboard only reads the marts. Each row depends only on the rows below it.",
+        "crates": {
+          "dashboard": "Streamlit: one filtered query per mart, no business logic.",
+          "orchestration": "Dagster: daily schedule, monthly partitions, backfills, checks on freshness and completeness.",
+          "transform": "dbt: staging, intermediate and marts, with more than a hundred tests.",
+          "ingestor": "Rust workspace: ARPAE and Open-Meteo clients behind a source trait, retries with backoff.",
+          "raw": "Parquet partitioned by year and month, each partition rewritten atomically, on disk or in Cloud Storage."
+        },
+        "note": "One command starts it all with Docker on a laptop; the cloud target writes to Cloud Storage and builds the same models in BigQuery."
+      },
+      "flow": {
+        "title": "One day of data, end to end",
+        "intro": "The daily refresh:",
+        "steps": {
+          "schedule": {
+            "actor": "Dagster",
+            "text": "At the scheduled hour it starts the refresh of the current month, one run at a time."
+          },
+          "ingest": {
+            "actor": "Ingestor",
+            "text": "It downloads the last 30 days from the ARPAE archive and the weather from Open-Meteo, and rewrites each month it touched as one Parquet file."
+          },
+          "transform": {
+            "actor": "dbt",
+            "text": "It normalises units, drops duplicates, merges the new rows and rebuilds the marts. A failing test stops the run."
+          },
+          "check": {
+            "actor": "Dagster",
+            "text": "Its checks warn when the newest value is older than 48 hours or when completeness drops."
+          },
+          "dashboard": {
+            "actor": "Dashboard",
+            "text": "It reads the marts: exceedances, trends, traffic against background, weather, completeness."
+          }
+        }
+      },
+      "decisions": {
+        "title": "Decisions and trade-offs",
+        "items": {
+          "partitions": {
+            "title": "Rewrite a partition, never append",
+            "body": "Each month is one Parquet file, rewritten whole with the merged rows and swapped in atomically. Rerunning a window gives the same bytes; the price is rewriting a month to change one hour, cheap at this size."
+          },
+          "rules": {
+            "title": "The legal rules, not a plain mean",
+            "body": "A day counts only with 18 valid hours, the value is rounded before it is compared with the limit, the day runs in UTC+1. Leaving out any one of them made the counts differ from ARPAE's."
+          },
+          "flags": {
+            "title": "Flag, don't drop",
+            "body": "Negative, zero and implausible values stay in the data with a flag and out of the aggregates. Two warning tests keep them visible instead of silently gone."
+          },
+          "warehouses": {
+            "title": "One set of models, two warehouses",
+            "body": "The SQL that differs between DuckDB and BigQuery lives in a few macros. An emulator checks the BigQuery version on every pull request, and the run on a real Google Cloud project gave identical marts."
+          },
+          "streaming": {
+            "title": "No streaming",
+            "body": "The sources publish hours after measuring and revise for months, and every question is daily or coarser. A daily batch answers them; streaming would only add moving parts."
+          }
+        }
+      },
+      "measures": {
+        "title": "Checked against ARPAE",
+        "body": "Every count of exceedances was compared with what ARPAE publishes itself. Two of the checks changed the code: PM10 matched only once the daily value was rounded before the comparison, and ozone matched for 29 stations out of 43 until the 8-hour windows were computed on every hour, missing ones included.",
+        "columns": {
+          "query": "Indicator",
+          "before": "ARPAE",
+          "after": "aria-er"
+        },
+        "rows": {
+          "pm10Report": "PM10 days above 50 µg/m³, Porta San Felice, 2025",
+          "o3Report": "Ozone days above 120 µg/m³, Via Chiarini, 2025",
+          "pm10Bulletin": "Stations with the same PM10 exceedance days in 2026",
+          "o3Bulletin": "Stations with the same ozone exceedance days in 2026"
+        },
+        "note": "Annual report on the 2025 data of the Bologna network, and daily bulletin of 12 October 2026."
+      },
+      "screens": {
+        "title": "Dashboard and pipeline",
+        "items": {
+          "exceedances": {
+            "alt": "Dashboard page with a bar chart of PM10 exceedance days per year, 2016 to 2026, for three Bologna stations, and a dashed line at the legal maximum of 35.",
+            "caption": "Exceedances: PM10 days above the limit per year in Bologna, against the 35 the law allows."
+          },
+          "traffic": {
+            "alt": "Dashboard page with two lines of monthly NO2 means in Bologna from 2016 to 2026, the traffic station always above the background ones.",
+            "caption": "Traffic against background: monthly NO2 in Bologna, the share of pollution that comes from traffic."
+          },
+          "lineage": {
+            "alt": "Dagster asset graph: the ingestion asset feeds the staging models, then intermediate models, then five marts.",
+            "caption": "The lineage in Dagster, from ingestion to the five marts."
+          }
+        }
+      },
+      "next": {
+        "title": "What comes next",
+        "items": [
+          "A daily export of the marts published by the pipeline, to show live results on this page.",
+          "Ozone exceedances averaged over three years, as the law asks, once three full years are loaded.",
+          "Loading the archive into a native BigQuery table, should it outgrow the free tier of reads."
+        ]
+      },
+      "access": {
+        "title": "Code",
+        "body": "The repository is public under the MIT licence. One command starts the whole stack with Docker and loads ten years of data.",
+        "cta": "Read the code on GitHub"
+      },
+      "back": "Back to Systems"
+    },
+    "it": {
+      "meta": {
+        "title": "aria-er — caso di studio",
+        "description": "Come è fatto aria-er: ingestion in Rust, dbt su DuckDB e BigQuery, Dagster, e superamenti verificati sui dati pubblicati da ARPAE."
+      },
+      "label": "Caso di studio",
+      "title": "I numeri coincidono con quelli di ARPAE.",
+      "titleEmphasis": "coincidono",
+      "lead": "aria-er è una piattaforma dati sulla qualità dell'aria in Emilia-Romagna: open data ARPAE e meteo di Open-Meteo, dall'ingestion alla dashboard. Questa pagina mostra come è fatta e come sono stati verificati i risultati.",
+      "facts": {
+        "started": {
+          "label": "Inizio",
+          "value": "Settembre 2026"
+        },
+        "version": {
+          "label": "Versione"
+        },
+        "team": {
+          "label": "Team",
+          "value": "Uno sviluppatore"
+        },
+        "source": {
+          "label": "Codice",
+          "value": "Pubblico, MIT"
+        }
+      },
+      "problem": {
+        "title": "Il problema",
+        "body": [
+          "ARPAE pubblica le misure della qualità dell'aria dell'Emilia-Romagna come open data, ma non in una forma a cui si possano fare domande: valori orari e giornalieri sparsi su più servizi, provvisori per settimane e poi corretti, codici delle stazioni che cambiano da un file all'altro.",
+          "Le domande sono semplici: quante volte ogni stazione ha superato i limiti di legge, se l'aria sta migliorando, quanto aggiunge il traffico all'inquinamento di fondo, come vento e pioggia muovono il PM10. Rispondere con numeri di cui fidarsi è il lavoro."
+        ]
+      },
+      "constraints": {
+        "title": "Vincoli",
+        "items": [
+          "I valori recenti vengono corretti per settimane: ogni esecuzione rielabora una finestra di 30 giorni e aggiorna per stazione, inquinante e ora. Rieseguire la stessa finestra produce gli stessi file.",
+          "I timestamp sono salvati in UTC; giorni e anni si contano in UTC+1 tutto l'anno, come fa ARPAE.",
+          "I limiti di legge stanno in un seed, mai nell'SQL di un modello.",
+          "I valori negativi o impossibili vengono segnalati, non scartati.",
+          "Gli stessi modelli girano su DuckDB in locale e su BigQuery nel cloud."
+        ]
+      },
+      "architecture": {
+        "title": "Architettura",
+        "body": "Quattro componenti, ognuno con un compito, collegati da file e tabelle invece che da chiamate: un binario Rust scrive Parquet partizionato, dbt ne ricava mart testati, Dagster pianifica e controlla entrambi, una dashboard legge soltanto i mart. Ogni riga dipende solo da quelle sotto.",
+        "crates": {
+          "dashboard": "Streamlit: una query filtrata per mart, nessuna logica di business.",
+          "orchestration": "Dagster: pianificazione giornaliera, partizioni mensili, backfill, controlli su freschezza e completezza.",
+          "transform": "dbt: staging, intermediate e mart, con più di cento test.",
+          "ingestor": "Workspace Rust: client ARPAE e Open-Meteo dietro un trait di sorgente, retry con backoff.",
+          "raw": "Parquet partizionato per anno e mese, ogni partizione riscritta in modo atomico, su disco o su Cloud Storage."
+        },
+        "note": "Un comando avvia tutto con Docker su un portatile; il target cloud scrive su Cloud Storage e costruisce gli stessi modelli su BigQuery."
+      },
+      "flow": {
+        "title": "Un giorno di dati, dall'inizio alla fine",
+        "intro": "L'aggiornamento giornaliero:",
+        "steps": {
+          "schedule": {
+            "actor": "Dagster",
+            "text": "All'ora prevista avvia l'aggiornamento del mese corrente, un'esecuzione alla volta."
+          },
+          "ingest": {
+            "actor": "Ingestor",
+            "text": "Scarica gli ultimi 30 giorni dall'archivio ARPAE e il meteo da Open-Meteo, e riscrive ogni mese toccato come un unico file Parquet."
+          },
+          "transform": {
+            "actor": "dbt",
+            "text": "Normalizza le unità, toglie i duplicati, unisce le righe nuove e ricostruisce i mart. Un test che fallisce ferma l'esecuzione."
+          },
+          "check": {
+            "actor": "Dagster",
+            "text": "I suoi controlli avvisano quando l'ultimo valore ha più di 48 ore o quando la completezza cala."
+          },
+          "dashboard": {
+            "actor": "Dashboard",
+            "text": "Legge i mart: superamenti, andamenti, traffico contro fondo, meteo, completezza."
+          }
+        }
+      },
+      "decisions": {
+        "title": "Scelte e compromessi",
+        "items": {
+          "partitions": {
+            "title": "Riscrivere una partizione, mai accodare",
+            "body": "Ogni mese è un file Parquet, riscritto per intero con le righe unite e sostituito in modo atomico. Rieseguire una finestra dà gli stessi byte; il prezzo è riscrivere un mese per cambiare un'ora, poco a queste dimensioni."
+          },
+          "rules": {
+            "title": "Le regole di legge, non una media qualsiasi",
+            "body": "Un giorno conta solo con 18 ore valide, il valore si arrotonda prima del confronto con il limite, il giorno è in UTC+1. Togliendo anche una sola di queste regole i conteggi non coincidevano più con quelli di ARPAE."
+          },
+          "flags": {
+            "title": "Segnalare, non scartare",
+            "body": "I valori negativi, nulli o non plausibili restano nei dati con un segnale e fuori dagli aggregati. Due test di avviso li tengono visibili invece di farli sparire in silenzio."
+          },
+          "warehouses": {
+            "title": "Un solo insieme di modelli, due warehouse",
+            "body": "L'SQL che cambia tra DuckDB e BigQuery sta in poche macro. Un emulatore verifica la versione BigQuery a ogni pull request, e l'esecuzione su un vero progetto Google Cloud ha dato mart identici."
+          },
+          "streaming": {
+            "title": "Niente streaming",
+            "body": "Le fonti pubblicano ore dopo la misura e correggono per mesi, e ogni domanda è giornaliera o più ampia. Basta un batch giornaliero; lo streaming aggiungerebbe solo parti in movimento."
+          }
+        }
+      },
+      "measures": {
+        "title": "Verificato con ARPAE",
+        "body": "Ogni conteggio di superamenti è stato confrontato con quello che pubblica ARPAE. Due verifiche hanno cambiato il codice: il PM10 coincideva solo arrotondando il valore giornaliero prima del confronto, e l'ozono coincideva per 29 stazioni su 43 finché le finestre di 8 ore non sono state calcolate su ogni ora, anche quelle mancanti.",
+        "columns": {
+          "query": "Indicatore",
+          "before": "ARPAE",
+          "after": "aria-er"
+        },
+        "rows": {
+          "pm10Report": "Giorni di PM10 oltre 50 µg/m³, Porta San Felice, 2025",
+          "o3Report": "Giorni di ozono oltre 120 µg/m³, Via Chiarini, 2025",
+          "pm10Bulletin": "Stazioni con gli stessi giorni di superamento del PM10 nel 2026",
+          "o3Bulletin": "Stazioni con gli stessi giorni di superamento dell'ozono nel 2026"
+        },
+        "note": "Report annuale sui dati 2025 della rete di Bologna e bollettino giornaliero del 12 ottobre 2026."
+      },
+      "screens": {
+        "title": "Dashboard e pipeline",
+        "items": {
+          "exceedances": {
+            "alt": "Pagina della dashboard con un grafico a barre dei giorni di superamento del PM10 per anno, dal 2016 al 2026, per tre stazioni di Bologna, e una linea tratteggiata sul massimo di legge di 35.",
+            "caption": "Superamenti: giorni di PM10 oltre il limite per anno a Bologna, rispetto ai 35 ammessi dalla legge."
+          },
+          "traffic": {
+            "alt": "Pagina della dashboard con due linee delle medie mensili di NO2 a Bologna dal 2016 al 2026, la stazione da traffico sempre sopra quelle di fondo.",
+            "caption": "Traffico contro fondo: NO2 mensile a Bologna, la quota di inquinamento che viene dal traffico."
+          },
+          "lineage": {
+            "alt": "Grafo degli asset in Dagster: l'asset di ingestion alimenta i modelli di staging, poi quelli intermedi, poi cinque mart.",
+            "caption": "La lineage in Dagster, dall'ingestion ai cinque mart."
+          }
+        }
+      },
+      "next": {
+        "title": "Cosa viene dopo",
+        "items": [
+          "Un export giornaliero dei mart pubblicato dalla pipeline, per mostrare i risultati aggiornati in questa pagina.",
+          "Superamenti dell'ozono come media su tre anni, come chiede la legge, quando saranno caricati tre anni completi.",
+          "Caricare l'archivio in una tabella nativa di BigQuery, se dovesse superare la quota gratuita di letture."
+        ]
+      },
+      "access": {
+        "title": "Codice",
+        "body": "Il repository è pubblico, con licenza MIT. Un solo comando avvia tutto con Docker e carica dieci anni di dati.",
+        "cta": "Leggi il codice su GitHub"
+      },
+      "back": "Torna a Sistemi"
+    },
+    "fr": {
+      "meta": {
+        "title": "aria-er — étude de cas",
+        "description": "Comment aria-er est construit : ingestion en Rust, dbt sur DuckDB et BigQuery, Dagster, dépassements vérifiés sur les chiffres de l'ARPAE."
+      },
+      "label": "Étude de cas",
+      "title": "Les chiffres concordent avec ceux de l'ARPAE.",
+      "titleEmphasis": "concordent",
+      "lead": "aria-er est une plateforme de données sur la qualité de l'air en Émilie-Romagne : open data de l'ARPAE et météo d'Open-Meteo, de l'ingestion au tableau de bord. Cette page montre comment elle est construite et comment ses résultats ont été vérifiés.",
+      "facts": {
+        "started": {
+          "label": "Début",
+          "value": "Septembre 2026"
+        },
+        "version": {
+          "label": "Version"
+        },
+        "team": {
+          "label": "Équipe",
+          "value": "Un développeur"
+        },
+        "source": {
+          "label": "Code",
+          "value": "Public, MIT"
+        }
+      },
+      "problem": {
+        "title": "Le problème",
+        "body": [
+          "L'ARPAE publie les mesures de la qualité de l'air de l'Émilie-Romagne en open data, mais pas sous une forme qu'on peut interroger : valeurs horaires et journalières réparties sur plusieurs services, provisoires pendant des semaines puis corrigées, identifiants de stations qui changent d'un fichier à l'autre.",
+          "Les questions sont simples : combien de fois chaque station a dépassé les limites légales, si l'air s'améliore, combien le trafic ajoute à la pollution de fond, comment le vent et la pluie agissent sur les PM10. Y répondre avec des chiffres fiables, c'est le travail."
+        ]
+      },
+      "constraints": {
+        "title": "Contraintes",
+        "items": [
+          "Les valeurs récentes sont corrigées pendant des semaines : chaque exécution retraite une fenêtre de 30 jours et met à jour par station, polluant et heure. Relancer la même fenêtre produit les mêmes fichiers.",
+          "Les horodatages sont stockés en UTC ; jours et années se comptent en UTC+1 toute l'année, comme le fait l'ARPAE.",
+          "Les limites légales sont dans un seed, jamais dans le SQL d'un modèle.",
+          "Les valeurs négatives ou impossibles sont signalées, pas supprimées.",
+          "Les mêmes modèles tournent sur DuckDB en local et sur BigQuery dans le cloud."
+        ]
+      },
+      "architecture": {
+        "title": "Architecture",
+        "body": "Quatre composants, chacun avec une seule tâche, reliés par des fichiers et des tables plutôt que par des appels : un binaire Rust écrit du Parquet partitionné, dbt en tire des marts testés, Dagster planifie et contrôle les deux, un tableau de bord ne fait que lire les marts. Chaque ligne ne dépend que de celles du dessous.",
+        "crates": {
+          "dashboard": "Streamlit : une requête filtrée par mart, aucune logique métier.",
+          "orchestration": "Dagster : planification quotidienne, partitions mensuelles, backfills, contrôles de fraîcheur et de complétude.",
+          "transform": "dbt : staging, intermediate et marts, avec plus de cent tests.",
+          "ingestor": "Workspace Rust : clients ARPAE et Open-Meteo derrière un trait de source, nouvelles tentatives avec backoff.",
+          "raw": "Parquet partitionné par année et par mois, chaque partition réécrite de façon atomique, sur disque ou dans Cloud Storage."
+        },
+        "note": "Une commande lance tout avec Docker sur un portable ; la cible cloud écrit dans Cloud Storage et construit les mêmes modèles dans BigQuery."
+      },
+      "flow": {
+        "title": "Une journée de données, de bout en bout",
+        "intro": "La mise à jour quotidienne :",
+        "steps": {
+          "schedule": {
+            "actor": "Dagster",
+            "text": "À l'heure prévue, il lance la mise à jour du mois en cours, une exécution à la fois."
+          },
+          "ingest": {
+            "actor": "Ingestor",
+            "text": "Il télécharge les 30 derniers jours depuis l'archive de l'ARPAE et la météo depuis Open-Meteo, et réécrit chaque mois touché en un seul fichier Parquet."
+          },
+          "transform": {
+            "actor": "dbt",
+            "text": "Il normalise les unités, supprime les doublons, fusionne les nouvelles lignes et reconstruit les marts. Un test en échec arrête l'exécution."
+          },
+          "check": {
+            "actor": "Dagster",
+            "text": "Ses contrôles avertissent quand la dernière valeur a plus de 48 heures ou quand la complétude baisse."
+          },
+          "dashboard": {
+            "actor": "Tableau de bord",
+            "text": "Il lit les marts : dépassements, tendances, trafic face au fond, météo, complétude."
+          }
+        }
+      },
+      "decisions": {
+        "title": "Choix et compromis",
+        "items": {
+          "partitions": {
+            "title": "Réécrire une partition, jamais ajouter",
+            "body": "Chaque mois est un fichier Parquet, réécrit en entier avec les lignes fusionnées et remplacé de façon atomique. Relancer une fenêtre donne les mêmes octets ; le prix est de réécrire un mois pour changer une heure, peu de chose à cette taille."
+          },
+          "rules": {
+            "title": "Les règles légales, pas une simple moyenne",
+            "body": "Un jour ne compte qu'avec 18 heures valides, la valeur est arrondie avant la comparaison avec la limite, le jour est en UTC+1. Sans l'une de ces règles, les décomptes s'écartaient de ceux de l'ARPAE."
+          },
+          "flags": {
+            "title": "Signaler, pas supprimer",
+            "body": "Les valeurs négatives, nulles ou invraisemblables restent dans les données avec un indicateur, et hors des agrégats. Deux tests d'avertissement les gardent visibles au lieu de les faire disparaître en silence."
+          },
+          "warehouses": {
+            "title": "Un seul jeu de modèles, deux entrepôts",
+            "body": "Le SQL qui diffère entre DuckDB et BigQuery tient dans quelques macros. Un émulateur vérifie la version BigQuery à chaque pull request, et l'exécution sur un vrai projet Google Cloud a donné des marts identiques."
+          },
+          "streaming": {
+            "title": "Pas de streaming",
+            "body": "Les sources publient des heures après la mesure et corrigent pendant des mois, et chaque question est quotidienne ou plus large. Un traitement par lot quotidien suffit ; le streaming n'ajouterait que des pièces mobiles."
+          }
+        }
+      },
+      "measures": {
+        "title": "Vérifié avec l'ARPAE",
+        "body": "Chaque décompte de dépassements a été comparé à ce que publie l'ARPAE. Deux vérifications ont changé le code : les PM10 ne concordaient qu'en arrondissant la valeur journalière avant la comparaison, et l'ozone concordait pour 29 stations sur 43 tant que les fenêtres de 8 heures n'étaient pas calculées sur chaque heure, y compris les heures manquantes.",
+        "columns": {
+          "query": "Indicateur",
+          "before": "ARPAE",
+          "after": "aria-er"
+        },
+        "rows": {
+          "pm10Report": "Jours de PM10 au-dessus de 50 µg/m³, Porta San Felice, 2025",
+          "o3Report": "Jours d'ozone au-dessus de 120 µg/m³, Via Chiarini, 2025",
+          "pm10Bulletin": "Stations avec les mêmes jours de dépassement des PM10 en 2026",
+          "o3Bulletin": "Stations avec les mêmes jours de dépassement de l'ozone en 2026"
+        },
+        "note": "Rapport annuel sur les données 2025 du réseau de Bologne et bulletin quotidien du 12 octobre 2026."
+      },
+      "screens": {
+        "title": "Tableau de bord et pipeline",
+        "items": {
+          "exceedances": {
+            "alt": "Page du tableau de bord avec un histogramme des jours de dépassement des PM10 par an, de 2016 à 2026, pour trois stations de Bologne, et une ligne pointillée au maximum légal de 35.",
+            "caption": "Dépassements : jours de PM10 au-dessus de la limite par an à Bologne, face aux 35 que la loi autorise."
+          },
+          "traffic": {
+            "alt": "Page du tableau de bord avec deux courbes de moyennes mensuelles de NO2 à Bologne de 2016 à 2026, la station de trafic toujours au-dessus des stations de fond.",
+            "caption": "Trafic face au fond : NO2 mensuel à Bologne, la part de pollution qui vient du trafic."
+          },
+          "lineage": {
+            "alt": "Graphe des assets dans Dagster : l'asset d'ingestion alimente les modèles de staging, puis les modèles intermédiaires, puis cinq marts.",
+            "caption": "Le lignage dans Dagster, de l'ingestion aux cinq marts."
+          }
+        }
+      },
+      "next": {
+        "title": "La suite",
+        "items": [
+          "Un export quotidien des marts publié par le pipeline, pour montrer des résultats à jour sur cette page.",
+          "Les dépassements d'ozone en moyenne sur trois ans, comme le demande la loi, dès que trois années complètes seront chargées.",
+          "Charger l'archive dans une table native BigQuery, si elle dépassait le quota gratuit de lectures."
+        ]
+      },
+      "access": {
+        "title": "Code",
+        "body": "Le dépôt est public, sous licence MIT. Une seule commande lance tout avec Docker et charge dix ans de données.",
+        "cta": "Lire le code sur GitHub"
+      },
+      "back": "Retour à Systèmes"
+    },
+    "de": {
+      "meta": {
+        "title": "aria-er — Fallstudie",
+        "description": "Wie aria-er gebaut ist: Ingestion in Rust, dbt auf DuckDB und BigQuery, Dagster, Überschreitungen an den Zahlen der ARPAE geprüft."
+      },
+      "label": "Fallstudie",
+      "title": "Die Zahlen stimmen mit denen der ARPAE überein.",
+      "titleEmphasis": "stimmen",
+      "lead": "aria-er ist eine Datenplattform zur Luftqualität in der Emilia-Romagna: Open Data der ARPAE und Wetter von Open-Meteo, von der Ingestion bis zum Dashboard. Diese Seite zeigt, wie sie gebaut ist und wie ihre Ergebnisse geprüft wurden.",
+      "facts": {
+        "started": {
+          "label": "Beginn",
+          "value": "September 2026"
+        },
+        "version": {
+          "label": "Version"
+        },
+        "team": {
+          "label": "Team",
+          "value": "Ein Entwickler"
+        },
+        "source": {
+          "label": "Code",
+          "value": "Öffentlich, MIT"
+        }
+      },
+      "problem": {
+        "title": "Das Problem",
+        "body": [
+          "Die ARPAE veröffentlicht die Luftqualitätsmessungen der Emilia-Romagna als Open Data, aber nicht in einer Form, der man Fragen stellen kann: Stunden- und Tageswerte verteilt auf mehrere Dienste, wochenlang vorläufig und dann korrigiert, Stations-IDs, die sich von Datei zu Datei ändern.",
+          "Die Fragen sind einfach: wie oft jede Station die gesetzlichen Grenzwerte überschritten hat, ob die Luft besser wird, wie viel der Verkehr zur Hintergrundbelastung beiträgt, wie Wind und Regen den Feinstaub beeinflussen. Sie mit verlässlichen Zahlen zu beantworten, ist die Arbeit."
+        ]
+      },
+      "constraints": {
+        "title": "Rahmenbedingungen",
+        "items": [
+          "Neuere Werte werden wochenlang korrigiert: Jeder Lauf verarbeitet ein Fenster von 30 Tagen neu und aktualisiert nach Station, Schadstoff und Stunde. Dasselbe Fenster zweimal ergibt dieselben Dateien.",
+          "Zeitstempel werden in UTC gespeichert; Tage und Jahre zählen das ganze Jahr in UTC+1, wie bei der ARPAE.",
+          "Gesetzliche Grenzwerte stehen in einem Seed, nie im SQL eines Modells.",
+          "Negative oder unmögliche Werte werden markiert, nicht verworfen.",
+          "Dieselben Modelle laufen auf DuckDB auf dem Laptop und auf BigQuery in der Cloud."
+        ]
+      },
+      "architecture": {
+        "title": "Architektur",
+        "body": "Vier Komponenten mit je einer Aufgabe, verbunden über Dateien und Tabellen statt über Aufrufe: Ein Rust-Binary schreibt partitioniertes Parquet, dbt macht daraus getestete Marts, Dagster plant und prüft beides, ein Dashboard liest nur die Marts. Jede Zeile hängt nur von den Zeilen darunter ab.",
+        "crates": {
+          "dashboard": "Streamlit: eine gefilterte Abfrage pro Mart, keine Geschäftslogik.",
+          "orchestration": "Dagster: täglicher Zeitplan, monatliche Partitionen, Backfills, Prüfungen auf Aktualität und Vollständigkeit.",
+          "transform": "dbt: Staging, Intermediate und Marts, mit mehr als hundert Tests.",
+          "ingestor": "Rust-Workspace: Clients für ARPAE und Open-Meteo hinter einem Source-Trait, Wiederholungen mit Backoff.",
+          "raw": "Parquet, nach Jahr und Monat partitioniert, jede Partition atomar neu geschrieben, auf der Festplatte oder in Cloud Storage."
+        },
+        "note": "Ein Befehl startet alles mit Docker auf dem Laptop; das Cloud-Ziel schreibt nach Cloud Storage und baut dieselben Modelle in BigQuery."
+      },
+      "flow": {
+        "title": "Ein Tag Daten, von Anfang bis Ende",
+        "intro": "Die tägliche Aktualisierung:",
+        "steps": {
+          "schedule": {
+            "actor": "Dagster",
+            "text": "Zur geplanten Stunde startet es die Aktualisierung des laufenden Monats, ein Lauf nach dem anderen."
+          },
+          "ingest": {
+            "actor": "Ingestor",
+            "text": "Er lädt die letzten 30 Tage aus dem Archiv der ARPAE und das Wetter von Open-Meteo und schreibt jeden betroffenen Monat als eine Parquet-Datei neu."
+          },
+          "transform": {
+            "actor": "dbt",
+            "text": "Es vereinheitlicht die Einheiten, entfernt Duplikate, führt die neuen Zeilen zusammen und baut die Marts neu. Ein fehlgeschlagener Test stoppt den Lauf."
+          },
+          "check": {
+            "actor": "Dagster",
+            "text": "Seine Prüfungen warnen, wenn der neueste Wert älter als 48 Stunden ist oder die Vollständigkeit sinkt."
+          },
+          "dashboard": {
+            "actor": "Dashboard",
+            "text": "Es liest die Marts: Überschreitungen, Trends, Verkehr gegen Hintergrund, Wetter, Vollständigkeit."
+          }
+        }
+      },
+      "decisions": {
+        "title": "Entscheidungen und Abwägungen",
+        "items": {
+          "partitions": {
+            "title": "Eine Partition neu schreiben, nie anhängen",
+            "body": "Jeder Monat ist eine Parquet-Datei, die mit den zusammengeführten Zeilen komplett neu geschrieben und atomar ersetzt wird. Ein erneuter Lauf ergibt dieselben Bytes; der Preis ist, einen Monat neu zu schreiben, um eine Stunde zu ändern, bei dieser Größe billig."
+          },
+          "rules": {
+            "title": "Die gesetzlichen Regeln, kein einfacher Mittelwert",
+            "body": "Ein Tag zählt nur mit 18 gültigen Stunden, der Wert wird vor dem Vergleich mit dem Grenzwert gerundet, der Tag läuft in UTC+1. Ohne eine dieser Regeln wichen die Zählungen von denen der ARPAE ab."
+          },
+          "flags": {
+            "title": "Markieren, nicht verwerfen",
+            "body": "Negative, null und unplausible Werte bleiben mit einer Markierung in den Daten und außerhalb der Aggregate. Zwei Warn-Tests halten sie sichtbar, statt sie still verschwinden zu lassen."
+          },
+          "warehouses": {
+            "title": "Ein Satz Modelle, zwei Warehouses",
+            "body": "Das SQL, das sich zwischen DuckDB und BigQuery unterscheidet, steckt in wenigen Makros. Ein Emulator prüft die BigQuery-Version bei jedem Pull Request, und der Lauf in einem echten Projekt auf Google Cloud ergab identische Marts."
+          },
+          "streaming": {
+            "title": "Kein Streaming",
+            "body": "Die Quellen veröffentlichen Stunden nach der Messung und korrigieren monatelang, und jede Frage ist täglich oder gröber. Ein täglicher Batch beantwortet sie; Streaming brächte nur bewegliche Teile hinzu."
+          }
+        }
+      },
+      "measures": {
+        "title": "Geprüft mit der ARPAE",
+        "body": "Jede Zählung von Überschreitungen wurde mit dem verglichen, was die ARPAE selbst veröffentlicht. Zwei Prüfungen haben den Code verändert: Beim Feinstaub stimmten die Zahlen erst, als der Tageswert vor dem Vergleich gerundet wurde, und beim Ozon stimmten 29 von 43 Stationen, bis die 8-Stunden-Fenster für jede Stunde berechnet wurden, auch für fehlende.",
+        "columns": {
+          "query": "Indikator",
+          "before": "ARPAE",
+          "after": "aria-er"
+        },
+        "rows": {
+          "pm10Report": "Tage mit PM10 über 50 µg/m³, Porta San Felice, 2025",
+          "o3Report": "Tage mit Ozon über 120 µg/m³, Via Chiarini, 2025",
+          "pm10Bulletin": "Stationen mit denselben PM10-Überschreitungstagen 2026",
+          "o3Bulletin": "Stationen mit denselben Ozon-Überschreitungstagen 2026"
+        },
+        "note": "Jahresbericht zu den Daten 2025 des Messnetzes Bologna und Tagesbulletin vom 12. Oktober 2026."
+      },
+      "screens": {
+        "title": "Dashboard und Pipeline",
+        "items": {
+          "exceedances": {
+            "alt": "Dashboard-Seite mit einem Balkendiagramm der PM10-Überschreitungstage pro Jahr, 2016 bis 2026, für drei Stationen in Bologna, und einer gestrichelten Linie beim gesetzlichen Maximum von 35.",
+            "caption": "Überschreitungen: PM10-Tage über dem Grenzwert pro Jahr in Bologna, gegen die 35, die das Gesetz erlaubt."
+          },
+          "traffic": {
+            "alt": "Dashboard-Seite mit zwei Linien der monatlichen NO2-Mittelwerte in Bologna von 2016 bis 2026, die Verkehrsstation immer über den Hintergrundstationen.",
+            "caption": "Verkehr gegen Hintergrund: monatliches NO2 in Bologna, der Anteil der Belastung, der vom Verkehr kommt."
+          },
+          "lineage": {
+            "alt": "Asset-Graph in Dagster: Das Ingestion-Asset speist die Staging-Modelle, dann die Zwischenmodelle, dann fünf Marts.",
+            "caption": "Die Lineage in Dagster, von der Ingestion bis zu den fünf Marts."
+          }
+        }
+      },
+      "next": {
+        "title": "Wie es weitergeht",
+        "items": [
+          "Ein täglicher Export der Marts, von der Pipeline veröffentlicht, um auf dieser Seite aktuelle Ergebnisse zu zeigen.",
+          "Ozon-Überschreitungen im Dreijahresmittel, wie es das Gesetz verlangt, sobald drei volle Jahre geladen sind.",
+          "Das Archiv in eine native BigQuery-Tabelle laden, falls es das kostenlose Lesekontingent übersteigt."
+        ]
+      },
+      "access": {
+        "title": "Code",
+        "body": "Das Repository ist öffentlich, unter MIT-Lizenz. Ein einziger Befehl startet alles mit Docker und lädt zehn Jahre Daten.",
+        "cta": "Den Code auf GitHub lesen"
+      },
+      "back": "Zurück zu Systeme"
+    },
+    "es": {
+      "meta": {
+        "title": "aria-er — caso de estudio",
+        "description": "Cómo está hecho aria-er: ingesta en Rust, dbt sobre DuckDB y BigQuery, Dagster, y superaciones verificadas con las cifras de ARPAE."
+      },
+      "label": "Caso de estudio",
+      "title": "Las cifras coinciden con las de ARPAE.",
+      "titleEmphasis": "coinciden",
+      "lead": "aria-er es una plataforma de datos sobre la calidad del aire en Emilia-Romaña: datos abiertos de ARPAE y meteorología de Open-Meteo, de la ingesta al dashboard. Esta página muestra cómo está hecha y cómo se verificaron sus resultados.",
+      "facts": {
+        "started": {
+          "label": "Inicio",
+          "value": "Septiembre de 2026"
+        },
+        "version": {
+          "label": "Versión"
+        },
+        "team": {
+          "label": "Equipo",
+          "value": "Un desarrollador"
+        },
+        "source": {
+          "label": "Código",
+          "value": "Público, MIT"
+        }
+      },
+      "problem": {
+        "title": "El problema",
+        "body": [
+          "ARPAE publica las mediciones de la calidad del aire de Emilia-Romaña como datos abiertos, pero no en una forma a la que se le puedan hacer preguntas: valores horarios y diarios repartidos en varios servicios, provisionales durante semanas y luego corregidos, identificadores de estación que cambian de un archivo a otro.",
+          "Las preguntas son sencillas: cuántas veces cada estación superó los límites legales, si el aire está mejorando, cuánto añade el tráfico a la contaminación de fondo, cómo influyen el viento y la lluvia en las PM10. Responderlas con cifras fiables es el trabajo."
+        ]
+      },
+      "constraints": {
+        "title": "Restricciones",
+        "items": [
+          "Los valores recientes se corrigen durante semanas: cada ejecución reprocesa una ventana de 30 días y actualiza por estación, contaminante y hora. Repetir la misma ventana produce los mismos archivos.",
+          "Las marcas de tiempo se guardan en UTC; días y años se cuentan en UTC+1 todo el año, como hace ARPAE.",
+          "Los límites legales están en un seed, nunca en el SQL de un modelo.",
+          "Los valores negativos o imposibles se marcan, no se descartan.",
+          "Los mismos modelos se ejecutan en DuckDB en un portátil y en BigQuery en la nube."
+        ]
+      },
+      "architecture": {
+        "title": "Arquitectura",
+        "body": "Cuatro componentes, cada uno con una tarea, unidos por archivos y tablas en lugar de llamadas: un binario en Rust escribe Parquet particionado, dbt lo convierte en marts probados, Dagster planifica y controla ambos, y un dashboard solo lee los marts. Cada fila depende solo de las de abajo.",
+        "crates": {
+          "dashboard": "Streamlit: una consulta filtrada por mart, sin lógica de negocio.",
+          "orchestration": "Dagster: planificación diaria, particiones mensuales, backfills, controles de frescura y completitud.",
+          "transform": "dbt: staging, intermediate y marts, con más de cien tests.",
+          "ingestor": "Workspace de Rust: clientes de ARPAE y Open-Meteo detrás de un trait de fuente, reintentos con backoff.",
+          "raw": "Parquet particionado por año y mes, cada partición reescrita de forma atómica, en disco o en Cloud Storage."
+        },
+        "note": "Un comando arranca todo con Docker en un portátil; el destino en la nube escribe en Cloud Storage y construye los mismos modelos en BigQuery."
+      },
+      "flow": {
+        "title": "Un día de datos, de principio a fin",
+        "intro": "La actualización diaria:",
+        "steps": {
+          "schedule": {
+            "actor": "Dagster",
+            "text": "A la hora prevista lanza la actualización del mes en curso, una ejecución cada vez."
+          },
+          "ingest": {
+            "actor": "Ingestor",
+            "text": "Descarga los últimos 30 días del archivo de ARPAE y la meteorología de Open-Meteo, y reescribe cada mes afectado como un único archivo Parquet."
+          },
+          "transform": {
+            "actor": "dbt",
+            "text": "Normaliza las unidades, quita duplicados, fusiona las filas nuevas y reconstruye los marts. Un test que falla detiene la ejecución."
+          },
+          "check": {
+            "actor": "Dagster",
+            "text": "Sus controles avisan cuando el último valor tiene más de 48 horas o cuando la completitud baja."
+          },
+          "dashboard": {
+            "actor": "Dashboard",
+            "text": "Lee los marts: superaciones, tendencias, tráfico frente a fondo, meteorología, completitud."
+          }
+        }
+      },
+      "decisions": {
+        "title": "Decisiones y compromisos",
+        "items": {
+          "partitions": {
+            "title": "Reescribir una partición, nunca añadir",
+            "body": "Cada mes es un archivo Parquet, reescrito entero con las filas fusionadas y sustituido de forma atómica. Repetir una ventana da los mismos bytes; el precio es reescribir un mes para cambiar una hora, poco a este tamaño."
+          },
+          "rules": {
+            "title": "Las reglas legales, no una media cualquiera",
+            "body": "Un día cuenta solo con 18 horas válidas, el valor se redondea antes de compararlo con el límite, el día va en UTC+1. Sin cualquiera de ellas, los recuentos no coincidían con los de ARPAE."
+          },
+          "flags": {
+            "title": "Marcar, no descartar",
+            "body": "Los valores negativos, nulos o inverosímiles se quedan en los datos con una marca y fuera de los agregados. Dos tests de aviso los mantienen visibles en lugar de hacerlos desaparecer en silencio."
+          },
+          "warehouses": {
+            "title": "Un solo conjunto de modelos, dos almacenes",
+            "body": "El SQL que cambia entre DuckDB y BigQuery está en unas pocas macros. Un emulador comprueba la versión de BigQuery en cada pull request, y la ejecución en un proyecto real de Google Cloud dio marts idénticos."
+          },
+          "streaming": {
+            "title": "Sin streaming",
+            "body": "Las fuentes publican horas después de medir y corrigen durante meses, y cada pregunta es diaria o más amplia. Basta un lote diario; el streaming solo añadiría piezas móviles."
+          }
+        }
+      },
+      "measures": {
+        "title": "Verificado con ARPAE",
+        "body": "Cada recuento de superaciones se comparó con lo que publica ARPAE. Dos comprobaciones cambiaron el código: las PM10 coincidieron solo al redondear el valor diario antes de compararlo, y el ozono coincidía en 29 estaciones de 43 hasta que las ventanas de 8 horas se calcularon sobre cada hora, también las que faltan.",
+        "columns": {
+          "query": "Indicador",
+          "before": "ARPAE",
+          "after": "aria-er"
+        },
+        "rows": {
+          "pm10Report": "Días de PM10 por encima de 50 µg/m³, Porta San Felice, 2025",
+          "o3Report": "Días de ozono por encima de 120 µg/m³, Via Chiarini, 2025",
+          "pm10Bulletin": "Estaciones con los mismos días de superación de PM10 en 2026",
+          "o3Bulletin": "Estaciones con los mismos días de superación de ozono en 2026"
+        },
+        "note": "Informe anual sobre los datos de 2025 de la red de Bolonia y boletín diario del 12 de octubre de 2026."
+      },
+      "screens": {
+        "title": "Dashboard y pipeline",
+        "items": {
+          "exceedances": {
+            "alt": "Página del dashboard con un gráfico de barras de los días de superación de PM10 por año, de 2016 a 2026, en tres estaciones de Bolonia, y una línea discontinua en el máximo legal de 35.",
+            "caption": "Superaciones: días de PM10 por encima del límite por año en Bolonia, frente a los 35 que permite la ley."
+          },
+          "traffic": {
+            "alt": "Página del dashboard con dos líneas de medias mensuales de NO2 en Bolonia de 2016 a 2026, la estación de tráfico siempre por encima de las de fondo.",
+            "caption": "Tráfico frente a fondo: NO2 mensual en Bolonia, la parte de la contaminación que viene del tráfico."
+          },
+          "lineage": {
+            "alt": "Grafo de assets en Dagster: el asset de ingesta alimenta los modelos de staging, luego los intermedios, luego cinco marts.",
+            "caption": "El linaje en Dagster, de la ingesta a los cinco marts."
+          }
+        }
+      },
+      "next": {
+        "title": "Lo que viene",
+        "items": [
+          "Una exportación diaria de los marts publicada por el pipeline, para mostrar resultados al día en esta página.",
+          "Superaciones de ozono como media de tres años, como pide la ley, cuando haya tres años completos cargados.",
+          "Cargar el archivo en una tabla nativa de BigQuery, si llegara a superar la cuota gratuita de lecturas."
+        ]
+      },
+      "access": {
+        "title": "Código",
+        "body": "El repositorio es público, con licencia MIT. Un solo comando arranca todo con Docker y carga diez años de datos.",
+        "cta": "Leer el código en GitHub"
+      },
+      "back": "Volver a Sistemas"
+    }
+  }
+}

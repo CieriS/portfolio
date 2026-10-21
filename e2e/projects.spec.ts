@@ -136,35 +136,20 @@ test('hovering a row moves only that row, and never dims the others', async ({ p
   for (const row of await rows.all()) await expect(row).toHaveCSS('opacity', '1');
 });
 
-test('the home links each project: one click to aria-er, with its panel open', async ({ page }) => {
-  await gotoView(page, 'en', 'hero');
-  const link = page.getByRole('main').getByRole('link', { name: 'aria-er', exact: true });
-  await expect(link).toHaveAttribute('href', `${pathFor('en', 'projects')}#ariaer`);
+for (const { id, name } of shared.projects) {
+  test(`the home links ${name} to its case study`, async ({ page }) => {
+    await gotoView(page, 'it', 'hero');
+    const link = page.getByRole('main').getByRole('link', { name, exact: true });
+    await expect(link).toHaveAttribute('href', `${pathFor('it', 'projects')}/${id}`);
+    await link.click();
+    await expect(page).toHaveURL(new RegExp(`/it/sistemi/${id}$`));
+    await expect(page.locator('h1')).toHaveText(name);
+  });
+}
 
-  await link.click();
-  await expectView(page, 'en', 'projects');
-  expect(new URL(page.url()).pathname + new URL(page.url()).hash).toBe(`${pathFor('en', 'projects')}#ariaer`);
-  const toggle = page.getByRole('button', { name: /aria-er/ });
-  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-  await expect(toggle).toBeFocused();
-  // Only the project that was asked for: the other stays closed.
-  await expect(page.getByRole('button', { name: /yourFinance/ })).toHaveAttribute('aria-expanded', 'false');
-
-  // The panel named by the address is a starting point, not a lock.
-  await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-});
-
-test('the home links yourFinance to its case study', async ({ page }) => {
-  await gotoView(page, 'it', 'hero');
-  const link = page.getByRole('main').getByRole('link', { name: 'yourFinance', exact: true });
-  await expect(link).toHaveAttribute('href', `${pathFor('it', 'projects')}/yourfinance`);
-  await link.click();
-  await expect(page).toHaveURL(/\/it\/sistemi\/yourfinance$/);
-  await expect(page.locator('h1')).toHaveText('yourFinance');
-});
-
-test('an address that names a project opens that panel on load, and back returns to the home', async ({ page }) => {
+test('an address that names a project opens that panel on load, and back from a project returns to the home', async ({
+  page,
+}) => {
   await page.goto(`${pathFor('fr', 'projects')}#ariaer`);
   await expect(page.getByRole('button', { name: /aria-er/ })).toHaveAttribute('aria-expanded', 'true');
   await expect(page.locator('#project-ariaer')).not.toHaveAttribute('inert');
@@ -175,7 +160,7 @@ test('an address that names a project opens that panel on load, and back returns
 
   await gotoView(page, 'en', 'hero');
   await page.getByRole('main').getByRole('link', { name: 'aria-er', exact: true }).click();
-  await expectView(page, 'en', 'projects');
+  await expect(page.locator('h1')).toHaveText('aria-er');
   await page.goBack();
   await expectView(page, 'en', 'hero');
 });

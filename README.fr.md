@@ -42,7 +42,7 @@ Le site est disponible en anglais, en italien, en français et en allemand.
 - **Accessibilité** : vrais liens, un seul `h1` par URL, attributs ARIA, focus visible et respect de `prefers-reduced-motion` en CSS, dans Framer Motion et dans la scène 3D.
 - **Contenus centralisés et validés** : un fichier JSON partagé plus un par langue, contrôlés par les types, un schéma zod et des contrôles croisés — un contenu incohérent fait échouer le build.
 - **CV sur demande** : le PDF est généré à chaque téléchargement à partir des mêmes contenus que le site, avec les coordonnées privées lues dans des variables d'environnement. Il n'est pas public : le visiteur laisse une adresse e-mail et reçoit un lien signé qui expire ; le propriétaire le télécharge tout de suite avec un mot de passe.
-- **Étude de cas** : yourFinance a sa propre page sous la vue des projets (`/fr/systemes/yourfinance`) : problème, contraintes, architecture, choix, mesures et captures d'écran avec des données de démonstration. Le code reste privé et la page n'y renvoie jamais.
+- **Études de cas** : yourFinance et aria-er ont leur propre page sous la vue des projets (`/fr/systemes/yourfinance`, `/fr/systemes/ariaer`) : problème, contraintes, architecture, choix, mesures et captures d'écran. Le code de yourFinance reste privé et sa page n'y renvoie jamais ; celle d'aria-er mène au dépôt public et compare ses résultats aux chiffres de l'ARPAE.
 
 ## Stack technique
 
@@ -217,8 +217,8 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 - `app/[locale]/[view]/[study]/page.tsx` pré-rend la page uniquement sous le slug de la vue des projets et uniquement pour les identifiants de `CASE_STUDY_IDS` (`lib/routes.ts`) ; le reste est une 404.
 - `components/case-study/CaseStudyPage.tsx` est un composant serveur : tout le texte est dans le HTML et la page ne charge pas la bibliothèque d'animation. Il utilise les primitives de texte de `components/ui/text.tsx`, partagées avec les vues.
 - Les contenus sont dans `data/case-studies/<id>.json` (structure et textes dans chaque langue), hors des fichiers de langue envoyés au navigateur. `lib/caseStudy.ts` les valide avec zod et des contrôles croisés : un identifiant sans texte dans une langue, un `alt` vide ou une description de plus de 160 caractères font échouer le build.
-- Les captures d'écran sont des imports statiques (`lib/caseStudyImages.ts`) servis par `next/image`. Elles doivent provenir **uniquement du profil de démonstration**.
-- Chaque page a son canonical, ses hreflang, son image Open Graph, son entrée dans le sitemap et un JSON-LD `TechArticle` avec `BreadcrumbList`. Pour un projet privé, `codeRepository` n'est jamais émis, et un test E2E vérifie que la page ne contient aucun lien vers le dépôt.
+- Les captures d'écran sont des imports statiques (`lib/caseStudyImages.ts`) servis par `next/image`. Pour un projet privé, elles doivent provenir **uniquement du profil de démonstration** ; celles d'aria-er viennent de son tableau de bord, sur des données publiques.
+- Chaque page a son canonical, ses hreflang, son image Open Graph, son entrée dans le sitemap et un JSON-LD `TechArticle` avec `BreadcrumbList`. Pour un projet privé, `codeRepository` n'est jamais émis, et un test E2E vérifie que la page ne contient aucun lien vers le dépôt. Pour un projet public, le lien final mène au dépôt (`data-source="public"`) et le JSON-LD contient `codeRepository`.
 
 ## SEO
 

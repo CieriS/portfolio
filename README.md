@@ -40,7 +40,7 @@ Portfolio personale di **Samuele Cieri**, Software Developer in transizione vers
 - **Accessibilità**: link reali, un solo `h1` per URL, attributi ARIA, focus visibile e rispetto di `prefers-reduced-motion` in CSS, in Framer Motion e nella scena 3D.
 - **Contenuti centralizzati e validati**: un file JSON condiviso più uno per lingua, controllati da tipi, schema zod e verifiche incrociate: un contenuto incoerente fa fallire la build.
 - **CV su richiesta**: il PDF viene generato a ogni download dagli stessi contenuti del sito, con i recapiti privati letti da variabili d'ambiente. Non è pubblico: chi visita lascia un'email e riceve un link firmato e a scadenza; il proprietario lo scarica subito con una password.
-- **Caso di studio**: yourFinance ha una pagina propria sotto la vista dei progetti (`/it/sistemi/yourfinance`): problema, vincoli, architettura, scelte, misure e schermate con dati demo. Il codice resta privato e la pagina non lo collega mai.
+- **Casi di studio**: yourFinance e aria-er hanno una pagina propria sotto la vista dei progetti (`/it/sistemi/yourfinance`, `/it/sistemi/ariaer`): problema, vincoli, architettura, scelte, misure e schermate. Il codice di yourFinance resta privato e la sua pagina non lo collega mai; quella di aria-er porta al repository pubblico e confronta i suoi risultati con i dati ARPAE.
 
 ## Stack
 
@@ -215,8 +215,8 @@ Sotto la vista Sistemi c'è una pagina in più per i progetti che hanno un caso 
 - `app/[locale]/[view]/[study]/page.tsx` prerenderizza la pagina solo sotto lo slug della vista dei progetti e solo per gli id in `CASE_STUDY_IDS` (`lib/routes.ts`); il resto è un 404.
 - `components/case-study/CaseStudyPage.tsx` è un componente server: tutto il testo è nell'HTML e la pagina non carica la libreria delle animazioni. Usa le primitive di testo di `components/ui/text.tsx`, condivise con le viste.
 - I contenuti stanno in `data/case-studies/<id>.json` (struttura più testi in ogni lingua), fuori dai file di lingua che arrivano al browser. `lib/caseStudy.ts` li valida con zod e con verifiche incrociate: un id senza testo in una lingua, un `alt` vuoto o una description oltre 160 caratteri fanno fallire la build.
-- Le schermate sono import statici (`lib/caseStudyImages.ts`) serviti da `next/image`. Vanno prese **solo dal profilo demo**.
-- Ogni pagina ha canonical, hreflang, immagine Open Graph, voce nella sitemap e un JSON-LD `TechArticle` con `BreadcrumbList`. Per un progetto privato `codeRepository` non viene mai emesso, e un test E2E verifica che la pagina non contenga link al repository.
+- Le schermate sono import statici (`lib/caseStudyImages.ts`) serviti da `next/image`. Per un progetto privato vanno prese **solo dal profilo demo**; per aria-er vengono dalla sua dashboard, su dati pubblici.
+- Ogni pagina ha canonical, hreflang, immagine Open Graph, voce nella sitemap e un JSON-LD `TechArticle` con `BreadcrumbList`. Per un progetto privato `codeRepository` non viene mai emesso, e un test E2E verifica che la pagina non contenga link al repository. Per un progetto pubblico il link in fondo porta al repository (`data-source="public"`) e il JSON-LD ha `codeRepository`.
 
 ## SEO
 

@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
@@ -96,12 +96,11 @@ describe.each(CASE_STUDY_IDS)('case study %s', (id) => {
 
   it('has an image for every screen, and the file is in the repository', () => {
     for (const screen of study.data.screens) expect(Object.keys(CASE_STUDY_IMAGES[id]), screen.id).toContain(screen.id);
-    for (const file of ['dashboard', 'statistics', 'movements-phone']) {
-      expect(existsSync(fileURLToPath(new URL(`../data/case-studies/${id}/${file}.webp`, import.meta.url)))).toBe(true);
-    }
+    const files = readdirSync(fileURLToPath(new URL(`../data/case-studies/${id}/`, import.meta.url)));
+    expect(files.filter((file) => file.endsWith('.webp'))).toHaveLength(study.data.screens.length);
   });
 
-  it('never names the private repository', () => {
+  it('names no repository: the page links to it only from the project data', () => {
     expect(JSON.stringify(study)).not.toMatch(/github\.com|your-finance/);
   });
 
