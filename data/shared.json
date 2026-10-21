@@ -80,8 +80,8 @@
       "id": "ariaer",
       "name": "aria-er",
       "source": { "visibility": "public", "url": "https://github.com/CieriS/aria-er" },
-      "version": "0.9.0",
-      "released": "2026-10-12",
+      "version": "1.0.0",
+      "released": "2026-10-21",
       "stack": ["Rust", "dbt", "Dagster", "DuckDB", "BigQuery", "Terraform"],
       "layers": [
         { "id": "ingestion", "tech": "Rust" },
