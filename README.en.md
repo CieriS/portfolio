@@ -205,7 +205,7 @@ Below the Systems view there is one more page for the projects that have a case 
 - `lib/cv/document.ts` builds the CV as plain data from `data/shared.json` and the chosen language; `lib/cv/pdf.ts` lays it out on A4 with the standard fonts (no font file to ship). PDF and email copy live in `data/cv.json`, outside the locale files that reach the browser.
 - In the form, the password field has a button to show or hide it: the comparison is exact, so a space pasted by mistake gets it refused. Switching method hides it again.
 - The form does not use the browser's validation (`noValidate`): its generic message is in the browser's language, not the page's. `checkCvInput` (`lib/cv/common.ts`) checks the field before sending and the page says what is missing in its own words (no address, something that does not look like an email, no password), marks the field with `aria-invalid` and moves focus back to it.
-- The CV adds what the site does not show, from `data/cv-profile.json` (`lib/cv/profile.ts`): grouped skills, spoken languages with their level, certifications and which profiles to list. Sections run skills, experience, education, certifications, projects, languages; the data-processing consent closes the page. It stays single-column and image-free so that applicant tracking systems (ATS) read it in order: the only colour is on the section titles. Course names are translated through `terms` in `data/cv.json`; a test fails when a technology from work or projects is missing from the skills.
+- The CV adds what the site does not show, from `data/cv-profile.json` (`lib/cv/profile.ts`): grouped skills, spoken languages with their level and which profiles to list. Certifications live in `shared.json`, where the site reads them too (the "Method" phase of the Tas thread and `Person.hasCredential` in the JSON-LD): one source, so the two cannot drift apart. Sections run skills, experience, education, certifications, projects, languages; the data-processing consent closes the page. It stays single-column and image-free so that applicant tracking systems (ATS) read it in order: the only colour is on the section titles. Course names are translated through `terms` in `data/cv.json`; a test fails when a technology from work or projects is missing from the skills.
 - `lib/cv/mailer.ts` is the outbound port for email, with an adapter for Resend's REST API over `fetch` (no SDK). Sending by SMS would be another adapter.
 - Known limits: there is no per-address request limit, since it would need shared state; on Vercel, set a Firewall rate-limiting rule on `/api/cv`. The owner password must be long precisely because attempts are not counted.
 
@@ -267,6 +267,7 @@ data/shared.json        language-independent data
 ├── name, handle, alternateNames, address
 ├── knowsLanguage[]     languages I speak (JSON-LD), not the site's languages
 ├── contacts[]          id, label, handle, url
+├── certifications[]    id, name, issuer, entity, issued, expires, url (CV, "Method" phase, hasCredential)
 ├── sponsor             label, url (GitHub Sponsors: kept out of contacts, so not in sameAs or the CV)
 ├── timeline.threads[]  lanes: id, kind (work | education), entity, segments[], phases
 ├── projects[]          id, name, source, stack, layers
@@ -393,7 +394,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 ├── data/
 │   ├── shared.json                  language-independent data
 │   ├── cv.json                      CV PDF and email copy (server only)
-│   ├── cv-profile.json              CV skills, languages and certifications (server only)
+│   ├── cv-profile.json              CV skills and languages (server only)
 │   ├── case-studies/                one JSON per case study + a folder with its screenshots (server only)
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, UI strings, SEO metadata
 ├── i18n/             routing.ts (languages) · request.ts (next-intl messages)

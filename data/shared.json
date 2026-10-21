@@ -10,6 +10,17 @@
     { "id": "instagram", "label": "Instagram", "handle": "@samuelecierii", "url": "https://www.instagram.com/samuelecierii/" }
   ],
   "sponsor": { "label": "GitHub Sponsors", "url": "https://github.com/sponsors/CieriS" },
+  "certifications": [
+    {
+      "id": "csm",
+      "name": "Certified ScrumMaster (CSM)",
+      "issuer": "Scrum Alliance",
+      "entity": "Tas",
+      "issued": "2025-11-05",
+      "expires": "2027-11-05",
+      "url": "https://app.badgecert.com/public/badges/pkoyxklw"
+    }
+  ],
   "timeline": {
     "threads": [
       {
@@ -19,7 +30,8 @@
         "segments": [{ "start": "2022-02-23", "end": null }],
         "phases": [
           { "id": "interface", "stack": ["HTML", "CSS", "JavaScript", "TypeScript", "Angular", "PHP", "SQL", "Tailwind"] },
-          { "id": "environments", "stack": ["Docker", "Kubernetes", "Helm", "Rancher"] }
+          { "id": "environments", "stack": ["Docker", "Kubernetes", "Helm", "Rancher"] },
+          { "id": "method", "start": "2025-01-01", "stack": ["Scrum"] }
         ]
       },
       {

@@ -63,6 +63,19 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
       ...(worksFor ? { worksFor } : {}),
       ...(alumniOf ? { alumniOf } : {}),
       sameAs: shared.contacts.map((contact) => contact.url),
+      ...(shared.certifications.length > 0
+        ? {
+            hasCredential: shared.certifications.map((cert) => ({
+              '@type': 'EducationalOccupationalCredential',
+              name: cert.name,
+              credentialCategory: 'certification',
+              recognizedBy: { '@type': 'Organization', name: cert.issuer },
+              dateCreated: cert.issued,
+              expires: cert.expires,
+              url: cert.url,
+            })),
+          }
+        : {}),
     },
     {
       '@type': 'ProfilePage',

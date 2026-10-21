@@ -77,12 +77,10 @@ describe('buildCv', () => {
   it('drops empty sections', () => {
     const noProjects: SharedData = { ...shared, projects: [] };
     expect(buildCv({ ...source, shared: noProjects }).sections.map((item) => item.title)).not.toContain('Projects');
-    const bare = { ...cvProfile, skills: [], certifications: [], spokenLanguages: [] };
-    expect(buildCv({ ...source, profile: bare }).sections.map((item) => item.title)).toEqual([
-      'Experience',
-      'Education',
-      'Projects',
-    ]);
+    const bare = { ...cvProfile, skills: [], spokenLanguages: [] };
+    expect(
+      buildCv({ ...source, profile: bare, shared: { ...shared, certifications: [] } }).sections.map((item) => item.title),
+    ).toEqual(['Experience', 'Education', 'Projects']);
   });
 
   it('dates the footer and names the site without the scheme', () => {
@@ -110,10 +108,14 @@ describe('buildCv', () => {
     expect(cv.sections[0].lines).toHaveLength(cvProfile.skills.length);
   });
 
-  it('states certifications with where they were obtained, and spoken languages with their level', () => {
+  it('states certifications with where, by whom and when they were obtained, and spoken languages with their level', () => {
+    // issue #49: the CV and the site read the same certification from shared.json.
     expect(section(cv, 'Certifications').entries).toEqual([
-      { heading: 'Certified ScrumMaster (CSM)', meta: 'Obtained at Tas', body: '', tags: [] },
+      { heading: 'Certified ScrumMaster (CSM)', meta: 'Obtained at Tas · Scrum Alliance · 2025', body: '', tags: [] },
     ]);
+    expect(section(cv, 'Certifications').entries.map((entry) => entry.heading)).toEqual(
+      shared.certifications.map((cert) => cert.name),
+    );
     expect(section(cv, 'Languages').lines).toEqual(['Italian (native) · English (B2) · French (B1)']);
   });
 

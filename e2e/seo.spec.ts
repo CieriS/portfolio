@@ -29,6 +29,18 @@ test('the index carries WebSite, Person and ProfilePage', async ({ page }) => {
     addressLocality: shared.address.locality,
     addressCountry: shared.address.country,
   });
+  // issue #49: every certification of shared.json, verifiable through its URL.
+  expect(person?.hasCredential).toEqual(
+    shared.certifications.map((cert) => ({
+      '@type': 'EducationalOccupationalCredential',
+      name: cert.name,
+      credentialCategory: 'certification',
+      recognizedBy: { '@type': 'Organization', name: cert.issuer },
+      dateCreated: cert.issued,
+      expires: cert.expires,
+      url: cert.url,
+    })),
+  );
 });
 
 test('the home page states employer, studies and projects in its served HTML', async ({ request }) => {

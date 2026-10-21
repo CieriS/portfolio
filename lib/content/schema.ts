@@ -4,6 +4,19 @@ import { z } from 'zod';
 const isoDate = z.iso.date();
 const id = z.string().regex(/^[a-z][a-z0-9-]*$/, 'ids are lowercase kebab-case');
 
+/** A verifiable credential. `entity` is where it was obtained (through the employer); `url` verifies it. */
+export const CertificationSchema = z
+  .object({
+    id,
+    name: z.string().min(1),
+    issuer: z.string().min(1),
+    entity: z.string().min(1),
+    issued: isoDate,
+    expires: isoDate,
+    url: z.url(),
+  })
+  .refine((cert) => cert.expires > cert.issued, 'a certification must expire after it was issued');
+
 export const ContactSchema = z.object({ id, label: z.string().min(1), handle: z.string().min(1), url: z.url() });
 
 /** One run of a thread. `end: null` means it is still running. */
@@ -59,6 +72,7 @@ export const SharedSchema = z.object({
   /** Languages the person speaks, for the JSON-LD `knowsLanguage`. Not the site's locales: the site can be in a language he does not speak. */
   knowsLanguage: z.array(z.string().regex(/^[a-z]{2}$/, 'a two-letter ISO 639-1 code')).min(1),
   contacts: z.array(ContactSchema),
+  certifications: z.array(CertificationSchema),
   /** Where people can support the work with money. Kept out of `contacts`: it is not a profile of the person (no `sameAs`, not in the CV). */
   sponsor: z.object({ label: z.string().min(1), url: z.url() }),
   timeline: z.object({ threads: z.array(ThreadSchema).min(1) }),
@@ -75,6 +89,7 @@ export const SharedSchema = z.object({
 });
 
 export type Contact = z.infer<typeof ContactSchema>;
+export type Certification = z.infer<typeof CertificationSchema>;
 export type Segment = z.infer<typeof SegmentSchema>;
 export type Phase = z.infer<typeof PhaseSchema>;
 export type ThreadKind = (typeof THREAD_KINDS)[number];

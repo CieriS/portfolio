@@ -11,6 +11,5 @@
     { "code": "it", "level": "native" },
     { "code": "en", "level": "B2" },
     { "code": "fr", "level": "B1" }
-  ],
-  "certifications": [{ "id": "csm", "name": "Certified ScrumMaster (CSM)", "entity": "Tas" }]
+  ]
 }

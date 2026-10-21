@@ -207,7 +207,7 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 - `lib/cv/document.ts` construit le CV en données pures à partir de `data/shared.json` et de la langue choisie ; `lib/cv/pdf.ts` le met en page en A4 avec les polices standard (aucun fichier de police à distribuer). Les textes du PDF et de l'e-mail sont dans `data/cv.json`, hors des fichiers de langue envoyés au navigateur.
 - Dans le formulaire, le champ du mot de passe a un bouton pour l'afficher ou le masquer : la comparaison est exacte, donc une espace collée par erreur le fait refuser. Changer de méthode le masque à nouveau.
 - Le formulaire n'utilise pas la validation du navigateur (`noValidate`) : son message générique est dans la langue du navigateur, pas dans celle de la page. `checkCvInput` (`lib/cv/common.ts`) vérifie le champ avant l'envoi et la page dit ce qui manque avec ses propres mots (adresse absente, adresse qui ne ressemble pas à un e-mail, mot de passe absent), marque le champ avec `aria-invalid` et y ramène le focus.
-- Le CV ajoute ce que le site ne montre pas, à partir de `data/cv-profile.json` (`lib/cv/profile.ts`) : compétences regroupées, langues parlées avec leur niveau, certifications et profils à citer. Les sections se suivent ainsi : compétences, expérience, formation, certifications, projets, langues ; le consentement au traitement des données ferme la page. Il reste sur une colonne et sans image, pour que les logiciels de tri des candidatures (ATS) le lisent dans l'ordre : la seule couleur est celle des titres de section. Les noms des cours sont traduits via `terms` dans `data/cv.json` ; un test échoue si une technologie du travail ou des projets manque aux compétences.
+- Le CV ajoute ce que le site ne montre pas, à partir de `data/cv-profile.json` (`lib/cv/profile.ts`) : compétences regroupées, langues parlées avec leur niveau et profils à citer. Les certifications sont dans `shared.json`, où le site les lit aussi (phase « Méthode » du couloir Tas et `Person.hasCredential` dans le JSON-LD) : une seule source, donc aucun écart possible. Les sections se suivent ainsi : compétences, expérience, formation, certifications, projets, langues ; le consentement au traitement des données ferme la page. Il reste sur une colonne et sans image, pour que les logiciels de tri des candidatures (ATS) le lisent dans l'ordre : la seule couleur est celle des titres de section. Les noms des cours sont traduits via `terms` dans `data/cv.json` ; un test échoue si une technologie du travail ou des projets manque aux compétences.
 - `lib/cv/mailer.ts` est le port de sortie pour l'e-mail, avec un adaptateur pour l'API REST de Resend via `fetch` (sans SDK). Un envoi par SMS serait un autre adaptateur.
 - Limites connues : pas de limite de requêtes par adresse, car il faudrait un état partagé ; sur Vercel, on configure une règle de rate limiting du Firewall sur `/api/cv`. Le mot de passe du propriétaire doit être long justement parce que les tentatives ne sont pas comptées.
 
@@ -269,6 +269,7 @@ data/shared.json        données indépendantes de la langue
 ├── name, handle, alternateNames, address
 ├── knowsLanguage[]     langues que je parle (JSON-LD), pas celles du site
 ├── contacts[]          id, label, handle, url
+├── certifications[]    id, name, issuer, entity, issued, expires, url (CV, phase « Méthode », hasCredential)
 ├── sponsor             label, url (GitHub Sponsors : hors de contacts, donc ni sameAs ni CV)
 ├── timeline.threads[]  couloirs : id, kind (work | education), entity, segments[], phases
 ├── projects[]          id, name, source, stack, layers
@@ -395,7 +396,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 ├── data/
 │   ├── shared.json                  données indépendantes de la langue
 │   ├── cv.json                      textes du PDF et de l'e-mail du CV (serveur uniquement)
-│   ├── cv-profile.json              compétences, langues et certifications du CV (serveur uniquement)
+│   ├── cv-profile.json              compétences et langues du CV (serveur uniquement)
 │   ├── case-studies/                un JSON par étude de cas + un dossier avec ses captures d'écran (serveur uniquement)
 │   └── locales/                     en.json · it.json · fr.json · de.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)

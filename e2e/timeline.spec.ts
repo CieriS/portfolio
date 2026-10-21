@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { locales, shared } from './content';
-import { gotoView, navLabel } from './helpers';
+import { gotoView, LOCALES, navLabel } from './helpers';
 
 const { threads } = shared.timeline;
 /** `formatDate` renders ISO as DD.MM.YYYY. */
@@ -63,4 +63,17 @@ test('the timeline view still has exactly one h1', async ({ page }) => {
   await gotoView(page, 'en', 'timeline');
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.locator('main > section')).toHaveAttribute('aria-label', navLabel('en', 'timeline'));
+});
+
+test('issue #49: the Execution view states the Scrum Master role and the certification in every language', async ({ page }) => {
+  const [csm] = shared.certifications;
+  for (const locale of LOCALES) {
+    await gotoView(page, locale, 'timeline');
+    const method = locales[locale].timeline.threads.industry.phases.method;
+    const section = page.locator('main > section');
+    await expect(section).toContainText(method.title);
+    await expect(section).toContainText(method.body);
+    expect(method.body).toContain(csm!.name.replace(' (CSM)', ''));
+    expect(method.body).toContain(csm!.issued.slice(0, 4));
+  }
 });
