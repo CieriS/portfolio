@@ -477,6 +477,10 @@ The portfolio used to be a PHP and MySQL site hosted on Altervista. Its code is 
 - GitHub: [@CieriS](https://github.com/CieriS/)
 - LinkedIn: [in/samuelecieri](https://www.linkedin.com/in/samuelecieri/)
 
+## Git hooks
+
+`.githooks/pre-push` runs before every push: a secret scan of the outgoing commits (gitleaks, or its Docker image when the binary is missing), then the fast checks (`format:check`, `lint`, `typecheck`, `test:unit`). `npm install` enables it (`prepare` script); skip it once with `git push --no-verify`. On CI, `.github/workflows/secret-scan.yml` runs gitleaks over the whole history of every branch and tag. The fake secret of the CV test is declared in `.gitleaksignore`.
+
 ## License
 
 Code and content are the author's property, all rights reserved: see [`LICENSE`](LICENSE).

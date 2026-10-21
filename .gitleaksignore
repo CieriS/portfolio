@@ -1,0 +1,2 @@
+# Fake values in tests, flagged by gitleaks (fingerprint: commit:file:rule:line).
+964a0d090d6648cc2ccc60a99998956bb333bf9b:lib/cv/token.test.ts:generic-api-key:4

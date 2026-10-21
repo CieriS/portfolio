@@ -477,6 +477,10 @@ In precedenza il portfolio era un sito PHP e MySQL pubblicato su Altervista. Il 
 - GitHub: [@CieriS](https://github.com/CieriS/)
 - LinkedIn: [in/samuelecieri](https://www.linkedin.com/in/samuelecieri/)
 
+## Hook di git
+
+`.githooks/pre-push` parte prima di ogni push: cerca segreti nei commit in uscita (gitleaks, o la sua immagine Docker se manca il binario) e poi lancia i controlli veloci (`format:check`, `lint`, `typecheck`, `test:unit`). Si attiva con `npm install` (script `prepare`); per saltarlo una volta: `git push --no-verify`. Sulla CI, `.github/workflows/secret-scan.yml` controlla con gitleaks tutta la cronologia di ogni branch e tag. Il segreto finto del test del CV è dichiarato in `.gitleaksignore`.
+
 ## Licenza
 
 Codice e contenuti sono di proprietà dell'autore, tutti i diritti riservati: vedi [`LICENSE`](LICENSE).
