@@ -10,6 +10,8 @@ export type DeployEnvironment = 'production' | 'preview';
 
 export type DeployExpectations = {
   environment: DeployEnvironment;
+  /** The host of SITE_URL: the public host, where production is served. */
+  siteHost: string;
   /** `index, follow` in production; previews must stay out of search engines. */
   indexable: boolean;
   /**
@@ -33,8 +35,20 @@ export function deployExpectations(environment: DeployEnvironment, siteUrl: stri
   const production = environment === 'production';
   return {
     environment,
+    siteHost,
     indexable: production,
     cvForgedTokenStatuses: production ? [403] : [403, 503],
     redirectingHosts: production ? ALIAS_HOSTS.filter((host) => host !== siteHost) : [],
   };
+}
+
+/**
+ * The X-Robots-Tag header a deployment must send. Vercel adds `noindex` by itself on every
+ * deployment-specific URL (`<project>-<hash>-<team>.vercel.app`), production included; only the
+ * public host of production must be free of it. The robots meta tag is the app's own and is
+ * checked separately on every page.
+ */
+export function robotsHeaderOn(expected: DeployExpectations, baseUrl: string): 'absent' | 'noindex' {
+  if (!expected.indexable) return 'noindex';
+  return new URL(baseUrl).host === expected.siteHost ? 'absent' : 'noindex';
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ALIAS_HOSTS } from './aliases';
-import { deployExpectations, parseDeployEnvironment } from './smoke';
+import { deployExpectations, parseDeployEnvironment, robotsHeaderOn } from './smoke';
 
 describe('issue #82: parseDeployEnvironment', () => {
   it('accepts the GitHub deployment names and the VERCEL_ENV values', () => {
@@ -48,5 +48,24 @@ describe('issue #82: deployExpectations', () => {
     for (const environment of ['production', 'preview'] as const) {
       expect(deployExpectations(environment, siteUrl).cvForgedTokenStatuses).not.toContain(500);
     }
+  });
+});
+
+describe('NT-2026-10-21-x-robots-tag: robotsHeaderOn', () => {
+  const siteUrl = 'https://cieri.vercel.app';
+
+  it('wants no X-Robots-Tag only on the public host of production', () => {
+    expect(robotsHeaderOn(deployExpectations('production', siteUrl), 'https://cieri.vercel.app')).toBe('absent');
+  });
+
+  it('accepts noindex on the deployment URL of production: Vercel adds it there by itself', () => {
+    // The first production run failed on portfolio-<hash>-cieri.vercel.app, while cieri.vercel.app had no header.
+    expect(robotsHeaderOn(deployExpectations('production', siteUrl), 'https://portfolio-2l3lq9g86-cieri.vercel.app')).toBe(
+      'noindex',
+    );
+  });
+
+  it('wants noindex on every preview URL', () => {
+    expect(robotsHeaderOn(deployExpectations('preview', siteUrl), 'https://portfolio-abc-cieri.vercel.app')).toBe('noindex');
   });
 });
