@@ -94,6 +94,7 @@ Pour le tester sur un smartphone connecté au même réseau, ouvrez l'adresse *N
 | `npm run typecheck` | Génère les types des routes (`next typegen`) et vérifie les types avec `tsc --noEmit` |
 | `npm run test:unit` | Tests unitaires Vitest de la logique pure (`lib/**/*.test.ts`), en moins d'une seconde |
 | `npm test` | Suite end-to-end Playwright ; construit et démarre lui-même le serveur de production |
+| `npm run test:smoke` | Tests de fumée Playwright sur un site déjà déployé : `SMOKE_BASE_URL` (URL du déploiement), `SMOKE_ENV` (`production` ou `preview`), `SMOKE_SITE_URL` (le `SITE_URL` du déploiement, par défaut la base) |
 | `npm run test:ui` | La même suite dans le mode interactif de Playwright |
 
 Avant un push, il est conseillé d'exécuter `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm run test:unit` et `npm test` — les mêmes commandes que la CI.
@@ -407,6 +408,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 ├── e2e/              suite Playwright · helpers.ts (langues, vues, attentes)
 ├── .github/workflows/ci.yml   lint, typecheck, build et tests sur chaque PR
 ├── .github/workflows/versions.yml   versions des projets alignées sur leurs publications (PR automatique)
+├── .github/workflows/smoke.yml   tests de fumée sur chaque déploiement Vercel (aperçus et production)
 ├── scripts/          sync-versions.mjs (utilisé par le workflow des versions)
 ├── proxy.ts          détection de la langue (middleware next-intl)
 ├── next.config.ts    plugin next-intl, redirections 301, origines autorisées en développement
@@ -450,6 +452,8 @@ Les issues et les pull requests sont rédigées en anglais ; les messages de com
 2. **Settings → Git → Production Branch** : `development`.
 3. Variables facultatives dans **Settings → Environment Variables** : `GOOGLE_SITE_VERIFICATION` et `SITE_URL` (uniquement avec un domaine personnalisé). Pour le CV : `CV_ADMIN_PASSWORD`, `CV_LINK_SECRET`, `RESEND_API_KEY`, `CV_MAIL_FROM`, `CV_NOTIFY_EMAIL`, `CV_EMAIL`, `CV_PHONE` (voir [Variables d'environnement](#variables-denvironnement)).
 4. Le site est en ligne sur `https://<projet>.vercel.app`. Chaque fusion dans `development` est déployée automatiquement ; les autres branches et les PR génèrent des prévisualisations non indexables.
+
+Après chaque déploiement réussi, Vercel le signale à GitHub et `.github/workflows/smoke.yml` lance `npm run test:smoke` sur l'URL déployée, avec le code de ce commit : toutes les pages (200, hydratation sans erreur, canonical, `robots` de l'environnement), la redirection de la racine, la 404, les en-têtes, `robots.txt` et le sitemap, l'endpoint du CV (en production un jeton falsifié doit recevoir 403 : 503 signifie que les variables manquent sur Vercel) et, en production seulement, le 308 des autres alias. Les attentes par environnement sont dans `lib/smoke.ts`. Ce n'est pas un contrôle obligatoire : la production se vérifie après la fusion.
 
 Sinon, depuis le terminal : `npx vercel login`, puis `npx vercel` (prévisualisation) et `npx vercel --prod` (production).
 

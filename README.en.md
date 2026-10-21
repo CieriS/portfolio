@@ -92,6 +92,7 @@ To try it on a phone on the same network, open the *Network* address printed by 
 | `npm run typecheck` | Generates route types (`next typegen`) and type-checks with `tsc --noEmit` |
 | `npm run test:unit` | Vitest unit tests for the pure logic (`lib/**/*.test.ts`), in under a second |
 | `npm test` | Playwright end-to-end suite; builds and starts the production server itself |
+| `npm run test:smoke` | Playwright smoke tests against a deployed site: `SMOKE_BASE_URL` (the deployment URL), `SMOKE_ENV` (`production` or `preview`), `SMOKE_SITE_URL` (the deployment's `SITE_URL`, defaults to the base) |
 | `npm run test:ui` | The same suite in Playwright's interactive mode |
 
 Before pushing, it is worth running `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm run test:unit` and `npm test` — the same commands CI runs.
@@ -405,6 +406,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 ├── e2e/              Playwright suite · helpers.ts (locales, views, waits)
 ├── .github/workflows/ci.yml   lint, typecheck, build and tests on every PR
 ├── .github/workflows/versions.yml   project versions kept in step with their releases (automatic PR)
+├── .github/workflows/smoke.yml   smoke tests on every Vercel deployment (previews and production)
 ├── scripts/          sync-versions.mjs (used by the versions workflow)
 ├── proxy.ts          language detection (next-intl middleware)
 ├── next.config.ts    next-intl plugin, 301 redirects, allowed dev origins
@@ -448,6 +450,8 @@ Issues and pull requests are written in English; commit messages in Italian.
 2. **Settings → Git → Production Branch**: `development`.
 3. Optional variables in **Settings → Environment Variables**: `GOOGLE_SITE_VERIFICATION` and `SITE_URL` (custom domain only). For the CV: `CV_ADMIN_PASSWORD`, `CV_LINK_SECRET`, `RESEND_API_KEY`, `CV_MAIL_FROM`, `CV_NOTIFY_EMAIL`, `CV_EMAIL`, `CV_PHONE` (see [Environment variables](#environment-variables)).
 4. The site is live at `https://<project>.vercel.app`. Every merge into `development` is deployed automatically; other branches and PRs produce non-indexable previews.
+
+After every successful deployment Vercel reports it to GitHub, and `.github/workflows/smoke.yml` runs `npm run test:smoke` against the deployed URL with that commit's code: every page (200, hydration without errors, canonical, the environment's `robots`), the root redirect, 404, headers, `robots.txt` and the sitemap, the CV endpoint (in production a forged token must get 403: 503 means the variables are missing on Vercel) and, in production only, the 308 of the other aliases. The expectations per environment live in `lib/smoke.ts`. It is not a required check: production is checked after the merge.
 
 Alternatively, from the terminal: `npx vercel login`, then `npx vercel` (preview) and `npx vercel --prod` (production).
 
