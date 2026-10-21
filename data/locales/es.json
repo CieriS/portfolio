@@ -19,11 +19,11 @@
         },
         "projects": {
           "title": "Proyectos: Rust, PostgreSQL y dbt",
-          "description": "yourFinance, una plataforma de finanzas personales con una API en Rust por capas sobre PostgreSQL, y aria-er, un pipeline de calidad del aire con Rust, dbt y Dagster."
+          "description": "yourFinance, finanzas personales con una API en Rust por capas sobre PostgreSQL, y aria-er, un pipeline de calidad del aire con Rust, dbt y Dagster."
         },
         "discipline": {
           "title": "Entrenamiento y música fuera del código",
-          "description": "Cómo entreno y hago música: sesiones de cuerpo completo con calistenia lastrada, levantamientos con barra y pliometría; guitarra acústica, edición de audio y vídeo."
+          "description": "Cómo entreno y hago música: cuerpo completo con calistenia lastrada, barra y pliometría; guitarra acústica, edición de audio y vídeo."
         }
       }
     },

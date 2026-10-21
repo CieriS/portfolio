@@ -285,10 +285,11 @@ data/locales/<lingua>.json   en · it · fr · de
 - Il copy è collegato ai dati condivisi tramite `id` (per esempio `shared.projects[].id` → `projects.items[id]` di ogni lingua).
 - I campi `*Emphasis` indicano la parola resa in corsivo serif e devono comparire nel testo a cui si riferiscono.
 - Le date sono in formato ISO `YYYY-MM-DD` e vengono mostrate come `DD.MM.YYYY`.
-- I contenuti passano tre controlli prima del prerender, e ogni errore fa fallire la build:
+- I contenuti passano quattro controlli prima del prerender, e ogni errore fa fallire la build:
   1. **tipi**: ogni lingua è assegnata alla forma di `en.json`, quindi una chiave mancante o rinominata fa fallire `npm run typecheck`;
   2. **schema** (`lib/content/schema.ts`): `shared.json` è validato con zod (enum, date ISO esistenti, segmenti che finiscono dopo l'inizio, URL, unione `source`); i tipi del dominio sono derivati dallo schema;
-  3. **verifiche incrociate** (`lib/content/validate.ts`): ogni id di corsia, fase, progetto e livello ha il suo copy in ogni lingua, ogni lingua ha l'etichetta in `ui.locale` e ogni `*Emphasis` compare nel suo testo. Tutti i problemi vengono elencati insieme, con il percorso.
+  3. **valori dei testi** (`lib/content/copy.ts`): ogni lingua è validata con zod contro la forma di `en.json` (stesse chiavi, stesse liste, stessi segnaposto `{…}`); nessun testo vuoto o con spazi ai bordi, meta description ≤ 160 caratteri, titoli ≤ 65 come li mostra la scheda (con il nome del sito), nessun testo di 60 caratteri o più identico all'inglese (non tradotto);
+  4. **verifiche incrociate** (`lib/content/validate.ts`): ogni id di corsia, fase, progetto e livello ha il suo copy in ogni lingua, ogni lingua ha l'etichetta in `ui.locale` e ogni `*Emphasis` compare nel suo testo. Tutti i problemi vengono elencati insieme, con il percorso.
 
 `alternateNames` (altre grafie e handle con cui la stessa persona viene cercata) e `address` (`locality` e `country`, codice ISO a due lettere) alimentano `alternateName` e `address` del `Person` nel JSON-LD; un codice paese non valido fa fallire la build.
 
