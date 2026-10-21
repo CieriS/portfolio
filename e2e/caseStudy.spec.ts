@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import ariaer from '../data/case-studies/ariaer.json';
 import yourfinance from '../data/case-studies/yourfinance.json';
 import { caseStudyPath, CASE_STUDY_IDS, LOCALES, type CaseStudyId } from '../lib/routes';
@@ -11,6 +11,47 @@ import { CASE_STUDY_PAGES, expectView, gotoView, pathFor } from './helpers';
  * tests find no way to its repository; aria-er is public, so its page leads to the repository.
  */
 const STUDIES = { yourfinance, ariaer } as const;
+
+/**
+ * The daily export aria-er publishes on GitHub Pages, replaced by a small fixture: the suite
+ * never depends on the network. `generatedAt` sets how old the data look; `fail` makes every
+ * file answer 503.
+ */
+async function serveExport(page: Page, { generatedAt = new Date().toISOString(), fail = false } = {}) {
+  const row = (station: string, year: number, exceedances: number) => ({
+    station_name: station,
+    municipality: 'BOLOGNA',
+    pollutant_code: 'PM10',
+    metric: 'daily_mean',
+    year,
+    exceedances,
+    max_exceedances_per_year: 35,
+    year_coverage: 0.98,
+  });
+  const files: Record<string, unknown> = {
+    'meta.json': { schema_version: 1, generated_at: generatedAt, period: { from: '2016-01-01', to: '2026-10-20' } },
+    'exceedances.json': [
+      row('PORTA SAN FELICE', 2024, 26),
+      row('PORTA SAN FELICE', 2025, 20),
+      row('VIA CHIARINI', 2025, 7),
+      { ...row('LM-PR', 2025, 1), municipality: null },
+    ],
+    'pollutant-trend.json': [
+      { municipality: 'BOLOGNA', pollutant_code: 'PM10', year: 2024, annual_mean_ugm3: 25, is_representative: true },
+      { municipality: 'BOLOGNA', pollutant_code: 'PM10', year: 2025, annual_mean_ugm3: 24, is_representative: true },
+      { municipality: 'BOLOGNA', pollutant_code: 'NO2', year: 2025, annual_mean_ugm3: 31, is_representative: true },
+    ],
+  };
+  await page.route(`${ariaer.live.source}*`, (route) => {
+    const name = new URL(route.request().url()).pathname.split('/').pop() ?? '';
+    if (fail || !(name in files)) return route.fulfill({ status: 503 });
+    return route.fulfill({ json: files[name], headers: { 'access-control-allow-origin': '*' } });
+  });
+}
+
+test.beforeEach(async ({ page }) => {
+  await serveExport(page);
+});
 
 function projectOf(id: CaseStudyId) {
   const project = shared.projects.find((item) => item.id === id);
@@ -95,7 +136,7 @@ for (const id of CASE_STUDY_IDS) {
       await expect
         .poll(() => image.evaluate((element: HTMLImageElement) => element.complete && element.naturalWidth > 0))
         .toBe(true);
-      await expect(page.locator('main figure figcaption').nth(index)).toHaveText(items[screen.id].caption);
+      await expect(page.locator('main figure:has(img) figcaption').nth(index)).toHaveText(items[screen.id].caption);
     }
   });
 
@@ -197,3 +238,43 @@ for (const id of CASE_STUDY_IDS) {
     await expect.poll(() => main.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
   });
 }
+
+test.describe('aria-er live results', () => {
+  const copy = ariaer.copy.en.live;
+
+  test('draws the charts from the export, with the date of the data', async ({ page }) => {
+    await page.goto(caseStudyPath('en', 'ariaer'));
+    const live = page.locator('[data-live="ready"]');
+    await expect(live).toBeVisible();
+    await expect(live.locator('[data-stale="false"]')).toContainText(/^Data of /);
+    // Two stations of Bologna; the station without a municipality is left out.
+    await expect(page.locator('[data-chart="exceedances"] rect')).toHaveCount(3);
+    await expect(page.locator('[data-chart="exceedances"]')).toContainText('PORTA SAN FELICE');
+    await expect(page.locator('[data-chart="exceedances"]')).not.toContainText('LM-PR');
+    await expect(page.locator('[data-chart="exceedances"]')).toContainText(copy.exceedances.allowed.replace('{n}', '35'));
+    await expect(page.locator('[data-chart="trend"] circle')).toHaveCount(3);
+    await expect(page.getByRole('heading', { level: 3, name: copy.trend.title })).toBeVisible();
+    await expect(live).toContainText(copy.credits);
+  });
+
+  test('says when the data are older than two days', async ({ page }) => {
+    await page.unrouteAll();
+    await serveExport(page, { generatedAt: '2026-01-01T06:30:00+00:00' });
+    await page.goto(caseStudyPath('it', 'ariaer'));
+    await expect(page.locator('[data-stale="true"]')).toContainText('1 gennaio 2026');
+  });
+
+  test('keeps the page whole when the export cannot be reached', async ({ page }) => {
+    await page.unrouteAll();
+    await serveExport(page, { fail: true });
+    await page.goto(caseStudyPath('en', 'ariaer'));
+    await expect(page.locator('[data-live="error"]')).toHaveText(copy.error);
+    await expect(page.locator('main figure img')).toHaveCount(ariaer.screens.length);
+    await expect(page.getByRole('heading', { level: 2, name: ariaer.copy.en.screens.title })).toBeVisible();
+  });
+
+  test('is not shown on a case study without live results', async ({ page }) => {
+    await page.goto(caseStudyPath('en', 'yourfinance'));
+    await expect(page.locator('[data-live]')).toHaveCount(0);
+  });
+});

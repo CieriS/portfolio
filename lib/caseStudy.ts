@@ -23,6 +23,8 @@ export const CaseStudySchema = z.object({
   decisions: z.array(id).min(1),
   measures: z.array(z.object({ id, query: id, before: id, after: id })),
   screens: z.array(z.object({ id, device: z.enum(['desktop', 'phone']) })).min(1),
+  /** Results the project publishes itself, read in the browser (`lib/liveResults.ts`). */
+  live: z.object({ source: z.string().url(), municipality: id }).optional(),
 });
 
 export type CaseStudyData = z.infer<typeof CaseStudySchema>;
@@ -38,6 +40,20 @@ export type CaseStudyCopy = Omit<Copy, 'architecture' | 'flow' | 'decisions' | '
   decisions: Omit<Copy['decisions'], 'items'> & { items: Record<string, { title: string; body: string }> };
   measures: Omit<Copy['measures'], 'rows'> & { rows: Record<string, string> };
   screens: Omit<Copy['screens'], 'items'> & { items: Record<string, { alt: string; caption: string }> };
+  live?: LiveCopy;
+};
+
+/** Copy of the live results section; `{date}` is replaced by the date of the data. */
+export type LiveCopy = {
+  title: string;
+  intro: string;
+  exceedances: { title: string; caption: string; allowed: string };
+  trend: { title: string; caption: string };
+  loading: string;
+  error: string;
+  updated: string;
+  stale: string;
+  credits: string;
 };
 export type CaseStudy = { data: CaseStudyData; copy: Record<Locale, CaseStudyCopy> };
 
@@ -51,6 +67,7 @@ export type CaseStudyCopyUnderCheck = {
   decisions: { items: Record<string, unknown> };
   measures: { rows: Record<string, string> };
   screens: { items: Record<string, { alt: string }> };
+  live?: unknown;
 };
 
 /** Google shows about this many characters of a meta description. */
@@ -88,6 +105,7 @@ export function findCaseStudyIssues(data: CaseStudyData, copy: Record<string, Ca
     for (const screen of data.screens) {
       if (text.screens.items[screen.id]?.alt.trim() === '') issues.push(`${locale}.screens.items.${screen.id} has an empty alt`);
     }
+    if (data.live && !text.live) issues.push(`${locale}.live is missing`);
     if (!text.title.includes(text.titleEmphasis)) issues.push(`${locale}.titleEmphasis does not occur in the title`);
     if (text.meta.description.length > MAX_DESCRIPTION) {
       issues.push(`${locale}.meta.description is longer than ${MAX_DESCRIPTION} characters`);
