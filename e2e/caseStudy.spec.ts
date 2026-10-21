@@ -212,8 +212,23 @@ test('the language links keep the reader on the case study', async ({ page }) =>
 test('a case study exists only under the projects view, and only for known projects', async ({ request }) => {
   expect((await request.get(`${pathFor('en', 'identity')}/yourfinance`)).status()).toBe(404);
   expect((await request.get(`${pathFor('en', 'projects')}/another-project`)).status()).toBe(404);
-  // The Italian slug is not valid under the English locale.
-  expect((await request.get('/en/sistemi/yourfinance')).status()).toBe(404);
+});
+
+test('a link written in another language opens the case study in the address language', async ({ request }) => {
+  const response = await request.get('/en/sistemi/yourfinance', { maxRedirects: 0 });
+  expect(response.status()).toBe(308);
+  expect(response.headers()['location']).toMatch(new RegExp(`${caseStudyPath('en', 'yourfinance')}$`));
+});
+
+test('an address without a language opens the case study in the reader language', async ({ browser }) => {
+  // What the repository links to: the English slug, no locale.
+  const context = await browser.newContext({ locale: 'it-IT', extraHTTPHeaders: { 'accept-language': 'it-IT,it;q=0.9' } });
+  const page = await context.newPage();
+  await serveExport(page);
+  await page.goto('/systems/ariaer');
+  await expect(page).toHaveURL(new RegExp(`${caseStudyPath('it', 'ariaer')}$`));
+  await expect(page.locator('h1')).toHaveText('aria-er');
+  await context.close();
 });
 
 test('the case study has its own share card', async ({ page, request }) => {
@@ -255,6 +270,7 @@ test.describe('aria-er live results', () => {
     await expect(page.locator('[data-chart="trend"] circle')).toHaveCount(3);
     await expect(page.getByRole('heading', { level: 3, name: copy.trend.title })).toBeVisible();
     await expect(live).toContainText(copy.credits);
+    await expect(live.locator('a[data-open-data]')).toHaveAttribute('href', ariaer.live.page);
   });
 
   test('says when the data are older than two days', async ({ page }) => {

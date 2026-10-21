@@ -4,6 +4,7 @@ import {
   caseStudyPath,
   isCaseStudyId,
   LOCALES,
+  localizedPath,
   pathFor,
   projectPath,
   VIEW_IDS,
@@ -80,5 +81,27 @@ describe('projectPath', () => {
     expect(projectPath('de', 'demo')).toBe('/de/systeme#demo');
     // The fragment is not part of the path: the address still resolves to the projects view.
     expect(viewFromPath(new URL(projectPath('fr', 'demo'), 'https://example.com').pathname)).toBe('projects');
+  });
+});
+
+describe('localizedPath', () => {
+  it('translates the view segment of another language into the language of the address', () => {
+    expect(localizedPath('/it/systems/ariaer')).toBe('/it/sistemi/ariaer');
+    expect(localizedPath('/de/sistemi')).toBe('/de/systeme');
+    expect(localizedPath('/en/identita/')).toBe('/en/identity');
+  });
+
+  it('leaves alone what is already right, unknown or outside a locale', () => {
+    expect(localizedPath('/it/sistemi/ariaer')).toBeNull();
+    expect(localizedPath('/it')).toBeNull();
+    expect(localizedPath('/it/nope')).toBeNull();
+    expect(localizedPath('/systems/ariaer')).toBeNull();
+    expect(localizedPath('/')).toBeNull();
+  });
+
+  it('keeps a slug that two languages share as it is', () => {
+    // `execution` is the timeline in English and in French.
+    expect(localizedPath('/fr/execution')).toBeNull();
+    expect(localizedPath('/it/execution')).toBe('/it/esecuzione');
   });
 });

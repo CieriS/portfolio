@@ -75,6 +75,7 @@
   ],
   "live": {
     "source": "https://cieris.github.io/aria-er/data/v1/",
+    "page": "https://cieris.github.io/aria-er/",
     "municipality": "BOLOGNA"
   },
   "copy": {
@@ -216,7 +217,8 @@
         "error": "The data could not be loaded right now. The charts are published every day at cieris.github.io/aria-er.",
         "updated": "Data of {date}",
         "stale": "Data of {date}: the daily refresh has not run since",
-        "credits": "Data: ARPAE Emilia-Romagna (CC BY), processed by aria-er; weather by Open-Meteo (CC BY 4.0)."
+        "credits": "Data: ARPAE Emilia-Romagna (CC BY), processed by aria-er; weather by Open-Meteo (CC BY 4.0).",
+        "data": "Open data: the JSON files and their contract"
       },
       "screens": {
         "title": "Dashboard and pipeline",
@@ -388,7 +390,8 @@
         "error": "Al momento non è stato possibile caricare i dati. I grafici sono pubblicati ogni giorno su cieris.github.io/aria-er.",
         "updated": "Dati del {date}",
         "stale": "Dati del {date}: l'aggiornamento giornaliero non è più girato da allora",
-        "credits": "Dati: ARPAE Emilia-Romagna (CC BY), elaborati da aria-er; meteo di Open-Meteo (CC BY 4.0)."
+        "credits": "Dati: ARPAE Emilia-Romagna (CC BY), elaborati da aria-er; meteo di Open-Meteo (CC BY 4.0).",
+        "data": "Dati aperti: i file JSON e il loro contratto"
       },
       "screens": {
         "title": "Dashboard e pipeline",
@@ -560,7 +563,8 @@
         "error": "Les données n'ont pas pu être chargées pour l'instant. Les graphiques sont publiés chaque jour sur cieris.github.io/aria-er.",
         "updated": "Données du {date}",
         "stale": "Données du {date} : la mise à jour quotidienne n'a plus tourné depuis",
-        "credits": "Données : ARPAE Émilie-Romagne (CC BY), traitées par aria-er ; météo d'Open-Meteo (CC BY 4.0)."
+        "credits": "Données : ARPAE Émilie-Romagne (CC BY), traitées par aria-er ; météo d'Open-Meteo (CC BY 4.0).",
+        "data": "Données ouvertes : les fichiers JSON et leur contrat"
       },
       "screens": {
         "title": "Tableau de bord et pipeline",
@@ -732,7 +736,8 @@
         "error": "Die Daten konnten gerade nicht geladen werden. Die Diagramme werden täglich unter cieris.github.io/aria-er veröffentlicht.",
         "updated": "Daten vom {date}",
         "stale": "Daten vom {date}: Die tägliche Aktualisierung ist seitdem nicht gelaufen",
-        "credits": "Daten: ARPAE Emilia-Romagna (CC BY), verarbeitet von aria-er; Wetter von Open-Meteo (CC BY 4.0)."
+        "credits": "Daten: ARPAE Emilia-Romagna (CC BY), verarbeitet von aria-er; Wetter von Open-Meteo (CC BY 4.0).",
+        "data": "Offene Daten: die JSON-Dateien und ihr Vertrag"
       },
       "screens": {
         "title": "Dashboard und Pipeline",
@@ -904,7 +909,8 @@
         "error": "Ahora mismo no se han podido cargar los datos. Los gráficos se publican cada día en cieris.github.io/aria-er.",
         "updated": "Datos del {date}",
         "stale": "Datos del {date}: la actualización diaria no se ha ejecutado desde entonces",
-        "credits": "Datos: ARPAE Emilia-Romaña (CC BY), procesados por aria-er; meteorología de Open-Meteo (CC BY 4.0)."
+        "credits": "Datos: ARPAE Emilia-Romaña (CC BY), procesados por aria-er; meteorología de Open-Meteo (CC BY 4.0).",
+        "data": "Datos abiertos: los archivos JSON y su contrato"
       },
       "screens": {
         "title": "Dashboard y pipeline",

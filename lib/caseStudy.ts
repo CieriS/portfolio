@@ -24,7 +24,7 @@ export const CaseStudySchema = z.object({
   measures: z.array(z.object({ id, query: id, before: id, after: id })),
   screens: z.array(z.object({ id, device: z.enum(['desktop', 'phone']) })).min(1),
   /** Results the project publishes itself, read in the browser (`lib/liveResults.ts`). */
-  live: z.object({ source: z.string().url(), municipality: id }).optional(),
+  live: z.object({ source: z.string().url(), page: z.string().url(), municipality: id }).optional(),
 });
 
 export type CaseStudyData = z.infer<typeof CaseStudySchema>;
@@ -54,6 +54,8 @@ export type LiveCopy = {
   updated: string;
   stale: string;
   credits: string;
+  /** Link to the page that lists the published files. */
+  data: string;
 };
 export type CaseStudy = { data: CaseStudyData; copy: Record<Locale, CaseStudyCopy> };
 

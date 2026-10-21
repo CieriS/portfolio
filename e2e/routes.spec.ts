@@ -61,8 +61,10 @@ test('an unknown slug returns a localized, non-indexable 404', async ({ page }) 
   expect(directives).toEqual(['noindex']);
 });
 
-test('a slug from another locale does not resolve', async ({ page }) => {
-  // /en/sistemi is the Italian slug under the English prefix: it must not be a page.
-  const response = await page.goto('/en/sistemi');
-  expect(response?.status()).toBe(404);
+test('a slug from another locale is not a page of its own: it redirects to the right one', async ({ request }) => {
+  // /en/sistemi is the Italian slug under the English prefix: no duplicate page, a permanent
+  // redirect to /en/systems, so a link written in one language still works in another.
+  const response = await request.get('/en/sistemi', { maxRedirects: 0 });
+  expect(response.status()).toBe(308);
+  expect(response.headers()['location']).toMatch(/\/en\/systems$/);
 });
