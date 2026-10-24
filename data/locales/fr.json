@@ -153,17 +153,13 @@
         "entityLabel": "Établissement",
         "summary": "Licence en ingénierie informatique à l'Université de Bologne, à temps partiel. Suspendue de 2023 à fin 2024 pour me concentrer sur le travail à plein temps, puis reprise.",
         "phases": {
-          "foundations": {
-            "title": "Fondements formels",
-            "body": "Modèles mathématiques, physiques et de circuits à la base du calcul."
-          },
           "computing": {
-            "title": "Systèmes de calcul",
-            "body": "Programmation, logique numérique, architectures matérielles, systèmes d'exploitation."
+            "title": "Systèmes informatiques",
+            "body": "Programmation en C et en Java, conception orientée objet, systèmes d'exploitation."
           },
           "information": {
             "title": "Systèmes d'information",
-            "body": "Bases de données, réseaux informatiques, technologies web, raisonnement statistique sur les données."
+            "body": "Bases de données et systèmes d'information, organisation de l'entreprise."
           }
         }
       },

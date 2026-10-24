@@ -150,18 +150,11 @@
         "entityLabel": "Institution",
         "summary": "Bachelor's degree in Computer Engineering at the University of Bologna, part-time. Suspended from 2023 to late 2024 to concentrate on full-time work, then resumed.",
         "phases": {
-          "foundations": {
-            "title": "Formal foundations",
-            "body": "Mathematical, physical and circuit models underlying computation."
-          },
           "computing": {
             "title": "Computing systems",
-            "body": "Programming, digital logic, hardware architectures, operating systems."
+            "body": "Programming in C and in Java, object-oriented design, operating systems."
           },
-          "information": {
-            "title": "Information systems",
-            "body": "Databases, computer networks, web technologies, statistical reasoning on data."
-          }
+          "information": { "title": "Information systems", "body": "Databases and information systems, business organization." }
         }
       },
       "independent": {

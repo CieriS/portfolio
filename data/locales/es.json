@@ -153,17 +153,13 @@
         "entityLabel": "Institución",
         "summary": "Grado en Ingeniería Informática en la Universidad de Bolonia, a tiempo parcial. Lo dejé en pausa de 2023 a finales de 2024 para centrarme en el trabajo a jornada completa y después lo retomé.",
         "phases": {
-          "foundations": {
-            "title": "Bases formales",
-            "body": "Modelos matemáticos, físicos y de circuitos sobre los que se apoya el cálculo."
-          },
           "computing": {
-            "title": "Sistemas de cálculo",
-            "body": "Programación, lógica digital, arquitectura de computadores, sistemas operativos."
+            "title": "Sistemas de cómputo",
+            "body": "Programación en C y en Java, diseño orientado a objetos, sistemas operativos."
           },
           "information": {
             "title": "Sistemas de información",
-            "body": "Bases de datos, redes, tecnologías web, razonamiento estadístico sobre datos."
+            "body": "Bases de datos y sistemas de información, organización de empresas."
           }
         }
       },

@@ -3,7 +3,7 @@
   "handle": "CieriS",
   "alternateNames": ["Cieri Samuele", "CieriS", "samuelecierii"],
   "address": { "locality": "Bologna", "country": "IT" },
-  "knowsLanguage": ["en", "it", "fr", "de"],
+  "knowsLanguage": ["en", "it", "fr"],
   "contacts": [
     { "id": "github", "label": "GitHub", "handle": "@CieriS", "url": "https://github.com/CieriS/" },
     { "id": "linkedin", "label": "LinkedIn", "handle": "in/samuelecieri", "url": "https://www.linkedin.com/in/samuelecieri/" },
@@ -43,9 +43,8 @@
           { "start": "2024-11-01", "end": null }
         ],
         "phases": [
-          { "id": "foundations", "stack": ["Calculus", "Linear Algebra", "Physics", "Circuit Theory"] },
-          { "id": "computing", "stack": ["C Programming", "Digital Logic", "Computer Architecture", "Operating Systems"] },
-          { "id": "information", "stack": ["Databases", "Computer Networks", "Web Technologies", "Statistics"] }
+          { "id": "computing", "stack": ["C Programming", "Java Programming", "Operating Systems"] },
+          { "id": "information", "stack": ["Databases", "Business Organization"] }
         ]
       },
       {

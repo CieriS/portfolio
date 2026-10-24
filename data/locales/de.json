@@ -153,17 +153,13 @@
         "entityLabel": "Hochschule",
         "summary": "Bachelor in Technischer Informatik an der Universität Bologna, in Teilzeit. Von 2023 bis Ende 2024 pausiert, um mich auf die Vollzeitarbeit zu konzentrieren, dann wieder aufgenommen.",
         "phases": {
-          "foundations": {
-            "title": "Formale Grundlagen",
-            "body": "Mathematische, physikalische und Schaltungsmodelle als Basis des Rechnens."
-          },
           "computing": {
-            "title": "Rechensysteme",
-            "body": "Programmierung, Digitallogik, Hardwarearchitekturen, Betriebssysteme."
+            "title": "Rechnersysteme",
+            "body": "Programmierung in C und Java, objektorientierter Entwurf, Betriebssysteme."
           },
           "information": {
             "title": "Informationssysteme",
-            "body": "Datenbanken, Rechnernetze, Webtechnologien, statistisches Denken über Daten."
+            "body": "Datenbanken und Informationssysteme, Unternehmensorganisation."
           }
         }
       },

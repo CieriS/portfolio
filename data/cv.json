@@ -59,18 +59,11 @@
       "obtainedAt": "Conseguita in {entity}",
       "consent": "Autorizzo il trattamento dei miei dati personali ai sensi del Regolamento (UE) 2016/679 (GDPR).",
       "terms": {
-        "Calculus": "Analisi matematica",
-        "Linear Algebra": "Algebra lineare",
-        "Physics": "Fisica",
-        "Circuit Theory": "Teoria dei circuiti",
         "C Programming": "Programmazione in C",
-        "Digital Logic": "Reti logiche",
-        "Computer Architecture": "Architettura dei calcolatori",
+        "Java Programming": "Programmazione in Java",
         "Operating Systems": "Sistemi operativi",
         "Databases": "Basi di dati",
-        "Computer Networks": "Reti di calcolatori",
-        "Web Technologies": "Tecnologie web",
-        "Statistics": "Statistica"
+        "Business Organization": "Organizzazione aziendale"
       }
     },
     "email": {
@@ -105,18 +98,11 @@
       "obtainedAt": "Obtenue chez {entity}",
       "consent": "J'autorise le traitement de mes données personnelles conformément au règlement (UE) 2016/679 (RGPD).",
       "terms": {
-        "Calculus": "Analyse",
-        "Linear Algebra": "Algèbre linéaire",
-        "Physics": "Physique",
-        "Circuit Theory": "Théorie des circuits",
         "C Programming": "Programmation en C",
-        "Digital Logic": "Logique numérique",
-        "Computer Architecture": "Architecture des ordinateurs",
+        "Java Programming": "Programmation en Java",
         "Operating Systems": "Systèmes d'exploitation",
         "Databases": "Bases de données",
-        "Computer Networks": "Réseaux informatiques",
-        "Web Technologies": "Technologies web",
-        "Statistics": "Statistiques"
+        "Business Organization": "Organisation de l'entreprise"
       }
     },
     "email": {
@@ -151,18 +137,11 @@
       "obtainedAt": "Erworben bei {entity}",
       "consent": "Ich willige in die Verarbeitung meiner personenbezogenen Daten gemäß der Verordnung (EU) 2016/679 (DSGVO) ein.",
       "terms": {
-        "Calculus": "Analysis",
-        "Linear Algebra": "Lineare Algebra",
-        "Physics": "Physik",
-        "Circuit Theory": "Schaltungstheorie",
         "C Programming": "C-Programmierung",
-        "Digital Logic": "Digitale Logik",
-        "Computer Architecture": "Rechnerarchitektur",
+        "Java Programming": "Java-Programmierung",
         "Operating Systems": "Betriebssysteme",
         "Databases": "Datenbanken",
-        "Computer Networks": "Rechnernetze",
-        "Web Technologies": "Webtechnologien",
-        "Statistics": "Statistik"
+        "Business Organization": "Unternehmensorganisation"
       }
     },
     "email": {
@@ -197,18 +176,11 @@
       "obtainedAt": "Obtenida en {entity}",
       "consent": "Autorizo el tratamiento de mis datos personales conforme al Reglamento (UE) 2016/679 (RGPD).",
       "terms": {
-        "Calculus": "Cálculo",
-        "Linear Algebra": "Álgebra lineal",
-        "Physics": "Física",
-        "Circuit Theory": "Teoría de circuitos",
         "C Programming": "Programación en C",
-        "Digital Logic": "Lógica digital",
-        "Computer Architecture": "Arquitectura de computadores",
+        "Java Programming": "Programación en Java",
         "Operating Systems": "Sistemas operativos",
         "Databases": "Bases de datos",
-        "Computer Networks": "Redes de computadores",
-        "Web Technologies": "Tecnologías web",
-        "Statistics": "Estadística"
+        "Business Organization": "Organización de empresas"
       }
     },
     "email": {
