@@ -153,17 +153,13 @@
         "entityLabel": "Ateneo",
         "summary": "Laurea triennale in Ingegneria Informatica all'Università di Bologna, part-time. Sospesa dal 2023 a fine 2024 per concentrarmi sul lavoro a tempo pieno, poi ripresa.",
         "phases": {
-          "foundations": {
-            "title": "Fondamenti formali",
-            "body": "Modelli matematici, fisici e circuitali alla base del calcolo."
-          },
           "computing": {
             "title": "Sistemi di calcolo",
-            "body": "Programmazione, reti logiche, architetture hardware, sistemi operativi."
+            "body": "Programmazione in C e in Java, programmazione a oggetti, sistemi operativi."
           },
           "information": {
             "title": "Sistemi informativi",
-            "body": "Basi di dati, reti di calcolatori, tecnologie web, ragionamento statistico sui dati."
+            "body": "Basi di dati e sistemi informativi, organizzazione aziendale."
           }
         }
       },
