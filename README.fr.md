@@ -404,6 +404,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   ├── content/      schema (zod) · validate (contrôles croisés)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV sur demande)
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)
+├── docs/audit-2026-10/   audit de design et revue des textes (2026-10-24), avec captures : origine des issues #95–#102 et suivantes
 ├── e2e/              suite Playwright · helpers.ts (langues, vues, attentes)
 ├── .github/workflows/ci.yml   lint, typecheck, build et tests sur chaque PR
 ├── .github/workflows/versions.yml   versions des projets alignées sur leurs publications (PR automatique)

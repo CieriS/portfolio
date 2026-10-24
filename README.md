@@ -402,6 +402,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 │   ├── content/      schema (zod) · validate (verifiche incrociate)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV su richiesta)
 ├── store/            viewStore (per istanza) · useSceneStore (scena, transiente)
+├── docs/audit-2026-10/   audit di design e revisione del copy (2026-10-24), con gli screenshot: origine delle issue #95–#102 e seguenti
 ├── e2e/              suite Playwright · helpers.ts (lingue, viste, attese)
 ├── .github/workflows/ci.yml   lint, typecheck, build e test su ogni PR
 ├── .github/workflows/versions.yml   versioni dei progetti allineate alle loro release (PR automatica)
