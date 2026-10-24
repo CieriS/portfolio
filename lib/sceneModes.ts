@@ -88,18 +88,4 @@ export const SCENE_MODES: Record<ViewId, SceneParams> = {
     camZ: 9,
     rotY: 0.5,
   },
-  discipline: {
-    amplitude: 0.75,
-    frequency: 0.3,
-    speed: 1,
-    flow: 5,
-    pulse: 0.35,
-    radius: 3,
-    force: 1.3,
-    presence: 0.55,
-    camX: 0,
-    camY: 2.4,
-    camZ: 12,
-    rotY: 0,
-  },
 };

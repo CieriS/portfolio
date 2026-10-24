@@ -20,10 +20,6 @@
         "projects": {
           "title": "Projets : Rust, PostgreSQL & dbt",
           "description": "yourFinance, plateforme de finance personnelle avec API Rust sur PostgreSQL, et aria-er, pipeline de données sur la qualité de l’air avec Rust, dbt et Dagster."
-        },
-        "discipline": {
-          "title": "Entraînement et musique au-delà du code",
-          "description": "Comment je m'entraîne et produis ma musique : séances full-body, callisthénie lestée, barre et pliométrie ; guitare acoustique, audio et montage vidéo."
         }
       }
     },
@@ -36,15 +32,13 @@
       "hero": "Index",
       "identity": "Identité",
       "timeline": "Exécution",
-      "projects": "Systèmes",
-      "discipline": "Optimisation"
+      "projects": "Systèmes"
     },
     "navPlain": {
       "hero": "Accueil",
       "identity": "À propos",
       "timeline": "Expérience",
-      "projects": "Projets",
-      "discipline": "Loisirs"
+      "projects": "Projets"
     },
     "theme": { "label": "Thème", "light": "Clair", "dark": "Sombre", "system": "Auto" },
     "locale": { "label": "Langue", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
@@ -112,6 +106,8 @@
         "body": "De nombreuses petites fonctions, au plus deux niveaux d'imbrication, des contrats explicites entre elles."
       }
     ],
+    "outsideTitle": "En dehors du travail",
+    "outside": "Je m'entraîne trois fois par semaine, en calisthenics lestée et à la barre, et je joue de la guitare acoustique.",
     "contactsTitle": "Contact",
     "contactsNote": "Dépôts et canaux directs.",
     "sponsor": "Soutenir mon travail"
@@ -242,35 +238,6 @@
           "transform": "Staging, intermediate, marts",
           "orchestration": "Schedules, backfills, lineage"
         }
-      }
-    }
-  },
-  "discipline": {
-    "title": "Au-delà du code",
-    "titleEmphasis": "code",
-    "subtitle": "Entraînement et musique, avec la même méthode qu'au travail : mesurer, planifier, ajuster.",
-    "biological": {
-      "title": "Force & explosivité",
-      "titleEmphasis": "explosivité",
-      "summary": "Je m'entraîne dans une salle aménagée au garage, avec des séances full-body qui se répètent chaque semaine : callisthénie lestée, mouvements de base à la barre, pliométrie et figures au poids du corps (front lever, handstand, muscle-up, human flag, planche). Chaque bloc dure quatre semaines et change de méthode chaque semaine : répétitions avec pause, lest, EMOM, pyramide. Vient ensuite une semaine de décharge. L'objectif est la performance, pas l'esthétique : détente, sprint et force.",
-      "metrics": { "height": "Taille", "weight": "Poids", "frequency": "Séances" },
-      "units": { "height": "cm", "weight": "kg", "frequency": "par semaine" },
-      "sessionsTitle": "Programme hebdomadaire",
-      "dayLabel": "Jour",
-      "focus": { "squat": "Focus squat", "hinge": "Focus soulevé de terre", "unilateral": "Focus unilatéral" }
-    },
-    "acoustic": {
-      "title": "Musique & vidéo",
-      "titleEmphasis": "vidéo",
-      "summary": "Je fais tout moi-même : je joue et j'enregistre la guitare acoustique, je travaille l'audio dans GarageBand et Logic Pro, je tourne la vidéo et je la monte dans DaVinci Resolve.",
-      "instrumentLabel": "Instrument",
-      "instrument": "Guitare acoustique",
-      "formatsLabel": "Logiciels",
-      "pipelineTitle": "Étapes",
-      "pipeline": {
-        "capture": "Enregistrement — guitare acoustique",
-        "mix": "Audio — montage dans GarageBand et Logic Pro",
-        "edit": "Vidéo — tournage, puis montage dans DaVinci Resolve avec l'audio final"
       }
     }
   }

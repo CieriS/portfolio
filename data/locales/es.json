@@ -20,10 +20,6 @@
         "projects": {
           "title": "Proyectos: Rust, PostgreSQL y dbt",
           "description": "yourFinance, finanzas personales con una API en Rust por capas sobre PostgreSQL, y aria-er, un pipeline de calidad del aire con Rust, dbt y Dagster."
-        },
-        "discipline": {
-          "title": "Entrenamiento y música fuera del código",
-          "description": "Cómo entreno y hago música: cuerpo completo con calistenia lastrada, barra y pliometría; guitarra acústica, edición de audio y vídeo."
         }
       }
     },
@@ -36,15 +32,13 @@
       "hero": "Índice",
       "identity": "Identidad",
       "timeline": "Ejecución",
-      "projects": "Sistemas",
-      "discipline": "Optimización"
+      "projects": "Sistemas"
     },
     "navPlain": {
       "hero": "Inicio",
       "identity": "Sobre mí",
       "timeline": "Experiencia",
-      "projects": "Proyectos",
-      "discipline": "Tiempo libre"
+      "projects": "Proyectos"
     },
     "theme": { "label": "Tema", "light": "Claro", "dark": "Oscuro", "system": "Auto" },
     "locale": { "label": "Idioma", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
@@ -112,6 +106,8 @@
         "body": "Muchas funciones pequeñas, como mucho dos niveles de anidación y contratos explícitos entre ellas."
       }
     ],
+    "outsideTitle": "Fuera del trabajo",
+    "outside": "Entreno tres veces por semana, con calistenia lastrada y barra, y toco la guitarra acústica.",
     "contactsTitle": "Contacto",
     "contactsNote": "Repositorios y canales directos.",
     "sponsor": "Apoya mi trabajo"
@@ -242,35 +238,6 @@
           "transform": "Staging, intermediate, marts",
           "orchestration": "Programación, backfill, linaje"
         }
-      }
-    }
-  },
-  "discipline": {
-    "title": "Fuera del código",
-    "titleEmphasis": "código",
-    "subtitle": "Entrenamiento y música, con el mismo método que uso en el trabajo: medir, planificar, ajustar.",
-    "biological": {
-      "title": "Fuerza y potencia",
-      "titleEmphasis": "potencia",
-      "summary": "Entreno en un gimnasio en el garaje con sesiones de cuerpo completo que se repiten cada semana: calistenia lastrada, levantamientos compuestos con barra, pliometría y habilidades con el propio peso (front lever, pino, muscle-up, bandera, plancha). Cada bloque dura cuatro semanas y cambia de método cada semana: repeticiones con pausa, trabajo lastrado, EMOM, series en pirámide. Después, una semana de descarga. El objetivo es el rendimiento, no la estética: salto, sprint y fuerza.",
-      "metrics": { "height": "Altura", "weight": "Peso", "frequency": "Sesiones" },
-      "units": { "height": "cm", "weight": "kg", "frequency": "por semana" },
-      "sessionsTitle": "Plan semanal",
-      "dayLabel": "Día",
-      "focus": { "squat": "Foco en sentadilla", "hinge": "Foco en peso muerto", "unilateral": "Foco unilateral" }
-    },
-    "acoustic": {
-      "title": "Música y vídeo",
-      "titleEmphasis": "vídeo",
-      "summary": "Lo hago todo yo: toco y grabo la guitarra acústica, edito el audio en GarageBand y Logic Pro, grabo el vídeo y lo monto en DaVinci Resolve.",
-      "instrumentLabel": "Instrumento",
-      "instrument": "Guitarra acústica",
-      "formatsLabel": "Software",
-      "pipelineTitle": "Proceso",
-      "pipeline": {
-        "capture": "Grabación — guitarra acústica",
-        "mix": "Audio — edición en GarageBand y Logic Pro",
-        "edit": "Vídeo — grabación y montaje en DaVinci Resolve con el audio final"
       }
     }
   }

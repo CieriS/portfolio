@@ -26,15 +26,15 @@ test('number and arrow shortcuts move between views', async ({ page }) => {
   await gotoView(page, 'en', 'hero');
   await markNoReload(page);
 
-  await page.keyboard.press('5');
-  await expectView(page, 'en', 'discipline');
+  await page.keyboard.press('4');
+  await expectView(page, 'en', 'projects');
 
   // The order wraps around, so from the last view ArrowRight lands on the first.
   await page.keyboard.press('ArrowRight');
   await expectView(page, 'en', 'hero');
 
   await page.keyboard.press('ArrowLeft');
-  await expectView(page, 'en', 'discipline');
+  await expectView(page, 'en', 'projects');
 
   expect(await stillSamePage(page)).toBe(true);
 });
@@ -104,7 +104,7 @@ test('every nav link names its view in plain words, and the active one shows the
     for (const view of VIEWS) {
       await page.goto(pathFor(locale, view));
       const nav = page.locator('footer nav');
-      // All five links carry the everyday word in their name, whichever is active.
+      // Every link carries the everyday word in their name, whichever is active.
       for (const other of VIEWS)
         await expect(nav.getByRole('link', { name: navLinkName(locale, other), exact: true })).toHaveCount(1);
 

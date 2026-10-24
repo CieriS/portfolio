@@ -32,6 +32,16 @@ export function IdentityView({ data }: ViewProps) {
         </motion.ol>
       </div>
 
+      {/* What the removed fifth view said, in one line (issue #50). */}
+      <div className="mt-24 grid gap-y-4 md:mt-36 md:grid-cols-12 md:gap-x-6">
+        <motion.div variants={fade} className="md:col-span-3">
+          <Meta as="h2">{copy.outsideTitle}</Meta>
+        </motion.div>
+        <motion.p variants={fade} className="max-w-xl text-[15px] leading-relaxed text-muted md:col-span-9">
+          {copy.outside}
+        </motion.p>
+      </div>
+
       <div className="mt-24 grid gap-y-8 md:mt-36 md:grid-cols-12 md:gap-x-6">
         <motion.div variants={fade} className="md:col-span-3">
           <Meta as="h2">{copy.contactsTitle}</Meta>

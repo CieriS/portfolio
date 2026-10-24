@@ -130,7 +130,7 @@ GOOGLE_SITE_VERIFICATION=il-tuo-token
 | 02 | Identità (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | `/es/identidad` | Titolo che è la prima frase della dichiarazione d'intenti (il resto ne è il sottotitolo), quattro principi di ingegneria e contatti (GitHub, LinkedIn, Instagram) e il link per sostenermi su GitHub Sponsors. |
 | 03 | Esecuzione (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | `/es/ejecucion` | Timeline a tre corsie (industria, percorso accademico e studio autonomo del Data Engineering) su un asse temporale condiviso, con uptime in tempo reale e fasi con il relativo stack. |
 | 04 | Sistemi (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | `/es/sistemas` | Progetti in un accordion, tutti chiusi all'apertura della vista: sintesi, scelte di ingegneria, architettura a livelli, legame con la Data Engineering e link al repository (o ai contatti, se il codice è privato). Oggi: yourFinance (privato) e aria-er (pubblico). |
-| 05 | Ottimizzazione (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | `/es/optimizacion` | Allenamento e musica oltre il codice: forza ed esplosività (metodo, metriche, programma settimanale) e produzione di musica e video (chitarra acustica, software, fasi di lavoro). |
+| — | ~~Ottimizzazione~~ (tolta) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | `/es/optimizacion` | Allenamento e musica: vista tolta con la issue #50. I vecchi indirizzi fanno un redirect permanente (308) alla vista Identità della stessa lingua (`RETIRED_VIEW_SLUGS` in `lib/routes.ts`); allenamento e chitarra restano in una riga di Identità ("Fuori dal lavoro"). L'ultimo stato della vista (codice, testi in cinque lingue, scena) è nel tag git `vista-ottimizzazione`: `git checkout vista-ottimizzazione` per rivederla, `git diff vista-ottimizzazione -- data components lib` per ripartire da lì. |
 
 Ogni URL è pre-renderizzato con i propri contenuti. Un indirizzo che non corrisponde a nessuna vista mostra una pagina 404 localizzata e non indicizzabile.
 
@@ -140,7 +140,7 @@ Sotto la vista Sistemi c'è una pagina in più per i progetti che hanno un caso 
 
 - **Link in basso** (`01`–`05`): sono veri `<a href>`, quindi funzionano anche con il clic centrale, con "apri in nuova scheda" e per i crawler. Il clic principale cambia vista sul posto. Accanto alla voce attiva compare la parola di uso comune per quella vista ("Esecuzione · Esperienza"), che fa parte anche del nome accessibile di ogni link: il nome viene dal testo del link (l'indice è nascosto ai lettori di schermo, la parola comune delle voci non attive è solo per loro), così ciò che si legge coincide con ciò che si vede.
 - **Progetti dalla home**: nel paragrafo della home i nomi dei progetti sono link (`ProjectLink`, ricavati da `shared.projects` con `splitByNames`). Portano al caso di studio se esiste, altrimenti alla vista dei progetti con il pannello già aperto: l'indirizzo è `/it/sistemi#<id>`, che funziona anche incollato o condiviso. Senza frammento i progetti partono tutti chiusi.
-- **Tastiera**: `1`–`5` saltano a una vista, `←` e `→` scorrono in modo circolare. I tasti vengono ignorati se è premuto un modificatore o se il focus è in un campo di testo.
+- **Tastiera**: `1`–`4` saltano a una vista, `←` e `→` scorrono in modo circolare. I tasti vengono ignorati se è premuto un modificatore o se il focus è in un campo di testo.
 - **Touch**: uno swipe orizzontale (oltre 70 px e prevalentemente orizzontale) passa alla vista precedente o successiva.
 - **Trackpad**: lo scorrimento laterale a due dita non fa tornare indietro né andare avanti nella cronologia (`overscroll-behavior: none` sulla radice), perché partiva per sbaglio mentre si scorreva una vista. Vale per Chromium e Firefox; Safari gestisce quel gesto per conto suo e può ignorare la regola. Pulsanti del browser e scorciatoie da tastiera restano invariati.
 - **Frecce e contatore** nel footer, su schermi medi e grandi.
@@ -272,15 +272,13 @@ data/shared.json        dati indipendenti dalla lingua
 ├── certifications[]    id, name, issuer, entity, issued, expires, url (CV, fase "Metodo", hasCredential)
 ├── sponsor             label, url (GitHub Sponsors: fuori da contacts, quindi niente sameAs né CV)
 ├── timeline.threads[]  corsie: id, kind (work | education), entity, segments[], fasi
-├── projects[]          id, name, source, stack, layers
-└── discipline          biological (metriche, sessioni) · acoustic (formati, pipeline)
+└── projects[]          id, name, source, stack, layers
 data/locales/<lingua>.json   en · it · fr · de
 ├── ui                  messages di next-intl: meta (SEO), notFound, nav, navPlain, theme, locale, shell
 ├── hero
 ├── identity
 ├── timeline
-├── projects            items[id]: summary, bridge, highlights, layers
-└── discipline
+└── projects            items[id]: summary, bridge, highlights, layers
 ```
 
 - `shared.json` contiene i dati indipendenti dalla lingua (link, date, stack, metriche); `locales/<lingua>.json` contiene il copy.
@@ -296,7 +294,7 @@ data/locales/<lingua>.json   en · it · fr · de
 
 `alternateNames` (altre grafie e handle con cui la stessa persona viene cercata) e `address` (`locality` e `country`, codice ISO a due lettere) alimentano `alternateName` e `address` del `Person` nel JSON-LD; un codice paese non valido fa fallire la build.
 
-Campi che accettano `null` (mostrati come `—`): `discipline.biological.heightCm`, `discipline.biological.weightKg`. Anche `timeline.threads[].entity` accetta `null`: la corsia mostra allora solo la sua `entityLabel` (es. "Studio autonomo") e resta fuori da `worksFor` / `alumniOf`. `projects[].source` vale `{ "visibility": "public", "url": "…" }` (link al repository, pubblicato anche come `codeRepository` nel JSON-LD) oppure `{ "visibility": "private" }`: il codice non viene linkato e il progetto rimanda alla vista Identità, da cui chiedere una demo. Una visibilità sconosciuta o un progetto pubblico senza `url` fa fallire la build.
+Campi che accettano `null` (mostrati come `—`): `timeline.threads[].entity` accetta `null`: la corsia mostra allora solo la sua `entityLabel` (es. "Studio autonomo") e resta fuori da `worksFor` / `alumniOf`. `projects[].source` vale `{ "visibility": "public", "url": "…" }` (link al repository, pubblicato anche come `codeRepository` nel JSON-LD) oppure `{ "visibility": "private" }`: il codice non viene linkato e il progetto rimanda alla vista Identità, da cui chiedere una demo. Una visibilità sconosciuta o un progetto pubblico senza `url` fa fallire la build.
 
 ### Corsie della timeline
 
@@ -392,7 +390,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
 │   │                 useViewNavigation, useViewUrlSync
 │   ├── ui/           text (Meta, Emphasis: primitive senza codice client)
-│   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, DisciplineView, CvRequest, atoms
+│   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, CvRequest, atoms
 ├── data/
 │   ├── shared.json                  dati indipendenti dalla lingua
 │   ├── cv.json                      testi del PDF e dell'email del CV (solo server)
@@ -424,7 +422,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 - Test unitari con Vitest accanto ai moduli (`lib/**/*.test.ts`): slug e URL, aritmetica della timeline (segmenti, vuoti, fasi, asse), formattazione, schema e verifiche dei contenuti, inclusi i file reali.
 - Test end-to-end in `e2e/` con Playwright, eseguiti sulla build di produzione su Chromium, WebKit e un profilo mobile. Coprono URL e metadata di ogni lingua, navigazione e cronologia, cambio lingua, SEO, header di sicurezza, accessibilità (axe) e la tenuta del sito a un fallimento WebGL.
 - CI in `.github/workflows/ci.yml`: formattazione, lint, typecheck, test unitari, build e test end-to-end su ogni pull request e a ogni push su `development`. I suoi tre job (questo, i test end-to-end e il budget di prestazioni) sono controlli obbligatori per il merge (vedi [Flusso di lavoro](#flusso-di-lavoro)).
-- **Regressione visiva** (`e2e/visual.spec.ts`): nove screenshot di riferimento in `e2e/__screenshots__/` (le cinque viste nel tema chiaro, due nel tema scuro, due su telefono) confrontati a ogni esecuzione. Per essere ripetibili fermano l'orologio e nascondono la scena WebGL. Valgono per Chromium su Linux, cioè per la CI: in locale su macOS i test sono saltati, perché fallirebbero per il solo antialiasing. Dopo una modifica visiva voluta la CI fallisce, rigenera i riferimenti sullo stesso runner e li pubblica nell'artefatto `visual-references`: `gh run download <id> -n visual-references -D e2e/__screenshots__`, si guardano le immagini e si committano.
+- **Regressione visiva** (`e2e/visual.spec.ts`): otto screenshot di riferimento in `e2e/__screenshots__/` (le quattro viste nel tema chiaro, due nel tema scuro, due su telefono) confrontati a ogni esecuzione. Per essere ripetibili fermano l'orologio e nascondono la scena WebGL. Valgono per Chromium su Linux, cioè per la CI: in locale su macOS i test sono saltati, perché fallirebbero per il solo antialiasing. Dopo una modifica visiva voluta la CI fallisce, rigenera i riferimenti sullo stesso runner e li pubblica nell'artefatto `visual-references`: `gh run download <id> -n visual-references -D e2e/__screenshots__`, si guardano le immagini e si committano.
 - **Budget di prestazioni** (`lighthouserc.json`): un terzo job della CI esegue Lighthouse tre volte, in emulazione mobile, su home, timeline e progetti della build di produzione e fallisce se la mediana esce dalle soglie: accessibilità e SEO a 100, buone pratiche ≥ 95, LCP ≤ 4 s, CLS ≤ 0,02, peso della pagina ≤ 450 KB (era 700 prima di togliere three.js). Punteggio di prestazioni (≥ 80) e TBT (≤ 300 ms) sono solo segnalati: dipendono dalla potenza del runner, che cambia da un'esecuzione all'altra (TBT da 360 a 750 ms sullo stesso codice), e come errori farebbero fallire la CI a caso. Le soglie fotografano lo stato attuale sui runner della CI, più lenti di un portatile e senza GPU (lì la scena WebGL pesa di più), con un piccolo margine: servono a bloccare i regressi e vanno strette a ogni miglioramento. In locale: `npm run build && npx @lhci/cli@0.15.1 autorun`.
 - Dependabot (`.github/dependabot.yml`) apre ogni settimana una PR raggruppata verso `development` per le dipendenze npm e una per le GitHub Actions. Le major di `eslint` e `typescript` sono ignorate finché `eslint-config-next` non le supporta.
 - Rilasci: una milestone per versione; ogni PR ha un'etichetta `semver:major|minor|patch`, e `.github/release.yml` raggruppa per etichetta le note generate della release. `version` in `package.json` si alza solo nella PR di rilascio.

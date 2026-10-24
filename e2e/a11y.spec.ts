@@ -20,7 +20,7 @@ for (const { view, path } of ALL_PAGES.filter((p) => p.locale === 'en')) {
 
 test('the scrollable view can be reached and scrolled with the keyboard alone', async ({ page }) => {
   await page.setViewportSize({ width: 900, height: 600 });
-  await gotoView(page, 'en', 'discipline');
+  await gotoView(page, 'en', 'identity');
   const section = page.locator('main > section');
 
   await expect(section).toHaveAttribute('tabindex', '0');
@@ -107,7 +107,7 @@ test.describe('reduced motion', () => {
 
 test('a view taller than the stage shows a scroll indicator that follows the scroll', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 600 });
-  await gotoView(page, 'en', 'discipline');
+  await gotoView(page, 'en', 'identity');
   const section = page.locator('main > section');
   const indicator = section.locator('[data-scroll-indicator]');
   const thumb = indicator.locator('div div div');

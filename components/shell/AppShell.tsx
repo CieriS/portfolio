@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { introStyle } from '@/components/motion/Reveal';
 import { ViewFrame } from '@/components/motion/ViewFrame';
-import { DisciplineView } from '@/components/views/DisciplineView';
 import { HeroView } from '@/components/views/HeroView';
 import { IdentityView } from '@/components/views/IdentityView';
 import { ProjectsView } from '@/components/views/ProjectsView';
@@ -27,7 +26,6 @@ const RENDER: Record<ViewId, (data: PortfolioView) => ReactNode> = {
   identity: (data) => <IdentityView data={data} />,
   timeline: (data) => <TimelineView data={data} />,
   projects: (data) => <ProjectsView data={data} />,
-  discipline: (data) => <DisciplineView data={data} />,
 };
 
 type AppShellProps = { data: PortfolioView; locale: Locale; onLocaleChange: (locale: Locale) => void };

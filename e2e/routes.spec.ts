@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { locales } from './content';
 import { ALL_PAGES, LOCALES, navLabel, pathFor } from './helpers';
+import { RETIRED_VIEW_SLUGS } from '../lib/routes';
 
 test.describe('every locale × view URL', () => {
   for (const { locale, view, path } of ALL_PAGES) {
@@ -31,13 +32,13 @@ test.describe('every locale × view URL', () => {
 });
 
 test('the identity view opens with the same display title as the other inner views', async ({ page }) => {
-  const titleSize = async (view: 'identity' | 'timeline' | 'projects' | 'discipline') => {
+  const titleSize = async (view: 'identity' | 'timeline' | 'projects') => {
     await page.goto(pathFor('en', view));
     return page.locator('h1').evaluate((h1) => getComputedStyle(h1).fontSize);
   };
   // It used to carry an 11px label as its h1, with the real headline in a paragraph.
   const identity = await titleSize('identity');
-  for (const view of ['timeline', 'projects', 'discipline'] as const) expect(await titleSize(view)).toBe(identity);
+  for (const view of ['timeline', 'projects'] as const) expect(await titleSize(view)).toBe(identity);
 
   for (const locale of LOCALES) {
     const { title, titleEmphasis, subtitle } = locales[locale].identity;
@@ -67,4 +68,14 @@ test('a slug from another locale is not a page of its own: it redirects to the r
   const response = await request.get('/en/sistemi', { maxRedirects: 0 });
   expect(response.status()).toBe(308);
   expect(response.headers()['location']).toMatch(/\/en\/systems$/);
+});
+
+test.describe('issue #50: URLs of the retired fifth view', () => {
+  for (const locale of LOCALES) {
+    test(`/${locale}/${RETIRED_VIEW_SLUGS[locale]} redirects permanently to the identity view`, async ({ request }) => {
+      const response = await request.get(`/${locale}/${RETIRED_VIEW_SLUGS[locale]}`, { maxRedirects: 0 });
+      expect(response.status()).toBe(308);
+      expect(new URL(response.headers()['location'], 'http://x').pathname).toBe(pathFor(locale, 'identity'));
+    });
+  }
 });

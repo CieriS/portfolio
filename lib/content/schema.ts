@@ -59,8 +59,6 @@ export const ProjectSchema = z.object({
   layers: z.array(z.object({ id, tech: z.string().min(1) })).min(1),
 });
 
-export const SessionSchema = z.object({ id: z.string().min(1), focus: z.string().min(1), patterns: z.array(z.string().min(1)) });
-
 /** Language-independent data: links, dates, stacks, metrics. */
 export const SharedSchema = z.object({
   name: z.string().min(1),
@@ -77,15 +75,6 @@ export const SharedSchema = z.object({
   sponsor: z.object({ label: z.string().min(1), url: z.url() }),
   timeline: z.object({ threads: z.array(ThreadSchema).min(1) }),
   projects: z.array(ProjectSchema),
-  discipline: z.object({
-    biological: z.object({
-      heightCm: z.number().positive().nullable(),
-      weightKg: z.number().positive().nullable(),
-      daysPerWeek: z.number().int().min(1).max(7),
-      sessions: z.array(SessionSchema),
-    }),
-    acoustic: z.object({ formats: z.array(z.string().min(1)), pipeline: z.array(z.string().min(1)) }),
-  }),
 });
 
 export type Contact = z.infer<typeof ContactSchema>;
@@ -97,5 +86,4 @@ export type Thread = z.infer<typeof ThreadSchema>;
 export type ProjectSource = z.infer<typeof ProjectSourceSchema>;
 export type Project = z.infer<typeof ProjectSchema>;
 export type ProjectLayer = Project['layers'][number];
-export type Session = z.infer<typeof SessionSchema>;
 export type SharedData = z.infer<typeof SharedSchema>;
