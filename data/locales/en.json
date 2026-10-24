@@ -20,10 +20,6 @@
         "projects": {
           "title": "Projects: Rust, PostgreSQL & dbt",
           "description": "yourFinance, a personal finance platform on a layered Rust API over PostgreSQL, and aria-er, an air-quality data pipeline built with Rust, dbt and Dagster."
-        },
-        "discipline": {
-          "title": "Training and music beyond the code",
-          "description": "How I train and make music: full-body sessions of weighted calisthenics, barbell lifts and plyometrics; acoustic guitar, audio editing and video."
         }
       }
     },
@@ -36,15 +32,13 @@
       "hero": "Index",
       "identity": "Identity",
       "timeline": "Execution",
-      "projects": "Systems",
-      "discipline": "Optimization"
+      "projects": "Systems"
     },
     "navPlain": {
       "hero": "Home",
       "identity": "About",
       "timeline": "Experience",
-      "projects": "Projects",
-      "discipline": "Free time"
+      "projects": "Projects"
     },
     "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "Auto" },
     "locale": { "label": "Language", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
@@ -109,6 +103,8 @@
         "body": "Many small functions, at most two levels of nesting, explicit contracts between them."
       }
     ],
+    "outsideTitle": "Outside work",
+    "outside": "I train three times a week, with weighted calisthenics and barbell lifts, and I play acoustic guitar.",
     "contactsTitle": "Contact",
     "contactsNote": "Repositories and direct channels.",
     "sponsor": "Support my work"
@@ -239,35 +235,6 @@
           "transform": "Staging, intermediate, marts",
           "orchestration": "Schedules, backfills, lineage"
         }
-      }
-    }
-  },
-  "discipline": {
-    "title": "Beyond the code",
-    "titleEmphasis": "code",
-    "subtitle": "Training and music, run with the same method I use at work: measure, plan, adjust.",
-    "biological": {
-      "title": "Strength & power",
-      "titleEmphasis": "power",
-      "summary": "I train in a garage gym with full-body sessions that repeat every week: weighted calisthenics, barbell compound lifts, plyometrics and bodyweight skills (front lever, handstand, muscle-up, human flag, planche). Each block lasts four weeks and changes method every week: pause reps, weighted work, EMOM, pyramid sets. Then a deload week. The goal is performance, not looks: jump, sprint and strength.",
-      "metrics": { "height": "Height", "weight": "Weight", "frequency": "Sessions" },
-      "units": { "height": "cm", "weight": "kg", "frequency": "per week" },
-      "sessionsTitle": "Weekly plan",
-      "dayLabel": "Day",
-      "focus": { "squat": "Squat focus", "hinge": "Deadlift focus", "unilateral": "Unilateral focus" }
-    },
-    "acoustic": {
-      "title": "Music & video",
-      "titleEmphasis": "video",
-      "summary": "I do it all myself: I play and record acoustic guitar, edit the audio in GarageBand and Logic Pro, shoot the video and cut it in DaVinci Resolve.",
-      "instrumentLabel": "Instrument",
-      "instrument": "Acoustic guitar",
-      "formatsLabel": "Software",
-      "pipelineTitle": "Workflow",
-      "pipeline": {
-        "capture": "Recording — acoustic guitar",
-        "mix": "Audio — editing in GarageBand and Logic Pro",
-        "edit": "Video — shooting, then editing in DaVinci Resolve with the final audio"
       }
     }
   }

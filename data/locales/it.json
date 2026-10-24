@@ -20,10 +20,6 @@
         "projects": {
           "title": "Progetti: Rust, PostgreSQL e dbt",
           "description": "yourFinance, piattaforma di finanza personale con API Rust su PostgreSQL, e aria-er, pipeline dati sulla qualità dell’aria con Rust, dbt e Dagster."
-        },
-        "discipline": {
-          "title": "Allenamento e musica oltre il codice",
-          "description": "Come mi alleno e come produco musica: sedute full-body con calisthenics zavorrata, bilanciere e pliometria; chitarra acustica, audio e montaggio video."
         }
       }
     },
@@ -36,15 +32,13 @@
       "hero": "Indice",
       "identity": "Identità",
       "timeline": "Esecuzione",
-      "projects": "Sistemi",
-      "discipline": "Ottimizzazione"
+      "projects": "Sistemi"
     },
     "navPlain": {
       "hero": "Home",
       "identity": "Chi sono",
       "timeline": "Esperienza",
-      "projects": "Progetti",
-      "discipline": "Tempo libero"
+      "projects": "Progetti"
     },
     "theme": { "label": "Tema", "light": "Chiaro", "dark": "Scuro", "system": "Auto" },
     "locale": { "label": "Lingua", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
@@ -112,6 +106,8 @@
         "body": "Molte funzioni semplici, al massimo due livelli di annidamento, contratti espliciti tra loro."
       }
     ],
+    "outsideTitle": "Fuori dal lavoro",
+    "outside": "Mi alleno tre volte a settimana, con calisthenics zavorrata e bilanciere, e suono la chitarra acustica.",
     "contactsTitle": "Contatti",
     "contactsNote": "Repository e canali diretti.",
     "sponsor": "Sostieni il mio lavoro"
@@ -242,35 +238,6 @@
           "transform": "Staging, intermediate, marts",
           "orchestration": "Schedule, backfill, lineage"
         }
-      }
-    }
-  },
-  "discipline": {
-    "title": "Oltre il codice",
-    "titleEmphasis": "codice",
-    "subtitle": "Allenamento e musica, con lo stesso metodo che uso nel lavoro: misurare, pianificare, correggere.",
-    "biological": {
-      "title": "Forza ed esplosività",
-      "titleEmphasis": "esplosività",
-      "summary": "Mi alleno in una palestra in garage con sedute full-body che si ripetono ogni settimana: calisthenics zavorrata, fondamentali con il bilanciere, pliometria e skill a corpo libero (front lever, handstand, muscle-up, human flag, planche). Ogni blocco dura quattro settimane e cambia metodo a ogni settimana: ripetizioni con pausa, zavorra, EMOM, piramidale. Poi una settimana di scarico. Obiettivo: la prestazione, non l'estetica. Salto, scatto e forza.",
-      "metrics": { "height": "Altezza", "weight": "Peso", "frequency": "Allenamenti" },
-      "units": { "height": "cm", "weight": "kg", "frequency": "a settimana" },
-      "sessionsTitle": "Programma settimanale",
-      "dayLabel": "Giorno",
-      "focus": { "squat": "Focus squat", "hinge": "Focus stacco", "unilateral": "Focus unilaterale" }
-    },
-    "acoustic": {
-      "title": "Musica e video",
-      "titleEmphasis": "video",
-      "summary": "Faccio tutto da solo: suono e registro la chitarra acustica, lavoro l'audio in GarageBand e Logic Pro, giro il video e lo monto in DaVinci Resolve.",
-      "instrumentLabel": "Strumento",
-      "instrument": "Chitarra acustica",
-      "formatsLabel": "Software",
-      "pipelineTitle": "Fasi di lavoro",
-      "pipeline": {
-        "capture": "Registrazione — chitarra acustica",
-        "mix": "Audio — editing in GarageBand e Logic Pro",
-        "edit": "Video — riprese, poi montaggio in DaVinci Resolve con l'audio finale"
       }
     }
   }

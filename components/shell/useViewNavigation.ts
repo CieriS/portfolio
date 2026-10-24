@@ -4,7 +4,7 @@ import { useViewStoreApi } from '@/store/viewStore';
 
 const SWIPE_MIN_PX = 70;
 
-/** Digits 1–5 jump to a view, ←/→ step through them, horizontal swipes do the same on touch. */
+/** Digits 1–4 jump to a view, ←/→ step through them, horizontal swipes do the same on touch. */
 export function useViewNavigation() {
   const store = useViewStoreApi();
 

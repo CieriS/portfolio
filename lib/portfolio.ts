@@ -17,7 +17,6 @@ export {
   type ProjectLayer,
   type ProjectSource,
   type Segment,
-  type Session,
   type SharedData,
   type Thread,
   type ThreadKind,

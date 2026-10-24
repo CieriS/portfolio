@@ -4,6 +4,8 @@ import {
   caseStudyPath,
   isCaseStudyId,
   LOCALES,
+  RETIRED_VIEW_SLUGS,
+  retiredViewRedirects,
   localizedPath,
   pathFor,
   projectPath,
@@ -17,7 +19,7 @@ describe('pathFor', () => {
   it('puts the hero at the locale root and inner views under their slug', () => {
     expect(pathFor('it', 'hero')).toBe('/it');
     expect(pathFor('it', 'projects')).toBe('/it/sistemi');
-    expect(pathFor('fr', 'discipline')).toBe('/fr/optimisation');
+    expect(pathFor('fr', 'identity')).toBe('/fr/identite');
     expect(pathFor('de', 'timeline')).toBe('/de/ausfuehrung');
   });
 });
@@ -103,5 +105,22 @@ describe('localizedPath', () => {
     // `execution` is the timeline in English and in French.
     expect(localizedPath('/fr/execution')).toBeNull();
     expect(localizedPath('/it/execution')).toBe('/it/esecuzione');
+  });
+});
+
+describe('issue #50: the retired fifth view', () => {
+  it('redirects every old slug permanently to the identity view of the same locale', () => {
+    expect(retiredViewRedirects()).toEqual(
+      LOCALES.map((locale) => ({
+        source: `/${locale}/${RETIRED_VIEW_SLUGS[locale]}`,
+        destination: pathFor(locale, 'identity'),
+        permanent: true,
+      })),
+    );
+    expect(retiredViewRedirects()).toContainEqual({ source: '/it/ottimizzazione', destination: '/it/identita', permanent: true });
+  });
+
+  it('never reuses an old slug for a live view, or the redirect would hide it', () => {
+    for (const locale of LOCALES) expect(viewFromSlug(locale, RETIRED_VIEW_SLUGS[locale])).toBeNull();
   });
 });

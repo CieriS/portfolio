@@ -16,17 +16,38 @@ export const LOCALE_NAMES: Record<Locale, string> = {
   es: 'Español',
 };
 
-export const VIEW_IDS = ['hero', 'identity', 'timeline', 'projects', 'discipline'] as const;
+export const VIEW_IDS = ['hero', 'identity', 'timeline', 'projects'] as const;
 export type ViewId = (typeof VIEW_IDS)[number];
 
 /** Localized URL segment per view; the hero lives at the locale root. */
 export const VIEW_SLUGS: Record<Locale, Record<ViewId, string>> = {
-  en: { hero: '', identity: 'identity', timeline: 'execution', projects: 'systems', discipline: 'optimization' },
-  it: { hero: '', identity: 'identita', timeline: 'esecuzione', projects: 'sistemi', discipline: 'ottimizzazione' },
-  fr: { hero: '', identity: 'identite', timeline: 'execution', projects: 'systemes', discipline: 'optimisation' },
-  de: { hero: '', identity: 'identitaet', timeline: 'ausfuehrung', projects: 'systeme', discipline: 'optimierung' },
-  es: { hero: '', identity: 'identidad', timeline: 'ejecucion', projects: 'sistemas', discipline: 'optimizacion' },
+  en: { hero: '', identity: 'identity', timeline: 'execution', projects: 'systems' },
+  it: { hero: '', identity: 'identita', timeline: 'esecuzione', projects: 'sistemi' },
+  fr: { hero: '', identity: 'identite', timeline: 'execution', projects: 'systemes' },
+  de: { hero: '', identity: 'identitaet', timeline: 'ausfuehrung', projects: 'systeme' },
+  es: { hero: '', identity: 'identidad', timeline: 'ejecucion', projects: 'sistemas' },
 };
+
+/**
+ * Slugs of the fifth view (training and music), removed in issue #50. Its last state is kept in
+ * git under the tag `vista-ottimizzazione`. The old URLs redirect permanently to the identity
+ * view, so links and search results that still point there land on a page that exists.
+ */
+export const RETIRED_VIEW_SLUGS: Record<Locale, string> = {
+  en: 'optimization',
+  it: 'ottimizzazione',
+  fr: 'optimisation',
+  de: 'optimierung',
+  es: 'optimizacion',
+};
+
+export function retiredViewRedirects(): { source: string; destination: string; permanent: true }[] {
+  return LOCALES.map((locale) => ({
+    source: `/${locale}/${RETIRED_VIEW_SLUGS[locale]}`,
+    destination: pathFor(locale, 'identity'),
+    permanent: true,
+  }));
+}
 
 export function isLocale(value: string | undefined): value is Locale {
   return LOCALES.some((locale) => locale === value);

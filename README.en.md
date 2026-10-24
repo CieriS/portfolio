@@ -130,7 +130,7 @@ GOOGLE_SITE_VERIFICATION=your-token
 | 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | `/es/identidad` | A title that is the first sentence of the mission statement (the rest is its subtitle), four engineering principles and contacts (GitHub, LinkedIn, Instagram) and a link to support me on GitHub Sponsors. |
 | 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | `/es/ejecucion` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
 | 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | `/es/sistemas` | Projects in an accordion, all collapsed when the view opens: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
-| 05 | Optimization (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | `/es/optimizacion` | Training and music beyond the code: strength and power (method, metrics, weekly plan) and music and video production (acoustic guitar, software, workflow). |
+| — | ~~Optimization~~ (removed) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | `/es/optimizacion` | Training and music: view removed in issue #50. The old URLs redirect permanently (308) to the identity view of the same locale (`RETIRED_VIEW_SLUGS` in `lib/routes.ts`); training and guitar stay as one line in Identity ("Outside work"). The view's last state (code, copy in five languages, scene) is kept in the git tag `vista-ottimizzazione`: `git checkout vista-ottimizzazione` to look at it, `git diff vista-ottimizzazione -- data components lib` to start again from there. |
 
 Every URL is prerendered with its own content. An address that matches no view shows a localised, non-indexable 404 page.
 
@@ -140,7 +140,7 @@ Below the Systems view there is one more page for the projects that have a case 
 
 - **Bottom links** (`01`–`05`): real `<a href>` elements, so middle-click, "open in new tab" and crawlers all work. A primary click swaps the view in place. Next to the active item sits the everyday word for that view ("Execution · Experience"), which is also part of every link's accessible name: the name comes from the link's own text (the index is hidden from screen readers, the everyday word of inactive items is there for them only), so what is read matches what is shown.
 - **Projects from the home**: in the home paragraph the project names are links (`ProjectLink`, derived from `shared.projects` with `splitByNames`). They lead to the case study when there is one, otherwise to the projects view with the panel already open: the address is `/en/systems#<id>`, which also works pasted or shared. Without a fragment every project starts collapsed.
-- **Keyboard**: `1`–`5` jump to a view, `←` and `→` cycle through them. Keys are ignored while a modifier is held or when focus is in a text field.
+- **Keyboard**: `1`–`4` jump to a view, `←` and `→` cycle through them. Keys are ignored while a modifier is held or when focus is in a text field.
 - **Touch**: a horizontal swipe (over 70 px and mostly horizontal) moves to the previous or next view.
 - **Trackpad**: a sideways two-finger scroll does not go back or forward in the history (`overscroll-behavior: none` on the root), because it fired by accident while scrolling a view. This holds in Chromium and Firefox; Safari handles that gesture itself and may ignore the rule. Browser buttons and keyboard shortcuts are unchanged.
 - **Arrows and counter** in the footer on medium and large screens.
@@ -272,15 +272,13 @@ data/shared.json        language-independent data
 ├── certifications[]    id, name, issuer, entity, issued, expires, url (CV, "Method" phase, hasCredential)
 ├── sponsor             label, url (GitHub Sponsors: kept out of contacts, so not in sameAs or the CV)
 ├── timeline.threads[]  lanes: id, kind (work | education), entity, segments[], phases
-├── projects[]          id, name, source, stack, layers
-└── discipline          biological (metrics, sessions) · acoustic (formats, pipeline)
+└── projects[]          id, name, source, stack, layers
 data/locales/<language>.json   en · it · fr · de
 ├── ui                  next-intl messages: meta (SEO), notFound, nav, navPlain, theme, locale, shell
 ├── hero
 ├── identity
 ├── timeline
-├── projects            items[id]: summary, bridge, highlights, layers
-└── discipline
+└── projects            items[id]: summary, bridge, highlights, layers
 ```
 
 - `shared.json` holds language-independent data (links, dates, stack, metrics); `locales/<language>.json` holds the copy.
@@ -296,7 +294,7 @@ data/locales/<language>.json   en · it · fr · de
 
 `alternateNames` (other spellings and handles the same person is searched by) and `address` (`locality` and `country`, a two-letter ISO code) feed the `alternateName` and `address` of the JSON-LD `Person`; an invalid country code fails the build.
 
-Fields that accept `null` (shown as `—`): `discipline.biological.heightCm`, `discipline.biological.weightKg`. `timeline.threads[].entity` accepts `null` too: the lane then shows its `entityLabel` alone (e.g. "Self-directed study") and stays out of `worksFor` / `alumniOf`. `projects[].source` is either `{ "visibility": "public", "url": "…" }` (repository link, also published as `codeRepository` in the JSON-LD) or `{ "visibility": "private" }`: the code is not linked and the project points to the Identity view, where a walkthrough can be requested. An unknown visibility or a public project without a `url` fails the build.
+Fields that accept `null` (shown as `—`): `timeline.threads[].entity` accepts `null` too: the lane then shows its `entityLabel` alone (e.g. "Self-directed study") and stays out of `worksFor` / `alumniOf`. `projects[].source` is either `{ "visibility": "public", "url": "…" }` (repository link, also published as `codeRepository` in the JSON-LD) or `{ "visibility": "private" }`: the code is not linked and the project points to the Identity view, where a walkthrough can be requested. An unknown visibility or a public project without a `url` fails the build.
 
 ### Timeline lanes
 
@@ -392,7 +390,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
 │   │                 useViewNavigation, useViewUrlSync
 │   ├── ui/           text (Meta, Emphasis: primitives with no client code)
-│   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, DisciplineView, CvRequest, atoms
+│   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, CvRequest, atoms
 ├── data/
 │   ├── shared.json                  language-independent data
 │   ├── cv.json                      CV PDF and email copy (server only)
@@ -424,7 +422,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 - Vitest unit tests next to the modules (`lib/**/*.test.ts`): slugs and URLs, timeline arithmetic (segments, gaps, phases, axis), formatting, the content schema and cross-checks, including the real files.
 - End-to-end tests in `e2e/` with Playwright, run against the production build on Chromium, WebKit and a mobile profile. They cover every language's URLs and metadata, navigation and history, the language switch, SEO, security headers, accessibility (axe) and the site's resilience to a WebGL failure.
 - CI in `.github/workflows/ci.yml`: formatting, lint, typecheck, unit tests, build and end-to-end tests on every pull request and on every push to `development`. Its three jobs (this one, the end-to-end tests and the performance budget) are required checks for merging (see [Workflow](#workflow)).
-- **Visual regression** (`e2e/visual.spec.ts`): nine reference screenshots in `e2e/__screenshots__/` (the five views in the light theme, two in the dark theme, two on a phone) compared on every run. To be repeatable they pin the clock and hide the WebGL scene. They are valid for Chromium on Linux, that is for CI: locally on macOS the tests are skipped, as they would fail on antialiasing alone. After an intended visual change CI fails, regenerates the references on the same runner and publishes them as the `visual-references` artifact: `gh run download <id> -n visual-references -D e2e/__screenshots__`, review the images and commit them.
+- **Visual regression** (`e2e/visual.spec.ts`): eight reference screenshots in `e2e/__screenshots__/` (the four views in the light theme, two in the dark theme, two on a phone) compared on every run. To be repeatable they pin the clock and hide the WebGL scene. They are valid for Chromium on Linux, that is for CI: locally on macOS the tests are skipped, as they would fail on antialiasing alone. After an intended visual change CI fails, regenerates the references on the same runner and publishes them as the `visual-references` artifact: `gh run download <id> -n visual-references -D e2e/__screenshots__`, review the images and commit them.
 - **Performance budget** (`lighthouserc.json`): a third CI job runs Lighthouse three times, in mobile emulation, on the home, timeline and projects pages of the production build, and fails when the median leaves the thresholds: accessibility and SEO at 100, best practices ≥ 95, LCP ≤ 4 s, CLS ≤ 0.02, page weight ≤ 450 KB (700 before three.js was removed). The performance score (≥ 80) and TBT (≤ 300 ms) are reported as warnings only: they depend on the runner's speed, which changes from one run to the next (TBT from 360 to 750 ms on the same code), and as errors they would fail CI at random. The thresholds capture the current state on the CI runners, which are slower than a laptop and have no GPU (the WebGL scene costs more there), with a small margin: they exist to stop regressions and should be tightened with every improvement. Locally: `npm run build && npx @lhci/cli@0.15.1 autorun`.
 - Dependabot (`.github/dependabot.yml`) opens one grouped weekly PR against `development` for npm dependencies and one for GitHub Actions. Major bumps of `eslint` and `typescript` are ignored until `eslint-config-next` supports them.
 - Releases: one milestone per version; every PR carries a `semver:major|minor|patch` label, and `.github/release.yml` groups the generated release notes by label. `version` in `package.json` changes only in the release PR.

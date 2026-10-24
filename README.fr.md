@@ -132,7 +132,7 @@ GOOGLE_SITE_VERIFICATION=votre-jeton
 | 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | `/es/identidad` | Un titre qui est la première phrase de la déclaration d'intention (le reste en est le sous-titre), quatre principes d'ingénierie et contacts (GitHub, LinkedIn, Instagram) et un lien pour me soutenir sur GitHub Sponsors. |
 | 03 | Exécution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | `/es/ejecucion` | Frise chronologique à trois couloirs (industrie, parcours universitaire et étude en autonomie du Data Engineering) sur un axe temporel commun, avec un compteur d'uptime en temps réel et des phases accompagnées de leur stack. |
 | 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | `/es/sistemas` | Projets présentés en accordéon, tous fermés à l'ouverture de la vue : résumé, choix d'ingénierie, architecture en couches, lien avec la Data Engineering et lien vers le dépôt (ou vers les contacts si le code est privé). Actuellement : yourFinance (privé) et aria-er (public). |
-| 05 | Optimisation (`discipline`) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | `/es/optimizacion` | Entraînement et musique au-delà du code : force et explosivité (méthode, mesures, programme hebdomadaire) et production de musique et de vidéo (guitare acoustique, logiciels, étapes). |
+| — | ~~Optimisation~~ (retirée) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | `/es/optimizacion` | Entraînement et musique : vue retirée avec l'issue #50. Les anciennes adresses redirigent de façon permanente (308) vers la vue Identité de la même langue (`RETIRED_VIEW_SLUGS` dans `lib/routes.ts`) ; l'entraînement et la guitare restent en une ligne dans Identité (« En dehors du travail »). Le dernier état de la vue (code, textes en cinq langues, scène) est conservé dans le tag git `vista-ottimizzazione` : `git checkout vista-ottimizzazione` pour la revoir, `git diff vista-ottimizzazione -- data components lib` pour repartir de là. |
 
 Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspond à aucune vue affiche une page 404 localisée et non indexable.
 
@@ -142,7 +142,7 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 
 - **Liens en bas de page** (`01`–`05`) : ce sont de vrais `<a href>`, donc le clic du milieu, « ouvrir dans un nouvel onglet » et les robots d'indexation fonctionnent. Le clic principal change la vue sur place. À côté de l'entrée active figure le mot courant pour cette vue (« Exécution · Expérience »), qui fait aussi partie du nom accessible de chaque lien : le nom vient du texte du lien (l'index est masqué aux lecteurs d'écran, le mot courant des entrées inactives n'est là que pour eux), si bien que ce qui est lu correspond à ce qui est affiché.
 - **Projets depuis l'accueil** : dans le paragraphe de l'accueil, les noms des projets sont des liens (`ProjectLink`, dérivés de `shared.projects` avec `splitByNames`). Ils mènent à l'étude de cas quand elle existe, sinon à la vue des projets avec le panneau déjà ouvert : l'adresse est `/fr/systemes#<id>`, qui fonctionne aussi collée ou partagée. Sans fragment, tous les projets démarrent fermés.
-- **Clavier** : `1`–`5` accèdent directement à une vue, `←` et `→` les parcourent en boucle. Les touches sont ignorées si une touche de modification est enfoncée ou si le focus est dans un champ de saisie.
+- **Clavier** : `1`–`4` accèdent directement à une vue, `←` et `→` les parcourent en boucle. Les touches sont ignorées si une touche de modification est enfoncée ou si le focus est dans un champ de saisie.
 - **Tactile** : un balayage horizontal (plus de 70 px et majoritairement horizontal) passe à la vue précédente ou suivante.
 - **Trackpad** : le défilement latéral à deux doigts ne fait ni reculer ni avancer dans l'historique (`overscroll-behavior: none` sur la racine), car il se déclenchait par erreur pendant le défilement d'une vue. Valable dans Chromium et Firefox ; Safari gère ce geste lui-même et peut ignorer la règle. Les boutons du navigateur et les raccourcis clavier ne changent pas.
 - **Flèches et compteur** dans le pied de page, sur les écrans moyens et grands.
@@ -274,15 +274,13 @@ data/shared.json        données indépendantes de la langue
 ├── certifications[]    id, name, issuer, entity, issued, expires, url (CV, phase « Méthode », hasCredential)
 ├── sponsor             label, url (GitHub Sponsors : hors de contacts, donc ni sameAs ni CV)
 ├── timeline.threads[]  couloirs : id, kind (work | education), entity, segments[], phases
-├── projects[]          id, name, source, stack, layers
-└── discipline          biological (mesures, séances) · acoustic (formats, pipeline)
+└── projects[]          id, name, source, stack, layers
 data/locales/<langue>.json   en · it · fr · de
 ├── ui                  messages next-intl : meta (SEO), notFound, nav, navPlain, theme, locale, shell
 ├── hero
 ├── identity
 ├── timeline
-├── projects            items[id] : summary, bridge, highlights, layers
-└── discipline
+└── projects            items[id] : summary, bridge, highlights, layers
 ```
 
 - `shared.json` contient les données indépendantes de la langue (liens, dates, stack, mesures) ; `locales/<langue>.json` contient les textes.
@@ -298,7 +296,7 @@ data/locales/<langue>.json   en · it · fr · de
 
 `alternateNames` (autres graphies et identifiants sous lesquels la même personne est recherchée) et `address` (`locality` et `country`, code ISO à deux lettres) alimentent `alternateName` et `address` du `Person` dans le JSON-LD ; un code pays invalide fait échouer le build.
 
-Champs acceptant `null` (affichés `—`) : `discipline.biological.heightCm`, `discipline.biological.weightKg`. `timeline.threads[].entity` accepte aussi `null` : le couloir affiche alors seulement son `entityLabel` (ex. « Étude en autonomie ») et reste hors de `worksFor` / `alumniOf`. `projects[].source` vaut `{ "visibility": "public", "url": "…" }` (lien vers le dépôt, publié aussi comme `codeRepository` dans le JSON-LD) ou `{ "visibility": "private" }` : le code n'est pas lié et le projet renvoie à la vue Identité, où demander une démo. Une visibilité inconnue ou un projet public sans `url` fait échouer le build.
+Champs acceptant `null` (affichés `—`) : `timeline.threads[].entity` accepte aussi `null` : le couloir affiche alors seulement son `entityLabel` (ex. « Étude en autonomie ») et reste hors de `worksFor` / `alumniOf`. `projects[].source` vaut `{ "visibility": "public", "url": "…" }` (lien vers le dépôt, publié aussi comme `codeRepository` dans le JSON-LD) ou `{ "visibility": "private" }` : le code n'est pas lié et le projet renvoie à la vue Identité, où demander une démo. Une visibilité inconnue ou un projet public sans `url` fait échouer le build.
 
 ### Couloirs de la frise
 
@@ -394,7 +392,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
 │   │                 useViewNavigation, useViewUrlSync
 │   ├── ui/           text (Meta, Emphasis : primitives sans code client)
-│   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, DisciplineView, CvRequest, atoms
+│   └── views/        HeroView, IdentityView, TimelineView, ProjectsView, CvRequest, atoms
 ├── data/
 │   ├── shared.json                  données indépendantes de la langue
 │   ├── cv.json                      textes du PDF et de l'e-mail du CV (serveur uniquement)
@@ -426,7 +424,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 - Tests unitaires Vitest à côté des modules (`lib/**/*.test.ts`) : slugs et URL, arithmétique de la timeline (segments, interruptions, phases, axe), formatage, schéma et contrôles des contenus, fichiers réels compris.
 - Tests end-to-end dans `e2e/` avec Playwright, exécutés contre le build de production sur Chromium, WebKit et un profil mobile. Ils couvrent les URL et métadonnées de chaque langue, la navigation et l'historique, le changement de langue, le SEO, les en-têtes de sécurité, l'accessibilité (axe) et la résistance du site à une panne WebGL.
 - CI dans `.github/workflows/ci.yml` : formatage, lint, typecheck, tests unitaires, build et tests end-to-end sur chaque pull request et à chaque push sur `development`. Ses trois jobs (celui-ci, les tests end-to-end et le budget de performance) sont des contrôles obligatoires pour la fusion (voir [Méthode de travail](#méthode-de-travail)).
-- **Régression visuelle** (`e2e/visual.spec.ts`) : neuf captures de référence dans `e2e/__screenshots__/` (les cinq vues en thème clair, deux en thème sombre, deux sur téléphone) comparées à chaque exécution. Pour être reproductibles, elles figent l'horloge et masquent la scène WebGL. Elles valent pour Chromium sous Linux, donc pour la CI : en local sous macOS les tests sont ignorés, car ils échoueraient sur le seul anticrénelage. Après un changement visuel voulu, la CI échoue, régénère les références sur le même runner et les publie dans l'artefact `visual-references` : `gh run download <id> -n visual-references -D e2e/__screenshots__`, on vérifie les images et on les committe.
+- **Régression visuelle** (`e2e/visual.spec.ts`) : huit captures de référence dans `e2e/__screenshots__/` (les quatre vues en thème clair, deux en thème sombre, deux sur téléphone) comparées à chaque exécution. Pour être reproductibles, elles figent l'horloge et masquent la scène WebGL. Elles valent pour Chromium sous Linux, donc pour la CI : en local sous macOS les tests sont ignorés, car ils échoueraient sur le seul anticrénelage. Après un changement visuel voulu, la CI échoue, régénère les références sur le même runner et les publie dans l'artefact `visual-references` : `gh run download <id> -n visual-references -D e2e/__screenshots__`, on vérifie les images et on les committe.
 - **Budget de performance** (`lighthouserc.json`) : un troisième job de la CI lance Lighthouse trois fois, en émulation mobile, sur l'accueil, la timeline et les projets du build de production, et échoue si la médiane sort des seuils : accessibilité et SEO à 100, bonnes pratiques ≥ 95, LCP ≤ 4 s, CLS ≤ 0,02, poids de page ≤ 450 Ko (700 avant le retrait de three.js). Le score de performance (≥ 80) et le TBT (≤ 300 ms) ne donnent lieu qu'à un avertissement : ils dépendent de la puissance du runner, qui change d'une exécution à l'autre (TBT de 360 à 750 ms sur le même code), et en erreur ils feraient échouer la CI au hasard. Les seuils reflètent l'état actuel sur les runners de la CI, plus lents qu'un portable et sans GPU (la scène WebGL y coûte davantage), avec une petite marge : ils servent à bloquer les régressions et doivent être resserrés à chaque amélioration. En local : `npm run build && npx @lhci/cli@0.15.1 autorun`.
 - Dependabot (`.github/dependabot.yml`) ouvre chaque semaine une PR groupée vers `development` pour les dépendances npm et une pour les GitHub Actions. Les versions majeures d’`eslint` et de `typescript` sont ignorées tant que `eslint-config-next` ne les prend pas en charge.
 - Versions publiées : un jalon (milestone) par version ; chaque PR porte une étiquette `semver:major|minor|patch`, et `.github/release.yml` regroupe par étiquette les notes générées de la publication. `version` dans `package.json` ne change que dans la PR de publication.

@@ -20,10 +20,6 @@
         "projects": {
           "title": "Projekte: Rust, PostgreSQL & dbt",
           "description": "yourFinance, Plattform für persönliche Finanzen mit Rust-API auf PostgreSQL, und aria-er, Datenpipeline zur Luftqualität mit Rust, dbt und Dagster."
-        },
-        "discipline": {
-          "title": "Training und Musik jenseits des Codes",
-          "description": "Wie ich trainiere und Musik produziere: Ganzkörpereinheiten mit gewichteten Calisthenics, Langhantel und Plyometrie; Akustikgitarre, Audio und Videoschnitt."
         }
       }
     },
@@ -36,15 +32,13 @@
       "hero": "Index",
       "identity": "Identität",
       "timeline": "Ausführung",
-      "projects": "Systeme",
-      "discipline": "Optimierung"
+      "projects": "Systeme"
     },
     "navPlain": {
       "hero": "Start",
       "identity": "Über mich",
       "timeline": "Erfahrung",
-      "projects": "Projekte",
-      "discipline": "Freizeit"
+      "projects": "Projekte"
     },
     "theme": { "label": "Design", "light": "Hell", "dark": "Dunkel", "system": "Auto" },
     "locale": { "label": "Sprache", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
@@ -112,6 +106,8 @@
         "body": "Viele kleine Funktionen, höchstens zwei Verschachtelungsebenen, explizite Verträge dazwischen."
       }
     ],
+    "outsideTitle": "Neben der Arbeit",
+    "outside": "Ich trainiere dreimal pro Woche, Calisthenics mit Zusatzgewicht und Langhantel, und spiele Akustikgitarre.",
     "contactsTitle": "Kontakt",
     "contactsNote": "Repositories und direkte Kanäle.",
     "sponsor": "Meine Arbeit unterstützen"
@@ -242,35 +238,6 @@
           "transform": "Staging, Intermediate, Marts",
           "orchestration": "Schedules, Backfills, Lineage"
         }
-      }
-    }
-  },
-  "discipline": {
-    "title": "Jenseits des Codes",
-    "titleEmphasis": "Codes",
-    "subtitle": "Training und Musik, mit derselben Methode wie im Beruf: messen, planen, anpassen.",
-    "biological": {
-      "title": "Kraft & Explosivität",
-      "titleEmphasis": "Explosivität",
-      "summary": "Ich trainiere in einem Garagen-Gym mit Ganzkörpereinheiten, die sich jede Woche wiederholen: Calisthenics mit Zusatzgewicht, Grundübungen mit der Langhantel, Plyometrie und Skills mit dem eigenen Körpergewicht (Front Lever, Handstand, Muscle-up, Human Flag, Planche). Jeder Block dauert vier Wochen und wechselt jede Woche die Methode: Pausenwiederholungen, Zusatzgewicht, EMOM, Pyramide. Danach folgt eine Deload-Woche. Das Ziel ist Leistung, nicht Aussehen: Sprungkraft, Sprint und Kraft.",
-      "metrics": { "height": "Größe", "weight": "Gewicht", "frequency": "Einheiten" },
-      "units": { "height": "cm", "weight": "kg", "frequency": "pro Woche" },
-      "sessionsTitle": "Wochenplan",
-      "dayLabel": "Tag",
-      "focus": { "squat": "Fokus Kniebeuge", "hinge": "Fokus Kreuzheben", "unilateral": "Fokus unilateral" }
-    },
-    "acoustic": {
-      "title": "Musik & Video",
-      "titleEmphasis": "Video",
-      "summary": "Ich mache alles selbst: Ich spiele und nehme Akustikgitarre auf, bearbeite das Audio in GarageBand und Logic Pro, drehe das Video und schneide es in DaVinci Resolve.",
-      "instrumentLabel": "Instrument",
-      "instrument": "Akustikgitarre",
-      "formatsLabel": "Software",
-      "pipelineTitle": "Ablauf",
-      "pipeline": {
-        "capture": "Aufnahme — Akustikgitarre",
-        "mix": "Audio — Bearbeitung in GarageBand und Logic Pro",
-        "edit": "Video — Dreh, dann Schnitt in DaVinci Resolve mit dem finalen Audio"
       }
     }
   }
