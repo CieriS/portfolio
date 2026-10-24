@@ -402,6 +402,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   ├── content/      schema (zod) · validate (cross-checks)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV on request)
 ├── store/            viewStore (per instance) · useSceneStore (scene, transient)
+├── docs/audit-2026-10/   design audit and copy review (2026-10-24), with screenshots: source of issues #95–#102 and later
 ├── e2e/              Playwright suite · helpers.ts (locales, views, waits)
 ├── .github/workflows/ci.yml   lint, typecheck, build and tests on every PR
 ├── .github/workflows/versions.yml   project versions kept in step with their releases (automatic PR)
