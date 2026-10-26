@@ -65,8 +65,8 @@
       "id": "yourfinance",
       "name": "yourFinance",
       "source": { "visibility": "private" },
-      "version": "1.2.0",
-      "released": "2026-10-11",
+      "version": "1.3.0",
+      "released": "2026-10-26",
       "stack": ["Rust", "PostgreSQL", "React Native", "Docker"],
       "layers": [
         { "id": "clients", "tech": "Expo · Tauri" },
