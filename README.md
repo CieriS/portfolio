@@ -2,7 +2,7 @@
 
 **Italiano** · [English](README.en.md) · [Français](README.fr.md)
 
-Portfolio personale di **Samuele Cieri**, Software Developer in transizione verso la Data Engineering. È una Single Page Application minimalista costruita con Next.js: il layout è bloccato a `100dvh`, le viste cambiano senza ricaricare la pagina e un campo di particelle 3D resta attivo in background. Ogni vista ha comunque un URL proprio, pre-renderizzato e indicizzabile, in inglese, italiano, francese e tedesco.
+Portfolio di **Samuele Cieri**, Software Developer in transizione verso la Data Engineering. È una Single Page Application minimalista costruita con Next.js: il layout è bloccato a `100dvh`, le viste cambiano senza ricaricare la pagina e un campo di particelle 3D resta attivo in background. Ogni vista ha comunque un URL proprio, pre-renderizzato e indicizzabile, in inglese, italiano, francese e tedesco.
 
 ## Indice
 
