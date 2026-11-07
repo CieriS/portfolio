@@ -8,7 +8,7 @@ Data: 2026-10-24. Analisi parallela a [design.md](design.md). Nessun file del si
 
 L'inglese è la versione che legge un recruiter internazionale. Le altre lingue ricalcano la stessa struttura, quindi i problemi di messaggio valgono anche per loro; vanno corrette lingua per lingua, non traducendo.
 
-**Riferimento di voce**: le regole già fissate in `CLAUDE.md` ("Tono del copy", issue #20):
+**Riferimento di voce**: le regole di tono del copy già fissate (issue #20):
 - preciso ma non strano;
 - le cose chiamate con il loro nome, in prima persona;
 - **niente metafore ingegneristiche forzate**;
