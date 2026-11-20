@@ -1,4 +1,4 @@
-# Samuele Cieri — Portfolio
+# Samuele Cieri — Portfolio.
 
 **Italiano** · [English](README.en.md) · [Français](README.fr.md)
 
