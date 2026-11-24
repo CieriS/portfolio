@@ -248,7 +248,8 @@
       "access": {
         "title": "Code",
         "body": "The repository is public under the MIT licence. One command starts the whole stack with Docker and loads ten years of data.",
-        "cta": "Read the code on GitHub"
+        "cta": "Read the code on GitHub",
+        "contact": "Get in touch"
       },
       "back": "Back to Systems"
     },
@@ -421,7 +422,8 @@
       "access": {
         "title": "Codice",
         "body": "Il repository è pubblico, con licenza MIT. Un solo comando avvia tutto con Docker e carica dieci anni di dati.",
-        "cta": "Leggi il codice su GitHub"
+        "cta": "Leggi il codice su GitHub",
+        "contact": "Scrivimi"
       },
       "back": "Torna a Sistemi"
     },
@@ -594,7 +596,8 @@
       "access": {
         "title": "Code",
         "body": "Le dépôt est public, sous licence MIT. Une seule commande lance tout avec Docker et charge dix ans de données.",
-        "cta": "Lire le code sur GitHub"
+        "cta": "Lire le code sur GitHub",
+        "contact": "Me contacter"
       },
       "back": "Retour à Systèmes"
     },
@@ -767,7 +770,8 @@
       "access": {
         "title": "Code",
         "body": "Das Repository ist öffentlich, unter MIT-Lizenz. Ein einziger Befehl startet alles mit Docker und lädt zehn Jahre Daten.",
-        "cta": "Den Code auf GitHub lesen"
+        "cta": "Den Code auf GitHub lesen",
+        "contact": "Kontakt aufnehmen"
       },
       "back": "Zurück zu Systeme"
     },
@@ -940,7 +944,8 @@
       "access": {
         "title": "Código",
         "body": "El repositorio es público, con licencia MIT. Un solo comando arranca todo con Docker y carga diez años de datos.",
-        "cta": "Leer el código en GitHub"
+        "cta": "Leer el código en GitHub",
+        "contact": "Escríbeme"
       },
       "back": "Volver a Sistemas"
     }

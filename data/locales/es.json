@@ -83,7 +83,7 @@
     "lead": "Construyo el camino de las interfaces a los sistemas: backends tipados, almacenamiento relacional y pipelines que mueven los datos con un propósito.",
     "detail": "Desde 2022 desarrollo en Tas, en frontend y full-stack, hoy con Angular y TypeScript, mientras estudio Ingeniería Informática en la Universidad de Bolonia. Mis proyectos personales usan Rust, PostgreSQL y dbt: yourFinance, una plataforma de finanzas personales, y aria-er, un pipeline de datos sobre la calidad del aire.",
     "hint": "Mueve el cursor: cada nodo es una unidad de cálculo",
-    "cta": "Explorar"
+    "cta": "Ver los proyectos"
   },
   "identity": {
     "title": "El software es una herramienta.",
@@ -202,6 +202,7 @@
     },
     "items": {
       "yourfinance": {
+        "teaser": "Plataforma de finanzas personales multiusuario, con Rust y PostgreSQL.",
         "summary": "Plataforma de finanzas personales multiusuario: un workspace de Rust por capas (dominio puro, capa de datos con SQLx, API con Axum, worker en segundo plano) sobre PostgreSQL, que sirve una app Expo para iOS, Android y web y una aplicación de escritorio con Tauri.",
         "bridge": "La integridad la garantiza la base de datos: saldos mantenidos solo por triggers, seguridad a nivel de fila por usuario, funciones SQL de análisis para tendencias y presupuestos, importaciones idempotentes de exportaciones de terceros.",
         "highlights": [
@@ -220,6 +221,7 @@
         }
       },
       "ariaer": {
+        "teaser": "Plataforma de datos sobre la calidad del aire en Emilia-Romaña.",
         "summary": "Plataforma de datos completa sobre la calidad del aire en Emilia-Romaña, con los datos abiertos de ARPAE y el tiempo de Open-Meteo: ingesta en Rust a Parquet particionado, modelos dbt sobre DuckDB en local y BigQuery en GCP, orquestación con Dagster. Funciona en local con Docker, con dashboard y CI, y los mismos modelos se ejecutaron en BigQuery en un proyecto real de Google Cloud con resultados idénticos a DuckDB.",
         "bridge": "Un proyecto de ingeniería de datos puro: medidas provisionales que se corrigen tras la validación, huecos y formatos incoherentes en la fuente, convertidos en un conjunto de datos histórico y con tests que responde sobre superaciones de los límites legales, tendencias de los contaminantes y relación con el tiempo.",
         "highlights": [

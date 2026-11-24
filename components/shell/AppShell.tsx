@@ -52,10 +52,13 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
           {shell('skip')}
         </a>
         <header
-          className="intro-fade relative z-20 flex items-center justify-between gap-6 px-frame pt-4 pb-3 select-none md:pt-6"
+          className="intro-fade relative z-20 flex items-center justify-between gap-6 px-frame pt-2 pb-1 select-none md:pt-4"
           style={introStyle(0)}
         >
-          <ViewLink view="hero" className="text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap select-none">
+          <ViewLink
+            view="hero"
+            className="inline-flex min-h-[2.8rem] items-center text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap select-none"
+          >
             <span className="link-underline">{data.shared.name}</span>
           </ViewLink>
           <p className="hidden font-mono text-[11px] tracking-[0.14em] text-muted uppercase lg:block">{shell('role')}</p>
@@ -74,7 +77,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
         </main>
 
         <footer
-          className="intro-fade flex items-center justify-between gap-6 px-frame pt-3 pb-4 select-none md:pb-6"
+          className="intro-fade flex items-center justify-between gap-6 px-frame pt-1 pb-2 select-none md:pb-4"
           style={introStyle(1)}
         >
           <NavBar />

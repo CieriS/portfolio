@@ -4,6 +4,8 @@ import type { ViewId } from '@/lib/routes';
 export {
   CASE_STUDY_IDS,
   caseStudyPath,
+  CONTACTS_FRAGMENT,
+  contactsPath,
   isCaseStudyId,
   pathFor,
   projectPath,

@@ -34,7 +34,9 @@ type Copy = (typeof yourfinance)['copy']['en'];
  * first case study, so another study can name its own crates, steps and screens; the
  * cross-checks below make sure every id has its entry.
  */
-export type CaseStudyCopy = Omit<Copy, 'architecture' | 'flow' | 'decisions' | 'measures' | 'screens'> & {
+export type CaseStudyCopy = Omit<Copy, 'architecture' | 'flow' | 'decisions' | 'measures' | 'screens' | 'access'> & {
+  /** `contact`: a link to the contacts next to the code, for a public project (a private one already leads there). */
+  access: Copy['access'] & { contact?: string };
   architecture: Omit<Copy['architecture'], 'crates'> & { crates: Record<string, string> };
   flow: Omit<Copy['flow'], 'steps'> & { steps: Record<string, { actor: string; text: string }> };
   decisions: Omit<Copy['decisions'], 'items'> & { items: Record<string, { title: string; body: string }> };
@@ -69,6 +71,7 @@ export type CaseStudyCopyUnderCheck = {
   decisions: { items: Record<string, unknown> };
   measures: { rows: Record<string, string> };
   screens: { items: Record<string, { alt: string }> };
+  access?: { contact?: string };
   live?: unknown;
 };
 
@@ -78,6 +81,11 @@ export const MAX_DESCRIPTION = 160;
 /** Copy keyed by ids of the structure, in every language; returns every problem at once. */
 export function findCaseStudyIssues(data: CaseStudyData, copy: Record<string, CaseStudyCopyUnderCheck>): string[] {
   const issues: string[] = [];
+  // An optional text is written in every language or in none: half a link would be worse.
+  const withContact = LOCALES.filter((locale) => copy[locale]?.access?.contact !== undefined);
+  if (withContact.length > 0 && withContact.length < LOCALES.length) {
+    for (const locale of LOCALES) if (!withContact.includes(locale)) issues.push(`${locale}.access.contact is missing`);
+  }
   for (const locale of LOCALES) {
     const text = copy[locale];
     if (!text) {

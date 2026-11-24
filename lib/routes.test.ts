@@ -9,6 +9,7 @@ import {
   localizedPath,
   pathFor,
   projectPath,
+  contactsPath,
   VIEW_IDS,
   VIEW_SLUGS,
   viewFromPath,
@@ -70,6 +71,17 @@ describe('case studies', () => {
 
   it('do not shadow a view: the page keeps resolving its own view', () => {
     expect(viewFromPath('/it/sistemi/yourfinance')).toBe('projects');
+  });
+});
+
+describe('contactsPath', () => {
+  it('points to the contact section of the identity view in every locale', () => {
+    for (const locale of LOCALES) {
+      const url = new URL(contactsPath(locale), 'https://example.com');
+      expect(url.hash).toBe('#contacts');
+      expect(viewFromPath(url.pathname)).toBe('identity');
+      expect(url.pathname).toBe(pathFor(locale, 'identity'));
+    }
   });
 });
 

@@ -83,7 +83,7 @@
     "lead": "Costruisco il percorso dalle interfacce ai sistemi: backend tipizzati, storage relazionale e pipeline che muovono dati con uno scopo.",
     "detail": "Dal 2022 sviluppo in Tas, frontend e full-stack, oggi con Angular e TypeScript, e studio Ingegneria Informatica all'Università di Bologna. Nei progetti personali uso Rust, PostgreSQL e dbt: yourFinance, piattaforma di finanza personale, e aria-er, pipeline dati sulla qualità dell'aria.",
     "hint": "Muovi il cursore — ogni nodo è un'unità di calcolo",
-    "cta": "Esplora"
+    "cta": "Vedi i progetti"
   },
   "identity": {
     "title": "Il software è uno strumento.",
@@ -202,6 +202,7 @@
     },
     "items": {
       "yourfinance": {
+        "teaser": "Piattaforma multi-utente di finanza personale, in Rust e PostgreSQL.",
         "summary": "Piattaforma multi-utente di finanza personale: un workspace Rust a livelli (dominio puro, data layer SQLx, API Axum, worker in background) su PostgreSQL, al servizio di un’app Expo per iOS, Android e web e di una shell desktop Tauri.",
         "bridge": "Integrità garantita dal database: saldi aggiornati solo dai trigger, row-level security per utente, funzioni SQL analitiche per andamenti e budget, import idempotenti da export di terze parti.",
         "highlights": [
@@ -220,6 +221,7 @@
         }
       },
       "ariaer": {
+        "teaser": "Piattaforma dati sulla qualità dell’aria in Emilia-Romagna.",
         "summary": "Piattaforma dati end-to-end sulla qualità dell’aria in Emilia-Romagna, sugli open data ARPAE arricchiti con il meteo di Open-Meteo: ingestion in Rust verso Parquet partizionato, modelli dbt su DuckDB in locale e BigQuery su GCP, orchestrazione con Dagster. Gira in locale con Docker, dashboard e CI comprese, e gli stessi modelli hanno girato su BigQuery in un vero progetto Google Cloud con risultati identici a DuckDB.",
         "bridge": "Un progetto di data engineering puro: misure provvisorie riviste dopo la validazione, buchi e formati incoerenti nella sorgente, trasformati in un dataset storicizzato e testato che risponde su superamenti dei limiti di legge, trend degli inquinanti e correlazione con il meteo.",
         "highlights": [

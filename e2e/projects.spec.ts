@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { LOCALES } from '../lib/routes';
+import { contactsPath, LOCALES } from '../lib/routes';
 import { locales, shared } from './content';
 import { expectView, gotoView, pathFor } from './helpers';
 
@@ -14,7 +14,7 @@ test('a private project shows its highlights and never links to a repository', a
   await expect(panel.getByRole('listitem').filter({ hasText: copy.items.yourfinance.highlights[0] })).toBeVisible();
 
   await expect(panel.locator('a[href*="github.com"]')).toHaveCount(0);
-  await expect(panel.getByRole('link', { name: copy.labels.private })).toHaveAttribute('href', pathFor('en', 'identity'));
+  await expect(panel.getByRole('link', { name: copy.labels.private })).toHaveAttribute('href', contactsPath('en'));
 });
 
 test('the private source link swaps to the contacts view in place', async ({ page }) => {
@@ -24,6 +24,34 @@ test('the private source link swaps to the contacts view in place', async ({ pag
 
   await expectView(page, 'en', 'identity');
   expect(new URL(page.url()).pathname).toBe(pathFor('en', 'identity'));
+  // It lands on the contacts, where access to the code can be asked for.
+  await expect(page.locator('#contacts')).toBeFocused();
+});
+
+for (const locale of LOCALES) {
+  test(`every closed project shows its teaser line, never cut, in ${locale}`, async ({ page }) => {
+    // The narrowest phone of the review: two lines at most, and the clamp must not cut a word (#96).
+    await page.setViewportSize({ width: 375, height: 812 });
+    await gotoView(page, locale, 'projects');
+    for (const project of shared.projects) {
+      const item = locales[locale].projects.items[project.id as keyof (typeof locales)[typeof locale]['projects']['items']];
+      const teaser = page.locator(`#project-${project.id}-teaser`);
+      await expect(teaser).toBeVisible();
+      await expect(teaser).toHaveText(item.teaser);
+      const line = teaser.locator('span');
+      expect(await line.evaluate((el) => el.scrollHeight <= el.clientHeight + 1)).toBe(true);
+      await expect(page.getByRole('button', { name: new RegExp(project.name) })).toHaveAccessibleDescription(item.teaser);
+    }
+  });
+}
+
+test('opening a project does not say the same sentence twice', async ({ page }) => {
+  await gotoView(page, 'en', 'projects');
+  await page.getByRole('button', { name: /aria-er/ }).click();
+  const panel = page.locator('#project-ariaer');
+  await expect(panel.getByText(copy.items.ariaer.summary)).toBeVisible();
+  await expect(page.locator('#project-ariaer-teaser')).toBeVisible();
+  await expect(panel.getByText(copy.items.ariaer.teaser)).toHaveCount(0);
 });
 
 test('only public projects publish a codeRepository in the JSON-LD', async ({ page }) => {

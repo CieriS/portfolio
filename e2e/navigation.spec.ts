@@ -117,3 +117,25 @@ test('every nav link names its view in plain words, and the active one shows the
     }
   }
 });
+
+test('on a 375 px phone every nav entry shows its plain word, and every control is a 44 px target', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  for (const locale of LOCALES) {
+    await gotoView(page, locale, 'hero');
+    const plain = page.locator('footer nav [data-plain]');
+    await expect(plain).toHaveCount(VIEWS.length);
+    for (const [index, view] of VIEWS.entries()) {
+      await expect(plain.nth(index)).toContainText(locales[locale].ui.navPlain[view]);
+      expect((await plain.nth(index).boundingBox())!.width).toBeGreaterThan(10);
+    }
+    // Header controls and the footer navigation (#95). The visual size may stay small: the hit area grows.
+    const controls = page.locator('header a, header button, footer nav a');
+    for (const control of await controls.all()) {
+      if (!(await control.isVisible())) continue;
+      const box = (await control.boundingBox())!;
+      expect(box.width, (await control.textContent()) ?? '').toBeGreaterThanOrEqual(44);
+      expect(box.height, (await control.textContent()) ?? '').toBeGreaterThanOrEqual(44);
+      expect(box.x + box.width).toBeLessThanOrEqual(375);
+    }
+  }
+});

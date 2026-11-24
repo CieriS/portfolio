@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import ariaer from '../data/case-studies/ariaer.json';
 import yourfinance from '../data/case-studies/yourfinance.json';
-import { caseStudyPath, CASE_STUDY_IDS, LOCALES, type CaseStudyId } from '../lib/routes';
+import { caseStudyPath, CASE_STUDY_IDS, contactsPath, LOCALES, type CaseStudyId } from '../lib/routes';
 import { locales, shared } from './content';
 import { CASE_STUDY_PAGES, expectView, gotoView, pathFor } from './helpers';
 
@@ -100,7 +100,7 @@ for (const { locale, id, path } of CASE_STUDY_PAGES) {
       expect(jsonLd).toContain('TechArticle');
       expect(jsonLd).not.toContain('codeRepository');
       // The way to the code is the same as in the accordion: ask.
-      await expect(page.locator('a[data-source="private"]')).toHaveAttribute('href', pathFor(locale, 'identity'));
+      await expect(page.locator('a[data-source="private"]')).toHaveAttribute('href', contactsPath(locale));
     });
   } else {
     test(`${path} leads to the public repository`, async ({ page }) => {
@@ -113,6 +113,27 @@ for (const { locale, id, path } of CASE_STUDY_PAGES) {
     });
   }
 }
+
+for (const { locale, path } of CASE_STUDY_PAGES) {
+  test(`${path} ends with a link to the contacts`, async ({ page }) => {
+    await page.goto(path);
+    // The last block of the page: a private study asks through its code link, a public one adds its own (#137).
+    const links = page
+      .locator('article > section')
+      .last()
+      .locator(`a[href="${contactsPath(locale)}"]`);
+    await expect(links).toHaveCount(1);
+    await expect(links).toBeVisible();
+  });
+}
+
+test('the contact link of a case study lands on the contacts', async ({ page }) => {
+  await page.goto(caseStudyPath('en', 'ariaer'));
+  await page.locator('a[data-contact]').click();
+  await expectView(page, 'en', 'identity');
+  await expect(page.locator('#contacts')).toBeFocused();
+  await expect(page.locator('#contacts')).toBeInViewport();
+});
 
 for (const id of CASE_STUDY_IDS) {
   test(`${id}: the version is the project's own, with the month it came out`, async ({ page }) => {

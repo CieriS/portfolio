@@ -24,10 +24,10 @@ export function NavBar() {
               <ViewLink
                 view={id}
                 aria-current={isActive ? 'page' : undefined}
-                className="group relative flex items-baseline gap-2 py-2 text-[13px] select-none"
+                className="group relative flex min-h-11 items-center gap-1.5 text-[13px] select-none md:gap-2"
               >
                 {/* The name comes from the content, so what is read matches what is shown: the
-                    index is decoration, the everyday word is there for every link. */}
+                    index is decoration. Every link is read as "system name · plain word". */}
                 <span
                   aria-hidden
                   className={cn(
@@ -37,22 +37,33 @@ export function NavBar() {
                 >
                   {pad(index + 1)}
                 </span>
-                {/* On small screens only the active label is shown next to its index. */}
+                {/* From `md` every entry shows its system name; on phones it is only read out. */}
                 <span
                   className={cn(
-                    'transition-colors duration-300',
-                    isActive ? 'text-ink' : 'sr-only text-muted group-hover:text-ink md:not-sr-only',
+                    'transition-colors duration-300 max-md:sr-only',
+                    isActive ? 'text-ink' : 'text-muted group-hover:text-ink',
                   )}
                 >
                   {t(id)}
+                </span>{' '}
+                {/* The plain word says what the view holds. On phones every entry shows it, so no
+                    entry is a bare number (#95); from `md` it sits next to the active view only. */}
+                <span
+                  data-plain
+                  className={cn(
+                    'whitespace-nowrap transition-colors duration-300',
+                    isActive
+                      ? 'text-ink md:font-mono md:text-[11px] md:text-muted'
+                      : 'text-muted group-hover:text-ink md:sr-only',
+                  )}
+                >
+                  <span className="max-md:sr-only">· </span>
+                  {plain(id)}
                 </span>
-                {/* The view names are a naming system; the plain word says what the view holds.
-                    Shown next to the active view only, read out for every link. */}{' '}
-                <span className={isActive ? 'font-mono text-[11px] whitespace-nowrap text-muted' : 'sr-only'}>· {plain(id)}</span>
                 {isActive && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute inset-x-0 bottom-0.5 h-px bg-ink"
+                    className="absolute inset-x-0 bottom-2 h-px bg-ink"
                     transition={{ type: 'spring', stiffness: 380, damping: 36 }}
                   />
                 )}

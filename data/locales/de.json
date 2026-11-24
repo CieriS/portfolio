@@ -83,7 +83,7 @@
     "lead": "Ich baue den Weg von Oberflächen zu Systemen: typisierte Backends, relationale Speicherung und Pipelines, die Daten mit klarem Zweck bewegen.",
     "detail": "Seit 2022 entwickle ich bei Tas, Frontend und Full-Stack, heute mit Angular und TypeScript, und studiere Technische Informatik an der Universität Bologna. Meine eigenen Projekte bauen auf Rust, PostgreSQL und dbt: yourFinance, eine Plattform für persönliche Finanzen, und aria-er, eine Datenpipeline zur Luftqualität.",
     "hint": "Bewege den Cursor — jeder Knoten ist eine Recheneinheit",
-    "cta": "Erkunden"
+    "cta": "Zu den Projekten"
   },
   "identity": {
     "title": "Software ist ein Instrument.",
@@ -202,6 +202,7 @@
     },
     "items": {
       "yourfinance": {
+        "teaser": "Mehrbenutzer-Plattform für persönliche Finanzen, mit Rust und PostgreSQL.",
         "summary": "Mehrbenutzer-Plattform für persönliche Finanzen: ein geschichteter Rust-Workspace (reine Domäne, SQLx-Datenschicht, Axum-API, Hintergrund-Worker) auf PostgreSQL, der eine Expo-App für iOS, Android und Web sowie eine Tauri-Desktop-Shell bedient.",
         "bridge": "Integrität durch die Datenbank: Salden werden nur über Trigger aktualisiert, Row-Level Security pro Benutzer, analytische SQL-Funktionen für Trends und Budgets, idempotente Importe von Fremdexporten.",
         "highlights": [
@@ -220,6 +221,7 @@
         }
       },
       "ariaer": {
+        "teaser": "Datenplattform zur Luftqualität in der Emilia-Romagna.",
         "summary": "End-to-End-Datenplattform zur Luftqualität in der Emilia-Romagna, auf Basis der Open Data von ARPAE, angereichert mit Wetterdaten von Open-Meteo: Ingestion in Rust zu partitioniertem Parquet, dbt-Modelle auf DuckDB lokal und BigQuery auf GCP, Orchestrierung mit Dagster. Sie läuft lokal mit Docker, einschließlich Dashboard und CI, und dieselben Modelle liefen auf BigQuery in einem echten Projekt auf Google Cloud mit denselben Ergebnissen wie auf DuckDB.",
         "bridge": "Ein reines Data-Engineering-Projekt: vorläufige Messwerte, die nach der Validierung revidiert werden, Lücken und uneinheitliche Formate in der Quelle, verwandelt in einen historisierten, getesteten Datensatz, der Fragen zu Grenzwertüberschreitungen, Schadstofftrends und Wetterkorrelation beantwortet.",
         "highlights": [

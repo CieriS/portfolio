@@ -12,6 +12,7 @@ import {
   type CvInputProblem,
 } from '@/lib/cv/common';
 import type { PortfolioView } from '@/lib/portfolio';
+import { ROW, ROW_DETAIL, ROW_ICON, ROW_LABEL } from './contactRow';
 
 type Method = 'email' | 'password';
 type Status = 'idle' | 'pending' | 'downloaded' | CvAnswer | CvInputProblem;
@@ -81,22 +82,18 @@ export function CvRequest({ data }: { data: PortfolioView }) {
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
         aria-controls={panelId}
-        className="group flex w-full items-center justify-between gap-6 py-5 text-left md:py-7"
+        className={ROW}
       >
-        <span className="text-[clamp(1.75rem,4vw,3.75rem)] leading-none font-medium tracking-[-0.04em] transition-transform duration-700 ease-out-expo select-none group-hover:translate-x-3">
-          {copy.label}
-        </span>
-        <span className="flex items-center gap-5">
-          <span className="hidden font-mono text-[11px] tracking-[0.14em] text-muted uppercase sm:inline">{copy.handle}</span>
-          <span
-            aria-hidden
-            className={cn(
-              'grid size-10 place-items-center rounded-full border border-line transition-all duration-500 ease-out-expo select-none',
-              open ? 'rotate-180 border-ink bg-ink text-paper' : 'group-hover:border-ink',
-            )}
-          >
-            ↓
-          </span>
+        <span className={ROW_LABEL}>{copy.label}</span> <span className={ROW_DETAIL}>{copy.handle}</span>
+        <span
+          aria-hidden
+          className={cn(
+            ROW_ICON,
+            'grid size-10 place-items-center rounded-full border border-line transition-all duration-500 ease-out-expo select-none',
+            open ? 'rotate-180 border-ink bg-ink text-paper' : 'group-hover:border-ink',
+          )}
+        >
+          ↓
         </span>
       </button>
 

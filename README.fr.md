@@ -128,10 +128,10 @@ GOOGLE_SITE_VERIFICATION=votre-jeton
 
 | # | Vue (ID) | EN | IT | FR | DE | ES | Contenu |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | `/es` | Nom en très grand format, rôle, présentation, un paragraphe citant employeur, études, stack et projets (les faits qu'un moteur de recherche doit lire dès la page d'accueil) et invitation à explorer. |
-| 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | `/es/identidad` | Un titre qui est la première phrase de la déclaration d'intention (le reste en est le sous-titre), quatre principes d'ingénierie et contacts (GitHub, LinkedIn, Instagram) et un lien pour me soutenir sur GitHub Sponsors. |
+| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | `/es` | Nom en très grand format, rôle, présentation, un paragraphe citant employeur, études, stack et projets (les faits qu'un moteur de recherche doit lire dès la page d'accueil) et deux invitations sous le rôle : « Voir les projets » (vue Systèmes) et « Contact » (la section des contacts). |
+| 02 | Identité (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | `/es/identidad` | Un titre qui est la première phrase de la déclaration d'intention (le reste en est le sous-titre), quatre principes d'ingénierie et contacts (`#contacts`), dans cet ordre : Curriculum, LinkedIn, GitHub, Instagram, GitHub Sponsors. Sur téléphone, le détail de chaque ligne (identifiant, « PDF · sur demande ») est sous le nom. |
 | 03 | Exécution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | `/es/ejecucion` | Frise chronologique à trois couloirs (industrie, parcours universitaire et étude en autonomie du Data Engineering) sur un axe temporel commun, avec un compteur d'uptime en temps réel et des phases accompagnées de leur stack. |
-| 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | `/es/sistemas` | Projets présentés en accordéon, tous fermés à l'ouverture de la vue : résumé, choix d'ingénierie, architecture en couches, lien avec la Data Engineering et lien vers le dépôt (ou vers les contacts si le code est privé). Actuellement : yourFinance (privé) et aria-er (public). |
+| 04 | Systèmes (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | `/es/sistemas` | Projets présentés en accordéon, tous fermés à l'ouverture de la vue mais chacun avec une ligne qui dit ce qu'il est (`teaser`) ; ouvert, il montre le résumé, choix d'ingénierie, architecture en couches, lien avec la Data Engineering et lien vers le dépôt (ou vers les contacts si le code est privé). Actuellement : yourFinance (privé) et aria-er (public). |
 | — | ~~Optimisation~~ (retirée) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | `/es/optimizacion` | Entraînement et musique : vue retirée avec l'issue #50. Les anciennes adresses redirigent de façon permanente (308) vers la vue Identité de la même langue, même écrites dans une autre langue (`/it/optimization` → `/it/identita` ; `RETIRED_VIEW_SLUGS` dans `lib/routes.ts`) ; l'entraînement et la guitare restent en une ligne dans Identité (« En dehors du travail »). Le dernier état de la vue (code, textes en cinq langues, scène) est conservé dans le tag git `vista-ottimizzazione` : `git checkout vista-ottimizzazione` pour la revoir, `git diff vista-ottimizzazione -- data components lib` pour repartir de là. |
 
 Chaque URL est pré-rendue avec son propre contenu. Une adresse qui ne correspond à aucune vue affiche une page 404 localisée et non indexable.
@@ -140,7 +140,9 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 
 ## Navigation et interactions
 
-- **Liens en bas de page** (`01`–`05`) : ce sont de vrais `<a href>`, donc le clic du milieu, « ouvrir dans un nouvel onglet » et les robots d'indexation fonctionnent. Le clic principal change la vue sur place. À côté de l'entrée active figure le mot courant pour cette vue (« Exécution · Expérience »), qui fait aussi partie du nom accessible de chaque lien : le nom vient du texte du lien (l'index est masqué aux lecteurs d'écran, le mot courant des entrées inactives n'est là que pour eux), si bien que ce qui est lu correspond à ce qui est affiché.
+- **Liens en bas de page** (`01`–`05`) : ce sont de vrais `<a href>`, donc le clic du milieu, « ouvrir dans un nouvel onglet » et les robots d'indexation fonctionnent. Le clic principal change la vue sur place. Sur ordinateur, le mot courant de la vue active figure à côté d'elle (« Exécution · Expérience ») ; sous `md`, chaque entrée montre son numéro et son mot courant (« 03 Expérience »), sans le nom de système. Le mot courant fait aussi partie du nom accessible de chaque lien : le nom vient du texte du lien (l'index est masqué aux lecteurs d'écran, sur ordinateur le mot courant des entrées inactives n'est là que pour eux, sur téléphone c'est le nom de système), si bien que ce qui est lu correspond à ce qui est affiché.
+- **Les contacts depuis partout** : le lien « Contact » de l'accueil, le lien vers le code d'un projet privé et la fin de chaque étude de cas mènent à `/fr/identite#contacts` (`contactsPath`, `lib/routes.ts`). Dans l'application, `ViewLink` avec un `fragment` écrit l'adresse et change la vue sur place ; la vue Identité lit le fragment, fait défiler la section jusqu'à elle et lui donne le focus clavier.
+- **Zones tactiles** : nom du site, langue, thème et entrées du menu mesurent au moins 44 × 44 px (`min-h-11`) : c'est la zone qui grandit, pas le texte. Sur les écrans sans survol (`@media (hover: none)`), la phrase « Déplacez le curseur » de l'accueil n'apparaît pas.
 - **Projets depuis l'accueil** : dans le paragraphe de l'accueil, les noms des projets sont des liens (`ProjectLink`, dérivés de `shared.projects` avec `splitByNames`). Ils mènent à l'étude de cas quand elle existe, sinon à la vue des projets avec le panneau déjà ouvert : l'adresse est `/fr/systemes#<id>`, qui fonctionne aussi collée ou partagée. Sans fragment, ou avec un fragment mal formé, tous les projets démarrent fermés. Le changement de langue garde le fragment et le panneau ouvert ; Précédent et Suivant à travers un changement de langue ne perdent aucune entrée de l'historique.
 - **Clavier** : `1`–`4` accèdent directement à une vue, `←` et `→` les parcourent en boucle. Les touches sont ignorées si une touche de modification est enfoncée ou si le focus est dans un champ de saisie.
 - **Tactile** : un balayage horizontal (plus de 70 px et majoritairement horizontal) passe à la vue précédente ou suivante.
@@ -221,7 +223,7 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 - Les contenus sont dans `data/case-studies/<id>.json` (structure et textes dans chaque langue), hors des fichiers de langue envoyés au navigateur. `lib/caseStudy.ts` les valide avec zod et des contrôles croisés : un identifiant sans texte dans une langue, un `alt` vide ou une description de plus de 160 caractères font échouer le build.
 - **Résultats en direct** (facultatifs, champ `live` du JSON) : un composant client (`components/case-study/LiveResults.tsx`) lit l'export que le projet publie (aria-er : un JSON quotidien sur GitHub Pages) et dessine des graphiques SVG aux couleurs du site. La logique est pure dans `lib/liveResults.ts` (schéma du contrat, séries des graphiques, données de plus de 48 heures) ; les origines autorisées sont dans `DATA_ORIGINS`, dont `next.config.ts` tire `connect-src`. Si l'export ne répond pas, la page reste entière avec un message. Les tests E2E simulent l'export avec `page.route`.
 - Les captures d'écran sont des imports statiques (`lib/caseStudyImages.ts`) servis par `next/image`. Pour un projet privé, elles doivent provenir **uniquement du profil de démonstration** ; celles d'aria-er viennent de son tableau de bord, sur des données publiques.
-- Chaque page a son canonical, ses hreflang, son image Open Graph, son entrée dans le sitemap et un JSON-LD `TechArticle` avec `BreadcrumbList`. Pour un projet privé, `codeRepository` n'est jamais émis, et un test E2E vérifie que la page ne contient aucun lien vers le dépôt. Pour un projet public, le lien final mène au dépôt (`data-source="public"`) et le JSON-LD contient `codeRepository`.
+- Chaque page a son canonical, ses hreflang, son image Open Graph, son entrée dans le sitemap et un JSON-LD `TechArticle` avec `BreadcrumbList`. Pour un projet privé, `codeRepository` n'est jamais émis, et un test E2E vérifie que la page ne contient aucun lien vers le dépôt. Pour un projet public, le lien final mène au dépôt (`data-source="public"`) et le JSON-LD contient `codeRepository`. Chaque étude de cas se termine par un lien vers les contacts : pour un projet privé c'est le lien vers le code, pour un projet public un second lien (`access.contact`, dans toutes les langues ou dans aucune : `findCaseStudyIssues` le vérifie).
 
 ## SEO
 
@@ -282,7 +284,7 @@ data/locales/<langue>.json   en · it · fr · de
 ├── hero
 ├── identity
 ├── timeline
-└── projects            items[id] : summary, bridge, highlights, layers
+└── projects            items[id] : teaser, summary, bridge, highlights, layers
 ```
 
 - `shared.json` contient les données indépendantes de la langue (liens, dates, stack, mesures) ; `locales/<langue>.json` contient les textes.
@@ -313,7 +315,7 @@ Chaque phase accepte un `start` facultatif. Sans lui, les phases sont réparties
 ### Ajouter un projet
 
 1. Ajoutez une entrée à `shared.projects` avec `id`, `name`, `source` (public avec `url`, ou privé), `stack` et `layers` (`id`, `tech`). `version` est facultatif (`0.9.0`, sans `v`) : il apparaît dans le panneau du projet, dans le CV et dans le JSON-LD, et pour un projet public il mène à la page du tag sur GitHub. Avec `released` (la date de publication), il est tenu à jour par un workflow : voir [Versions des projets](#versions-des-projets).
-2. Dans **chaque** langue, ajoutez `projects.items[<id>]` avec `summary`, `bridge`, `highlights` (liste des choix d'ingénierie) et `layers` (une description par `id` de couche).
+2. Dans **chaque** langue, ajoutez `projects.items[<id>]` avec `teaser` (une ligne visible quand le projet est fermé, 80 caractères au plus et non répétée dans le `summary`), `summary`, `bridge`, `highlights` (liste des choix d'ingénierie) et `layers` (une description par `id` de couche).
 3. Si nécessaire, mettez à jour le title et la description dans `ui.meta.views.projects`.
 
 La vue et le JSON-LD `ItemList` se mettent à jour automatiquement.
@@ -348,7 +350,7 @@ Il faut un jeton personnel et non celui du workflow : une pull request ouverte a
 
 ### Ajouter un contact
 
-Ajoutez `{ id, label, handle, url }` à `shared.contacts` : le contact apparaît dans la vue Identity et dans le champ `sameAs` du JSON-LD.
+Ajoutez `{ id, label, handle, url }` à `shared.contacts` : le contact apparaît dans la vue Identity, dans l'ordre du tableau (après le Curriculum), et dans le champ `sameAs` du JSON-LD.
 
 ### Ajouter une vue
 

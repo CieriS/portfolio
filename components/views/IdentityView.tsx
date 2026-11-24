@@ -1,15 +1,32 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import { fade } from '@/components/motion/Reveal';
 import { pad } from '@/lib/format';
+import { fragmentId } from '@/lib/projects';
+import { CONTACTS_FRAGMENT } from '@/lib/views';
 import { Meta, SectionHead, type ViewProps } from './atoms';
+import { ROW, ROW_DETAIL, ROW_ICON, ROW_LABEL } from './contactRow';
 import { CvRequest } from './CvRequest';
 
 export function IdentityView({ data }: ViewProps) {
   const copy = data.content.identity;
   const label = data.content.ui.nav.identity;
   const { contacts, sponsor } = data.shared;
+
+  // Arriving by `#contacts` (the home page, the case studies): bring the contact list into view
+  // and put the keyboard inside it. Deferred by a task, so it comes after the view frame has
+  // taken focus for the view change, as in the projects view.
+  useEffect(() => {
+    if (fragmentId(window.location.hash) !== CONTACTS_FRAGMENT) return;
+    const timer = setTimeout(() => {
+      const section = document.getElementById(CONTACTS_FRAGMENT);
+      section?.scrollIntoView({ block: 'start' });
+      section?.focus({ preventScroll: true });
+    });
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="px-frame pt-10 pb-28 md:pt-16">
@@ -42,12 +59,14 @@ export function IdentityView({ data }: ViewProps) {
         </motion.p>
       </div>
 
-      <div className="mt-24 grid gap-y-8 md:mt-36 md:grid-cols-12 md:gap-x-6">
+      <div id={CONTACTS_FRAGMENT} tabIndex={-1} className="mt-24 grid scroll-mt-10 gap-y-8 md:mt-36 md:grid-cols-12 md:gap-x-6">
         <motion.div variants={fade} className="md:col-span-3">
           <Meta as="h2">{copy.contactsTitle}</Meta>
           <p className="mt-3 max-w-[24ch] text-sm text-muted">{copy.contactsNote}</p>
         </motion.div>
+        {/* What a recruiter wants most comes first: the CV, then LinkedIn (#133). */}
         <motion.ul variants={fade} className="border-b border-line md:col-span-9">
+          <CvRequest data={data} />
           {contacts.map((contact) => (
             <LinkRow
               key={contact.id}
@@ -58,29 +77,23 @@ export function IdentityView({ data }: ViewProps) {
             />
           ))}
           <LinkRow href={sponsor.url} label={copy.sponsor} detail={sponsor.label} rel="noopener noreferrer" />
-          <CvRequest data={data} />
         </motion.ul>
       </div>
     </div>
   );
 }
 
-/** One large outbound link: name on the left, a short detail and the arrow on the right. */
+/** One large outbound link: the name, a short detail (under it on phones) and the arrow. */
 function LinkRow({ href, label, detail, rel }: { href: string; label: string; detail: string; rel: string }) {
   return (
     <li className="border-t border-line">
-      <a href={href} target="_blank" rel={rel} className="group flex items-center justify-between gap-6 py-5 md:py-7">
-        <span className="text-[clamp(1.75rem,4vw,3.75rem)] leading-none font-medium tracking-[-0.04em] transition-transform duration-700 ease-out-expo select-none group-hover:translate-x-3">
-          {label}
-        </span>
-        <span className="flex items-center gap-5">
-          <span className="hidden font-mono text-[11px] tracking-[0.14em] text-muted uppercase sm:inline">{detail}</span>
-          <span
-            aria-hidden
-            className="grid size-10 place-items-center rounded-full border border-line transition-all duration-500 ease-out-expo select-none group-hover:rotate-45 group-hover:border-ink group-hover:bg-ink group-hover:text-paper"
-          >
-            ↑
-          </span>
+      <a href={href} target="_blank" rel={rel} className={ROW}>
+        <span className={ROW_LABEL}>{label}</span> <span className={ROW_DETAIL}>{detail}</span>
+        <span
+          aria-hidden
+          className={`${ROW_ICON} grid size-10 place-items-center rounded-full border border-line transition-all duration-500 ease-out-expo select-none group-hover:rotate-45 group-hover:border-ink group-hover:bg-ink group-hover:text-paper`}
+        >
+          ↑
         </span>
       </a>
     </li>

@@ -126,10 +126,10 @@ GOOGLE_SITE_VERIFICATION=your-token
 
 | # | View (ID) | EN | IT | FR | DE | ES | Content |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | `/es` | Large-format name, role, introduction, a paragraph naming employer, studies, stack and projects (the facts a search engine should read on the home page itself) and a call to explore. |
-| 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | `/es/identidad` | A title that is the first sentence of the mission statement (the rest is its subtitle), four engineering principles and contacts (GitHub, LinkedIn, Instagram) and a link to support me on GitHub Sponsors. |
+| 01 | Index (`hero`) | `/en` | `/it` | `/fr` | `/de` | `/es` | Large-format name, role, introduction, a paragraph naming employer, studies, stack and projects (the facts a search engine should read on the home page itself) and two calls to action under the role: "See the projects" (Systems view) and "Contact" (the contact section). |
+| 02 | Identity (`identity`) | `/en/identity` | `/it/identita` | `/fr/identite` | `/de/identitaet` | `/es/identidad` | A title that is the first sentence of the mission statement (the rest is its subtitle), four engineering principles and contacts (`#contacts`), in this order: Curriculum, LinkedIn, GitHub, Instagram, GitHub Sponsors. On phones each row's detail (handle, "PDF · on request") sits under its name. |
 | 03 | Execution (`timeline`) | `/en/execution` | `/it/esecuzione` | `/fr/execution` | `/de/ausfuehrung` | `/es/ejecucion` | Three-lane timeline (industry, academic path and self-directed Data Engineering study) on a shared time axis, with a live uptime counter and phases with their stack. |
-| 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | `/es/sistemas` | Projects in an accordion, all collapsed when the view opens: summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
+| 04 | Systems (`projects`) | `/en/systems` | `/it/sistemi` | `/fr/systemes` | `/de/systeme` | `/es/sistemas` | Projects in an accordion, all collapsed when the view opens but each with one line saying what it is (`teaser`); opened, it shows the summary, engineering decisions, layered architecture, link to Data Engineering and repository link (or a link to the contacts when the code is private). Currently: yourFinance (private) and aria-er (public). |
 | — | ~~Optimization~~ (removed) | `/en/optimization` | `/it/ottimizzazione` | `/fr/optimisation` | `/de/optimierung` | `/es/optimizacion` | Training and music: view removed in issue #50. The old URLs redirect permanently (308) to the identity view of the same locale, also when written in another language (`/it/optimization` → `/it/identita`; `RETIRED_VIEW_SLUGS` in `lib/routes.ts`); training and guitar stay as one line in Identity ("Outside work"). The view's last state (code, copy in five languages, scene) is kept in the git tag `vista-ottimizzazione`: `git checkout vista-ottimizzazione` to look at it, `git diff vista-ottimizzazione -- data components lib` to start again from there. |
 
 Every URL is prerendered with its own content. An address that matches no view shows a localised, non-indexable 404 page.
@@ -138,7 +138,9 @@ Below the Systems view there is one more page for the projects that have a case 
 
 ## Navigation and interaction
 
-- **Bottom links** (`01`–`05`): real `<a href>` elements, so middle-click, "open in new tab" and crawlers all work. A primary click swaps the view in place. Next to the active item sits the everyday word for that view ("Execution · Experience"), which is also part of every link's accessible name: the name comes from the link's own text (the index is hidden from screen readers, the everyday word of inactive items is there for them only), so what is read matches what is shown.
+- **Bottom links** (`01`–`05`): real `<a href>` elements, so middle-click, "open in new tab" and crawlers all work. A primary click swaps the view in place. On desktop the everyday word for the active view sits next to it ("Execution · Experience"); below `md` every item shows its number and everyday word ("03 Experience"), without the system name. The everyday word is also part of every link's accessible name: the name comes from the link's own text (the index is hidden from screen readers, on desktop the everyday word of inactive items is there for them only, on phones the system name is), so what is read matches what is shown.
+- **Contacts from everywhere**: the home's "Contact" link, a private project's code link and the end of every case study lead to `/en/identity#contacts` (`contactsPath`, `lib/routes.ts`). Inside the app `ViewLink` with a `fragment` writes the address and swaps the view in place; the Identity view reads the fragment, scrolls the section into view and gives it keyboard focus.
+- **Touch targets**: site name, language, theme and menu items are at least 44 × 44 px (`min-h-11`): the hit area grows, not the type. On screens without hover (`@media (hover: none)`) the home's "Move the cursor" hint is not shown.
 - **Projects from the home**: in the home paragraph the project names are links (`ProjectLink`, derived from `shared.projects` with `splitByNames`). They lead to the case study when there is one, otherwise to the projects view with the panel already open: the address is `/en/systems#<id>`, which also works pasted or shared. Without a fragment, or with a malformed one, every project starts collapsed. A language switch keeps the fragment and the open panel; Back and Forward across a language switch lose no history entry.
 - **Keyboard**: `1`–`4` jump to a view, `←` and `→` cycle through them. Keys are ignored while a modifier is held or when focus is in a text field.
 - **Touch**: a horizontal swipe (over 70 px and mostly horizontal) moves to the previous or next view.
@@ -219,7 +221,7 @@ Below the Systems view there is one more page for the projects that have a case 
 - The content lives in `data/case-studies/<id>.json` (structure plus copy in every language), outside the locale files that reach the browser. `lib/caseStudy.ts` validates it with zod and cross-checks: an id with no copy in one language, an empty `alt` or a description over 160 characters fails the build.
 - **Live results** (optional, `live` field of the JSON): a client component (`components/case-study/LiveResults.tsx`) reads the export the project publishes (aria-er: a daily JSON on GitHub Pages) and draws SVG charts in the site's colours. The logic is pure in `lib/liveResults.ts` (contract schema, chart series, data older than 48 hours); the allowed origins are in `DATA_ORIGINS`, from which `next.config.ts` builds `connect-src`. If the export does not answer, the page stays whole with a message. The E2E tests stub the export with `page.route`.
 - Screenshots are static imports (`lib/caseStudyImages.ts`) served by `next/image`. For a private project they must come **from the demo profile only**; aria-er's come from its own dashboard, on public data.
-- Each page has a canonical, hreflang, an Open Graph image, a sitemap entry and a `TechArticle` JSON-LD with a `BreadcrumbList`. For a private project `codeRepository` is never emitted, and an E2E test checks that the page holds no link to the repository. For a public project the closing link leads to the repository (`data-source="public"`) and the JSON-LD has `codeRepository`.
+- Each page has a canonical, hreflang, an Open Graph image, a sitemap entry and a `TechArticle` JSON-LD with a `BreadcrumbList`. For a private project `codeRepository` is never emitted, and an E2E test checks that the page holds no link to the repository. For a public project the closing link leads to the repository (`data-source="public"`) and the JSON-LD has `codeRepository`. Every case study ends with a link to the contacts: for a private project it is the code link, for a public one a second link (`access.contact`, in every language or in none: `findCaseStudyIssues` checks it).
 
 ## SEO
 
@@ -280,7 +282,7 @@ data/locales/<language>.json   en · it · fr · de
 ├── hero
 ├── identity
 ├── timeline
-└── projects            items[id]: summary, bridge, highlights, layers
+└── projects            items[id]: teaser, summary, bridge, highlights, layers
 ```
 
 - `shared.json` holds language-independent data (links, dates, stack, metrics); `locales/<language>.json` holds the copy.
@@ -311,7 +313,7 @@ Each phase takes an optional `start`. Without it, phases are spread over the lan
 ### Adding a project
 
 1. Add an entry to `shared.projects` with `id`, `name`, `source` (public with a `url`, or private), `stack` and `layers` (`id`, `tech`). `version` is optional (`0.9.0`, no `v`): it shows in the project panel, in the CV and in the JSON-LD, and for a public project it links to the tag's page on GitHub. Together with `released` (the publication date) it is kept up to date by a workflow: see [Project versions](#project-versions).
-2. In **every** language, add `projects.items[<id>]` with `summary`, `bridge`, `highlights` (the list of engineering decisions) and `layers` (one description per layer `id`).
+2. In **every** language, add `projects.items[<id>]` with `teaser` (one line shown while the project is closed, at most 80 characters and not repeated in the `summary`), `summary`, `bridge`, `highlights` (the list of engineering decisions) and `layers` (one description per layer `id`).
 3. If needed, update the title and description in `ui.meta.views.projects`.
 
 The view and the `ItemList` JSON-LD update automatically.
@@ -346,7 +348,7 @@ A personal token is needed, not the workflow's own: a pull request opened with `
 
 ### Adding a contact
 
-Add `{ id, label, handle, url }` to `shared.contacts`: it appears in the Identity view and in the JSON-LD `sameAs` field.
+Add `{ id, label, handle, url }` to `shared.contacts`: it appears in the Identity view, in the order of the array (after the Curriculum), and in the JSON-LD `sameAs` field.
 
 ### Adding a view
 

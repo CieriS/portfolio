@@ -5,8 +5,8 @@
   "address": { "locality": "Bologna", "country": "IT" },
   "knowsLanguage": ["en", "it", "fr"],
   "contacts": [
-    { "id": "github", "label": "GitHub", "handle": "@CieriS", "url": "https://github.com/CieriS/" },
     { "id": "linkedin", "label": "LinkedIn", "handle": "in/samuelecieri", "url": "https://www.linkedin.com/in/samuelecieri/" },
+    { "id": "github", "label": "GitHub", "handle": "@CieriS", "url": "https://github.com/CieriS/" },
     { "id": "instagram", "label": "Instagram", "handle": "@samuelecierii", "url": "https://www.instagram.com/samuelecierii/" }
   ],
   "sponsor": { "label": "GitHub Sponsors", "url": "https://github.com/sponsors/CieriS" },

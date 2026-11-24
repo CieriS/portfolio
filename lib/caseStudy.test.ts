@@ -88,6 +88,15 @@ describe('live results copy', () => {
     expect(findCaseStudyIssues(live, { ...everywhere({ ...text, live: {} }), es: text })).toEqual(['es.live is missing']);
     expect(findCaseStudyIssues(data, everywhere(text))).toEqual([]);
   });
+
+  it('wants the contact link in every language or in none', () => {
+    const contact = { ...text, access: { contact: 'Get in touch' } };
+    expect(findCaseStudyIssues(data, everywhere(contact))).toEqual([]);
+    expect(findCaseStudyIssues(data, { ...everywhere(contact), it: text, de: text })).toEqual([
+      'it.access.contact is missing',
+      'de.access.contact is missing',
+    ]);
+  });
 });
 
 describe('CaseStudySchema', () => {
