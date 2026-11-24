@@ -41,12 +41,15 @@ export const RETIRED_VIEW_SLUGS: Record<Locale, string> = {
   es: 'optimizacion',
 };
 
+/**
+ * Every retired slug under every locale: active slugs are translated across languages
+ * (`localizedPath`), so `/it/optimization` must land somewhere too, not on a 404 (#117).
+ */
 export function retiredViewRedirects(): { source: string; destination: string; permanent: true }[] {
-  return LOCALES.map((locale) => ({
-    source: `/${locale}/${RETIRED_VIEW_SLUGS[locale]}`,
-    destination: pathFor(locale, 'identity'),
-    permanent: true,
-  }));
+  const slugs = [...new Set(Object.values(RETIRED_VIEW_SLUGS))];
+  return LOCALES.flatMap((locale) =>
+    slugs.map((slug) => ({ source: `/${locale}/${slug}`, destination: pathFor(locale, 'identity'), permanent: true as const })),
+  );
 }
 
 export function isLocale(value: string | undefined): value is Locale {

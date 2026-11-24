@@ -51,3 +51,15 @@ export function splitByNames(text: string, items: ReadonlyArray<{ id: string; na
   if (cursor < text.length) segments.push({ text: text.slice(cursor) });
   return segments;
 }
+
+/**
+ * The project id named by a URL fragment (`#ariaer` → `ariaer`). A fragment that does not
+ * decode (`#%ZZ`) names nothing: `decodeURIComponent` would throw and take the page down (#114).
+ */
+export function fragmentId(hash: string): string {
+  try {
+    return decodeURIComponent(hash.replace(/^#/, ''));
+  } catch {
+    return '';
+  }
+}

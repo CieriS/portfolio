@@ -25,13 +25,15 @@ export function useViewUrlSync(locale: Locale, meta: UiMessages['meta']) {
     });
 
     // Back/forward: read the view from the restored URL. Entries written before a language
-    // switch still carry the other locale's slug, so realign the URL to the current language.
+    // switch still carry the other locale's slug, so realign the URL to the current language
+    // first: the subscriber above pushes whenever the path differs, and a push here would
+    // erase every Forward entry (#115).
     const onPopState = () => {
       const view = viewFromPath(window.location.pathname);
       if (!view) return;
-      store.getState().setView(view);
       const path = pathFor(locale, view);
-      if (window.location.pathname !== path) window.history.replaceState(null, '', path);
+      if (window.location.pathname !== path) window.history.replaceState(null, '', path + window.location.hash);
+      store.getState().setView(view);
     };
 
     window.addEventListener('popstate', onPopState);

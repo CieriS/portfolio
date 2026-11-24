@@ -23,7 +23,8 @@ export function AppRoot({ shared, contents, initialLocale }: AppRootProps) {
       const active = store.getState().active;
       markBooted();
       setLocale(next);
-      window.history.replaceState(null, '', pathFor(next, active));
+      // The fragment names an open project (`#ariaer`): keep it, so the panel stays open (#116).
+      window.history.replaceState(null, '', pathFor(next, active) + window.location.hash);
       document.documentElement.lang = next;
       document.title = documentTitle(contents[next].ui.meta, active);
       document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000; samesite=lax`;

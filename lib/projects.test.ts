@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { getCaseStudy } from './caseStudy';
 import { ProjectSchema } from './content/schema';
 import { getPortfolioBundle } from './portfolio';
-import { releaseMonth, releaseUrl, splitByNames, versionLabel, versionWithDate } from './projects';
+import { fragmentId, releaseMonth, releaseUrl, splitByNames, versionLabel, versionWithDate } from './projects';
 import { CASE_STUDY_IDS, LOCALES } from './routes';
 
 const open = { visibility: 'public' as const, url: 'https://example.com/me/tool' };
@@ -142,5 +142,19 @@ describe('the home paragraph', () => {
   it.each(LOCALES)('%s: names every project, so each gets its link', (locale) => {
     const linked = splitByNames(contents[locale].hero.detail, shared.projects).flatMap((segment) => segment.id ?? []);
     expect(linked.sort()).toEqual(shared.projects.map((project) => project.id).sort());
+  });
+});
+
+describe('fragmentId (#114)', () => {
+  it('decodes the fragment without its hash', () => {
+    expect(fragmentId('#ariaer')).toBe('ariaer');
+    expect(fragmentId('#a%20b')).toBe('a b');
+  });
+
+  it('treats an empty or malformed fragment as no fragment', () => {
+    expect(fragmentId('')).toBe('');
+    expect(fragmentId('#')).toBe('');
+    expect(fragmentId('#%ZZ')).toBe('');
+    expect(fragmentId('#%E0%A4%A')).toBe('');
   });
 });

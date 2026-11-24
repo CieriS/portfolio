@@ -78,4 +78,11 @@ test.describe('issue #50: URLs of the retired fifth view', () => {
       expect(new URL(response.headers()['location'], 'http://x').pathname).toBe(pathFor(locale, 'identity'));
     });
   }
+
+  // #117: active slugs are translated across languages, so a retired one written in another language must redirect too.
+  test('/it/optimization redirects to the Italian identity view', async ({ request }) => {
+    const response = await request.get('/it/optimization', { maxRedirects: 0 });
+    expect(response.status()).toBe(308);
+    expect(new URL(response.headers()['location'], 'http://x').pathname).toBe(pathFor('it', 'identity'));
+  });
 });
