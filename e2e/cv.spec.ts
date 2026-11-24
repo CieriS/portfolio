@@ -137,8 +137,29 @@ test.describe('the API', () => {
   });
 
   test('rejects malformed requests', async ({ request }) => {
-    expect((await request.post('/api/cv', { data: 'nonsense' })).status()).toBe(400);
+    expect((await request.post('/api/cv', { data: 'nonsense', headers: { 'Content-Type': 'application/json' } })).status()).toBe(
+      400,
+    );
     expect((await request.post('/api/cv', { data: { method: 'password', locale: 'en' } })).status()).toBe(400);
+  });
+
+  // #113: without a mail sender an email request answers 503, so a 415 or 403 proves the request
+  // stopped before the service and the mailer.
+  test('refuses a non-JSON request before reading it', async ({ request }) => {
+    const email = JSON.stringify({ method: 'email', locale: 'en', email: 'visitor@example.com' });
+    const plain = await request.post('/api/cv', { data: email, headers: { 'Content-Type': 'text/plain' } });
+    expect(plain.status()).toBe(415);
+    expect(plain.headers()['cache-control']).toBe('no-store');
+    const form = await request.post('/api/cv', { form: { method: 'email', locale: 'en', email: 'visitor@example.com' } });
+    expect(form.status()).toBe(415);
+  });
+
+  test('refuses a request sent from another site', async ({ request, baseURL }) => {
+    const data = { method: 'email', locale: 'en', email: 'visitor@example.com' };
+    const foreign = await request.post('/api/cv', { data, headers: { Origin: 'https://evil.example' } });
+    expect(foreign.status()).toBe(403);
+    const own = await request.post('/api/cv', { data, headers: { Origin: new URL(baseURL!).origin } });
+    expect(own.status()).toBe(503);
   });
 
   test('refuses a link when links are not configured', async ({ request }) => {

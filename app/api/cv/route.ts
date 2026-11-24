@@ -1,5 +1,6 @@
 import { cvFileName } from '@/lib/cv/common';
 import { readCvConfig } from '@/lib/cv/config';
+import { guardCvPost } from '@/lib/cv/guard';
 import { cvCopy } from '@/lib/cv/copy';
 import { buildCv } from '@/lib/cv/document';
 import { resendMailer } from '@/lib/cv/mailer';
@@ -15,6 +16,7 @@ import { SITE_URL } from '@/lib/site';
  * - POST `{ method: 'password', password, locale }` → the PDF, or 403;
  * - POST `{ method: 'email', email, locale }` → 202 once the signed link is mailed;
  * - GET `?token=…` → the PDF behind a link from that email, or 403 once it has expired.
+ * A POST that is not JSON (415) or comes from another site (403) is refused before the body is read.
  * The only part of the site rendered per request: everything else stays prerendered.
  */
 export const runtime = 'nodejs';
@@ -26,6 +28,14 @@ const mailer = config.links ? resendMailer(config.links) : null;
 const NO_STORE = { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' };
 
 export async function POST(request: Request): Promise<Response> {
+  const guard = guardCvPost({
+    contentType: request.headers.get('content-type'),
+    origin: request.headers.get('origin'),
+    requestUrl: request.url,
+    siteUrl: SITE_URL,
+  });
+  if (guard !== 'ok')
+    return Response.json({ status: guard === 415 ? 'unsupported' : 'forbidden' }, { status: guard, headers: NO_STORE });
   const body: unknown = await request.json().catch(() => null);
   const outcome = await requestCv(body, {
     config,
