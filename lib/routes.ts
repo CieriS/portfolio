@@ -86,6 +86,14 @@ export function projectPath(locale: Locale, projectId: string): string {
   return isCaseStudyId(projectId) ? caseStudyPath(locale, projectId) : `${pathFor(locale, 'projects')}#${projectId}`;
 }
 
+/** Fragment of the contact section inside the identity view, the same in every language. */
+export const CONTACTS_FRAGMENT = 'contacts';
+
+/** Where the contacts are: the identity view scrolled to its contact section (`/it/identita#contacts`). */
+export function contactsPath(locale: Locale): string {
+  return `${pathFor(locale, 'identity')}#${CONTACTS_FRAGMENT}`;
+}
+
 /** `/it/sistemi` → `projects`. The slug is resolved against the locale written in the path. */
 export function viewFromPath(pathname: string): ViewId | null {
   const [, locale, slug] = pathname.split('/');

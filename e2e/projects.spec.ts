@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { LOCALES } from '../lib/routes';
+import { contactsPath, LOCALES } from '../lib/routes';
 import { locales, shared } from './content';
 import { expectView, gotoView, pathFor } from './helpers';
 
@@ -14,7 +14,7 @@ test('a private project shows its highlights and never links to a repository', a
   await expect(panel.getByRole('listitem').filter({ hasText: copy.items.yourfinance.highlights[0] })).toBeVisible();
 
   await expect(panel.locator('a[href*="github.com"]')).toHaveCount(0);
-  await expect(panel.getByRole('link', { name: copy.labels.private })).toHaveAttribute('href', pathFor('en', 'identity'));
+  await expect(panel.getByRole('link', { name: copy.labels.private })).toHaveAttribute('href', contactsPath('en'));
 });
 
 test('the private source link swaps to the contacts view in place', async ({ page }) => {
@@ -24,6 +24,8 @@ test('the private source link swaps to the contacts view in place', async ({ pag
 
   await expectView(page, 'en', 'identity');
   expect(new URL(page.url()).pathname).toBe(pathFor('en', 'identity'));
+  // It lands on the contacts, where access to the code can be asked for.
+  await expect(page.locator('#contacts')).toBeFocused();
 });
 
 test('only public projects publish a codeRepository in the JSON-LD', async ({ page }) => {

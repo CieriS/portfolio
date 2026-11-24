@@ -11,7 +11,7 @@ import { pad, pick } from '@/lib/format';
 import { getPortfolioBundle } from '@/lib/portfolio';
 import { versionWithDate } from '@/lib/projects';
 import { buildCaseStudyJsonLd } from '@/lib/structuredData';
-import { caseStudyPath, pathFor, VIEW_IDS, type CaseStudyId } from '@/lib/views';
+import { caseStudyPath, contactsPath, pathFor, VIEW_IDS, type CaseStudyId } from '@/lib/views';
 import { LiveResults } from './LiveResults';
 import { SceneMode } from './SceneMode';
 
@@ -40,11 +40,13 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
     { key: 'source', ...text.facts.source },
   ];
   const projectsPath = pathFor(locale, 'projects');
-  // A public project leads to its repository; a private one to the contact view, as in the accordion.
+  // A public project leads to its repository; a private one to the contacts, as in the accordion.
   const source =
     project?.source.visibility === 'public'
       ? { href: project.source.url, kind: 'public' }
-      : { href: pathFor(locale, 'identity'), kind: 'private' };
+      : { href: contactsPath(locale), kind: 'private' };
+  // Every case study ends with a way to get in touch (#137): a private one already has it in `source`.
+  const contact = source.kind === 'public' ? text.access.contact : undefined;
   const json = JSON.stringify(buildCaseStudyJsonLd(locale, id)).replace(/</g, '\\u003c');
 
   return (
@@ -321,6 +323,12 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                     <span className={UNDERLINE}>{text.access.cta}</span>
                     <span aria-hidden>→</span>
                   </a>
+                  {contact && (
+                    <a href={contactsPath(locale)} className={LINK} data-contact>
+                      <span className={UNDERLINE}>{contact}</span>
+                      <span aria-hidden>→</span>
+                    </a>
+                  )}
                   <a href={projectsPath} className={LINK}>
                     <span aria-hidden>←</span>
                     <span className={UNDERLINE}>{text.back}</span>

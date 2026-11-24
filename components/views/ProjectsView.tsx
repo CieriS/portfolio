@@ -8,7 +8,7 @@ import { cn } from '@/lib/cn';
 import { pad, pick } from '@/lib/format';
 import type { PortfolioView, Project } from '@/lib/portfolio';
 import { fragmentId, releaseUrl, versionLabel } from '@/lib/projects';
-import { caseStudyPath, isCaseStudyId, type Locale } from '@/lib/routes';
+import { caseStudyPath, CONTACTS_FRAGMENT, isCaseStudyId, type Locale } from '@/lib/routes';
 import { Meta, SectionHead, type ViewProps } from './atoms';
 
 type ProjectsCopy = PortfolioView['content']['projects'];
@@ -219,7 +219,7 @@ function SourceLink({ project, copy }: { project: Project; copy: ProjectsCopy })
   }
 
   return (
-    <ViewLink view="identity" className={LINK_CLASS} data-source="private">
+    <ViewLink view="identity" fragment={CONTACTS_FRAGMENT} className={LINK_CLASS} data-source="private">
       {label}
       <span aria-hidden>→</span>
     </ViewLink>
