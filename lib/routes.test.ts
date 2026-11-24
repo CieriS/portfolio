@@ -109,15 +109,25 @@ describe('localizedPath', () => {
 });
 
 describe('issue #50: the retired fifth view', () => {
-  it('redirects every old slug permanently to the identity view of the same locale', () => {
-    expect(retiredViewRedirects()).toEqual(
-      LOCALES.map((locale) => ({
-        source: `/${locale}/${RETIRED_VIEW_SLUGS[locale]}`,
-        destination: pathFor(locale, 'identity'),
-        permanent: true,
-      })),
-    );
-    expect(retiredViewRedirects()).toContainEqual({ source: '/it/ottimizzazione', destination: '/it/identita', permanent: true });
+  it('redirects every old slug, in every locale, permanently to the identity view of that locale (#117)', () => {
+    const slugs = [...new Set(Object.values(RETIRED_VIEW_SLUGS))];
+    const redirects = retiredViewRedirects();
+    expect(redirects).toHaveLength(LOCALES.length * slugs.length);
+    for (const locale of LOCALES)
+      for (const slug of slugs)
+        expect(redirects).toContainEqual({
+          source: `/${locale}/${slug}`,
+          destination: pathFor(locale, 'identity'),
+          permanent: true,
+        });
+    expect(redirects).toContainEqual({ source: '/it/ottimizzazione', destination: '/it/identita', permanent: true });
+    expect(redirects).toContainEqual({ source: '/it/optimization', destination: '/it/identita', permanent: true });
+    expect(new Set(redirects.map((redirect) => redirect.source)).size).toBe(redirects.length);
+  });
+
+  it('never redirects a live view of any locale', () => {
+    const live = new Set(LOCALES.flatMap((locale) => VIEW_IDS.map((view) => pathFor(locale, view))));
+    for (const { source } of retiredViewRedirects()) expect(live.has(source)).toBe(false);
   });
 
   it('never reuses an old slug for a live view, or the redirect would hide it', () => {
