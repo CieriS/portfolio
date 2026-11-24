@@ -1,49 +1,120 @@
-import { z } from 'zod';
-
 /**
  * Live results of a case study: JSON files a project publishes on its own (aria-er: a daily
  * export on GitHub Pages, contract `v1` in its `docs/export.md`), read in the browser.
  * Everything here is pure, so the client component only fetches and draws.
+ *
+ * The export is checked by small hand-written guards, not zod: this module runs in the
+ * browser, where zod would add ~38 KB gzip and its `Function('')` probe trips the CSP
+ * (issues #122, #124). Each guard throws on the first field that does not match.
  */
 
-/** Origins the browser may fetch data from; `next.config.ts` puts them in `connect-src`. */
-export const DATA_ORIGINS = ['https://cieris.github.io'] as const;
+export { DATA_ORIGINS } from './dataOrigins';
 
 /** Older than this, the data are shown with a warning: the daily run has not succeeded. */
-export const STALE_AFTER_HOURS = 48;
+const STALE_AFTER_HOURS = 48;
 
-export const MetaSchema = z.object({
-  schema_version: z.literal(1),
-  generated_at: z.string().datetime({ offset: true }),
-  period: z.object({ from: z.string(), to: z.string() }).nullable(),
-});
+export type Meta = {
+  schema_version: 1;
+  generated_at: string;
+  period: { from: string; to: string } | null;
+};
 
 // Stations of the local networks have no municipality in the ARPAE registry: null.
-const ExceedanceSchema = z.object({
-  station_name: z.string(),
-  municipality: z.string().nullable(),
-  pollutant_code: z.string(),
-  metric: z.string(),
-  year: z.number().int(),
-  exceedances: z.number().int(),
-  max_exceedances_per_year: z.number().int().nullable(),
-  year_coverage: z.number().nullable(),
-});
+export type Exceedance = {
+  station_name: string;
+  municipality: string | null;
+  pollutant_code: string;
+  metric: string;
+  year: number;
+  exceedances: number;
+  max_exceedances_per_year: number | null;
+  year_coverage: number | null;
+};
 
-const TrendSchema = z.object({
-  municipality: z.string().nullable(),
-  pollutant_code: z.string(),
-  year: z.number().int(),
-  annual_mean_ugm3: z.number().nullable(),
-  is_representative: z.boolean().nullable(),
-});
+export type Trend = {
+  municipality: string | null;
+  pollutant_code: string;
+  year: number;
+  annual_mean_ugm3: number | null;
+  is_representative: boolean | null;
+};
 
-export const ExceedancesSchema = z.array(ExceedanceSchema);
-export const TrendsSchema = z.array(TrendSchema);
+type Check = (value: unknown) => boolean;
 
-export type Meta = z.infer<typeof MetaSchema>;
-export type Exceedance = z.infer<typeof ExceedanceSchema>;
-export type Trend = z.infer<typeof TrendSchema>;
+const isString: Check = (value) => typeof value === 'string';
+const isNumber: Check = (value) => typeof value === 'number' && Number.isFinite(value);
+const isInteger: Check = (value) => Number.isInteger(value);
+const isBoolean: Check = (value) => typeof value === 'boolean';
+const nullable =
+  (check: Check): Check =>
+  (value) =>
+    value === null || check(value);
+// An ISO 8601 date-time with an explicit offset, as the export writes it.
+const isDateTime: Check = (value) =>
+  typeof value === 'string' &&
+  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/.test(value) &&
+  !Number.isNaN(Date.parse(value));
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function object<T>(value: unknown, shape: Record<keyof T, Check>, at: string): T {
+  if (!isRecord(value)) throw new TypeError(`${at}: expected an object`);
+  for (const [key, check] of Object.entries<Check>(shape)) {
+    if (!check(value[key])) throw new TypeError(`${at}.${key}: unexpected value`);
+  }
+  return value as T;
+}
+
+function array<T>(value: unknown, item: (value: unknown, at: string) => T, at: string): T[] {
+  if (!Array.isArray(value)) throw new TypeError(`${at}: expected an array`);
+  return value.map((entry, index) => item(entry, `${at}[${index}]`));
+}
+
+const isPeriod: Check = (value) => value === null || (isRecord(value) && isString(value.from) && isString(value.to));
+
+/** The export's `meta.json`; only contract version 1 is accepted. */
+export function parseMeta(value: unknown): Meta {
+  return object<Meta>(value, { schema_version: (v) => v === 1, generated_at: isDateTime, period: isPeriod }, 'meta');
+}
+
+const exceedance = (value: unknown, at: string) =>
+  object<Exceedance>(
+    value,
+    {
+      station_name: isString,
+      municipality: nullable(isString),
+      pollutant_code: isString,
+      metric: isString,
+      year: isInteger,
+      exceedances: isInteger,
+      max_exceedances_per_year: nullable(isInteger),
+      year_coverage: nullable(isNumber),
+    },
+    at,
+  );
+
+const trend = (value: unknown, at: string) =>
+  object<Trend>(
+    value,
+    {
+      municipality: nullable(isString),
+      pollutant_code: isString,
+      year: isInteger,
+      annual_mean_ugm3: nullable(isNumber),
+      is_representative: nullable(isBoolean),
+    },
+    at,
+  );
+
+export function parseExceedances(value: unknown): Exceedance[] {
+  return array(value, exceedance, 'exceedances');
+}
+
+export function parseTrends(value: unknown): Trend[] {
+  return array(value, trend, 'trends');
+}
 
 export type ExceedanceChart = {
   years: number[];

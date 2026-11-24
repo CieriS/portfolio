@@ -5,13 +5,13 @@ import { Meta } from '@/components/ui/text';
 import type { LiveCopy } from '@/lib/caseStudy';
 import { cn } from '@/lib/cn';
 import {
-  ExceedancesSchema,
   exceedanceChart,
   isStale,
-  MetaSchema,
   niceCeiling,
+  parseExceedances,
+  parseMeta,
+  parseTrends,
   trendChart,
-  TrendsSchema,
   type ExceedanceChart,
   type Meta as ExportMeta,
   type TrendChart,
@@ -28,9 +28,9 @@ async function load(source: string, municipality: string, signal: AbortSignal): 
   };
   const [meta, exceedances, trends] = await Promise.all([get('meta.json'), get('exceedances.json'), get('pollutant-trend.json')]);
   return {
-    meta: MetaSchema.parse(meta),
-    exceedances: exceedanceChart(ExceedancesSchema.parse(exceedances), { municipality, pollutant: 'PM10', metric: 'daily_mean' }),
-    trend: trendChart(TrendsSchema.parse(trends), { municipality, pollutants: ['PM10', 'NO2'] }),
+    meta: parseMeta(meta),
+    exceedances: exceedanceChart(parseExceedances(exceedances), { municipality, pollutant: 'PM10', metric: 'daily_mean' }),
+    trend: trendChart(parseTrends(trends), { municipality, pollutants: ['PM10', 'NO2'] }),
   };
 }
 

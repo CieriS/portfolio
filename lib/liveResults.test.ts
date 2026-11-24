@@ -2,13 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { getCaseStudy } from './caseStudy';
 import {
   DATA_ORIGINS,
-  ExceedancesSchema,
   exceedanceChart,
   isStale,
-  MetaSchema,
   niceCeiling,
+  parseExceedances,
+  parseMeta,
+  parseTrends,
   trendChart,
-  TrendsSchema,
   type Exceedance,
   type Trend,
 } from './liveResults';
@@ -36,6 +36,16 @@ const trend = (overrides: Partial<Trend>): Trend => ({
 });
 
 const PM10 = { municipality: 'BOLOGNA', pollutant: 'PM10', metric: 'daily_mean' };
+
+// Whether a guard accepts a value, without letting its error escape.
+const safe = (parse: (value: unknown) => unknown, value: unknown) => {
+  try {
+    parse(value);
+    return { success: true };
+  } catch {
+    return { success: false };
+  }
+};
 
 describe('exceedanceChart', () => {
   it('lines the stations up on every year that has data, with gaps where a station has none', () => {
@@ -124,9 +134,9 @@ describe('niceCeiling', () => {
 describe('stations without a municipality', () => {
   it('are accepted, as the export has them (local networks), and left out of a municipality chart', () => {
     const local = { ...exceedance({ station_name: 'LM-PR' }), municipality: null };
-    expect(ExceedancesSchema.safeParse([local]).success).toBe(true);
-    expect(TrendsSchema.safeParse([{ ...trend({}), municipality: null }]).success).toBe(true);
-    const chart = exceedanceChart(ExceedancesSchema.parse([local, exceedance({})]), PM10);
+    expect(safe(parseExceedances, [local]).success).toBe(true);
+    expect(safe(parseTrends, [{ ...trend({}), municipality: null }]).success).toBe(true);
+    const chart = exceedanceChart(parseExceedances([local, exceedance({})]), PM10);
     expect(chart.stations.map((station) => station.name)).toEqual(['GIARDINI MARGHERITA']);
   });
 });
@@ -134,11 +144,11 @@ describe('stations without a municipality', () => {
 describe('schemas', () => {
   it('accept the export contract v1 and refuse another version', () => {
     const meta = { schema_version: 1, generated_at: '2026-10-21T12:43:26.644502+00:00', period: null };
-    expect(MetaSchema.safeParse(meta).success).toBe(true);
-    expect(MetaSchema.safeParse({ ...meta, schema_version: 2 }).success).toBe(false);
-    expect(ExceedancesSchema.safeParse([exceedance({})]).success).toBe(true);
-    expect(ExceedancesSchema.safeParse([{ ...exceedance({}), year: '2025' }]).success).toBe(false);
-    expect(TrendsSchema.safeParse([trend({ annual_mean_ugm3: null })]).success).toBe(true);
+    expect(safe(parseMeta, meta).success).toBe(true);
+    expect(safe(parseMeta, { ...meta, schema_version: 2 }).success).toBe(false);
+    expect(safe(parseExceedances, [exceedance({})]).success).toBe(true);
+    expect(safe(parseExceedances, [{ ...exceedance({}), year: '2025' }]).success).toBe(false);
+    expect(safe(parseTrends, [trend({ annual_mean_ugm3: null })]).success).toBe(true);
   });
 });
 
@@ -148,5 +158,44 @@ describe('data origins', () => {
       const live = getCaseStudy(id).data.live;
       if (live) expect(DATA_ORIGINS, id).toContain(new URL(live.source).origin);
     }
+  });
+});
+
+describe('guards', () => {
+  const meta = { schema_version: 1, generated_at: '2026-10-21T12:43:26Z', period: { from: '2020-01-01', to: '2026-10-20' } };
+
+  it('accept a period and refuse a half one', () => {
+    expect(parseMeta(meta)).toEqual(meta);
+    expect(safe(parseMeta, { ...meta, period: { from: '2020-01-01' } }).success).toBe(false);
+  });
+
+  it('refuse a date-time without an offset or that is not a date', () => {
+    expect(safe(parseMeta, { ...meta, generated_at: '2026-10-21T12:43:26' }).success).toBe(false);
+    expect(safe(parseMeta, { ...meta, generated_at: '2026-13-45T99:00:00Z' }).success).toBe(false);
+    expect(safe(parseMeta, { ...meta, generated_at: 1 }).success).toBe(false);
+  });
+
+  it('refuse what is not an object or an array, and a missing field', () => {
+    for (const value of [null, [], 'meta', 1]) expect(safe(parseMeta, value).success).toBe(false);
+    expect(safe(parseExceedances, {}).success).toBe(false);
+    expect(safe(parseTrends, null).success).toBe(false);
+    const partial: Partial<Exceedance> = exceedance({});
+    delete partial.metric;
+    expect(safe(parseExceedances, [partial]).success).toBe(false);
+  });
+
+  it('refuse a fractional count, a non-finite mean and a non-boolean flag', () => {
+    expect(safe(parseExceedances, [exceedance({ exceedances: 1.5 })]).success).toBe(false);
+    expect(safe(parseTrends, [trend({ annual_mean_ugm3: Number.NaN })]).success).toBe(false);
+    expect(safe(parseTrends, [{ ...trend({}), is_representative: 'yes' }]).success).toBe(false);
+  });
+
+  it('name the row and the field that failed', () => {
+    expect(() => parseExceedances([exceedance({}), { ...exceedance({}), year: '2025' }])).toThrow('exceedances[1].year');
+  });
+
+  it('accept an empty export', () => {
+    expect(parseExceedances([])).toEqual([]);
+    expect(parseTrends([])).toEqual([]);
   });
 });
