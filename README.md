@@ -193,7 +193,7 @@ Sotto la vista Sistemi c'è una pagina in più per i progetti che hanno un caso 
 - La griglia è caricata sulla GPU una volta sola (`lib/sceneField.ts`). Altezza, onda attorno al puntatore, pacchetti e colore di ogni punto li calcola il vertex shader (`components/scene/fieldShader.ts`); a ogni frame `stepSim` (`lib/sceneSim.ts`, logica pura e testata, con la camera di `lib/sceneMath.ts`) interpola i parametri e passa allo shader una dozzina di numeri, qualunque sia il numero di punti. Le fasi di onda e flusso arrivano già riportate entro il loro periodo, perché sulla GPU i numeri sono a 32 bit.
 - Ogni vista ha una modalità in `lib/sceneModes.ts` (ampiezza, frequenza, velocità, flusso, raggio e forza del puntatore, presenza, posizione della camera). Al cambio vista i parametri vengono interpolati in modo graduale.
 - `lib/sceneMonitor.ts` (stesse soglie del `PerformanceMonitor` di drei che sostituisce) riduce il device pixel ratio a 1 quando il frame rate cala e lo riporta fino a 1,75 quando migliora.
-- Con `prefers-reduced-motion: reduce` il canvas non ha un ciclo di frame e ridisegna solo quando cambiano vista o tema.
+- Con `prefers-reduced-motion: reduce` il canvas non ha un ciclo di frame e ridisegna solo quando cambiano vista o tema. Lo stesso vale con il pulsante di pausa dell'header (`MotionToggle`, #142, WCAG 2.2.2): un pulsante a due stati (`aria-pressed`) che ferma la scena e nasconde i cicli decorativi (pacchetti della timeline, pulsazioni) tramite `data-motion="paused"` su `<html>`; la scelta resta in `localStorage` (`lib/motionPreference.ts`) fra viste e ricariche. Fermi (movimento ridotto o pausa) il contatore della timeline si aggiorna una volta al minuto invece che ogni secondo (#143).
 - La palette segue il tema risolto (chiaro o scuro) e porta con sé anche la dimensione dei punti: nel tema chiaro il punto è più scuro e più grande del 25% circa, perché punti scuri su fondo chiaro appaiono più sottili di punti chiari su fondo scuro a parità di contrasto. Nelle viste interne, dove il campo è attenuato per lasciar leggere il testo, il tema chiaro ne conserva di più (`presenceScale`), altrimenti sulla carta panna quasi sparirebbe.
 
 ### Motion
@@ -274,7 +274,7 @@ Con un dominio personale conviene una proprietà di tipo "Dominio", verificata v
 - Accordion dei progetti con `aria-expanded` e `aria-controls`; i pannelli chiusi sono `inert`, fuori dal focus e dalle tecnologie assistive; pulsanti e controlli con etichette localizzate.
 - Focus sempre visibile (`:focus-visible`), attributo `lang` aggiornato al cambio lingua; il menu delle lingue espone `aria-haspopup="listbox"`, `aria-expanded` e `aria-selected`, e ogni opzione ha il proprio `lang`.
 - Elementi decorativi (canvas, frecce, indici) marcati con `aria-hidden`.
-- Movimento ridotto rispettato su tre livelli: intro CSS, Framer Motion e frame loop della scena.
+- Movimento ridotto rispettato su tre livelli: intro CSS, Framer Motion e frame loop della scena; senza quell'impostazione, il pulsante di pausa ferma scena e cicli decorativi.
 
 ## Selezione del testo
 

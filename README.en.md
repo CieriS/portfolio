@@ -193,7 +193,7 @@ Below the Systems view there is one more page for the projects that have a case 
 - The grid is uploaded to the GPU once (`lib/sceneField.ts`). Each point's height, the ripple around the pointer, the packets and the colour are computed by the vertex shader (`components/scene/fieldShader.ts`); on every frame `stepSim` (`lib/sceneSim.ts`, pure and tested, with the camera maths in `lib/sceneMath.ts`) eases the parameters and hands the shader a dozen numbers, whatever the point count. The wave and flow phases arrive already wrapped into their period, because numbers on the GPU are 32-bit.
 - Each view has a mode in `lib/sceneModes.ts` (amplitude, frequency, speed, flow, pointer radius and force, presence, camera position). On a view change the parameters ease smoothly to the new values.
 - `lib/sceneMonitor.ts` (same thresholds as the drei `PerformanceMonitor` it replaces) drops the device pixel ratio to 1 when the frame rate falls and raises it back up to 1.75 when it recovers.
-- With `prefers-reduced-motion: reduce` the canvas has no frame loop and repaints only when the view or theme changes.
+- With `prefers-reduced-motion: reduce` the canvas has no frame loop and repaints only when the view or theme changes. The same holds with the pause button in the header (`MotionToggle`, #142, WCAG 2.2.2): a two-state button (`aria-pressed`) that stops the scene and hides the decorative loops (timeline packets, pulses) through `data-motion="paused"` on `<html>`; the choice is kept in `localStorage` (`lib/motionPreference.ts`) across views and reloads. While still (reduced motion or paused) the timeline counter updates once a minute instead of every second (#143).
 - The palette follows the resolved theme (light or dark) and carries the point size too: in the light theme the point is darker and about 25% larger, because dark points on a bright ground look thinner than light points on a dark one at the same contrast. On the inner views, where the field is dimmed to keep the text readable, the light theme keeps more of it (`presenceScale`), or it would all but vanish on the cream paper.
 
 ### Motion
@@ -274,7 +274,7 @@ With a custom domain, prefer a "Domain" property verified through DNS.
 - The projects accordion uses `aria-expanded` and `aria-controls`; collapsed panels are `inert`, out of reach for focus and assistive technology; buttons and controls have localised labels.
 - Focus is always visible (`:focus-visible`), the `lang` attribute updates on language change; the language menu exposes `aria-haspopup="listbox"`, `aria-expanded` and `aria-selected`, and each option carries its own `lang`.
 - Decorative elements (canvas, arrows, indices) are marked `aria-hidden`.
-- Reduced motion is honoured at three levels: CSS intro, Framer Motion and the scene's frame loop.
+- Reduced motion is honoured at three levels: CSS intro, Framer Motion and the scene's frame loop; without that setting, the pause button stops the scene and the decorative loops.
 
 ## Text selection
 

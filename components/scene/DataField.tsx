@@ -19,7 +19,9 @@ export default function DataField() {
     // Throws without WebGL: the error reaches SceneErrorBoundary, which drops the canvas.
     const renderer = createFieldRenderer(canvas);
     const sim = createSim();
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Still: the system asks for reduced motion, or the visitor paused the scene (#142).
+    const isStill = () => reduced || useSceneStore.getState().paused;
     const monitor = createFpsMonitor();
     const size = { width: 1, height: 1, dpr: Math.min(window.devicePixelRatio, MAX_DPR) };
     let last: number | null = null;
@@ -29,7 +31,7 @@ export default function DataField() {
       const delta = last === null ? 0 : (now - last) / 1000;
       last = now;
       const { mode, palette, pointer } = useSceneStore.getState();
-      renderer.draw(stepSim(sim, { mode, palette, pointer, delta, still, ...size }));
+      renderer.draw(stepSim(sim, { mode, palette, pointer, delta, still: isStill(), ...size }));
     };
 
     const resize = () => {
@@ -44,7 +46,12 @@ export default function DataField() {
       resize();
     };
 
+    let running = false;
     const loop = (now: number) => {
+      if (isStill()) {
+        running = false;
+        return;
+      }
       draw(now);
       const verdict = monitor(now);
       if (verdict === 'decline') setDpr(1);
@@ -52,22 +59,39 @@ export default function DataField() {
       frame = requestAnimationFrame(loop);
     };
 
-    // Reduced motion: repaint only when the view, the palette or the size change.
+    // Still: repaint only when the view, the palette or the size change.
     const paint = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(draw);
     };
 
+    // A store change while still repaints once; leaving the pause restarts the loop with a zero
+    // step, so the field resumes where it stopped instead of jumping by the paused time.
+    const wake = () => {
+      if (isStill()) {
+        running = false;
+        paint();
+      } else if (!running) {
+        running = true;
+        last = null;
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(loop);
+      }
+    };
+
     resize();
     const observer = new ResizeObserver(() => {
       resize();
-      if (still) paint();
+      if (isStill()) paint();
     });
     observer.observe(canvas);
-    const unsubscribe = still ? useSceneStore.subscribe(paint) : () => {};
+    const unsubscribe = useSceneStore.subscribe(wake);
     frame = requestAnimationFrame((now) => {
-      if (still) draw(now);
-      else loop(now);
+      if (isStill()) draw(now);
+      else {
+        running = true;
+        loop(now);
+      }
       setReady(true);
     });
 

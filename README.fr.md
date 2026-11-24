@@ -195,7 +195,7 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 - La grille est envoyée au GPU une seule fois (`lib/sceneField.ts`). La hauteur de chaque point, l'onde autour du pointeur, les paquets et la couleur sont calculés par le vertex shader (`components/scene/fieldShader.ts`) ; à chaque image, `stepSim` (`lib/sceneSim.ts`, logique pure et testée, avec la caméra de `lib/sceneMath.ts`) interpole les paramètres et transmet au shader une douzaine de nombres, quel que soit le nombre de points. Les phases de l'onde et du flux arrivent déjà ramenées dans leur période, car les nombres du GPU sont sur 32 bits.
 - Chaque vue possède un mode dans `lib/sceneModes.ts` (amplitude, fréquence, vitesse, flux, rayon et force du pointeur, présence, position de la caméra). Lors d'un changement de vue, les paramètres évoluent progressivement vers les nouvelles valeurs.
 - `lib/sceneMonitor.ts` (mêmes seuils que le `PerformanceMonitor` de drei qu'il remplace) ramène le device pixel ratio à 1 lorsque la fréquence d'images baisse et le remonte jusqu'à 1,75 lorsqu'elle s'améliore.
-- Avec `prefers-reduced-motion: reduce`, le canvas n'a pas de boucle d'images et ne se redessine que lorsque la vue ou le thème change.
+- Avec `prefers-reduced-motion: reduce`, le canvas n'a pas de boucle d'images et ne se redessine que lorsque la vue ou le thème change. Il en va de même avec le bouton pause de l'en-tête (`MotionToggle`, #142, WCAG 2.2.2) : un bouton à deux états (`aria-pressed`) qui arrête la scène et masque les boucles décoratives (paquets de la timeline, pulsations) via `data-motion="paused"` sur `<html>` ; le choix est gardé dans `localStorage` (`lib/motionPreference.ts`) entre vues et rechargements. À l'arrêt (mouvement réduit ou pause), le compteur de la timeline se met à jour une fois par minute au lieu de chaque seconde (#143).
 - La palette suit le thème résolu (clair ou sombre) et porte aussi la taille des points : en thème clair le point est plus foncé et environ 25 % plus grand, car des points sombres sur fond clair paraissent plus fins que des points clairs sur fond sombre à contraste égal. Sur les vues internes, où le champ est atténué pour laisser lire le texte, le thème clair en conserve davantage (`presenceScale`), sans quoi il disparaîtrait presque sur le papier crème.
 
 ### Animations
@@ -276,7 +276,7 @@ Avec un domaine personnalisé, préférez une propriété de type « Domaine »,
 - L'accordéon des projets utilise `aria-expanded` et `aria-controls` ; les panneaux fermés sont `inert`, hors du focus et des technologies d'assistance ; les boutons et contrôles ont des libellés localisés.
 - Focus toujours visible (`:focus-visible`), attribut `lang` mis à jour lors du changement de langue ; le menu des langues expose `aria-haspopup="listbox"`, `aria-expanded` et `aria-selected`, et chaque option porte son propre `lang`.
 - Éléments décoratifs (canvas, flèches, index) marqués `aria-hidden`.
-- Réduction des animations respectée à trois niveaux : intro CSS, Framer Motion et boucle de rendu de la scène.
+- Réduction des animations respectée à trois niveaux : intro CSS, Framer Motion et boucle de rendu de la scène ; sans ce réglage, le bouton pause arrête la scène et les boucles décoratives.
 
 ## Sélection du texte
 

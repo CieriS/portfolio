@@ -235,6 +235,14 @@ html:not([data-booted]) .intro-fade {
   animation-delay: calc(var(--i, 0) * 90ms + 360ms);
 }
 
+/*
+ * The visitor paused the animations (#142, `MotionToggle`): the decorative loops go, as they do
+ * under reduced motion. The entrance animations are left alone: they end on their own.
+ */
+html[data-motion='paused'] :is(.packet-travel, .animate-ping) {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .intro-line,
   .intro-fade,

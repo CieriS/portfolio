@@ -15,6 +15,7 @@ import type { PortfolioView } from '@/lib/portfolio';
 import { VIEW_IDS, type ViewId } from '@/lib/views';
 import { useViewStore } from '@/store/viewStore';
 import { LocaleSwitch } from './LocaleSwitch';
+import { MotionToggle } from './MotionToggle';
 import { NavBar } from './NavBar';
 import { ThemeToggle } from './ThemeToggle';
 import { useViewNavigation } from './useViewNavigation';
@@ -66,6 +67,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
           <div className="flex items-center gap-6">
             <LocaleSwitch locale={locale} onChange={onLocaleChange} />
             <ThemeToggle />
+            <MotionToggle />
           </div>
         </header>
 
