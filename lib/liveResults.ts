@@ -11,7 +11,7 @@
 export { DATA_ORIGINS } from './dataOrigins';
 
 /** Older than this, the data are shown with a warning: the daily run has not succeeded. */
-export const STALE_AFTER_HOURS = 48;
+const STALE_AFTER_HOURS = 48;
 
 export type Meta = {
   schema_version: 1;
