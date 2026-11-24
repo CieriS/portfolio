@@ -1,6 +1,5 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { routing, type Locale } from '@/i18n/routing';
@@ -15,6 +14,8 @@ const OPTIONS = routing.locales;
 /**
  * Shows only the active language; the trigger opens a listbox with every configured locale,
  * each labelled with its own native name. Adding a locale to `lib/routes.ts` adds it here.
+ * The same control sits in the shell and in the case study header (#98); it opens with a CSS
+ * animation rather than Framer Motion, so the server-rendered case study does not ship the library.
  */
 export function LocaleSwitch({ locale, onChange }: LocaleSwitchProps) {
   const t = useTranslations('locale');
@@ -109,46 +110,40 @@ export function LocaleSwitch({ locale, onChange }: LocaleSwitchProps) {
         </span>
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.ul
-            id={listId}
-            role="listbox"
-            aria-label={t('label')}
-            onKeyDown={onListKeyDown}
-            initial={{ opacity: 0, y: -6, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -4, scale: 0.98 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute top-full right-0 z-30 mt-1 min-w-[10rem] origin-top-right rounded-xl border border-line bg-paper p-1 shadow-lg"
-          >
-            {OPTIONS.map((option, index) => (
-              <li
-                key={option}
-                ref={(node) => {
-                  optionRefs.current[index] = node;
-                }}
-                role="option"
-                aria-selected={option === locale}
-                lang={option}
-                tabIndex={-1}
-                onClick={() => select(option)}
-                onPointerMove={() => setHighlight(index)}
-                className={cn(
-                  'flex cursor-pointer items-center justify-between gap-4 rounded-lg px-3 py-2 outline-none',
-                  index === highlight && 'bg-line/60',
-                  option === locale ? 'text-ink' : 'text-muted',
-                )}
-              >
-                <span>{LOCALE_NAMES[option]}</span>
-                <span aria-hidden className="font-mono text-label text-muted">
-                  {t(option)}
-                </span>
-              </li>
-            ))}
-          </motion.ul>
-        )}
-      </AnimatePresence>
+      {open && (
+        <ul
+          id={listId}
+          role="listbox"
+          aria-label={t('label')}
+          onKeyDown={onListKeyDown}
+          className="absolute top-full right-0 z-30 mt-1 min-w-[10rem] origin-top-right menu-in rounded-xl border border-line bg-paper p-1 shadow-lg"
+        >
+          {OPTIONS.map((option, index) => (
+            <li
+              key={option}
+              ref={(node) => {
+                optionRefs.current[index] = node;
+              }}
+              role="option"
+              aria-selected={option === locale}
+              lang={option}
+              tabIndex={-1}
+              onClick={() => select(option)}
+              onPointerMove={() => setHighlight(index)}
+              className={cn(
+                'flex cursor-pointer items-center justify-between gap-4 rounded-lg px-3 py-2 outline-none',
+                index === highlight && 'bg-line/60',
+                option === locale ? 'text-ink' : 'text-muted',
+              )}
+            >
+              <span>{LOCALE_NAMES[option]}</span>
+              <span aria-hidden className="font-mono text-label text-muted">
+                {t(option)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

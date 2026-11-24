@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import type { ReactNode } from 'react';
 import { ThemeToggle } from '@/components/shell/ThemeToggle';
 import { DISPLAY_TITLE, Emphasis, Meta } from '@/components/ui/text';
-import { routing, type Locale } from '@/i18n/routing';
+import type { Locale } from '@/i18n/routing';
 import { getCaseStudy } from '@/lib/caseStudy';
 import { CASE_STUDY_IMAGES } from '@/lib/caseStudyImages';
 import { cn } from '@/lib/cn';
@@ -11,7 +11,8 @@ import { pad, pick } from '@/lib/format';
 import { getPortfolioBundle } from '@/lib/portfolio';
 import { versionWithDate } from '@/lib/projects';
 import { buildCaseStudyJsonLd } from '@/lib/structuredData';
-import { caseStudyPath, contactsPath, pathFor, VIEW_IDS, type CaseStudyId } from '@/lib/views';
+import { contactsPath, pathFor, VIEW_IDS, type CaseStudyId } from '@/lib/views';
+import { CaseStudyLocaleSwitch } from './CaseStudyLocaleSwitch';
 import { LiveResults } from './LiveResults';
 import { SceneMode } from './SceneMode';
 
@@ -60,44 +61,31 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
         >
           {ui.shell.skip}
         </a>
-        <header className="relative z-20 flex items-center justify-between gap-6 px-frame pt-4 pb-3 select-none md:pt-6">
-          <div className="flex min-w-0 items-center gap-6">
-            <a
-              href={pathFor(locale, 'hero')}
-              className="group/link hidden text-body font-medium tracking-snug whitespace-nowrap sm:block"
-            >
+        <header className="relative z-20 flex items-center justify-between gap-4 px-frame pt-4 pb-3 select-none md:pt-6">
+          <div className="flex min-w-0 items-center gap-3 sm:gap-6">
+            <a href={pathFor(locale, 'hero')} className="group/link text-body font-medium tracking-snug whitespace-nowrap">
               <span className={UNDERLINE}>{shared.name}</span>
             </a>
-            {/* The header stays put while the page scrolls: the way back is always on screen. */}
-            <a href={projectsPath} data-back className="group/link flex items-center gap-2 text-body whitespace-nowrap">
+            {/* The header stays put while the page scrolls: the way back is always on screen. Below
+                `sm` it is the arrow alone, so the site name, language and theme fit at 375 px (#98). */}
+            <a
+              href={projectsPath}
+              data-back
+              aria-label={text.back}
+              className="group/link flex min-h-11 min-w-11 items-center justify-center gap-2 text-body whitespace-nowrap sm:min-w-0"
+            >
               <span aria-hidden>←</span>
-              <span className={UNDERLINE}>
-                <span className="sm:hidden">{ui.nav.projects}</span>
-                <span className="hidden sm:inline">{text.back}</span>
+              <span aria-hidden className={cn(UNDERLINE, 'hidden sm:inline')}>
+                {text.back}
               </span>
             </a>
           </div>
-          <div className="flex items-center gap-6">
-            <nav aria-label={ui.locale.label}>
-              <ul className="flex gap-3 font-mono text-label tracking-label uppercase">
-                {routing.locales.map((other) => (
-                  <li key={other}>
-                    <a
-                      href={caseStudyPath(other, id)}
-                      hrefLang={other}
-                      aria-current={other === locale ? 'page' : undefined}
-                      className={cn('py-2 transition-colors hover:text-ink', other === locale ? 'text-ink' : 'text-muted')}
-                    >
-                      {ui.locale[other]}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <NextIntlClientProvider locale={locale} messages={{ theme: ui.theme }} timeZone="UTC">
+          <NextIntlClientProvider locale={locale} messages={{ theme: ui.theme, locale: ui.locale }} timeZone="UTC">
+            <div className="flex items-center gap-4 sm:gap-6">
+              <CaseStudyLocaleSwitch locale={locale} id={id} />
               <ThemeToggle />
-            </NextIntlClientProvider>
-          </div>
+            </div>
+          </NextIntlClientProvider>
         </header>
 
         {/* Focusable, like the views: the page scrolls inside this element, not in the document. */}

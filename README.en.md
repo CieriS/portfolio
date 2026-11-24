@@ -232,6 +232,7 @@ Below the Systems view there is one more page for the projects that have a case 
 
 - `app/[locale]/[view]/[study]/page.tsx` prerenders the page only under the slug of the projects view and only for the ids in `CASE_STUDY_IDS` (`lib/routes.ts`); anything else is a 404. A view segment in another language (`/it/systems/ariaer`) is not a 404 but a 308 redirect to the right one (`localizedPath`, applied by `proxy.ts`): `/systems/ariaer`, with no language, therefore opens the case study in the browser language and is the address to use outside the site.
 - `components/case-study/CaseStudyPage.tsx` is a server component: all the text is in the HTML and the page does not load the animation library. It uses the text primitives of `components/ui/text.tsx`, shared with the views.
+- The case study header uses the shell's language menu (`LocaleSwitch`, through `CaseStudyLocaleSwitch`, #98): picking a language opens the same case study in that language (a real navigation, plus the `NEXT_LOCALE` cookie). The menu opens with a CSS animation rather than Framer Motion, so the server page does not load the library. The site name stays on phones too; below `sm` the back link is the arrow alone, with the full accessible name. An E2E test checks that name, back link, language and theme fit the header at 320 and 375 px.
 - The content lives in `data/case-studies/<id>.json` (structure plus copy in every language), outside the locale files that reach the browser. `lib/caseStudy.ts` validates it with zod and cross-checks: an id with no copy in one language, an empty `alt` or a description over 160 characters fails the build.
 - **Live results** (optional, `live` field of the JSON): a client component (`components/case-study/LiveResults.tsx`) reads the export the project publishes (aria-er: a daily JSON on GitHub Pages) and draws SVG charts in the site's colours. The logic is pure in `lib/liveResults.ts` (hand-written contract guards, no zod: in the browser zod weighed 38 KB gzip and its `Function('')` probe broke the CSP; chart series; data older than 48 hours); the allowed origins are in `DATA_ORIGINS` (`lib/dataOrigins.ts`), from which `next.config.ts` builds `connect-src`. If the export does not answer, the page stays whole with a message. The E2E tests stub the export with `page.route`.
 - Screenshots are static imports (`lib/caseStudyImages.ts`) served by `next/image`. For a private project they must come **from the demo profile only**; aria-er's come from its own dashboard, on public data.
@@ -405,7 +406,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   ├── motion/       ViewFrame (view container), Reveal (variants, line mask, intro)
 │   ├── providers/    ThemeProvider (next-themes)
 │   ├── scene/        SceneLayer → DataField (lazy) → fieldRenderer (WebGL) · fieldShader
-│   ├── case-study/   CaseStudyPage (server component), SceneMode
+│   ├── case-study/   CaseStudyPage (server component), CaseStudyLocaleSwitch, LiveResults, SceneMode
 │   ├── seo/          PortfolioPage (JSON-LD + app)
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
 │   │                 useViewNavigation, useViewUrlSync

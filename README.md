@@ -232,6 +232,7 @@ Sotto la vista Sistemi c'è una pagina in più per i progetti che hanno un caso 
 
 - `app/[locale]/[view]/[study]/page.tsx` prerenderizza la pagina solo sotto lo slug della vista dei progetti e solo per gli id in `CASE_STUDY_IDS` (`lib/routes.ts`); il resto è un 404. Un segmento di vista in un'altra lingua (`/it/systems/ariaer`) non è un 404 ma un redirect 308 a quello giusto (`localizedPath`, applicato da `proxy.ts`): così `/systems/ariaer`, senza lingua, apre il caso di studio nella lingua del browser ed è l'indirizzo da usare fuori dal sito.
 - `components/case-study/CaseStudyPage.tsx` è un componente server: tutto il testo è nell'HTML e la pagina non carica la libreria delle animazioni. Usa le primitive di testo di `components/ui/text.tsx`, condivise con le viste.
+- L'intestazione del caso di studio usa lo stesso menu delle lingue della shell (`LocaleSwitch`, tramite `CaseStudyLocaleSwitch`, #98): scegliere una lingua apre lo stesso caso di studio in quella lingua (navigazione vera e cookie `NEXT_LOCALE`). Il menu si apre con un'animazione CSS e non con Framer Motion, così la pagina server non carica la libreria. Il nome del sito resta anche su telefono; sotto `sm` il link indietro è la sola freccia, con il nome accessibile completo. Un test E2E controlla che a 320 e 375 px nome, link indietro, lingua e tema stiano nell'intestazione.
 - I contenuti stanno in `data/case-studies/<id>.json` (struttura più testi in ogni lingua), fuori dai file di lingua che arrivano al browser. `lib/caseStudy.ts` li valida con zod e con verifiche incrociate: un id senza testo in una lingua, un `alt` vuoto o una description oltre 160 caratteri fanno fallire la build.
 - **Risultati dal vivo** (facoltativi, campo `live` del JSON): un componente client (`components/case-study/LiveResults.tsx`) legge l'export che il progetto pubblica (aria-er: JSON giornaliero su GitHub Pages) e disegna i grafici in SVG con i colori del sito. La logica è pura in `lib/liveResults.ts` (controlli del contratto scritti a mano, senza zod: nel browser zod pesava 38 KB compressi e la sua prova `Function('')` violava la CSP; serie dei grafici; dati vecchi oltre 48 ore); le origini permesse stanno in `DATA_ORIGINS` (`lib/dataOrigins.ts`), da cui `next.config.ts` ricava `connect-src`. Se l'export non risponde, la pagina resta intera con un messaggio. I test E2E simulano l'export con `page.route`.
 - Le schermate sono import statici (`lib/caseStudyImages.ts`) serviti da `next/image`. Per un progetto privato vanno prese **solo dal profilo demo**; per aria-er vengono dalla sua dashboard, su dati pubblici.
@@ -405,7 +406,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 │   ├── motion/       ViewFrame (contenitore della vista), Reveal (varianti, line mask, intro)
 │   ├── providers/    ThemeProvider (next-themes)
 │   ├── scene/        SceneLayer → DataField (lazy) → fieldRenderer (WebGL) · fieldShader
-│   ├── case-study/   CaseStudyPage (componente server), SceneMode
+│   ├── case-study/   CaseStudyPage (componente server), CaseStudyLocaleSwitch, LiveResults, SceneMode
 │   ├── seo/          PortfolioPage (JSON-LD + app)
 │   ├── shell/        AppRoot, AppShell, NavBar, ViewLink, LocaleSwitch, ThemeToggle,
 │   │                 useViewNavigation, useViewUrlSync
