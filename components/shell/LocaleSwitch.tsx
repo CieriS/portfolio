@@ -88,7 +88,7 @@ export function LocaleSwitch({ locale, onChange }: LocaleSwitchProps) {
   };
 
   return (
-    <div ref={rootRef} data-keep-focus className="relative text-[13px] select-none" onBlur={onBlur}>
+    <div ref={rootRef} data-keep-focus className="relative text-small select-none" onBlur={onBlur}>
       <button
         ref={triggerRef}
         type="button"
@@ -103,7 +103,7 @@ export function LocaleSwitch({ locale, onChange }: LocaleSwitchProps) {
         <span className="link-underline">{t(locale)}</span>
         <span
           aria-hidden
-          className={cn('text-[9px] text-muted transition-transform duration-300 ease-out-expo', open && 'rotate-180')}
+          className={cn('text-label text-muted transition-transform duration-300 ease-out-expo', open && 'rotate-180')}
         >
           ▾
         </span>
@@ -141,7 +141,7 @@ export function LocaleSwitch({ locale, onChange }: LocaleSwitchProps) {
                 )}
               >
                 <span>{LOCALE_NAMES[option]}</span>
-                <span aria-hidden className="font-mono text-[11px] text-muted">
+                <span aria-hidden className="font-mono text-label text-muted">
                   {t(option)}
                 </span>
               </li>

@@ -11,7 +11,22 @@
   --accent: #ff5b1f;
   --frame: clamp(1rem, 2.4vw, 2.25rem);
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Mono labels: 12 px on phones (nothing smaller than 12 px below md), 11 px from md up. */
+  --label-size: 12px;
+  /* Vertical rhythm between the blocks of a page (mobile values, md values below). */
+  --gap-head: 5rem; /* SectionHead → the first block of a view */
+  --gap-section: 6rem; /* top-level sections of a long view (Identity) */
+  --gap-subsection: 5rem; /* sections that follow inside a view or a case study */
   color-scheme: light;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --label-size: 11px;
+    --gap-head: 8rem;
+    --gap-section: 9rem;
+    --gap-subsection: 7rem;
+  }
 }
 
 .dark {
@@ -32,6 +47,42 @@
   --color-line: var(--line);
   --color-accent: var(--accent);
   --ease-out-expo: var(--ease-expo);
+
+  /*
+   * Type roles. Components use these instead of arbitrary text-[…], tracking-[…] and
+   * leading-[…] classes (lib/designTokens.test.ts scans the sources).
+   */
+  --text-display: clamp(4rem, 15.5vw, 17rem); /* the hero name */
+  --text-display--line-height: 0.84;
+  --text-display--letter-spacing: -0.06em;
+  --text-title: clamp(2.5rem, 6.4vw, 6.75rem); /* the single h1 of views, case studies and error pages */
+  --text-title--line-height: 0.95;
+  --text-title--letter-spacing: -0.045em;
+  --text-heading: clamp(2.25rem, 5.6vw, 5.5rem); /* project names */
+  --text-heading--line-height: 0.95;
+  --text-heading--letter-spacing: -0.045em;
+  --text-subheading: clamp(1.75rem, 4vw, 3.75rem); /* contact rows */
+  --text-subheading--line-height: 1;
+  --text-subheading--letter-spacing: -0.045em;
+  --text-lede: clamp(1.5rem, 3vw, 2.5rem); /* the case study lede */
+  --text-lede--line-height: 1.1;
+  --text-lede--letter-spacing: -0.02em;
+  --text-body: 15px;
+  --text-small: 13px;
+  --text-label: var(--label-size);
+  /* Serif emphasis inside a heading, relative to the heading. */
+  --text-emphasis: 1.06em;
+
+  /* Tracking: three values for headings, one for mono labels. */
+  --tracking-display: -0.06em;
+  --tracking-tight: -0.045em;
+  --tracking-snug: -0.02em;
+  --tracking-label: 0.14em;
+
+  /* Section gaps: mt-head, mt-section, mt-subsection. */
+  --spacing-head: var(--gap-head);
+  --spacing-section: var(--gap-section);
+  --spacing-subsection: var(--gap-subsection);
 }
 
 @layer base {

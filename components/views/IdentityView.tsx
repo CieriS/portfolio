@@ -34,36 +34,36 @@ export function IdentityView({ data }: ViewProps) {
           like the others with one plain heading. */}
       <SectionHead index={2} label={label} title={copy.title} emphasis={copy.titleEmphasis} subtitle={copy.subtitle} />
 
-      <div className="mt-24 grid gap-y-10 md:mt-36 md:grid-cols-12 md:gap-x-6">
+      <div className="mt-section grid gap-y-10 md:grid-cols-12 md:gap-x-6">
         <motion.div variants={fade} className="md:col-span-3">
           <Meta as="h2">{copy.principlesTitle}</Meta>
         </motion.div>
         <motion.ol variants={fade} className="grid gap-x-6 gap-y-12 sm:grid-cols-2 md:col-span-9">
           {copy.principles.map((principle, index) => (
             <li key={principle.title} className="border-t border-line pt-5">
-              <span className="font-mono text-[11px] text-muted tabular-nums select-none">{pad(index + 1)}</span>
-              <h3 className="mt-4 text-lg font-medium tracking-[-0.015em]">{principle.title}</h3>
-              <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-muted">{principle.body}</p>
+              <span className="font-mono text-label text-muted tabular-nums select-none">{pad(index + 1)}</span>
+              <h3 className="mt-4 text-lg font-medium tracking-snug">{principle.title}</h3>
+              <p className="mt-2 max-w-sm text-body leading-relaxed text-muted">{principle.body}</p>
             </li>
           ))}
         </motion.ol>
       </div>
 
       {/* What the removed fifth view said, in one line (issue #50). */}
-      <div className="mt-24 grid gap-y-4 md:mt-36 md:grid-cols-12 md:gap-x-6">
+      <div className="mt-section grid gap-y-4 md:grid-cols-12 md:gap-x-6">
         <motion.div variants={fade} className="md:col-span-3">
           <Meta as="h2">{copy.outsideTitle}</Meta>
         </motion.div>
-        <motion.p variants={fade} className="max-w-xl text-[15px] leading-relaxed text-muted md:col-span-9">
+        <motion.p variants={fade} className="max-w-xl text-body leading-relaxed text-muted md:col-span-9">
           {copy.outside}
         </motion.p>
       </div>
 
-      <div id={CONTACTS_FRAGMENT} tabIndex={-1} className="mt-24 grid scroll-mt-10 gap-y-8 md:mt-36 md:grid-cols-12 md:gap-x-6">
+      <div id={CONTACTS_FRAGMENT} tabIndex={-1} className="mt-section grid scroll-mt-10 gap-y-8 md:grid-cols-12 md:gap-x-6">
         <motion.div variants={fade} className="md:col-span-3">
           <Meta as="h2">{copy.contactsTitle}</Meta>
           {/* The role sought sits with the contacts too: it is where a recruiter acts on it (#104). */}
-          <p data-seeking className="mt-3 max-w-[28ch] text-[15px] leading-snug">
+          <p data-seeking className="mt-3 max-w-[28ch] text-body leading-snug">
             {data.content.hero.seeking}
           </p>
           <p className="mt-3 max-w-[28ch] text-sm text-muted">{copy.contactsNote}</p>

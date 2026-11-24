@@ -46,7 +46,7 @@ export function SectionHead({ index, label, title, emphasis, subtitle, aside }: 
         {(subtitle || aside) && (
           <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             {subtitle && (
-              <motion.p variants={fade} className="max-w-md text-[15px] leading-relaxed text-muted">
+              <motion.p variants={fade} className="max-w-md text-body leading-relaxed text-muted">
                 {subtitle}
               </motion.p>
             )}

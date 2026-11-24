@@ -205,6 +205,7 @@ Below the Systems view there is one more page for the projects that have a case 
 ### Theme and typography
 
 - CSS tokens in `app/globals.css` (`--paper`, `--ink`, `--muted`, `--line`, `--accent`), redefined under `.dark` and exposed to Tailwind v4 with `@theme inline`.
+- Type roles, in the same `@theme inline` (#97): `text-display` (the name on the home page), `text-title` (the single `h1` of views, case studies and error pages), `text-heading` (project names), `text-subheading` (contact rows), `text-lede` (the case study subtitle), `text-body` (15 px), `text-small` (13 px), `text-label` (mono labels: 12 px below `md`, 11 px above; no text below 12 px on a phone) and `text-emphasis` (serif italic inside a heading). The large roles carry line height and tracking; headings keep three tracking values (`tracking-display`, `tracking-tight`, `tracking-snug`) plus `tracking-label`. Vertical gaps between blocks (#145): `mt-head` (after `SectionHead`), `mt-section` (Identity's sections), `mt-subsection` (later sections of a view or case study), with the `md` values in the `--gap-*` variables. `lib/designTokens.test.ts` fails if a `text-[…]`, `tracking-[…]` or `leading-[…]` class or a hand-written large margin comes back in `components/` or `app/`; `e2e/typography.spec.ts` checks that no text drops below 12 px at 375 px and that the timeline phase labels stay on screen at 375, 768 and 1440 px in every locale (the last one aligns right when it would not fit).
 - The light theme is a cream paper (`#ede7db`), not display white: less glare, and the point field behind the content stays readable.
 - `lib/theme.ts` repeats paper, ink, muted text and accent for whatever cannot read custom properties (WebGL scene, `theme-color`, manifest, Open Graph images, `app/global-error.tsx`); `inkAlpha` gives the ink at an opacity, for hairlines and borders. A test fails if `global-error.tsx` or `lib/og.tsx` writes a colour of its own. `lib/theme.test.ts` fails when CSS and TypeScript drift apart, when text drops below AA/AAA contrast, or when the scene points become invisible or stronger than text.
 - Custom utilities: `px-frame`, `no-scrollbar`, `fade-edges`, `link-underline`, `bg-dashed`.
@@ -394,7 +395,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   │       ├── opengraph-image.tsx  per-view Open Graph image
 │   │       └── [study]/             case study of a project (page + Open Graph image)
 │   ├── api/cv/route.ts              CV download (the only dynamic route)
-│   ├── globals.css                  colour tokens, Tailwind utilities, CSS intro
+│   ├── globals.css                  colour, type and spacing tokens, Tailwind utilities, CSS intro
 │   ├── sitemap.ts · robots.ts · manifest.ts
 │   └── favicon.ico · icon.png · apple-icon.png
 ├── components/

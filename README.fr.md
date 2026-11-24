@@ -207,6 +207,7 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 ### Thème et typographie
 
 - Tokens CSS dans `app/globals.css` (`--paper`, `--ink`, `--muted`, `--line`, `--accent`), redéfinis sous `.dark` et exposés à Tailwind v4 via `@theme inline`.
+- Typographie par rôles, dans le même `@theme inline` (#97) : `text-display` (le nom sur l'accueil), `text-title` (l'unique `h1` des vues, des études de cas et des pages d'erreur), `text-heading` (noms des projets), `text-subheading` (lignes des contacts), `text-lede` (sous-titre de l'étude de cas), `text-body` (15 px), `text-small` (13 px), `text-label` (étiquettes mono : 12 px sous `md`, 11 px au-dessus ; aucun texte sous 12 px sur téléphone) et `text-emphasis` (italique serif dans un titre). Les grands rôles portent interligne et approche ; les titres gardent trois valeurs d'approche (`tracking-display`, `tracking-tight`, `tracking-snug`) plus `tracking-label`. Espaces verticaux entre les blocs (#145) : `mt-head` (après `SectionHead`), `mt-section` (sections d'Identité), `mt-subsection` (sections suivantes d'une vue ou d'une étude de cas), avec les valeurs `md` dans les variables `--gap-*`. `lib/designTokens.test.ts` échoue si une classe `text-[…]`, `tracking-[…]`, `leading-[…]` ou une grande marge écrite à la main revient dans `components/` ou `app/` ; `e2e/typography.spec.ts` vérifie qu'aucun texte ne descend sous 12 px à 375 px et que les étiquettes des phases de la timeline restent à l'écran à 375, 768 et 1440 px dans chaque langue (la dernière s'aligne à droite si elle ne tient pas).
 - Le thème clair est un papier crème (`#ede7db`), pas un blanc d'écran : moins éblouissant, et le champ de points derrière le contenu reste lisible.
 - `lib/theme.ts` répète papier, encre, texte secondaire et accent pour ce qui ne peut pas lire les custom properties (scène WebGL, `theme-color`, manifest, images Open Graph, `app/global-error.tsx`) ; `inkAlpha` donne l'encre avec une opacité, pour les filets et les bordures. Un test échoue si `global-error.tsx` ou `lib/og.tsx` écrit sa propre couleur. `lib/theme.test.ts` échoue si CSS et TypeScript divergent, si le texte passe sous les contrastes AA/AAA ou si les points de la scène deviennent invisibles ou plus forts que le texte.
 - Utilitaires personnalisés : `px-frame`, `no-scrollbar`, `fade-edges`, `link-underline`, `bg-dashed`.
@@ -396,7 +397,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   │       ├── opengraph-image.tsx  image Open Graph par vue
 │   │       └── [study]/             étude de cas d'un projet (page + image Open Graph)
 │   ├── api/cv/route.ts              téléchargement du CV (seule route dynamique)
-│   ├── globals.css                  tokens de couleur, utilitaires Tailwind, intro CSS
+│   ├── globals.css                  tokens de couleur, typo et espaces, utilitaires Tailwind, intro CSS
 │   ├── sitemap.ts · robots.ts · manifest.ts
 │   └── favicon.ico · icon.png · apple-icon.png
 ├── components/

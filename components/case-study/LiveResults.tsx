@@ -68,14 +68,14 @@ export function LiveResults({
 
   if (state.status === 'loading') {
     return (
-      <p className="text-[15px] text-muted" data-live="loading" aria-live="polite">
+      <p className="text-body text-muted" data-live="loading" aria-live="polite">
         {copy.loading}
       </p>
     );
   }
   if (state.status === 'error') {
     return (
-      <p className="max-w-2xl text-[15px] text-muted" data-live="error" aria-live="polite">
+      <p className="max-w-2xl text-body text-muted" data-live="error" aria-live="polite">
         {copy.error}
       </p>
     );
@@ -87,17 +87,14 @@ export function LiveResults({
   const stale = isStale(state.meta.generated_at, new Date());
   return (
     <div className="space-y-14" data-live="ready">
-      <p
-        className={cn('font-mono text-[11px] tracking-[0.14em] uppercase', stale ? 'text-accent' : 'text-muted')}
-        data-stale={stale}
-      >
+      <p className={cn('font-mono text-label tracking-label uppercase', stale ? 'text-accent' : 'text-muted')} data-stale={stale}>
         {(stale ? copy.stale : copy.updated).replace('{date}', date)}
       </p>
       <ExceedancesFigure chart={state.exceedances} copy={copy} />
       <TrendFigure chart={state.trend} copy={copy} />
       <p className="text-sm text-muted">{copy.credits}</p>
       <p>
-        <a href={page} className="group/link inline-flex items-center gap-3 text-[15px]" data-open-data>
+        <a href={page} className="group/link inline-flex items-center gap-3 text-body" data-open-data>
           <span className="link-underline group-hover/link:bg-[length:100%_1px]">{copy.data}</span>
           <span aria-hidden>↗</span>
         </a>
@@ -107,7 +104,7 @@ export function LiveResults({
 }
 
 // Not the mono label style: it is uppercase, and µg/m³ would read Mg/m³.
-const CHART_TITLE = 'text-lg font-medium tracking-[-0.015em]';
+const CHART_TITLE = 'text-lg font-medium tracking-snug';
 const WIDTH = 640;
 const HEIGHT = 240;
 const PAD = { top: 12, right: 12, bottom: 28, left: 32 };
@@ -119,7 +116,7 @@ const SHADES = [1, 0.55, 0.28, 0.75, 0.4];
 function Axis({ top, years, x }: { top: number; years: number[]; x: (index: number) => number }) {
   const ticks = [0, top / 2, top];
   return (
-    <g className="font-mono text-[10px]" fill="currentColor">
+    <g className="font-mono text-label" fill="currentColor">
       {ticks.map((tick) => {
         const y = PAD.top + PLOT_H - (tick / top) * PLOT_H;
         return (

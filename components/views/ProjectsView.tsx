@@ -46,7 +46,7 @@ export function ProjectsView({ data }: ViewProps) {
         subtitle={copy.subtitle}
       />
 
-      <motion.ul variants={fade} className="mt-20 border-b border-line md:mt-32">
+      <motion.ul variants={fade} className="mt-head border-b border-line">
         {projects.map((project, index) => (
           <ProjectRow
             key={project.id}
@@ -95,11 +95,11 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
           aria-describedby={item ? teaserId : undefined}
           className="group grid w-full grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-x-4 pt-6 pb-3 text-left md:grid-cols-12 md:gap-x-6 md:pt-9 md:pb-4"
         >
-          <span className="font-mono text-[11px] text-muted tabular-nums md:col-span-3">{pad(index + 1)}</span>
-          <span className="text-[clamp(2.25rem,5.6vw,5.5rem)] leading-[0.95] font-medium tracking-[-0.045em] transition-transform duration-700 ease-out-expo group-hover:translate-x-3 md:col-span-6">
+          <span className="font-mono text-label text-muted tabular-nums md:col-span-3">{pad(index + 1)}</span>
+          <span className="text-heading font-medium transition-transform duration-700 ease-out-expo group-hover:translate-x-3 md:col-span-6">
             {project.name}
           </span>
-          <span className="hidden text-right font-mono text-[11px] tracking-[0.14em] text-muted uppercase md:col-span-2 md:block">
+          <span className="hidden text-right font-mono text-label tracking-label text-muted uppercase md:col-span-2 md:block">
             {project.stack.join(' · ')}
           </span>
           <span
@@ -118,7 +118,7 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
       {item && (
         <p
           id={teaserId}
-          className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 pb-6 text-[15px] leading-snug text-muted md:grid-cols-12 md:gap-x-6 md:pb-9"
+          className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 pb-6 text-body leading-snug text-muted md:grid-cols-12 md:gap-x-6 md:pb-9"
         >
           <span className="col-start-2 line-clamp-2 md:col-span-6 md:col-start-4">{item.teaser}</span>
         </p>
@@ -137,11 +137,11 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
         >
           <div className="grid gap-12 pb-12 md:grid-cols-12 md:gap-x-6 md:pb-16">
             <div className="md:col-span-4 md:col-start-4">
-              <p className="text-lg leading-relaxed md:text-xl md:leading-snug md:tracking-[-0.01em]">{item.summary}</p>
+              <p className="text-lg leading-relaxed md:text-xl md:leading-snug md:tracking-snug">{item.summary}</p>
               <Meta as="h3" className="mt-10">
                 {copy.labels.highlights}
               </Meta>
-              <ul className="mt-5 space-y-3 text-[15px] leading-snug text-muted">
+              <ul className="mt-5 space-y-3 text-body leading-snug text-muted">
                 {item.highlights.map((highlight) => (
                   <li key={highlight} className="flex gap-3">
                     <span aria-hidden className="font-mono text-ink">
@@ -162,7 +162,7 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
                       aria-hidden
                       className="absolute top-[0.45em] left-0 size-[7px] rounded-full border border-ink bg-paper"
                     />
-                    <p className="text-[15px] leading-tight">{layer.tech}</p>
+                    <p className="text-body leading-tight">{layer.tech}</p>
                     <p className="mt-1 text-sm text-muted">{pick(item.layers, layer.id) ?? layer.id}</p>
                   </li>
                 ))}
@@ -172,7 +172,7 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
             <div className="flex flex-col gap-8 md:col-span-3 md:col-start-10">
               <div>
                 <Meta as="h3">{copy.labels.bridge}</Meta>
-                <p className="mt-5 text-[15px] leading-relaxed text-muted">{item.bridge}</p>
+                <p className="mt-5 text-body leading-relaxed text-muted">{item.bridge}</p>
               </div>
               <Version project={project} label={copy.labels.version} />
               {/* A page of its own, outside the view carousel: a plain link, so it navigates. It comes
@@ -201,7 +201,7 @@ function Version({ project, label }: { project: Project; label: string }) {
   return (
     <div data-version>
       <Meta as="h3">{label}</Meta>
-      <p className="mt-5 text-[15px] tabular-nums">
+      <p className="mt-5 text-body tabular-nums">
         {release ? (
           <a href={release} target="_blank" rel="noopener noreferrer" className={LINK_CLASS}>
             <span className="link-underline group-hover/link:bg-[length:100%_1px]">{version}</span>
@@ -215,7 +215,7 @@ function Version({ project, label }: { project: Project; label: string }) {
   );
 }
 
-const LINK_CLASS = 'group/link inline-flex select-none items-center gap-3 self-start text-[15px]';
+const LINK_CLASS = 'group/link inline-flex select-none items-center gap-3 self-start text-body';
 
 /** Public code links out to its repository; private code points to the contacts, where access can be asked for. */
 function SourceLink({ project, copy }: { project: Project; copy: ProjectsCopy }) {

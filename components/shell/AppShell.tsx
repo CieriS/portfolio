@@ -47,7 +47,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
         {/* First tab stop: jumps past header and language/theme controls, straight into the view. */}
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-[var(--frame)] focus:z-20 focus:rounded-full focus:border focus:border-ink focus:bg-paper focus:px-4 focus:py-2 focus:text-[13px]"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-[var(--frame)] focus:z-20 focus:rounded-full focus:border focus:border-ink focus:bg-paper focus:px-4 focus:py-2 focus:text-small"
         >
           {shell('skip')}
         </a>
@@ -57,11 +57,11 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
         >
           <ViewLink
             view="hero"
-            className="inline-flex min-h-[2.8rem] items-center text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap select-none"
+            className="inline-flex min-h-[2.8rem] items-center text-body font-medium tracking-snug whitespace-nowrap select-none"
           >
             <span className="link-underline">{data.shared.name}</span>
           </ViewLink>
-          <p className="hidden font-mono text-[11px] tracking-[0.14em] text-muted uppercase lg:block">{shell('role')}</p>
+          <p className="hidden font-mono text-label tracking-label text-muted uppercase lg:block">{shell('role')}</p>
           <div className="flex items-center gap-6">
             <LocaleSwitch locale={locale} onChange={onLocaleChange} />
             <ThemeToggle />
@@ -90,7 +90,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
             >
               ←
             </button>
-            <p className="font-mono text-[11px] text-muted tabular-nums">
+            <p className="font-mono text-label text-muted tabular-nums">
               <span className="text-ink">{pad(index + 1)}</span> / {pad(VIEW_IDS.length)}
             </p>
             <button

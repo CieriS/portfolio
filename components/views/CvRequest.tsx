@@ -98,7 +98,7 @@ export function CvRequest({ data }: { data: PortfolioView }) {
       </button>
 
       <div id={panelId} hidden={!open} className="pb-8">
-        <p className="max-w-xl text-[15px] leading-relaxed text-muted">{copy.note}</p>
+        <p className="max-w-xl text-body leading-relaxed text-muted">{copy.note}</p>
 
         <div role="group" aria-label={copy.title} className="mt-6 flex gap-2">
           {(['email', 'password'] as const).map((option) => (
@@ -112,7 +112,7 @@ export function CvRequest({ data }: { data: PortfolioView }) {
                 setStatus('idle');
               }}
               className={cn(
-                'rounded-full border px-4 py-1.5 font-mono text-[11px] tracking-[0.14em] uppercase transition-colors',
+                'rounded-full border px-4 py-1.5 font-mono text-label tracking-label uppercase transition-colors',
                 method === option ? 'border-ink bg-ink text-paper' : 'border-line text-muted hover:border-ink hover:text-ink',
               )}
             >
@@ -123,7 +123,7 @@ export function CvRequest({ data }: { data: PortfolioView }) {
 
         <form onSubmit={submit} noValidate className="mt-6 flex max-w-xl flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex flex-1 flex-col gap-2">
-            <label htmlFor={fieldId} className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
+            <label htmlFor={fieldId} className="font-mono text-label tracking-label text-muted uppercase">
               {method === 'email' ? copy.email : copy.password}
             </label>
             <div className="flex items-end gap-4 border-b border-line focus-within:border-ink">
@@ -146,7 +146,7 @@ export function CvRequest({ data }: { data: PortfolioView }) {
                   type="button"
                   onClick={() => setRevealed((value) => !value)}
                   aria-controls={fieldId}
-                  className="pb-2.5 font-mono text-[11px] tracking-[0.14em] text-muted uppercase transition-colors hover:text-ink"
+                  className="pb-2.5 font-mono text-label tracking-label text-muted uppercase transition-colors hover:text-ink"
                 >
                   {revealed ? copy.hidePassword : copy.showPassword}
                 </button>
@@ -162,13 +162,13 @@ export function CvRequest({ data }: { data: PortfolioView }) {
           <button
             type="submit"
             disabled={status === 'pending'}
-            className="rounded-full border border-ink bg-ink px-6 py-2.5 text-[15px] text-paper transition-opacity disabled:opacity-50"
+            className="rounded-full border border-ink bg-ink px-6 py-2.5 text-body text-paper transition-opacity disabled:opacity-50"
           >
             {status === 'pending' ? copy.pending : method === 'email' ? copy.send : copy.download}
           </button>
         </form>
 
-        <p id={statusId} role="status" className="mt-4 min-h-6 text-[15px]">
+        <p id={statusId} role="status" className="mt-4 min-h-6 text-body">
           {after === null || !linkedin ? (
             message
           ) : (
