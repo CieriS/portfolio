@@ -3,7 +3,12 @@
     "collect": {
       "startServerCommand": "npm start -- --port 3220",
       "startServerReadyPattern": "Ready",
-      "url": ["http://localhost:3220/en", "http://localhost:3220/en/execution", "http://localhost:3220/en/systems"],
+      "url": [
+        "http://localhost:3220/en",
+        "http://localhost:3220/en/execution",
+        "http://localhost:3220/en/systems",
+        "http://localhost:3220/en/systems/ariaer"
+      ],
       "numberOfRuns": 3
     },
     "assert": {
