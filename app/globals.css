@@ -1,6 +1,11 @@
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
+/*
+ * Short screens: high zoom (1280 × 720 at 200% is 640 × 360) and phones in landscape. There the
+ * fixed header and menu left the view a strip (#141, WCAG 1.4.10), so they scroll away instead.
+ */
+@custom-variant short (@media (max-height: 30rem));
 
 :root {
   /* Paper and ink are mirrored in lib/theme.ts for the scene and the browser chrome. */

@@ -45,7 +45,8 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="relative z-10 flex h-dvh flex-col">
+      {/* On short screens (#141) the whole shell scrolls: header and menu leave, the view fills the screen. */}
+      <div className="relative z-10 flex h-dvh flex-col short:block short:overflow-y-auto">
         {/* First tab stop: jumps past header and language/theme controls, straight into the view. */}
         <a
           href="#main"
@@ -71,7 +72,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
           </div>
         </header>
 
-        <main id="main" className="relative min-h-0 flex-1">
+        <main id="main" className="relative min-h-0 flex-1 short:h-dvh">
           <AnimatePresence mode="wait" initial={false}>
             <ViewFrame key={`${active}:${locale}`} label={nav(active)}>
               {RENDER[active](data)}
