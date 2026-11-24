@@ -2,6 +2,7 @@ import { hasLocale } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { getPortfolioBundle } from '@/lib/portfolio';
+import { RoundIcon } from '@/components/ui/RoundIcon';
 
 export default async function NotFound() {
   const requested = await getLocale();
@@ -16,9 +17,7 @@ export default async function NotFound() {
         <p className="mt-6 max-w-md text-body leading-relaxed text-muted">{copy.body}</p>
         <a href={`/${locale}`} className="group mt-10 inline-flex items-center gap-4 text-body">
           <span className="link-underline">{copy.cta}</span>
-          <span aria-hidden className="grid size-10 place-items-center rounded-full border border-line">
-            →
-          </span>
+          <RoundIcon>→</RoundIcon>
         </a>
       </div>
     </main>

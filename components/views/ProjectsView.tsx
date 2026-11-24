@@ -10,6 +10,7 @@ import type { PortfolioView, Project } from '@/lib/portfolio';
 import { fragmentId, releaseUrl, versionLabel } from '@/lib/projects';
 import { caseStudyPath, CONTACTS_FRAGMENT, isCaseStudyId, type Locale } from '@/lib/routes';
 import { Meta, SectionHead, type ViewProps } from './atoms';
+import { RoundIcon } from '@/components/ui/RoundIcon';
 
 type ProjectsCopy = PortfolioView['content']['projects'];
 
@@ -102,15 +103,13 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
           <span className="hidden text-right font-mono text-label tracking-label text-muted uppercase md:col-span-2 md:block">
             {project.stack.join(' · ')}
           </span>
-          <span
-            aria-hidden
-            className={cn(
-              'grid size-10 place-items-center justify-self-end rounded-full border border-line text-lg font-light transition-all duration-500 ease-out-expo md:col-span-1',
-              open ? 'rotate-45 border-ink bg-ink text-paper' : 'group-hover:border-ink',
-            )}
+          <RoundIcon
+            active={open}
+            hover="border"
+            className={cn('justify-self-end text-lg font-light md:col-span-1', open && 'rotate-45')}
           >
             +
-          </span>
+          </RoundIcon>
         </button>
       </h2>
       {/* One line of what the project is, visible while the row is closed, so the list is more than

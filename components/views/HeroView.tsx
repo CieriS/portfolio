@@ -7,6 +7,7 @@ import { ViewLink } from '@/components/shell/ViewLink';
 import { splitByNames } from '@/lib/projects';
 import { CONTACTS_FRAGMENT } from '@/lib/views';
 import { Meta, type ViewProps } from './atoms';
+import { RoundIcon } from '@/components/ui/RoundIcon';
 
 export function HeroView({ data }: ViewProps) {
   const copy = data.content.hero;
@@ -45,12 +46,7 @@ export function HeroView({ data }: ViewProps) {
           <p className="flex flex-wrap items-center gap-x-8 gap-y-2 select-none">
             <ViewLink view="projects" data-cta="projects" className="group inline-flex min-h-11 items-center gap-4 text-body">
               <span className="link-underline">{copy.cta}</span>
-              <span
-                aria-hidden
-                className="grid size-10 place-items-center rounded-full border border-line transition-colors duration-500 group-hover:border-ink group-hover:bg-ink group-hover:text-paper"
-              >
-                →
-              </span>
+              <RoundIcon>→</RoundIcon>
             </ViewLink>
             <ViewLink
               view="identity"

@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { hasLocale } from 'next-intl';
 import { routing } from '@/i18n/routing';
 import { errorCopy } from '@/lib/errorCopy';
+import { RoundIcon } from '@/components/ui/RoundIcon';
 
 /**
  * Boundary for the views. It sits below the locale layout, so the canvas, the theme and
@@ -24,9 +25,7 @@ export default function ViewError({ reset }: { error: Error & { digest?: string 
         <p className="mt-6 max-w-md text-body leading-relaxed text-muted">{copy.body}</p>
         <button type="button" onClick={reset} className="group mt-10 inline-flex items-center gap-4 text-body">
           <span className="link-underline">{copy.cta}</span>
-          <span aria-hidden className="grid size-10 place-items-center rounded-full border border-line">
-            ↻
-          </span>
+          <RoundIcon>↻</RoundIcon>
         </button>
       </div>
     </main>

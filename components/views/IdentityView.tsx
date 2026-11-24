@@ -9,6 +9,7 @@ import { CONTACTS_FRAGMENT } from '@/lib/views';
 import { Meta, SectionHead, type ViewProps } from './atoms';
 import { ROW, ROW_DETAIL, ROW_ICON, ROW_LABEL } from './contactRow';
 import { CvRequest } from './CvRequest';
+import { RoundIcon } from '@/components/ui/RoundIcon';
 
 export function IdentityView({ data }: ViewProps) {
   const copy = data.content.identity;
@@ -93,12 +94,7 @@ function LinkRow({ href, label, detail, rel }: { href: string; label: string; de
     <li className="border-t border-line">
       <a href={href} target="_blank" rel={rel} className={ROW}>
         <span className={ROW_LABEL}>{label}</span> <span className={ROW_DETAIL}>{detail}</span>
-        <span
-          aria-hidden
-          className={`${ROW_ICON} grid size-10 place-items-center rounded-full border border-line transition-all duration-500 ease-out-expo select-none group-hover:rotate-45 group-hover:border-ink group-hover:bg-ink group-hover:text-paper`}
-        >
-          ↑
-        </span>
+        <RoundIcon className={`${ROW_ICON} group-hover:rotate-45`}>↑</RoundIcon>
       </a>
     </li>
   );

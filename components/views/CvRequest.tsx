@@ -13,6 +13,7 @@ import {
 } from '@/lib/cv/common';
 import type { PortfolioView } from '@/lib/portfolio';
 import { ROW, ROW_DETAIL, ROW_ICON, ROW_LABEL } from './contactRow';
+import { RoundIcon } from '@/components/ui/RoundIcon';
 
 type Method = 'email' | 'password';
 type Status = 'idle' | 'pending' | 'downloaded' | CvAnswer | CvInputProblem;
@@ -85,16 +86,9 @@ export function CvRequest({ data }: { data: PortfolioView }) {
         className={ROW}
       >
         <span className={ROW_LABEL}>{copy.label}</span> <span className={ROW_DETAIL}>{copy.handle}</span>
-        <span
-          aria-hidden
-          className={cn(
-            ROW_ICON,
-            'grid size-10 place-items-center rounded-full border border-line transition-all duration-500 ease-out-expo select-none',
-            open ? 'rotate-180 border-ink bg-ink text-paper' : 'group-hover:border-ink',
-          )}
-        >
+        <RoundIcon active={open} hover="border" className={cn(ROW_ICON, open && 'rotate-180')}>
           ↓
-        </span>
+        </RoundIcon>
       </button>
 
       <div id={panelId} hidden={!open} className="pb-8">

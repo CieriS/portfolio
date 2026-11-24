@@ -35,6 +35,19 @@ describe('design tokens (#97, #145)', () => {
   });
 });
 
+describe('round icon (#144)', () => {
+  it('is written only in components/ui/RoundIcon.tsx', () => {
+    const handWritten = files
+      .filter(([path]) => !path.endsWith('ui/RoundIcon.tsx'))
+      .flatMap(([path, text]) =>
+        [...text.matchAll(/["'`][^"'`]*\brounded-full\b[^"'`]*["'`]/g)]
+          .filter((match) => /\bborder\b/.test(match[0]) && /\bsize-(?:9|10)\b/.test(match[0]))
+          .map((match) => `${path}: ${match[0]}`),
+      );
+    expect(handWritten).toEqual([]);
+  });
+});
+
 describe('accent colour (#100)', () => {
   // 2.52:1 on the light paper: dots, lines and fills only. `dark:` variants are allowed.
   it('is never a text colour in the light theme', () => {

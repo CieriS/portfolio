@@ -20,6 +20,7 @@ import { ThemeToggle } from './ThemeToggle';
 import { useViewNavigation } from './useViewNavigation';
 import { useViewUrlSync } from './useViewUrlSync';
 import { ViewLink } from './ViewLink';
+import { roundIcon } from '@/components/ui/RoundIcon';
 
 const RENDER: Record<ViewId, (data: PortfolioView) => ReactNode> = {
   hero: (data) => <HeroView data={data} />,
@@ -86,7 +87,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
               type="button"
               onClick={() => step(-1)}
               aria-label={shell('prev')}
-              className="grid size-9 place-items-center rounded-full border border-line transition-colors duration-500 hover:border-ink hover:bg-ink hover:text-paper"
+              className={roundIcon({ size: 'sm', trigger: 'self' })}
             >
               ←
             </button>
@@ -97,7 +98,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
               type="button"
               onClick={() => step(1)}
               aria-label={shell('next')}
-              className="grid size-9 place-items-center rounded-full border border-line transition-colors duration-500 hover:border-ink hover:bg-ink hover:text-paper"
+              className={roundIcon({ size: 'sm', trigger: 'self' })}
             >
               →
             </button>
