@@ -65,7 +65,7 @@ Les tests end-to-end tournent avec Playwright sur Chromium, WebKit et un profil 
 
 ## Prérequis
 
-- **Node.js ≥ 22.12.0** (requis par Vitest) (champ `engines` de `package.json`)
+- **Node.js ≥ 22.18.0** (champ `engines` de `package.json` ; `.nvmrc` indique la version majeure utilisée par la CI, `nvm use`)
 - **npm** (le dépôt contient `package-lock.json`)
 
 ## Démarrage rapide
