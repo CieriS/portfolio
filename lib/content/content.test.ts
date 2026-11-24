@@ -74,10 +74,12 @@ describe('findContentIssues', () => {
   const shared = {
     timeline: { threads: [{ id: 'work', phases: [{ id: 'one' }] }] },
     projects: [{ id: 'app', layers: [{ id: 'api' }] }],
+    seeks: { role: 'Data Engineer' },
   } as unknown as SharedData;
 
   const copy = (overrides: Partial<CopyUnderCheck> = {}): CopyUnderCheck => ({
     ui: { locale: { en: 'EN', it: 'IT' } },
+    hero: { seeking: 'Looking for a Data Engineer role.' },
     timeline: { threads: { work: { phases: { one: {} } } } },
     projects: { items: { app: { layers: { api: 'API' } } } },
     ...overrides,
@@ -97,6 +99,12 @@ describe('findContentIssues', () => {
       'it.ui.locale has no label for "it"',
       'it.timeline.threads.work.phases has no copy for "one"',
       'it.projects.items.app.layers has no copy for "api"',
+    ]);
+  });
+
+  it('reports a sentence on the role sought that does not name the role of the JSON-LD (#176)', () => {
+    expect(findContentIssues(shared, { en: copy(), it: copy({ hero: { seeking: 'Cerco un ruolo.' } }) })).toEqual([
+      'it.hero.seeking does not name "Data Engineer"',
     ]);
   });
 

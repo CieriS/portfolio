@@ -73,6 +73,8 @@ export const SharedSchema = z.object({
   certifications: z.array(CertificationSchema),
   /** Where people can support the work with money. Kept out of `contacts`: it is not a profile of the person (no `sameAs`, not in the CV). */
   sponsor: z.object({ label: z.string().min(1), url: z.url() }),
+  /** The role sought, for the JSON-LD `seeks` (#176). Every locale's `hero.seeking` must name it (`validate.ts`). */
+  seeks: z.object({ role: z.string().min(1) }),
   timeline: z.object({ threads: z.array(ThreadSchema).min(1) }),
   projects: z.array(ProjectSchema),
 });

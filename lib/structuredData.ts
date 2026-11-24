@@ -3,6 +3,8 @@ import { pick } from '@/lib/format';
 import { getPortfolioBundle, type Thread } from '@/lib/portfolio';
 import { absoluteUrl } from '@/lib/site';
 import { getCaseStudy } from '@/lib/caseStudy';
+import { pageLastModified } from '@/lib/gitDates';
+import { caseStudySources, viewSources } from '@/lib/lastModified';
 import { caseStudyPath, pathFor, type CaseStudyId, type ViewId } from '@/lib/views';
 
 type Node = Record<string, unknown>;
@@ -63,6 +65,8 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
       ...(worksFor ? { worksFor } : {}),
       ...(alumniOf ? { alumniOf } : {}),
       sameAs: shared.contacts.map((contact) => contact.url),
+      // The role sought (#104, #176): the role from `shared.seeks`, the sentence the page shows.
+      seeks: { '@type': 'Demand', name: shared.seeks.role, description: content.hero.seeking },
       ...(shared.certifications.length > 0
         ? {
             hasCredential: shared.certifications.map((cert) => ({
@@ -84,6 +88,7 @@ export function buildJsonLd(locale: Locale, view: ViewId): Node {
       name: meta.views[view].title,
       description: meta.views[view].description,
       inLanguage: locale,
+      dateModified: pageLastModified(viewSources(locale)),
       isPartOf: { '@id': websiteId },
       mainEntity: { '@id': personId },
       ...(view === 'hero' ? {} : { breadcrumb: { '@id': `${pageUrl}#breadcrumb` } }),
@@ -150,6 +155,7 @@ export function buildCaseStudyJsonLd(locale: Locale, id: CaseStudyId): Node {
         headline: text.title,
         description: text.meta.description,
         inLanguage: locale,
+        dateModified: pageLastModified(caseStudySources(locale, id)),
         author: { '@id': personId },
         isPartOf: { '@id': `${siteUrl}#website` },
         breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
