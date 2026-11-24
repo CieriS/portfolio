@@ -21,7 +21,7 @@ const PLACEHOLDER = /\{(\w+)\}/g;
 const placeholders = (text: string) => [...text.matchAll(PLACEHOLDER)].map((match) => match[1]).sort();
 
 /** Strict zod schema with the shape of `reference`: same keys, same list lengths, same placeholders. */
-export function copySchema(reference: unknown): z.ZodType {
+function copySchema(reference: unknown): z.ZodType {
   if (typeof reference === 'string') {
     const expected = placeholders(reference).join(', ');
     return z

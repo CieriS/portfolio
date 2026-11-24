@@ -5,7 +5,7 @@ const isoDate = z.iso.date();
 const id = z.string().regex(/^[a-z][a-z0-9-]*$/, 'ids are lowercase kebab-case');
 
 /** A verifiable credential. `entity` is where it was obtained (through the employer); `url` verifies it. */
-export const CertificationSchema = z
+const CertificationSchema = z
   .object({
     id,
     name: z.string().min(1),
@@ -17,7 +17,7 @@ export const CertificationSchema = z
   })
   .refine((cert) => cert.expires > cert.issued, 'a certification must expire after it was issued');
 
-export const ContactSchema = z.object({ id, label: z.string().min(1), handle: z.string().min(1), url: z.url() });
+const ContactSchema = z.object({ id, label: z.string().min(1), handle: z.string().min(1), url: z.url() });
 
 /** One run of a thread. `end: null` means it is still running. */
 export const SegmentSchema = z
@@ -25,9 +25,9 @@ export const SegmentSchema = z
   .refine((segment) => segment.end === null || segment.end > segment.start, 'a segment must end after it starts');
 
 /** `start` is optional: without it the phase is spread over the thread's active time. */
-export const PhaseSchema = z.object({ id, start: isoDate.optional(), stack: z.array(z.string().min(1)) });
+const PhaseSchema = z.object({ id, start: isoDate.optional(), stack: z.array(z.string().min(1)) });
 
-export const THREAD_KINDS = ['work', 'education'] as const;
+const THREAD_KINDS = ['work', 'education'] as const;
 
 /** A thread runs over one or more segments, so an interruption is part of the model. */
 export const ThreadSchema = z.object({

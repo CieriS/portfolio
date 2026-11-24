@@ -12,7 +12,7 @@ type ViewState = {
 
 export type ViewStore = StoreApi<ViewState>;
 
-export function createViewStore(initial: ViewId): ViewStore {
+function createViewStore(initial: ViewId): ViewStore {
   return createStore<ViewState>()((set, get) => ({
     active: initial,
     setView: (id) => {

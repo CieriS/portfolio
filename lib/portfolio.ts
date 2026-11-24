@@ -10,7 +10,6 @@ import { findContentIssues } from '@/lib/content/validate';
 import type { Locale } from '@/lib/routes';
 
 export {
-  THREAD_KINDS,
   type Contact,
   type Phase,
   type Project,
