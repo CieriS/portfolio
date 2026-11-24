@@ -6,7 +6,7 @@
       "siteName": "Samuele Cieri",
       "views": {
         "hero": {
-          "title": "Samuele Cieri — Software Developer & Data Engineering",
+          "title": "Samuele Cieri — Software Developer moving into Data Engineering",
           "description": "Samuele Cieri, Software Developer in Bologna moving into Data Engineering: Angular at work, Rust, PostgreSQL and dbt pipelines in personal projects."
         },
         "identity": {
@@ -24,9 +24,9 @@
       }
     },
     "notFound": {
-      "title": "Not found",
-      "body": "This address does not match any view. The process may have moved or never existed.",
-      "cta": "Back to index"
+      "title": "Page not found",
+      "body": "This address does not match any page on the site.",
+      "cta": "Back to home"
     },
     "nav": {
       "hero": "Index",
@@ -43,7 +43,7 @@
     "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "Auto" },
     "locale": { "label": "Language", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
     "shell": {
-      "role": "Software Developer — Data Engineering",
+      "role": "Software Developer, moving into Data Engineering",
       "nav": "Views",
       "prev": "Previous view",
       "next": "Next view",
@@ -80,9 +80,10 @@
   "hero": {
     "role": "Software Developer",
     "transition": "Transitioning to Data Engineering",
-    "lead": "Building the path from interfaces to systems: typed backends, relational storage, and pipelines that move data with intent.",
+    "seeking": "Looking for a Data Engineer role, full remote.",
+    "lead": "From interfaces to systems: typed backends, relational databases and pipelines that load, test and publish data.",
     "detail": "Since 2022 I have been developing at Tas, frontend and full-stack, today with Angular and TypeScript, while studying Computer Engineering at the University of Bologna. My personal projects run on Rust, PostgreSQL and dbt: yourFinance, a personal finance platform, and aria-er, an air-quality data pipeline.",
-    "hint": "Move the cursor — every node is a unit of computation",
+    "hint": "Move the cursor: the dots react as it passes",
     "cta": "See the projects"
   },
   "identity": {
@@ -108,20 +109,20 @@
     "outsideTitle": "Outside work",
     "outside": "I train three times a week, with weighted calisthenics and barbell lifts, and I play acoustic guitar.",
     "contactsTitle": "Contact",
-    "contactsNote": "Repositories and direct channels.",
+    "contactsNote": "For a role or a project, LinkedIn is the fastest way to reach me.",
     "sponsor": "Support my work"
   },
   "timeline": {
-    "title": "Multi-thread execution",
-    "titleEmphasis": "Multi-thread",
-    "subtitle": "Three concurrent processes sharing one clock. None blocks the others.",
+    "title": "Work, university and self-study",
+    "titleEmphasis": "self-study",
+    "subtitle": "What I have done since 2021, on one time axis. University paused from 2023 to late 2024 while I worked full time.",
     "labels": {
       "thread": "Thread",
       "start": "Start",
       "running": "Running",
       "suspended": "Suspended",
       "periods": "Active periods",
-      "uptime": "Uptime",
+      "uptime": "Time at Tas",
       "days": "d",
       "now": "Now"
     },
@@ -142,7 +143,7 @@
           },
           "method": {
             "title": "Method",
-            "body": "Scrum Master of the front-end team since early 2025. Certified ScrumMaster (Scrum Alliance) since November 2025."
+            "body": "Scrum Master of the frontend team since early 2025. Certified ScrumMaster (Scrum Alliance) since November 2025."
           }
         }
       },
@@ -184,13 +185,13 @@
   "projects": {
     "title": "Systems & architecture",
     "titleEmphasis": "architecture",
-    "subtitle": "Projects built as bridges toward Data Engineering.",
+    "subtitle": "Two projects I built to learn data engineering on real data.",
     "labels": {
       "architecture": "Topology",
-      "bridge": "Data bridge",
+      "bridge": "What it shows for data engineering",
       "highlights": "Engineering decisions",
       "repo": "Repository",
-      "private": "Private source — walkthrough on request",
+      "private": "Private code: demo on request",
       "caseStudy": "Read the case study",
       "version": "Version"
     },

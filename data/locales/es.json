@@ -6,7 +6,7 @@
       "siteName": "Samuele Cieri",
       "views": {
         "hero": {
-          "title": "Samuele Cieri — Software Developer y Data Engineering",
+          "title": "Samuele Cieri — Software Developer, hacia la ingeniería de datos",
           "description": "Samuele Cieri, Software Developer en Bolonia camino de la ingeniería de datos: Angular en el trabajo; Rust, PostgreSQL y pipelines dbt en mis proyectos."
         },
         "identity": {
@@ -24,9 +24,9 @@
       }
     },
     "notFound": {
-      "title": "No encontrado",
-      "body": "Esta dirección no corresponde a ninguna vista. Puede que el proceso se haya movido o que nunca existiera.",
-      "cta": "Volver al índice"
+      "title": "Página no encontrada",
+      "body": "Esta dirección no corresponde a ninguna página del sitio.",
+      "cta": "Volver al inicio"
     },
     "nav": {
       "hero": "Índice",
@@ -43,7 +43,7 @@
     "theme": { "label": "Tema", "light": "Claro", "dark": "Oscuro", "system": "Auto" },
     "locale": { "label": "Idioma", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
     "shell": {
-      "role": "Software Developer — Data Engineering",
+      "role": "Software Developer, hacia la ingeniería de datos",
       "nav": "Vistas",
       "prev": "Vista anterior",
       "next": "Vista siguiente",
@@ -80,9 +80,10 @@
   "hero": {
     "role": "Software Developer",
     "transition": "En transición hacia la ingeniería de datos",
-    "lead": "Construyo el camino de las interfaces a los sistemas: backends tipados, almacenamiento relacional y pipelines que mueven los datos con un propósito.",
+    "seeking": "Busco un puesto de Data Engineer, en remoto total.",
+    "lead": "De las interfaces a los sistemas: backends tipados, bases de datos relacionales y pipelines que cargan, prueban y publican datos.",
     "detail": "Desde 2022 desarrollo en Tas, en frontend y full-stack, hoy con Angular y TypeScript, mientras estudio Ingeniería Informática en la Universidad de Bolonia. Mis proyectos personales usan Rust, PostgreSQL y dbt: yourFinance, una plataforma de finanzas personales, y aria-er, un pipeline de datos sobre la calidad del aire.",
-    "hint": "Mueve el cursor: cada nodo es una unidad de cálculo",
+    "hint": "Mueve el cursor: los puntos reaccionan a su paso",
     "cta": "Ver los proyectos"
   },
   "identity": {
@@ -111,20 +112,20 @@
     "outsideTitle": "Fuera del trabajo",
     "outside": "Entreno tres veces por semana, con calistenia lastrada y barra, y toco la guitarra acústica.",
     "contactsTitle": "Contacto",
-    "contactsNote": "Repositorios y canales directos.",
+    "contactsNote": "Para un puesto o un proyecto, LinkedIn es la forma más rápida de contactarme.",
     "sponsor": "Apoya mi trabajo"
   },
   "timeline": {
-    "title": "Ejecución multihilo",
-    "titleEmphasis": "multihilo",
-    "subtitle": "Tres procesos concurrentes con un mismo reloj. Ninguno bloquea a los demás.",
+    "title": "Trabajo, universidad y estudio autónomo",
+    "titleEmphasis": "estudio autónomo",
+    "subtitle": "Lo que hago desde 2021, en un mismo eje de tiempo. La universidad estuvo en pausa de 2023 a finales de 2024, mientras trabajaba a tiempo completo.",
     "labels": {
       "thread": "Hilo",
       "start": "Inicio",
       "running": "En ejecución",
       "suspended": "Suspendido",
       "periods": "Periodos activos",
-      "uptime": "Tiempo activo",
+      "uptime": "Tiempo en Tas",
       "days": "d",
       "now": "Hoy"
     },
@@ -145,7 +146,7 @@
           },
           "method": {
             "title": "Método",
-            "body": "Desde principios de 2025 soy Scrum Master del equipo front-end. Certified ScrumMaster (Scrum Alliance) desde noviembre de 2025."
+            "body": "Desde principios de 2025 soy Scrum Master del equipo frontend. Certified ScrumMaster (Scrum Alliance) desde noviembre de 2025."
           }
         }
       },
@@ -190,10 +191,10 @@
   "projects": {
     "title": "Sistemas y arquitectura",
     "titleEmphasis": "arquitectura",
-    "subtitle": "Proyectos pensados como puentes hacia la ingeniería de datos.",
+    "subtitle": "Dos proyectos que he construido para aprender ingeniería de datos con datos reales.",
     "labels": {
       "architecture": "Topología",
-      "bridge": "Puente hacia los datos",
+      "bridge": "Qué muestra de ingeniería de datos",
       "highlights": "Decisiones de ingeniería",
       "repo": "Repositorio",
       "private": "Código privado: demo a petición",

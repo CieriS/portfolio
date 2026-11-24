@@ -1,27 +1,27 @@
 {
   "en": {
-    "title": "Process failed",
-    "body": "Something interrupted this view. The rest of the site is still running.",
-    "cta": "Retry"
+    "title": "This page failed to load",
+    "body": "Something went wrong while showing this page. Try again: the rest of the site still works.",
+    "cta": "Try again"
   },
   "it": {
-    "title": "Processo interrotto",
-    "body": "Qualcosa ha interrotto questa vista. Il resto del sito è ancora in esecuzione.",
+    "title": "Questa pagina non si è caricata",
+    "body": "Qualcosa è andato storto mentre mostravo questa pagina. Riprova: il resto del sito funziona.",
     "cta": "Riprova"
   },
   "fr": {
-    "title": "Processus interrompu",
-    "body": "Quelque chose a interrompu cette vue. Le reste du site fonctionne toujours.",
+    "title": "Cette page n'a pas pu se charger",
+    "body": "Un problème est survenu pendant l'affichage de cette page. Réessayez : le reste du site fonctionne.",
     "cta": "Réessayer"
   },
   "de": {
-    "title": "Prozess unterbrochen",
-    "body": "Etwas hat diese Ansicht unterbrochen. Der Rest der Website funktioniert weiterhin.",
+    "title": "Diese Seite konnte nicht geladen werden",
+    "body": "Beim Anzeigen dieser Seite ist etwas schiefgelaufen. Versuche es noch einmal: Der Rest der Website funktioniert.",
     "cta": "Erneut versuchen"
   },
   "es": {
-    "title": "Proceso interrumpido",
-    "body": "Algo ha interrumpido esta vista. El resto del sitio sigue funcionando.",
+    "title": "Esta página no se ha podido cargar",
+    "body": "Algo ha fallado al mostrar esta página. Vuelve a intentarlo: el resto del sitio funciona.",
     "cta": "Reintentar"
   }
 }

@@ -175,14 +175,15 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
                 <p className="mt-5 text-[15px] leading-relaxed text-muted">{item.bridge}</p>
               </div>
               <Version project={project} label={copy.labels.version} />
-              <SourceLink project={project} copy={copy} />
-              {/* A page of its own, outside the view carousel: a plain link, so it navigates. */}
+              {/* A page of its own, outside the view carousel: a plain link, so it navigates. It comes
+                  before the source: for private code the case study is what can be read (#106). */}
               {isCaseStudyId(project.id) && (
                 <a href={caseStudyPath(locale, project.id)} className={LINK_CLASS} data-case-study>
                   <span className="link-underline group-hover/link:bg-[length:100%_1px]">{copy.labels.caseStudy}</span>
                   <span aria-hidden>→</span>
                 </a>
               )}
+              <SourceLink project={project} copy={copy} />
             </div>
           </div>
         </motion.div>

@@ -25,3 +25,15 @@ for (const locale of LOCALES) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 }
+
+/** The role sought, next to the role on the home page and next to the contacts (#104). */
+for (const locale of LOCALES) {
+  test(`the home page and the contacts say which role I am looking for, in ${locale}`, async ({ page }) => {
+    const seeking = locales[locale].hero.seeking;
+    await gotoView(page, locale, 'hero');
+    await expect(page.locator('[data-seeking]')).toHaveText(seeking);
+    await gotoView(page, locale, 'identity');
+    await expect(page.locator('#contacts [data-seeking]')).toHaveText(seeking);
+    await expect(page.locator('#contacts').getByText(locales[locale].identity.contactsNote)).toBeVisible();
+  });
+}
