@@ -69,3 +69,12 @@ export async function expectView(page: import('@playwright/test').Page, locale: 
     { timeout: 10_000, polling: 100 },
   );
 }
+
+/**
+ * Presses a digit shortcut the way a keyboard user can: digits only act while focus is in the
+ * view menu (#121), so the first menu link takes focus first.
+ */
+export async function pressViewDigit(page: import('@playwright/test').Page, digit: number) {
+  await page.locator('footer nav a').first().focus();
+  await page.keyboard.press(String(digit));
+}

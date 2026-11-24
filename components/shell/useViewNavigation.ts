@@ -4,7 +4,12 @@ import { useViewStoreApi } from '@/store/viewStore';
 
 const SWIPE_MIN_PX = 70;
 
-/** Digits 1–4 jump to a view, ←/→ step through them, horizontal swipes do the same on touch. */
+/**
+ * Digits 1–4 jump to a view while focus is in the view menu (`data-view-keys`), ←/→ step through
+ * the views from anywhere, horizontal swipes do the same on touch. A bare digit acting page-wide
+ * fails WCAG 2.1.4 and fires when speech input dictates a number (#121); arrows are not character
+ * keys, so they keep working everywhere.
+ */
 export function useViewNavigation() {
   const store = useViewStoreApi();
 
@@ -21,6 +26,7 @@ export function useViewNavigation() {
       const { setView, step } = store.getState();
       const digit = Number.parseInt(event.key, 10);
       if (digit >= 1 && digit <= VIEW_IDS.length) {
+        if (!target?.closest?.('[data-view-keys]')) return;
         setView(VIEW_IDS[digit - 1]);
       } else if (event.key === 'ArrowRight') {
         step(1);

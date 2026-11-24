@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
-import { ALL_PAGES, expectView, gotoView, navLabel } from './helpers';
+import { ALL_PAGES, expectView, gotoView, navLabel, pressViewDigit } from './helpers';
 
 // One scan per view in the default locale; the other locales share the same markup.
 for (const { view, path } of ALL_PAGES.filter((p) => p.locale === 'en')) {
@@ -63,7 +63,7 @@ test('a view change moves focus so screen readers announce it', async ({ page })
   // The first render must not steal focus: there is no previous view to announce.
   expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('BODY');
 
-  await page.keyboard.press('3');
+  await pressViewDigit(page, 3);
   await expectView(page, 'en', 'timeline');
   await page.waitForTimeout(300);
 
