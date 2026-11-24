@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { locales } from './content';
-import { expectView, gotoView, LOCALES, navLinkName, pathFor, VIEWS, pressViewDigit } from './helpers';
+import { expectView, gotoView, LOCALES, MIN_TARGET_PX, navLinkName, pathFor, VIEWS, pressViewDigit } from './helpers';
 
 /** Marks the document so a full page reload can be told apart from a client-side swap. */
 async function markNoReload(page: import('@playwright/test').Page) {
@@ -147,8 +147,8 @@ test('on a 375 px phone every nav entry shows its plain word, and every control 
     for (const control of await controls.all()) {
       if (!(await control.isVisible())) continue;
       const box = (await control.boundingBox())!;
-      expect(box.width, (await control.textContent()) ?? '').toBeGreaterThanOrEqual(44);
-      expect(box.height, (await control.textContent()) ?? '').toBeGreaterThanOrEqual(44);
+      expect(box.width, (await control.textContent()) ?? '').toBeGreaterThanOrEqual(MIN_TARGET_PX);
+      expect(box.height, (await control.textContent()) ?? '').toBeGreaterThanOrEqual(MIN_TARGET_PX);
       expect(box.x + box.width).toBeLessThanOrEqual(375);
     }
   }

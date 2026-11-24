@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { contactsPath } from '../lib/routes';
 import { locales } from './content';
-import { expectView, gotoView, LOCALES, pathFor } from './helpers';
+import { expectView, gotoView, LOCALES, MIN_TARGET_PX, pathFor } from './helpers';
 
 /**
  * The two ways on from the home page (#131, #132): the projects, which are the evidence, and the
@@ -25,7 +25,7 @@ test.describe('on a 390 × 844 phone', () => {
       for (const link of [projects, contact]) {
         const box = (await link.boundingBox())!;
         expect(box.y + box.height).toBeLessThanOrEqual(fadeTop);
-        expect(box.height).toBeGreaterThanOrEqual(44);
+        expect(box.height).toBeGreaterThanOrEqual(MIN_TARGET_PX);
       }
     });
   }
