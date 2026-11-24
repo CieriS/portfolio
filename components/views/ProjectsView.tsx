@@ -7,7 +7,7 @@ import { ViewLink } from '@/components/shell/ViewLink';
 import { cn } from '@/lib/cn';
 import { pad, pick } from '@/lib/format';
 import type { PortfolioView, Project } from '@/lib/portfolio';
-import { releaseUrl, versionLabel } from '@/lib/projects';
+import { fragmentId, releaseUrl, versionLabel } from '@/lib/projects';
 import { caseStudyPath, isCaseStudyId, type Locale } from '@/lib/routes';
 import { Meta, SectionHead, type ViewProps } from './atoms';
 
@@ -63,7 +63,7 @@ export function ProjectsView({ data }: ViewProps) {
   );
 }
 
-const readHash = () => decodeURIComponent(window.location.hash.slice(1));
+const readHash = () => fragmentId(window.location.hash);
 
 function subscribeToHash(notify: () => void) {
   window.addEventListener('hashchange', notify);

@@ -164,3 +164,14 @@ test('an address that names a project opens that panel on load, and back from a 
   await page.goBack();
   await expectView(page, 'en', 'hero');
 });
+
+// #114: decodeURIComponent threw on a malformed escape and the page showed the 500 screen.
+test('a malformed fragment is treated as no fragment', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto(`${pathFor('en', 'projects')}#%ZZ`);
+  const buttons = page.locator('main button[aria-expanded]');
+  await expect(buttons.first()).toBeVisible();
+  for (const button of await buttons.all()) await expect(button).toHaveAttribute('aria-expanded', 'false');
+  expect(errors).toEqual([]);
+});
