@@ -87,7 +87,10 @@ export function LiveResults({
   const stale = isStale(state.meta.generated_at, new Date());
   return (
     <div className="space-y-14" data-live="ready">
-      <p className={cn('font-mono text-label tracking-label uppercase', stale ? 'text-accent' : 'text-muted')} data-stale={stale}>
+      <p
+        className={cn('font-mono text-label tracking-label uppercase', stale ? 'text-ink dark:text-accent' : 'text-muted')}
+        data-stale={stale}
+      >
         {(stale ? copy.stale : copy.updated).replace('{date}', date)}
       </p>
       <ExceedancesFigure chart={state.exceedances} copy={copy} />

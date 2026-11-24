@@ -34,3 +34,17 @@ describe('design tokens (#97, #145)', () => {
     expect(find(/(?<![\w-])(?:md:)?mt-(?:2[0-9]|3[0-9])(?![\w-])/g)).toEqual([]);
   });
 });
+
+describe('accent colour (#100)', () => {
+  // 2.52:1 on the light paper: dots, lines and fills only. `dark:` variants are allowed.
+  it('is never a text colour in the light theme', () => {
+    expect(find(/(?<!dark:)(?<![\w-])(?:text|fill|decoration|placeholder)-accent\b/g)).toEqual([]);
+    expect(find(/\b(?:color|fill)\s*[:=]\s*["'{]*\s*["']?var\(--accent\)/g)).toEqual([]);
+  });
+
+  it('catches the patterns it guards against', () => {
+    const sample = '<p className="text-accent" /> <p className="dark:text-accent" /> <text fill="var(--accent)" />';
+    expect([...sample.matchAll(/(?<!dark:)(?<![\w-])(?:text|fill|decoration|placeholder)-accent\b/g)]).toHaveLength(1);
+    expect([...sample.matchAll(/\b(?:color|fill)\s*[:=]\s*["'{]*\s*["']?var\(--accent\)/g)]).toHaveLength(1);
+  });
+});
