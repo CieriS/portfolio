@@ -206,7 +206,7 @@ Below the Systems view there is one more page for the projects that have a case 
 
 - CSS tokens in `app/globals.css` (`--paper`, `--ink`, `--muted`, `--line`, `--accent`), redefined under `.dark` and exposed to Tailwind v4 with `@theme inline`.
 - The light theme is a cream paper (`#ede7db`), not display white: less glare, and the point field behind the content stays readable.
-- `lib/theme.ts` repeats paper and ink for whatever cannot read custom properties (WebGL scene, `theme-color`, manifest, Open Graph images). `lib/theme.test.ts` fails when CSS and TypeScript drift apart, when text drops below AA/AAA contrast, or when the scene points become invisible or stronger than text.
+- `lib/theme.ts` repeats paper, ink, muted text and accent for whatever cannot read custom properties (WebGL scene, `theme-color`, manifest, Open Graph images, `app/global-error.tsx`); `inkAlpha` gives the ink at an opacity, for hairlines and borders. A test fails if `global-error.tsx` or `lib/og.tsx` writes a colour of its own. `lib/theme.test.ts` fails when CSS and TypeScript drift apart, when text drops below AA/AAA contrast, or when the scene points become invisible or stronger than text.
 - Custom utilities: `px-frame`, `no-scrollbar`, `fade-edges`, `link-underline`, `bg-dashed`.
 - Fonts loaded with `next/font` and `display: swap`: Geist for body text, Geist Mono for labels, italic Instrument Serif for emphasised words.
 
@@ -235,8 +235,9 @@ Below the Systems view there is one more page for the projects that have a case 
 
 ## SEO
 
-- **Per-view metadata** (`lib/seo.ts`): title, description, canonical, hreflang (`en`, `it`, `fr`, `de`, `x-default`), Open Graph `profile` and a `summary_large_image` Twitter card. For the index, `x-default` points to `/`, which detects the language; for the other views it points to the English version.
+- **Per-view metadata** (`lib/seo.ts`): title, description, canonical, hreflang (`en`, `it`, `fr`, `de`, `es`, `x-default`), Open Graph `profile` and a `summary_large_image` Twitter card. For the index, `x-default` points to `/`, which detects the language; for the other views it points to the English version.
 - **Open Graph images** at 1200 × 630, generated at build time for every language and view (`opengraph-image.tsx`, `lib/og.tsx`), featuring the site's long-standing icon. The icon is a 56 px copy (`lib/og-icon.png`, about 3 KB), the size it is drawn at: regenerate it from `app/icon.png` if the icon changes.
+- Metadata and JSON-LD have unit tests for every locale and page (`lib/seo.test.ts`, `lib/structuredData.test.ts`): canonical, complete hreflang, robots (including `noindex` on previews), graph types and links between nodes.
 - **JSON-LD** `@graph` (`lib/structuredData.ts`): `WebSite`, `Person` (with `alternateName`, `address`, `knowsAbout` and `sameAs`; `url` is the site root in every language), `ProfilePage`, `BreadcrumbList` on inner views and an `ItemList` of `SoftwareSourceCode` on the projects view.
 - **`sitemap.xml`** with hreflang alternates, **`robots.txt`**, **`manifest.webmanifest`**, plus a favicon and icons derived from the previous site's icon.
 - **Controlled indexing**: only production is indexable (see [Environment variables](#environment-variables)). The `robots` meta is set per page, not in the layout, so the 404 carries only Next's `noindex`.

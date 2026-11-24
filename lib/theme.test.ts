@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { SCENE_MODES } from './sceneModes';
-import { THEME, type ThemeName } from './theme';
+import { ACCENT, inkAlpha, THEME, type ThemeName } from './theme';
 
 const css = readFileSync(new URL('../app/globals.css', import.meta.url), 'utf8');
 
@@ -32,9 +32,15 @@ describe.each(Object.keys(THEME) as ThemeName[])('%s theme', (name) => {
   const theme = THEME[name];
   const declared = tokens(SELECTOR[name]);
 
-  it('declares the same paper and ink in CSS as in lib/theme.ts', () => {
+  it('declares the same paper, ink and muted text in CSS as in lib/theme.ts', () => {
     expect(declared.paper).toBe(theme.paper);
     expect(declared.ink).toBe(theme.ink);
+    expect(declared.muted).toBe(theme.muted);
+  });
+
+  it('inkAlpha gives the hairline colour the CSS declares', () => {
+    const [, alpha] = /\/ (0\.\d+)\)$/.exec(declared.line)!;
+    expect(inkAlpha(name, Number(alpha))).toBe(`rgba(${rgb(theme.ink).join(', ')}, ${alpha})`);
   });
 
   it('draws its hairlines in the ink colour', () => {
@@ -103,5 +109,19 @@ describe('contrast', () => {
     expect(contrast('#000000', '#ffffff')).toBeCloseTo(21, 5);
     expect(contrast('#777777', '#ffffff')).toBeCloseTo(4.48, 2);
     expect(contrast('#123456', '#123456')).toBe(1);
+  });
+});
+
+describe('accent', () => {
+  it('is the one the CSS declares', () => {
+    expect(tokens(':root').accent).toBe(ACCENT);
+  });
+});
+
+// issue #127: what cannot read custom properties takes its colours from lib/theme.ts.
+describe.each(['app/global-error.tsx', 'lib/og.tsx'])('%s', (file) => {
+  it('writes no colour of its own', () => {
+    const source = readFileSync(new URL(`../${file}`, import.meta.url), 'utf8');
+    expect(source).not.toMatch(/['"`]#[0-9a-f]{3,8}\b|rgba?\(/i);
   });
 });
