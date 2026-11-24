@@ -109,3 +109,44 @@ test('going back across a language switch realigns the URL', async ({ page }) =>
   await expectView(page, 'fr', 'hero');
   expect(new URL(page.url()).pathname).toBe(pathFor('fr', 'hero'));
 });
+
+// #115: popstate used to change the view first, so the store subscriber saw the other language's
+// slug and pushed a new entry, which erased Forward.
+test('Back then Forward across a language switch keeps every history entry', async ({ page }) => {
+  await gotoView(page, 'en', 'hero');
+  await page.keyboard.press('2');
+  await expectView(page, 'en', 'identity');
+  await switchLocale(page, 'it');
+  await expectView(page, 'it', 'identity');
+  await page.keyboard.press('3');
+  await expectView(page, 'it', 'timeline');
+  const length = await page.evaluate(() => history.length);
+
+  await page.goBack();
+  await expectView(page, 'it', 'identity');
+  await page.goBack();
+  await expectView(page, 'it', 'hero');
+  expect(new URL(page.url()).pathname).toBe(pathFor('it', 'hero'));
+  expect(await page.evaluate(() => history.length)).toBe(length);
+
+  await page.goForward();
+  await expectView(page, 'it', 'identity');
+  await page.goForward();
+  await expectView(page, 'it', 'timeline');
+  expect(new URL(page.url()).pathname).toBe(pathFor('it', 'timeline'));
+  expect(await page.evaluate(() => history.length)).toBe(length);
+});
+
+// #116: the switch rewrote the path without the fragment, so the named project closed.
+test('a language switch keeps the project named in the address, with its panel open', async ({ page }) => {
+  await page.goto(`${pathFor('en', 'projects')}#ariaer`);
+  await page.waitForFunction(() => (document.querySelector('[data-theme-toggle]')?.textContent ?? '').trim().length > 0);
+  await expect(page.getByRole('button', { name: /aria-er/ })).toHaveAttribute('aria-expanded', 'true');
+
+  await switchLocale(page, 'it');
+  await expectView(page, 'it', 'projects');
+  const url = new URL(page.url());
+  expect(url.pathname).toBe(pathFor('it', 'projects'));
+  expect(url.hash).toBe('#ariaer');
+  await expect(page.getByRole('button', { name: /aria-er/ })).toHaveAttribute('aria-expanded', 'true');
+});
