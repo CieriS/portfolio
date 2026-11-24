@@ -20,6 +20,7 @@ import { ThemeToggle } from './ThemeToggle';
 import { useViewNavigation } from './useViewNavigation';
 import { useViewUrlSync } from './useViewUrlSync';
 import { ViewLink } from './ViewLink';
+import { roundIcon } from '@/components/ui/RoundIcon';
 
 const RENDER: Record<ViewId, (data: PortfolioView) => ReactNode> = {
   hero: (data) => <HeroView data={data} />,
@@ -47,7 +48,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
         {/* First tab stop: jumps past header and language/theme controls, straight into the view. */}
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-[var(--frame)] focus:z-20 focus:rounded-full focus:border focus:border-ink focus:bg-paper focus:px-4 focus:py-2 focus:text-[13px]"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-[var(--frame)] focus:z-20 focus:rounded-full focus:border focus:border-ink focus:bg-paper focus:px-4 focus:py-2 focus:text-small"
         >
           {shell('skip')}
         </a>
@@ -57,11 +58,11 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
         >
           <ViewLink
             view="hero"
-            className="inline-flex min-h-[2.8rem] items-center text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap select-none"
+            className="inline-flex min-h-[2.8rem] items-center text-body font-medium tracking-snug whitespace-nowrap select-none"
           >
             <span className="link-underline">{data.shared.name}</span>
           </ViewLink>
-          <p className="hidden font-mono text-[11px] tracking-[0.14em] text-muted uppercase lg:block">{shell('role')}</p>
+          <p className="hidden font-mono text-label tracking-label text-muted uppercase lg:block">{shell('role')}</p>
           <div className="flex items-center gap-6">
             <LocaleSwitch locale={locale} onChange={onLocaleChange} />
             <ThemeToggle />
@@ -86,18 +87,18 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
               type="button"
               onClick={() => step(-1)}
               aria-label={shell('prev')}
-              className="grid size-9 place-items-center rounded-full border border-line transition-colors duration-500 hover:border-ink hover:bg-ink hover:text-paper"
+              className={roundIcon({ size: 'sm', trigger: 'self' })}
             >
               ←
             </button>
-            <p className="font-mono text-[11px] text-muted tabular-nums">
+            <p className="font-mono text-label text-muted tabular-nums">
               <span className="text-ink">{pad(index + 1)}</span> / {pad(VIEW_IDS.length)}
             </p>
             <button
               type="button"
               onClick={() => step(1)}
               aria-label={shell('next')}
-              className="grid size-9 place-items-center rounded-full border border-line transition-colors duration-500 hover:border-ink hover:bg-ink hover:text-paper"
+              className={roundIcon({ size: 'sm', trigger: 'self' })}
             >
               →
             </button>

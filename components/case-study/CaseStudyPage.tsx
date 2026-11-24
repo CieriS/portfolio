@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import type { ReactNode } from 'react';
 import { ThemeToggle } from '@/components/shell/ThemeToggle';
 import { DISPLAY_TITLE, Emphasis, Meta } from '@/components/ui/text';
-import { routing, type Locale } from '@/i18n/routing';
+import type { Locale } from '@/i18n/routing';
 import { getCaseStudy } from '@/lib/caseStudy';
 import { CASE_STUDY_IMAGES } from '@/lib/caseStudyImages';
 import { cn } from '@/lib/cn';
@@ -11,11 +11,12 @@ import { pad, pick } from '@/lib/format';
 import { getPortfolioBundle } from '@/lib/portfolio';
 import { versionWithDate } from '@/lib/projects';
 import { buildCaseStudyJsonLd } from '@/lib/structuredData';
-import { caseStudyPath, contactsPath, pathFor, VIEW_IDS, type CaseStudyId } from '@/lib/views';
+import { contactsPath, pathFor, VIEW_IDS, type CaseStudyId } from '@/lib/views';
+import { CaseStudyLocaleSwitch } from './CaseStudyLocaleSwitch';
 import { LiveResults } from './LiveResults';
 import { SceneMode } from './SceneMode';
 
-const LINK = 'group/link inline-flex items-center gap-3 text-[15px]';
+const LINK = 'group/link inline-flex items-center gap-3 text-body';
 const UNDERLINE = 'link-underline group-hover/link:bg-[length:100%_1px]';
 
 /**
@@ -56,48 +57,35 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
       <div className="relative z-10 flex h-dvh flex-col">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-[var(--frame)] focus:z-20 focus:rounded-full focus:border focus:border-ink focus:bg-paper focus:px-4 focus:py-2 focus:text-[13px]"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-[var(--frame)] focus:z-20 focus:rounded-full focus:border focus:border-ink focus:bg-paper focus:px-4 focus:py-2 focus:text-small"
         >
           {ui.shell.skip}
         </a>
-        <header className="relative z-20 flex items-center justify-between gap-6 px-frame pt-4 pb-3 select-none md:pt-6">
-          <div className="flex min-w-0 items-center gap-6">
-            <a
-              href={pathFor(locale, 'hero')}
-              className="group/link hidden text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap sm:block"
-            >
+        <header className="relative z-20 flex items-center justify-between gap-4 px-frame pt-4 pb-3 select-none md:pt-6">
+          <div className="flex min-w-0 items-center gap-3 sm:gap-6">
+            <a href={pathFor(locale, 'hero')} className="group/link text-body font-medium tracking-snug whitespace-nowrap">
               <span className={UNDERLINE}>{shared.name}</span>
             </a>
-            {/* The header stays put while the page scrolls: the way back is always on screen. */}
-            <a href={projectsPath} data-back className="group/link flex items-center gap-2 text-[15px] whitespace-nowrap">
+            {/* The header stays put while the page scrolls: the way back is always on screen. Below
+                `sm` it is the arrow alone, so the site name, language and theme fit at 375 px (#98). */}
+            <a
+              href={projectsPath}
+              data-back
+              aria-label={text.back}
+              className="group/link flex min-h-11 min-w-11 items-center justify-center gap-2 text-body whitespace-nowrap sm:min-w-0"
+            >
               <span aria-hidden>←</span>
-              <span className={UNDERLINE}>
-                <span className="sm:hidden">{ui.nav.projects}</span>
-                <span className="hidden sm:inline">{text.back}</span>
+              <span aria-hidden className={cn(UNDERLINE, 'hidden sm:inline')}>
+                {text.back}
               </span>
             </a>
           </div>
-          <div className="flex items-center gap-6">
-            <nav aria-label={ui.locale.label}>
-              <ul className="flex gap-3 font-mono text-[11px] tracking-[0.14em] uppercase">
-                {routing.locales.map((other) => (
-                  <li key={other}>
-                    <a
-                      href={caseStudyPath(other, id)}
-                      hrefLang={other}
-                      aria-current={other === locale ? 'page' : undefined}
-                      className={cn('py-2 transition-colors hover:text-ink', other === locale ? 'text-ink' : 'text-muted')}
-                    >
-                      {ui.locale[other]}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <NextIntlClientProvider locale={locale} messages={{ theme: ui.theme }} timeZone="UTC">
+          <NextIntlClientProvider locale={locale} messages={{ theme: ui.theme, locale: ui.locale }} timeZone="UTC">
+            <div className="flex items-center gap-4 sm:gap-6">
+              <CaseStudyLocaleSwitch locale={locale} id={id} />
               <ThemeToggle />
-            </NextIntlClientProvider>
-          </div>
+            </div>
+          </NextIntlClientProvider>
         </header>
 
         {/* Focusable, like the views: the page scrolls inside this element, not in the document. */}
@@ -114,10 +102,10 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
               </Meta>
               <div className="md:col-span-9">
                 <h1 className={DISPLAY_TITLE}>{name}</h1>
-                <p className="mt-8 max-w-3xl text-[clamp(1.5rem,3vw,2.5rem)] leading-[1.1] font-medium tracking-[-0.03em] text-balance">
+                <p className="mt-8 max-w-3xl text-lede font-medium text-balance">
                   <Emphasis text={text.title} emphasis={text.titleEmphasis} />
                 </p>
-                <p className="mt-8 max-w-xl text-[15px] leading-relaxed text-muted">{text.lead}</p>
+                <p className="mt-8 max-w-xl text-body leading-relaxed text-muted">{text.lead}</p>
               </div>
             </header>
 
@@ -126,11 +114,11 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                 {facts.map((fact) => (
                   <div key={fact.key} data-fact={fact.key}>
                     <Meta as="dt">{fact.label}</Meta>
-                    <dd className="mt-3 text-[15px]">{fact.value}</dd>
+                    <dd className="mt-3 text-body">{fact.value}</dd>
                   </div>
                 ))}
               </dl>
-              <p className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase md:col-span-9 md:col-start-4">
+              <p className="font-mono text-label tracking-label text-muted uppercase md:col-span-9 md:col-start-4">
                 {data.stack.join(' · ')}
               </p>
             </Section>
@@ -146,7 +134,7 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
             <Section title={text.constraints.title}>
               <ul className="space-y-4 md:col-span-9">
                 {text.constraints.items.map((item) => (
-                  <li key={item} className="flex max-w-2xl gap-3 text-[15px] leading-relaxed">
+                  <li key={item} className="flex max-w-2xl gap-3 text-body leading-relaxed">
                     <span aria-hidden className="font-mono text-muted">
                       —
                     </span>
@@ -165,14 +153,14 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                   {data.crates.map((row, index) => (
                     <li key={row[0].id}>
                       {index > 0 && (
-                        <p aria-hidden className="py-1 text-center font-mono text-[11px] text-muted select-none">
+                        <p aria-hidden className="py-1 text-center font-mono text-label text-muted select-none">
                           ↓
                         </p>
                       )}
                       <div className={cn('grid gap-2', row.length > 1 && 'sm:grid-cols-2')}>
                         {row.map((crate) => (
                           <div key={crate.id} className="border border-line bg-paper p-5">
-                            <p className="font-mono text-[13px]">{crate.name}</p>
+                            <p className="font-mono text-small">{crate.name}</p>
                             <p className="mt-2 text-sm leading-relaxed text-muted">{pick(text.architecture.crates, crate.id)}</p>
                           </div>
                         ))}
@@ -186,7 +174,7 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
 
             <Section title={text.flow.title}>
               <div className="md:col-span-9">
-                <p className="text-[15px] text-muted">{text.flow.intro}</p>
+                <p className="text-body text-muted">{text.flow.intro}</p>
                 <ol className="mt-6 border-b border-line">
                   {data.flow.map((step, index) => {
                     const item = pick(text.flow.steps, step);
@@ -195,9 +183,9 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                         key={step}
                         className="grid gap-x-6 gap-y-2 border-t border-line py-5 sm:grid-cols-[2.5rem_8rem_minmax(0,1fr)]"
                       >
-                        <span className="font-mono text-[11px] text-muted tabular-nums select-none">{pad(index + 1)}</span>
+                        <span className="font-mono text-label text-muted tabular-nums select-none">{pad(index + 1)}</span>
                         <Meta as="span">{item?.actor}</Meta>
-                        <p className="max-w-2xl text-[15px] leading-relaxed">{item?.text}</p>
+                        <p className="max-w-2xl text-body leading-relaxed">{item?.text}</p>
                       </li>
                     );
                   })}
@@ -211,9 +199,9 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                   const item = pick(text.decisions.items, decision);
                   return (
                     <li key={decision} className="border-t border-line pt-5">
-                      <span className="font-mono text-[11px] text-muted tabular-nums select-none">{pad(index + 1)}</span>
-                      <h3 className="mt-4 text-lg font-medium tracking-[-0.015em]">{item?.title}</h3>
-                      <p className="mt-2 max-w-md text-[15px] leading-relaxed text-muted">{item?.body}</p>
+                      <span className="font-mono text-label text-muted tabular-nums select-none">{pad(index + 1)}</span>
+                      <h3 className="mt-4 text-lg font-medium tracking-snug">{item?.title}</h3>
+                      <p className="mt-2 max-w-md text-body leading-relaxed text-muted">{item?.body}</p>
                     </li>
                   );
                 })}
@@ -226,7 +214,7 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                   <Prose>
                     <p>{text.measures.body}</p>
                   </Prose>
-                  <table className="mt-10 w-full max-w-2xl text-left text-[15px]">
+                  <table className="mt-10 w-full max-w-2xl text-left text-body">
                     <caption className="caption-bottom pt-4 text-left text-sm text-muted">{text.measures.note}</caption>
                     <thead>
                       <tr className="border-b border-line">
@@ -248,7 +236,7 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                         <tr key={measure.id} className="border-b border-line">
                           <th scope="row" className="py-4 pr-6 font-normal">
                             {pick(text.measures.rows, measure.id)}
-                            <span className="mt-1 block font-mono text-[11px] text-muted">{measure.query}</span>
+                            <span className="mt-1 block font-mono text-label text-muted">{measure.query}</span>
                           </th>
                           <td className="py-4 pl-6 text-right whitespace-nowrap text-muted tabular-nums">{measure.before}</td>
                           <td className="py-4 pl-6 text-right font-medium whitespace-nowrap tabular-nums">{measure.after}</td>
@@ -303,7 +291,7 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
             <Section title={text.next.title}>
               <ul className="space-y-4 md:col-span-9">
                 {text.next.items.map((item) => (
-                  <li key={item} className="flex max-w-2xl gap-3 text-[15px] leading-relaxed">
+                  <li key={item} className="flex max-w-2xl gap-3 text-body leading-relaxed">
                     <span aria-hidden className="font-mono text-muted">
                       —
                     </span>
@@ -321,7 +309,8 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                 <p className="mt-8 flex flex-wrap gap-x-10 gap-y-4">
                   <a href={source.href} className={LINK} data-source={source.kind}>
                     <span className={UNDERLINE}>{text.access.cta}</span>
-                    <span aria-hidden>→</span>
+                    {/* ↗ leaves the site (the public repository), → stays on it (#148). */}
+                    <span aria-hidden>{source.kind === 'public' ? '↗' : '→'}</span>
                   </a>
                   {contact && (
                     <a href={contactsPath(locale)} className={LINK} data-contact>
@@ -346,7 +335,7 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
 /** One block of the page: its title in the left column, like the sections of the views. */
 function Section({ title, children }: { title?: string; children: ReactNode }) {
   return (
-    <section className="mt-20 grid gap-y-8 md:mt-28 md:grid-cols-12 md:gap-x-6">
+    <section className="mt-subsection grid gap-y-8 md:grid-cols-12 md:gap-x-6">
       {title && (
         <div className="md:col-span-3">
           <Meta as="h2">{title}</Meta>

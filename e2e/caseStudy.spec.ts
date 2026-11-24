@@ -4,7 +4,7 @@ import ariaer from '../data/case-studies/ariaer.json';
 import yourfinance from '../data/case-studies/yourfinance.json';
 import { caseStudyPath, CASE_STUDY_IDS, contactsPath, LOCALES, type CaseStudyId } from '../lib/routes';
 import { locales, shared } from './content';
-import { CASE_STUDY_PAGES, expectView, gotoView, pathFor } from './helpers';
+import { CASE_STUDY_PAGES, expectView, gotoView, pathFor, switchLocale } from './helpers';
 
 /**
  * The case studies: prerendered pages below the projects view. yourFinance is private, so its
@@ -194,11 +194,28 @@ test('the way back stays on screen however far the page is scrolled', async ({ p
   await expectView(page, 'it', 'projects');
 });
 
-test('the header link names where it leads, in full where there is room', async ({ page, isMobile }) => {
+test('the header link names where it leads, as an arrow alone on a phone', async ({ page, isMobile }) => {
   await page.goto(caseStudyPath('en', 'yourfinance'));
   const back = page.locator('header a[data-back]');
-  await expect(back).toHaveAccessibleName(isMobile ? locales.en.ui.nav.projects : yourfinance.copy.en.back);
+  await expect(back).toHaveAccessibleName(yourfinance.copy.en.back);
+  await expect(back.getByText(yourfinance.copy.en.back)).toBeVisible({ visible: !isMobile });
 });
+
+for (const width of [320, 375]) {
+  test(`at ${width} px the header shows name, back link, language and theme without overflow (#98)`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto(caseStudyPath('es', 'ariaer'));
+    const header = page.locator('body > div header').first();
+    await expect(header.getByRole('link', { name: shared.name })).toBeVisible();
+    await expect(header.locator('a[data-back]')).toBeVisible();
+    await expect(header.locator('button[aria-haspopup="listbox"]')).toBeVisible();
+    const overflow = await header.evaluate((el) =>
+      [...el.querySelectorAll('a, button')].some((child) => child.getBoundingClientRect().right > window.innerWidth),
+    );
+    expect(overflow).toBe(false);
+    expect(await header.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+  });
+}
 
 test('only projects with a case study link to one', async ({ page }) => {
   await gotoView(page, 'en', 'projects');
@@ -220,14 +237,15 @@ test('browser back from the case study returns to the view it was opened from', 
   await expectView(page, 'en', 'projects');
 });
 
-test('the language links keep the reader on the case study', async ({ page }) => {
+test('the language menu is the shell one and keeps the reader on the case study (#98)', async ({ page }) => {
   await page.goto(caseStudyPath('en', 'yourfinance'));
-  const languages = page.getByRole('navigation', { name: locales.en.ui.locale.label });
-  await expect(languages.getByRole('link', { name: 'EN' })).toHaveAttribute('aria-current', 'page');
+  const trigger = page.locator('header button[aria-haspopup="listbox"]');
+  await expect(trigger).toContainText(locales.en.ui.locale.en);
 
-  await languages.getByRole('link', { name: 'DE' }).click();
+  await switchLocale(page, 'de');
   await expect(page).toHaveURL(new RegExp(`${caseStudyPath('de', 'yourfinance')}$`));
   await expect(page.getByRole('heading', { level: 2, name: yourfinance.copy.de.problem.title })).toBeVisible();
+  await expect(page.locator('header button[aria-haspopup="listbox"]')).toContainText(locales.de.ui.locale.de);
 });
 
 test('a case study exists only under the projects view, and only for known projects', async ({ request }) => {

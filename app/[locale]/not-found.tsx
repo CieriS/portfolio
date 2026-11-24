@@ -2,6 +2,7 @@ import { hasLocale } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { getPortfolioBundle } from '@/lib/portfolio';
+import { RoundIcon } from '@/components/ui/RoundIcon';
 
 export default async function NotFound() {
   const requested = await getLocale();
@@ -10,15 +11,13 @@ export default async function NotFound() {
 
   return (
     <main className="relative z-10 flex h-dvh flex-col justify-between px-frame py-6 md:py-10">
-      <p className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase select-none">404</p>
+      <p className="font-mono text-label tracking-label text-muted uppercase select-none">404</p>
       <div>
-        <h1 className="text-[clamp(3rem,10vw,9rem)] leading-[0.9] font-medium tracking-[-0.05em]">{copy.title}</h1>
-        <p className="mt-6 max-w-md text-[15px] leading-relaxed text-muted">{copy.body}</p>
-        <a href={`/${locale}`} className="group mt-10 inline-flex items-center gap-4 text-[15px]">
+        <h1 className="text-title font-medium">{copy.title}</h1>
+        <p className="mt-6 max-w-md text-body leading-relaxed text-muted">{copy.body}</p>
+        <a href={`/${locale}`} className="group mt-10 inline-flex items-center gap-4 text-body">
           <span className="link-underline">{copy.cta}</span>
-          <span aria-hidden className="grid size-10 place-items-center rounded-full border border-line">
-            →
-          </span>
+          <RoundIcon>→</RoundIcon>
         </a>
       </div>
     </main>

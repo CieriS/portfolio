@@ -24,14 +24,14 @@ export function NavBar() {
               <ViewLink
                 view={id}
                 aria-current={isActive ? 'page' : undefined}
-                className="group relative flex min-h-11 items-center gap-1.5 text-[13px] select-none md:gap-2"
+                className="group relative flex min-h-11 items-center gap-1.5 text-small select-none md:gap-2"
               >
                 {/* The name comes from the content, so what is read matches what is shown: the
                     index is decoration. Every link is read as "system name · plain word". */}
                 <span
                   aria-hidden
                   className={cn(
-                    'font-mono text-[11px] tabular-nums transition-colors duration-300',
+                    'font-mono text-label tabular-nums transition-colors duration-300',
                     isActive ? 'text-ink' : 'text-muted group-hover:text-ink',
                   )}
                 >
@@ -52,9 +52,7 @@ export function NavBar() {
                   data-plain
                   className={cn(
                     'whitespace-nowrap transition-colors duration-300',
-                    isActive
-                      ? 'text-ink md:font-mono md:text-[11px] md:text-muted'
-                      : 'text-muted group-hover:text-ink md:sr-only',
+                    isActive ? 'text-ink md:font-mono md:text-label md:text-muted' : 'text-muted group-hover:text-ink md:sr-only',
                   )}
                 >
                   <span className="max-md:sr-only">· </span>

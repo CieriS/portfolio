@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { hasLocale } from 'next-intl';
 import { routing } from '@/i18n/routing';
 import { errorCopy } from '@/lib/errorCopy';
+import { RoundIcon } from '@/components/ui/RoundIcon';
 
 /**
  * Boundary for the views. It sits below the locale layout, so the canvas, the theme and
@@ -18,15 +19,13 @@ export default function ViewError({ reset }: { error: Error & { digest?: string 
 
   return (
     <main className="relative z-10 flex h-dvh flex-col justify-between px-frame py-6 md:py-10">
-      <p className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase select-none">500</p>
+      <p className="font-mono text-label tracking-label text-muted uppercase select-none">500</p>
       <div>
-        <h1 className="text-[clamp(3rem,10vw,9rem)] leading-[0.9] font-medium tracking-[-0.05em]">{copy.title}</h1>
-        <p className="mt-6 max-w-md text-[15px] leading-relaxed text-muted">{copy.body}</p>
-        <button type="button" onClick={reset} className="group mt-10 inline-flex items-center gap-4 text-[15px]">
+        <h1 className="text-title font-medium">{copy.title}</h1>
+        <p className="mt-6 max-w-md text-body leading-relaxed text-muted">{copy.body}</p>
+        <button type="button" onClick={reset} className="group mt-10 inline-flex items-center gap-4 text-body">
           <span className="link-underline">{copy.cta}</span>
-          <span aria-hidden className="grid size-10 place-items-center rounded-full border border-line">
-            ↻
-          </span>
+          <RoundIcon>↻</RoundIcon>
         </button>
       </div>
     </main>

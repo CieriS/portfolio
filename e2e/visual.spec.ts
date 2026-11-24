@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { caseStudyPath } from '../lib/routes';
 import { gotoView, VIEWS, type ViewId } from './helpers';
 
 /**
@@ -36,6 +37,26 @@ for (const { name, view, scheme, viewport } of CASES) {
     await page.waitForTimeout(2500);
 
     await expect(page).toHaveScreenshot(`${name}.png`, {
+      animations: 'disabled',
+      stylePath: 'e2e/visual.css',
+      maxDiffPixelRatio: 0.002,
+    });
+  });
+}
+
+// The case study header (#98): name, back link, the shell's language menu and the theme toggle.
+for (const [name, viewport] of [
+  ['case-study-header-desktop', DESKTOP],
+  ['case-study-header-phone', PHONE],
+] as const) {
+  test(`${name} matches its reference`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
+    await page.goto(caseStudyPath('en', 'yourfinance'));
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator('header button[aria-haspopup="listbox"]')).toBeVisible();
+
+    await expect(page.locator('body > div header').first()).toHaveScreenshot(`${name}.png`, {
       animations: 'disabled',
       stylePath: 'e2e/visual.css',
       maxDiffPixelRatio: 0.002,

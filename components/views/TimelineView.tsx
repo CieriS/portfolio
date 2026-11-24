@@ -53,7 +53,7 @@ export function TimelineView({ data }: ViewProps) {
         aside={
           <motion.div variants={fade} className="select-none md:text-right">
             <Meta>{copy.labels.uptime}</Meta>
-            <p className="mt-3 text-3xl font-light tracking-[-0.03em] tabular-nums md:text-5xl">
+            <p className="mt-3 text-3xl font-light tracking-snug tabular-nums md:text-5xl">
               <Uptime thread={primary} days={copy.labels.days} fallback={unknown} />
             </p>
           </motion.div>
@@ -61,9 +61,9 @@ export function TimelineView({ data }: ViewProps) {
       />
 
       {/* Scheduler: every thread on one shared time axis, advancing in lockstep. Purely visual chrome. */}
-      <motion.div variants={fade} className="mt-20 select-none md:mt-32 md:grid md:grid-cols-12 md:gap-x-6">
+      <motion.div variants={fade} className="mt-head select-none md:grid md:grid-cols-12 md:gap-x-6">
         <div className="md:col-span-9 md:col-start-4">
-          <div className="relative mb-5 h-4 font-mono text-[11px] text-muted tabular-nums">
+          <div className="relative mb-5 h-4 font-mono text-label text-muted tabular-nums">
             {years.map((year, i) => (
               <span
                 key={year}
@@ -93,7 +93,7 @@ export function TimelineView({ data }: ViewProps) {
         </div>
       </motion.div>
 
-      <div className="mt-20 md:mt-28 md:grid md:grid-cols-12 md:gap-x-6">
+      <div className="mt-subsection md:grid md:grid-cols-12 md:gap-x-6">
         <div className="grid gap-16 md:col-span-9 md:col-start-4 md:grid-cols-[var(--threads)] md:gap-x-6" style={columns}>
           {threads.map((thread, i) => (
             <motion.div key={thread.id} variants={fade}>
@@ -143,12 +143,12 @@ function Lane({ thread, index, copy, labels, unknown, ticks, clock, toPct }: Lan
     <div className="border-t border-line pt-6 pb-10">
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
         <p className="flex items-baseline gap-3">
-          <span className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
+          <span className="font-mono text-label tracking-label text-muted uppercase">
             {labels.thread} {threadCode(index)}
           </span>
-          <span className="text-[15px]">{copy?.label ?? thread.id}</span>
+          <span className="text-body">{copy?.label ?? thread.id}</span>
         </p>
-        <div className="flex items-center gap-5 font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
+        <div className="flex items-center gap-5 font-mono text-label tracking-label text-muted uppercase">
           <span>
             {labels.start} {formatDate(first?.start ?? null, unknown)}
           </span>
@@ -226,15 +226,28 @@ function Lane({ thread, index, copy, labels, unknown, ticks, clock, toPct }: Lan
       {/* The row keeps its height either way, so every lane stays the same size. */}
       <div className="relative mt-5 hidden h-4 md:block">
         {phaseMarksFit(marks) &&
-          thread.phases.map((phase, i) => (
-            <span
-              key={phase.id}
-              className="absolute top-0 border-l border-line pl-2 font-mono text-[11px] whitespace-nowrap text-muted"
-              style={{ left: `${marks[i]}%` }}
-            >
-              {pad(i + 1)} {pick(copy?.phases ?? {}, phase.id)?.title ?? phase.id}
-            </span>
-          ))}
+          thread.phases.map((phase, i) => {
+            const label = (
+              <span className="border-l border-line pl-2 font-mono text-label whitespace-nowrap text-muted">
+                {pad(i + 1)} {pick(copy?.phases ?? {}, phase.id)?.title ?? phase.id}
+              </span>
+            );
+            if (i < thread.phases.length - 1) {
+              return (
+                <span key={phase.id} className="absolute top-0 flex" style={{ left: `${marks[i]}%` }}>
+                  {label}
+                </span>
+              );
+            }
+            // The last label starts at its mark when it fits; otherwise the spacer before it shrinks
+            // and the label ends at the end of the axis instead of running past it (#97).
+            return (
+              <span key={phase.id} className="absolute inset-x-0 top-0 flex">
+                <span aria-hidden className="shrink" style={{ flexBasis: `${marks[i]}%` }} />
+                <span className="flex shrink-0">{label}</span>
+              </span>
+            );
+          })}
       </div>
     </div>
   );
@@ -260,28 +273,28 @@ function ThreadDetail({ thread, index, copy, labels, unknown }: ThreadDetailProp
       <Meta as="h2">
         {labels.thread} {threadCode(index)} — {copy?.label ?? thread.id}
       </Meta>
-      <h3 className="mt-5 text-2xl font-medium tracking-[-0.025em] md:text-3xl">{copy?.role ?? thread.id}</h3>
-      <p className="mt-2 font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
+      <h3 className="mt-5 text-2xl font-medium tracking-snug md:text-3xl">{copy?.role ?? thread.id}</h3>
+      <p className="mt-2 font-mono text-label tracking-label text-muted uppercase">
         {/* A thread with no entity (self-directed study) states its label alone, not "label: —". */}
         {thread.entity ? `${copy?.entityLabel}: ${thread.entity}` : copy?.entityLabel}
       </p>
       {thread.segments.length > 1 && (
-        <p className="mt-1 font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
+        <p className="mt-1 font-mono text-label tracking-label text-muted uppercase">
           {labels.periods}: {periods}
         </p>
       )}
-      <p className="mt-6 text-[15px] leading-relaxed text-muted">{copy?.summary}</p>
+      <p className="mt-6 text-body leading-relaxed text-muted">{copy?.summary}</p>
 
       <ol className="mt-10">
         {thread.phases.map((phase, i) => {
           const phaseCopy = pick(copy?.phases ?? {}, phase.id);
           return (
             <li key={phase.id} className="grid grid-cols-[2.5rem_minmax(0,1fr)] border-t border-line py-5">
-              <span className="font-mono text-[11px] text-muted tabular-nums select-none">{pad(i + 1)}</span>
+              <span className="font-mono text-label text-muted tabular-nums select-none">{pad(i + 1)}</span>
               <div>
-                <h4 className="text-[15px] font-normal">{phaseCopy?.title ?? phase.id}</h4>
+                <h4 className="text-body font-normal">{phaseCopy?.title ?? phase.id}</h4>
                 {phaseCopy && <p className="mt-1 text-sm leading-relaxed text-muted">{phaseCopy.body}</p>}
-                <p className="mt-3 font-mono text-[11px] tracking-[0.04em] text-muted">{phase.stack.join(' · ')}</p>
+                <p className="mt-3 font-mono text-label tracking-wider text-muted">{phase.stack.join(' · ')}</p>
               </div>
             </li>
           );
