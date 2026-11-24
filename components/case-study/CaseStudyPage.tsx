@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactNode } from 'react';
+import { MotionToggle } from '@/components/shell/MotionToggle';
 import { ThemeToggle } from '@/components/shell/ThemeToggle';
 import { DISPLAY_TITLE, Emphasis, Meta } from '@/components/ui/text';
 import type { Locale } from '@/i18n/routing';
@@ -80,10 +81,16 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
               </span>
             </a>
           </div>
-          <NextIntlClientProvider locale={locale} messages={{ theme: ui.theme, locale: ui.locale }} timeZone="UTC">
+          <NextIntlClientProvider
+            locale={locale}
+            messages={{ theme: ui.theme, locale: ui.locale, motion: ui.motion }}
+            timeZone="UTC"
+          >
             <div className="flex items-center gap-4 sm:gap-6">
               <CaseStudyLocaleSwitch locale={locale} id={id} />
               <ThemeToggle />
+              {/* The scene runs here too: the pause chosen in the views holds, and can be changed here (#142). */}
+              <MotionToggle />
             </div>
           </NextIntlClientProvider>
         </header>

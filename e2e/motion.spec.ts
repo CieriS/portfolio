@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { locales } from './content';
+import { caseStudyPath } from '../lib/routes';
 import { expectView, gotoView } from './helpers';
 
 const toggle = (page: Page) => page.locator('[data-motion-toggle]');
@@ -67,6 +68,14 @@ test('the pause survives a change of view and a reload', async ({ page }) => {
   await gotoView(page, 'en', 'timeline');
   await expect(toggle(page)).toHaveAttribute('aria-pressed', 'true');
   expect(await runningLoops(page)).toBe(0);
+});
+
+test('the pause chosen in the views holds on a case study', async ({ page }) => {
+  await gotoView(page, 'en', 'hero');
+  await toggle(page).click();
+  await page.goto(caseStudyPath('en', 'ariaer'));
+  await expect(toggle(page)).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('html')).toHaveAttribute('data-motion', 'paused');
 });
 
 // #143: under reduced motion the timeline counter must not tick every second.
