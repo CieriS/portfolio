@@ -97,7 +97,7 @@ export function LocaleSwitch({ locale, onChange }: LocaleSwitchProps) {
         aria-controls={open ? listId : undefined}
         onClick={() => (open ? close(false) : openMenu())}
         onKeyDown={onTriggerKeyDown}
-        className="flex items-center gap-1.5 py-2 text-ink"
+        className="flex min-h-11 min-w-11 items-center justify-center gap-1.5 text-ink"
       >
         <span className="sr-only">{t('label')}: </span>
         <span className="link-underline">{t(locale)}</span>
