@@ -208,7 +208,7 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 
 - Tokens CSS dans `app/globals.css` (`--paper`, `--ink`, `--muted`, `--line`, `--accent`), redéfinis sous `.dark` et exposés à Tailwind v4 via `@theme inline`.
 - Le thème clair est un papier crème (`#ede7db`), pas un blanc d'écran : moins éblouissant, et le champ de points derrière le contenu reste lisible.
-- `lib/theme.ts` répète papier et encre pour ce qui ne peut pas lire les custom properties (scène WebGL, `theme-color`, manifest, images Open Graph). `lib/theme.test.ts` échoue si CSS et TypeScript divergent, si le texte passe sous les contrastes AA/AAA ou si les points de la scène deviennent invisibles ou plus forts que le texte.
+- `lib/theme.ts` répète papier, encre, texte secondaire et accent pour ce qui ne peut pas lire les custom properties (scène WebGL, `theme-color`, manifest, images Open Graph, `app/global-error.tsx`) ; `inkAlpha` donne l'encre avec une opacité, pour les filets et les bordures. Un test échoue si `global-error.tsx` ou `lib/og.tsx` écrit sa propre couleur. `lib/theme.test.ts` échoue si CSS et TypeScript divergent, si le texte passe sous les contrastes AA/AAA ou si les points de la scène deviennent invisibles ou plus forts que le texte.
 - Utilitaires personnalisés : `px-frame`, `no-scrollbar`, `fade-edges`, `link-underline`, `bg-dashed`.
 - Polices chargées avec `next/font` et `display: swap` : Geist pour le texte, Geist Mono pour les étiquettes, Instrument Serif en italique pour les mots mis en valeur.
 
@@ -237,8 +237,9 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 
 ## SEO
 
-- **Métadonnées par vue** (`lib/seo.ts`) : title, description, canonical, hreflang (`en`, `it`, `fr`, `de`, `x-default`), Open Graph de type `profile` et Twitter card `summary_large_image`. Pour l'index, `x-default` pointe vers `/`, qui détecte la langue ; pour les autres vues, il pointe vers la version anglaise.
+- **Métadonnées par vue** (`lib/seo.ts`) : title, description, canonical, hreflang (`en`, `it`, `fr`, `de`, `es`, `x-default`), Open Graph de type `profile` et Twitter card `summary_large_image`. Pour l'index, `x-default` pointe vers `/`, qui détecte la langue ; pour les autres vues, il pointe vers la version anglaise.
 - **Images Open Graph** en 1200 × 630, générées au build pour chaque langue et chaque vue (`opengraph-image.tsx`, `lib/og.tsx`), avec l'icône de l'ancien site. L'icône est une copie de 56 px (`lib/og-icon.png`, environ 3 Ko), la taille à laquelle elle est dessinée : il faut la régénérer à partir de `app/icon.png` si l'icône change.
+- Les métadonnées et le JSON-LD ont des tests unitaires pour chaque langue et page (`lib/seo.test.ts`, `lib/structuredData.test.ts`) : canonical, hreflang complets, robots (y compris `noindex` sur les aperçus), types du graphe et liens entre nœuds.
 - **JSON-LD** `@graph` (`lib/structuredData.ts`) : `WebSite`, `Person` (avec `alternateName`, `address`, `knowsAbout` et `sameAs` ; `url` est la racine du site dans toutes les langues), `ProfilePage`, `BreadcrumbList` sur les vues internes et `ItemList` de `SoftwareSourceCode` sur la vue des projets.
 - **`sitemap.xml`** avec alternatives hreflang, **`robots.txt`**, **`manifest.webmanifest`**, ainsi qu'un favicon et des icônes dérivés de l'icône de l'ancien site.
 - **Indexation maîtrisée** : seule la production est indexable (voir [Variables d'environnement](#variables-denvironnement)). La balise `robots` est définie par page, pas dans le layout : la 404 ne porte donc que le `noindex` de Next.

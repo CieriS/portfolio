@@ -33,7 +33,7 @@ export type CvDeps = {
 
 const locale = z.enum(LOCALES);
 
-export const CvRequestSchema = z.discriminatedUnion('method', [
+const CvRequestSchema = z.discriminatedUnion('method', [
   z.object({ method: z.literal('password'), locale, password: z.string().min(1).max(256) }),
   z.object({
     method: z.literal('email'),

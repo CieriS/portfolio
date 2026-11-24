@@ -7,7 +7,7 @@ import { DISPLAY_TITLE, Emphasis, Meta } from '@/components/ui/text';
 import { pad } from '@/lib/format';
 import type { PortfolioView } from '@/lib/portfolio';
 
-export { Emphasis, Meta };
+export { Meta };
 export type ViewProps = { data: PortfolioView };
 
 export function Pulse() {

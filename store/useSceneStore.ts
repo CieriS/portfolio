@@ -30,7 +30,7 @@ export const useSceneStore = create<SceneState>()((set, get) => ({
   },
 }));
 
-// Transient write path: the canvas reads these inside useFrame via getState(),
+// Transient write path: DataField reads these in its requestAnimationFrame loop via getState(),
 // so pointer motion never notifies subscribers and never re-renders React.
 export function writePointer(x: number, y: number, touch: boolean) {
   const pointer = useSceneStore.getState().pointer;

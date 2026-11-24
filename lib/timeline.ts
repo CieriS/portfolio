@@ -45,7 +45,7 @@ export function phaseAt(thread: Thread, index: number, spans: Span[]): number {
 }
 
 /** Share of the axis, in percent, that one phase label needs to stay readable. */
-export const PHASE_LABEL_ROOM = 12;
+const PHASE_LABEL_ROOM = 12;
 
 /**
  * Whether phase labels placed at `marks` (axis percentages, ascending) have room: a young

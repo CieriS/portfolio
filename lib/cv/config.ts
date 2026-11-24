@@ -15,8 +15,8 @@ export type CvConfig = {
 
 type Env = Record<string, string | undefined>;
 
-export const MIN_PASSWORD_LENGTH = 16;
-export const MIN_SECRET_LENGTH = 32;
+const MIN_PASSWORD_LENGTH = 16;
+const MIN_SECRET_LENGTH = 32;
 
 export function readCvConfig(env: Env): { config: CvConfig; problems: string[] } {
   const problems: string[] = [];

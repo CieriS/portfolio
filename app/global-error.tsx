@@ -2,7 +2,7 @@
 
 import { routing } from '@/i18n/routing';
 import { errorCopy } from '@/lib/errorCopy';
-import { THEME } from '@/lib/theme';
+import { inkAlpha, THEME } from '@/lib/theme';
 
 /**
  * Last resort: this replaces the root layout, so it has to ship its own <html> and <body>
@@ -31,14 +31,14 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
         <h1 style={{ margin: 0, fontSize: 'clamp(2.5rem, 8vw, 5rem)', lineHeight: 0.95, letterSpacing: '-0.04em' }}>
           {copy.title}
         </h1>
-        <p style={{ margin: 0, maxWidth: '28rem', color: '#8c8b86' }}>{copy.body}</p>
+        <p style={{ margin: 0, maxWidth: '28rem', color: THEME.dark.muted }}>{copy.body}</p>
         <button
           type="button"
           onClick={reset}
           style={{
             alignSelf: 'flex-start',
             padding: '0.6rem 1.2rem',
-            border: '1px solid rgba(236, 235, 231, 0.3)',
+            border: `1px solid ${inkAlpha('dark', 0.3)}`,
             borderRadius: '999px',
             background: 'transparent',
             color: 'inherit',

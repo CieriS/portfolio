@@ -6,7 +6,7 @@ import { getCaseStudy } from '@/lib/caseStudy';
 import { pad } from '@/lib/format';
 import { OG_ICON_FILE, OG_ICON_SIZE } from '@/lib/ogIcon';
 import { getPortfolioBundle } from '@/lib/portfolio';
-import { THEME } from '@/lib/theme';
+import { ACCENT, inkAlpha, THEME } from '@/lib/theme';
 import { VIEW_IDS, type CaseStudyId, type ViewId } from '@/lib/views';
 
 /**
@@ -17,12 +17,15 @@ import { VIEW_IDS, type CaseStudyId, type ViewId } from '@/lib/views';
 export const OG_ALT = getPortfolioBundle().contents[routing.defaultLocale].ui.meta.views.hero.title;
 
 // Share cards are always drawn in the dark theme.
-const { paper: PAPER, ink: INK } = THEME.dark;
-const MUTED = '#8c8b86';
-const LINE = 'rgba(236, 235, 231, 0.14)';
+const { paper: PAPER, ink: INK, muted: MUTED } = THEME.dark;
+const LINE = inkAlpha('dark', 0.14);
 
-// Read once: every card of a build shares the same few kilobytes.
-const ICON_SRC = readFile(join(process.cwd(), OG_ICON_FILE)).then((icon) => `data:image/png;base64,${icon.toString('base64')}`);
+// Read once: every card of a build shares the same few kilobytes. The ignore comment stops
+// Turbopack from tracing the whole project into every route that imports this module (#126);
+// `outputFileTracingIncludes` in next.config.ts ships the one file this reads.
+const ICON_SRC = readFile(join(/* turbopackIgnore: true */ process.cwd(), OG_ICON_FILE)).then(
+  (icon) => `data:image/png;base64,${icon.toString('base64')}`,
+);
 
 type Card = { locale: Locale; label: string; title: string; titleSize: number; subtitle: string };
 
@@ -86,7 +89,7 @@ async function renderCard({ locale, label, title, titleSize, subtitle }: Card): 
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, borderTop: `1px solid ${LINE}`, paddingTop: 28 }}>
-        <span style={{ width: 10, height: 10, borderRadius: 10, background: '#ff5b1f' }} />
+        <span style={{ width: 10, height: 10, borderRadius: 10, background: ACCENT }} />
         <span style={{ fontSize: 22, color: MUTED, letterSpacing: 3 }}>{ui.shell.role.toUpperCase()}</span>
       </div>
     </div>,
