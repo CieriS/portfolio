@@ -287,6 +287,7 @@ Assistants and coding agents often read a site through a fetch tool, not a brows
 - Never in these files: e-mail addresses, phone numbers or environment values (the CV is "on request through the form"), nor a repository link for a private project (tested).
 - The JSON-LD carries `dateModified` (the last commit that touched the page's data files, `lib/lastModified.ts`; the same date is `lastmod` in the sitemap) and `seeks` on `Person` (the role in `shared.seeks`, which every locale's `hero.seeking` must name).
 - How to check what assistants answer about the site, and the results: [`docs/ai-agents.md`](docs/ai-agents.md).
+- **`robots.txt`** (`lib/agents/crawlers.ts`, #175): every AI crawler is allowed, written out by group (search, fetch on a user's request, training) from one tested list; `/api/` is closed to every agent; previews are `Disallow: /`.
 
 ## Accessibility
 
@@ -442,7 +443,7 @@ TypeScript flags any step you miss, because all these maps are typed on `Locale`
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, UI strings, SEO metadata
 ├── i18n/             routing.ts (languages) · request.ts (next-intl messages)
 ├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, liveResults, dataOrigins, importGraph, sceneField, projects, versions, format, hooks, cn
-│   ├── agents/       paths, markdown, llmsTxt, fullText, render (files for AI agents)
+│   ├── agents/       paths, markdown, llmsTxt, fullText, render, crawlers (files for AI agents)
 │   ├── content/      schema (zod) · validate (cross-checks)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV on request)
 ├── store/            viewStore (per instance) · useSceneStore (scene, transient)

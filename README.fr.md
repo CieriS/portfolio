@@ -289,6 +289,7 @@ Les assistants et les agents de code lisent souvent un site avec un outil de fet
 - Jamais dans ces fichiers : adresses e-mail, téléphones ou valeurs d'environnement (le CV est « sur demande via le formulaire »), ni lien vers le dépôt d'un projet privé (testé).
 - Le JSON-LD porte `dateModified` (le dernier commit qui a touché les fichiers de données de la page, `lib/lastModified.ts` ; la même date est le `lastmod` du sitemap) et `seeks` sur `Person` (le rôle de `shared.seeks`, que `hero.seeking` de chaque langue doit nommer).
 - Comment vérifier ce que les assistants répondent sur le site, et les résultats : [`docs/ai-agents.md`](docs/ai-agents.md).
+- **`robots.txt`** (`lib/agents/crawlers.ts`, #175) : tous les robots IA sont admis, écrits par groupe (recherche, fetch à la demande d'un utilisateur, entraînement) depuis une seule liste testée ; `/api/` est fermé à tous ; les previews ont `Disallow: /`.
 
 ## Accessibilité
 
@@ -444,7 +445,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   └── locales/                     en.json · it.json · fr.json · de.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)
 ├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, liveResults, dataOrigins, importGraph, sceneField, projects, versions, format, hooks, cn
-│   ├── agents/       paths, markdown, llmsTxt, fullText, render (fichiers pour les agents IA)
+│   ├── agents/       paths, markdown, llmsTxt, fullText, render, crawlers (fichiers pour les agents IA)
 │   ├── content/      schema (zod) · validate (contrôles croisés)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV sur demande)
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)

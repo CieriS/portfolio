@@ -41,9 +41,12 @@ Ask each question in a new conversation of at least two assistants with web acce
 For each answer note: correct facts, wrong facts, invented facts, sources cited. The reference
 for "correct" is the site itself (`data/`), as of the run's date.
 
-Who asks: still to be decided by the owner (asked on 2026-11-24): either he asks ChatGPT with
-search and Claude himself and pastes the answers here, or the session that runs the check uses
-its own fetch tool as one of the two assistants.
+Who asks (decided on 2026-11-24): no personal assistant account is used. The questions go to
+the **web fetch tool of the Claude Code session** that runs the check: it reads the pages it is
+given, starting from `https://cieri.vercel.app/en`, and follows links on the site. It is a fetch,
+**not an assistant with a search index**: it says what a page-reading agent understands, not
+whether ChatGPT, Perplexity or Google would find and cite the site. Same tool, same start URL and
+same questions on every run.
 
 ## Results
 
@@ -60,7 +63,30 @@ its own fetch tool as one of the two assistants.
 
 No redirect and no bot challenge: Vercel's bot protection does not block these user agents.
 
-**Questions to assistants.** Pending the decision on who asks (see above).
+**Questions (web fetch, starting from `/en`).** 4 pages fetched (`/en`, `/en/identity`,
+`/en/execution`, `/en/systems`); no invented fact.
+
+| Question | Answer | Correct? |
+| --- | --- | --- |
+| Who is he | Software Developer at Tas since 2022 (Angular, TypeScript), Scrum Master, moving into Data Engineering; Computer Engineering part-time in Bologna | correct |
+| Role sought | Data Engineer, full remote | correct |
+| Projects | aria-er (public, repository and v1.2.0 linked) and yourFinance (private, demo on request, v1.3.1) | correct |
+| CV | on request: leave an e-mail, a link arrives; LinkedIn is the fastest contact | correct, but the tool saw a "Password" label and could not tell whether a password is needed |
+| Studies | Computer Engineering at Bologna, part-time, paused 2023–2024, not finished | correct; dates read as `12.11.2021 … Now` from the timeline |
+
+Reading notes from the tool: the layout of the timeline and the project topology came out as lists
+in approximate order; the case studies were not opened (the projects page was enough).
+
+## AI crawler names (#175)
+
+Checked on 2026-11-24 on the vendors' pages; the policy is in `lib/agents/crawlers.ts` (all
+allowed, by group, `/api/` closed).
+
+| Group | User agents | Source |
+| --- | --- | --- |
+| Search and answer indexing | `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot` | [OpenAI](https://developers.openai.com/api/docs/bots), [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), [Perplexity](https://docs.perplexity.ai/guides/bots) |
+| Fetch on a user's request | `ChatGPT-User`, `Claude-User`, `Perplexity-User` (OpenAI and Perplexity say these may ignore robots.txt) | same pages |
+| Model training | `GPTBot`, `ClaudeBot`, `Google-Extended` and `Applebot-Extended` (control tokens, not crawlers), `CCBot` | same pages, [Google](https://developers.google.com/search/docs/crawling-indexing/google-common-crawlers), [Apple](https://support.apple.com/en-us/119829) |
 
 ### After 2.13.0 is deployed
 

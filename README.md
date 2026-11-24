@@ -287,6 +287,7 @@ Assistenti e agenti di programmazione leggono spesso un sito con uno strumento d
 - Mai in questi file: indirizzi email, telefoni o valori d'ambiente (il CV è "su richiesta tramite il modulo"), né il link al repository di un progetto privato (testato).
 - Il JSON-LD ha `dateModified` (l'ultimo commit che ha toccato i file di dati della pagina, `lib/lastModified.ts`; la stessa data è il `lastmod` della sitemap) e `seeks` su `Person` (il ruolo di `shared.seeks`, che `hero.seeking` di ogni lingua deve nominare).
 - Come verificare cosa rispondono gli assistenti sul sito, e i risultati: [`docs/ai-agents.md`](docs/ai-agents.md).
+- **`robots.txt`** (`lib/agents/crawlers.ts`, #175): tutti i crawler AI ammessi, scritti per gruppo (ricerca, fetch su richiesta di un utente, addestramento) da una sola lista testata; `/api/` chiuso a tutti; le anteprime hanno `Disallow: /`.
 
 ## Accessibilità
 
@@ -442,7 +443,7 @@ TypeScript segnala ogni punto dimenticato, perché tutte queste mappe sono tipiz
 │   └── locales/                     en.json · it.json · fr.json · de.json: copy, stringhe UI, metadata SEO
 ├── i18n/             routing.ts (lingue) · request.ts (messages di next-intl)
 ├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, liveResults, dataOrigins, importGraph, sceneField, projects, versions, format, hooks, cn
-│   ├── agents/       paths, markdown, llmsTxt, fullText, render (file per gli agenti AI)
+│   ├── agents/       paths, markdown, llmsTxt, fullText, render, crawlers (file per gli agenti AI)
 │   ├── content/      schema (zod) · validate (verifiche incrociate)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV su richiesta)
 ├── store/            viewStore (per istanza) · useSceneStore (scena, transiente)
