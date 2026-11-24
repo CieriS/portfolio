@@ -37,3 +37,28 @@ export function checkCvInput(method: 'email' | 'password', value: string): CvInp
   if (email === '') return 'emptyEmail';
   return EMAIL_SHAPE.test(email) ? null : 'badEmail';
 }
+
+/** What the form says for each answer of `POST /api/cv` (see app/api/cv/route.ts). */
+export type CvAnswer = 'sent' | 'invalid' | 'denied' | 'unavailable' | 'notSent' | 'tooMany' | 'failed';
+
+const ANSWERS: Record<number, CvAnswer> = {
+  202: 'sent',
+  400: 'invalid',
+  403: 'denied',
+  // The mail provider refused the message: retrying gives the same result, so the message points elsewhere (#136).
+  502: 'notSent',
+  503: 'unavailable',
+  // The firewall's rate limit (#112).
+  429: 'tooMany',
+};
+
+export function statusFromCode(code: number): CvAnswer {
+  return ANSWERS[code] ?? 'failed';
+}
+
+/** `'Write on {linkedin}.'` → `['Write on ', '.']`, so a link can sit where the placeholder was; `null` after when it is missing. */
+export function splitAtPlaceholder(text: string, name: string): [string, string | null] {
+  const token = `{${name}}`;
+  const at = text.indexOf(token);
+  return at === -1 ? [text, null] : [text.slice(0, at), text.slice(at + token.length)];
+}

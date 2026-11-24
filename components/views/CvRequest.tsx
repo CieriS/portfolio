@@ -2,17 +2,22 @@
 
 import { useId, useRef, useState, type FormEvent } from 'react';
 import { cn } from '@/lib/cn';
-import { checkCvInput, fileNameFrom, LINK_HOURS, type CvInputProblem } from '@/lib/cv/common';
+import {
+  checkCvInput,
+  fileNameFrom,
+  LINK_HOURS,
+  splitAtPlaceholder,
+  statusFromCode,
+  type CvAnswer,
+  type CvInputProblem,
+} from '@/lib/cv/common';
 import type { PortfolioView } from '@/lib/portfolio';
 
 type Method = 'email' | 'password';
-type Status = 'idle' | 'pending' | 'sent' | 'downloaded' | 'invalid' | 'denied' | 'unavailable' | 'failed' | CvInputProblem;
+type Status = 'idle' | 'pending' | 'downloaded' | CvAnswer | CvInputProblem;
 
 /** Problems of the field itself, found before sending: they mark the field, not just the message. */
 const FIELD_PROBLEMS: ReadonlySet<Status> = new Set<Status>(['emptyEmail', 'badEmail', 'emptyPassword']);
-
-/** What the API answers (see app/api/cv/route.ts), mapped to the message shown. */
-const STATUS_BY_CODE: Record<number, Status> = { 202: 'sent', 400: 'invalid', 403: 'denied', 503: 'unavailable' };
 
 /**
  * The CV is not public: it carries a phone number. Visitors leave an email address and get a
@@ -57,7 +62,7 @@ export function CvRequest({ data }: { data: PortfolioView }) {
         saveFile(await response.blob(), fileNameFrom(response.headers.get('Content-Disposition')));
         setStatus('downloaded');
       } else {
-        setStatus(STATUS_BY_CODE[response.status] ?? 'failed');
+        setStatus(statusFromCode(response.status));
       }
     } catch {
       setStatus('failed');
@@ -65,6 +70,9 @@ export function CvRequest({ data }: { data: PortfolioView }) {
   };
 
   const message = status === 'idle' || status === 'pending' ? '' : copy[status].replace('{hours}', String(LINK_HOURS));
+  // A refused email says where else to write: the placeholder becomes a real link (#136).
+  const [before, after] = splitAtPlaceholder(message, 'linkedin');
+  const linkedin = data.shared.contacts.find((contact) => contact.id === 'linkedin');
 
   return (
     <li className="border-t border-line">
@@ -164,7 +172,17 @@ export function CvRequest({ data }: { data: PortfolioView }) {
         </form>
 
         <p id={statusId} role="status" className="mt-4 min-h-6 text-[15px]">
-          {message}
+          {after === null || !linkedin ? (
+            message
+          ) : (
+            <>
+              {before}
+              <a href={linkedin.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
+                {linkedin.label}
+              </a>
+              {after}
+            </>
+          )}
         </p>
       </div>
     </li>

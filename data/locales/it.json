@@ -72,7 +72,9 @@
       "invalid": "Controlla quello che hai scritto e riprova.",
       "denied": "Password errata.",
       "unavailable": "Non disponibile in questo momento: scrivimi su LinkedIn.",
-      "failed": "Qualcosa è andato storto. Riprova tra poco."
+      "failed": "Qualcosa è andato storto. Riprova tra poco.",
+      "notSent": "Non sono riuscito a inviare il link. Scrivimi su {linkedin}.",
+      "tooMany": "Troppe richieste in poco tempo. Riprova tra qualche minuto."
     }
   },
   "hero": {

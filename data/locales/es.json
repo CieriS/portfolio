@@ -72,7 +72,9 @@
       "invalid": "Revisa lo que has escrito y vuelve a intentarlo.",
       "denied": "Contraseña incorrecta.",
       "unavailable": "No está disponible ahora mismo: escríbeme por LinkedIn.",
-      "failed": "Algo ha fallado. Vuelve a intentarlo dentro de un momento."
+      "failed": "Algo ha fallado. Vuelve a intentarlo dentro de un momento.",
+      "notSent": "No he podido enviar el enlace. Escríbeme por {linkedin}.",
+      "tooMany": "Demasiadas solicitudes en poco tiempo. Vuelve a intentarlo dentro de unos minutos."
     }
   },
   "hero": {
