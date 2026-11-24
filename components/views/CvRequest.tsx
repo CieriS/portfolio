@@ -120,7 +120,9 @@ export function CvRequest({ data }: { data: PortfolioView }) {
             <label htmlFor={fieldId} className="font-mono text-label tracking-label text-muted uppercase">
               {method === 'email' ? copy.email : copy.password}
             </label>
-            <div className="flex items-end gap-4 border-b border-line focus-within:border-ink">
+            {/* Focus: the line turns ink and doubles to 2 px, like the outline elsewhere a change of shape
+                and not of colour only (#147); `-mb-px` keeps the row from shifting. */}
+            <div className="flex items-end gap-4 border-b border-line focus-within:-mb-px focus-within:border-b-2 focus-within:border-ink">
               <input
                 key={method}
                 id={fieldId}

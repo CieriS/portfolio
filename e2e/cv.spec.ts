@@ -198,3 +198,24 @@ test.describe('the API', () => {
     expect(response.headers()['cache-control']).toBe('no-store');
   });
 });
+
+// #147: the focused field was only a 1 px border changing colour.
+test('the focused CV field has a 2 px ink border', async ({ page }) => {
+  await openCvPanel(page);
+  const field = page.getByLabel('Email address');
+  const line = field.locator('xpath=..');
+  await expect(line).toHaveCSS('border-bottom-width', '1px');
+  await field.focus();
+  await expect(line).toHaveCSS('border-bottom-width', '2px');
+  const ink = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--ink').trim());
+  const color = await line.evaluate((el) => getComputedStyle(el).borderBottomColor);
+  const probe = await page.evaluate((value) => {
+    const el = document.createElement('div');
+    el.style.color = value;
+    document.body.append(el);
+    const rgb = getComputedStyle(el).color;
+    el.remove();
+    return rgb;
+  }, ink);
+  expect(color).toBe(probe);
+});
