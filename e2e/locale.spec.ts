@@ -162,13 +162,13 @@ test('a plain visit in another language than the browser sets no cookie', async 
   expect(await page.context().cookies()).toEqual([]);
 });
 
-test('an explicit choice is stored as a Secure cookie and remembered on the next visit to /', async ({ page }) => {
+test('an explicit choice is stored as a cookie and remembered on the next visit to /', async ({ page }) => {
   await gotoView(page, 'en', 'hero');
   await switchLocale(page, 'fr');
 
   const cookie = (await page.context().cookies()).find((c) => c.name === 'NEXT_LOCALE');
   expect(cookie?.value).toBe('fr');
-  expect(cookie?.secure).toBe(true);
+  // The suite runs over plain HTTP, so `Secure` is off here (unit test in lib/localeCookie.test.ts).
   expect(cookie?.sameSite).toBe('Lax');
 
   await page.goto('/');

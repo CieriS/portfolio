@@ -10,9 +10,13 @@ export const LOCALE_COOKIE = 'NEXT_LOCALE';
 
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
-/** The `document.cookie` assignment that remembers an explicit language choice. */
-export function localeCookie(locale: string): string {
-  return `${LOCALE_COOKIE}=${locale}; path=/; max-age=${ONE_YEAR_SECONDS}; samesite=lax; secure`;
+/**
+ * The `document.cookie` assignment that remembers an explicit language choice. `Secure` whenever
+ * the page is served over HTTPS (always in production); over plain HTTP (local builds, E2E)
+ * some browsers, WebKit on Linux among them, would drop a `Secure` cookie altogether.
+ */
+export function localeCookie(locale: string, https: boolean): string {
+  return `${LOCALE_COOKIE}=${locale}; path=/; max-age=${ONE_YEAR_SECONDS}; samesite=lax${https ? '; secure' : ''}`;
 }
 
 const isLocaleCookie = (cookie: string) => cookie.trimStart().startsWith(`${LOCALE_COOKIE}=`);

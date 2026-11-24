@@ -2,8 +2,16 @@ import { describe, expect, it } from 'vitest';
 import { dropLocaleCookie, LOCALE_COOKIE, localeCookie } from './localeCookie';
 
 describe('localeCookie', () => {
-  it('remembers the choice for a year, site-wide, Secure and SameSite=Lax', () => {
-    const cookie = localeCookie('it');
+  it('is not Secure over plain HTTP, where some browsers would drop it', () => {
+    expect(
+      localeCookie('it', false)
+        .split(';')
+        .map((part) => part.trim()),
+    ).not.toContain('secure');
+  });
+
+  it('remembers the choice for a year, site-wide, Secure over HTTPS and SameSite=Lax', () => {
+    const cookie = localeCookie('it', true);
     expect(cookie.startsWith(`${LOCALE_COOKIE}=it;`)).toBe(true);
     expect(cookie).toContain('path=/');
     expect(cookie).toContain('max-age=31536000');

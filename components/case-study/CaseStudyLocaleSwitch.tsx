@@ -15,7 +15,7 @@ export function CaseStudyLocaleSwitch({ locale, id }: { locale: Locale; id: Case
       locale={locale}
       onChange={(next) => {
         if (next === locale) return;
-        document.cookie = localeCookie(next);
+        document.cookie = localeCookie(next, window.location.protocol === 'https:');
         window.location.assign(caseStudyPath(next, id));
       }}
     />

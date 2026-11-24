@@ -28,7 +28,7 @@ export function AppRoot({ shared, contents, initialLocale }: AppRootProps) {
       window.history.replaceState(null, '', pathFor(next, active) + window.location.hash);
       document.documentElement.lang = next;
       document.title = documentTitle(contents[next].ui.meta, active);
-      document.cookie = localeCookie(next);
+      document.cookie = localeCookie(next, window.location.protocol === 'https:');
     },
     [locale, contents, store],
   );
