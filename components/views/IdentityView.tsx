@@ -94,7 +94,7 @@ function LinkRow({ href, label, detail, rel }: { href: string; label: string; de
     <li className="border-t border-line">
       <a href={href} target="_blank" rel={rel} className={ROW}>
         <span className={ROW_LABEL}>{label}</span> <span className={ROW_DETAIL}>{detail}</span>
-        <RoundIcon className={`${ROW_ICON} group-hover:rotate-45`}>↑</RoundIcon>
+        <RoundIcon className={ROW_ICON}>↗</RoundIcon>
       </a>
     </li>
   );

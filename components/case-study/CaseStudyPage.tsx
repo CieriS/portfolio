@@ -321,7 +321,8 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
                 <p className="mt-8 flex flex-wrap gap-x-10 gap-y-4">
                   <a href={source.href} className={LINK} data-source={source.kind}>
                     <span className={UNDERLINE}>{text.access.cta}</span>
-                    <span aria-hidden>→</span>
+                    {/* ↗ leaves the site (the public repository), → stays on it (#148). */}
+                    <span aria-hidden>{source.kind === 'public' ? '↗' : '→'}</span>
                   </a>
                   {contact && (
                     <a href={contactsPath(locale)} className={LINK} data-contact>

@@ -48,6 +48,22 @@ describe('round icon (#144)', () => {
   });
 });
 
+describe('external links (#148)', () => {
+  it('use ↗, never the old ↑', () => {
+    expect(find(/↑/g)).toEqual([]);
+  });
+
+  // Exception: an inline link inside a sentence (`underline-offset-4`) has no arrow.
+  it('put ↗ on every link that opens in a new tab', () => {
+    const missing = files.flatMap(([path, text]) =>
+      [...text.matchAll(/<a\b[^>]*target="_blank"[^>]*>([\s\S]*?)<\/a>/g)]
+        .filter((match) => !match[1].includes('↗') && !/underline-offset/.test(match[0]))
+        .map((match) => `${path}: ${match[0].slice(0, 80)}`),
+    );
+    expect(missing).toEqual([]);
+  });
+});
+
 describe('accent colour (#100)', () => {
   // 2.52:1 on the light paper: dots, lines and fills only. `dark:` variants are allowed.
   it('is never a text colour in the light theme', () => {
