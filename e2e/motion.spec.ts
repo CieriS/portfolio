@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { locales } from './content';
 import { caseStudyPath } from '../lib/routes';
-import { expectView, gotoView } from './helpers';
+import { expectView, gotoView, MIN_TARGET_PX } from './helpers';
 
 const toggle = (page: Page) => page.locator('[data-motion-toggle]');
 
@@ -41,8 +41,8 @@ test('the pause control works from the keyboard and names its state', async ({ p
 test('the pause control has a 44 px hit area', async ({ page }) => {
   await gotoView(page, 'en', 'hero');
   const box = (await toggle(page).boundingBox())!;
-  expect(box.width).toBeGreaterThanOrEqual(44);
-  expect(box.height).toBeGreaterThanOrEqual(44);
+  expect(box.width).toBeGreaterThanOrEqual(MIN_TARGET_PX);
+  expect(box.height).toBeGreaterThanOrEqual(MIN_TARGET_PX);
 });
 
 test('while paused the scene does not change', async ({ page, browserName }) => {

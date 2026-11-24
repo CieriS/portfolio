@@ -8,6 +8,13 @@ import { CASE_STUDY_IDS, caseStudyPath, LOCALE_NAMES, LOCALES, pathFor, VIEW_IDS
 export { LOCALES, VIEW_IDS as VIEWS, pathFor, type Locale, type ViewId } from '../lib/routes';
 
 /** Every locale × view pair, as the app prerenders them. */
+/**
+ * Smallest touch target accepted (WCAG 2.5.5, 44 CSS px). Layout can land a hair under the CSS
+ * value (WebKit measured 43.99999 px for a 44 px control), so the check allows one hundredth of
+ * a pixel: a real shortfall is always much larger.
+ */
+export const MIN_TARGET_PX = 44 - 0.01;
+
 export const ALL_PAGES = LOCALES.flatMap((locale) => VIEW_IDS.map((view) => ({ locale, view, path: pathFor(locale, view) })));
 
 /** Every locale × case study: pages below the projects view, outside the view carousel. */
