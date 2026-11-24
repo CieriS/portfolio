@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactNode } from 'react';
+import { MotionToggle } from '@/components/shell/MotionToggle';
 import { ThemeToggle } from '@/components/shell/ThemeToggle';
 import { DISPLAY_TITLE, Emphasis, Meta } from '@/components/ui/text';
 import type { Locale } from '@/i18n/routing';
@@ -80,10 +81,16 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
               </span>
             </a>
           </div>
-          <NextIntlClientProvider locale={locale} messages={{ theme: ui.theme, locale: ui.locale }} timeZone="UTC">
+          <NextIntlClientProvider
+            locale={locale}
+            messages={{ theme: ui.theme, locale: ui.locale, motion: ui.motion }}
+            timeZone="UTC"
+          >
             <div className="flex items-center gap-4 sm:gap-6">
               <CaseStudyLocaleSwitch locale={locale} id={id} />
               <ThemeToggle />
+              {/* The scene runs here too: the pause chosen in the views holds, and can be changed here (#142). */}
+              <MotionToggle />
             </div>
           </NextIntlClientProvider>
         </header>
@@ -210,40 +217,45 @@ export function CaseStudyPage({ locale, id }: { locale: Locale; id: CaseStudyId 
 
             {data.measures.length > 0 && (
               <Section title={text.measures.title}>
-                <div className="md:col-span-9">
+                {/* `min-w-0`: a grid item otherwise grows to the table's width and widens the page. */}
+                <div className="min-w-0 md:col-span-9">
                   <Prose>
                     <p>{text.measures.body}</p>
                   </Prose>
-                  <table className="mt-10 w-full max-w-2xl text-left text-body">
-                    <caption className="caption-bottom pt-4 text-left text-sm text-muted">{text.measures.note}</caption>
-                    <thead>
-                      <tr className="border-b border-line">
-                        {[text.measures.columns.query, text.measures.columns.before, text.measures.columns.after].map(
-                          (column, index) => (
-                            <th
-                              key={column}
-                              scope="col"
-                              className={cn('py-3 font-normal', index > 0 && 'pl-6 text-right whitespace-nowrap')}
-                            >
-                              <Meta as="span">{column}</Meta>
-                            </th>
-                          ),
-                        )}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data.measures.map((measure) => (
-                        <tr key={measure.id} className="border-b border-line">
-                          <th scope="row" className="py-4 pr-6 font-normal">
-                            {pick(text.measures.rows, measure.id)}
-                            <span className="mt-1 block font-mono text-label text-muted">{measure.query}</span>
-                          </th>
-                          <td className="py-4 pl-6 text-right whitespace-nowrap text-muted tabular-nums">{measure.before}</td>
-                          <td className="py-4 pl-6 text-right font-medium whitespace-nowrap tabular-nums">{measure.after}</td>
+                  {/* At 320 px the table is wider than the screen: only it scrolls, not the page (#146).
+                      Focusable and named so the keyboard can scroll it too. */}
+                  <div role="region" aria-label={text.measures.title} tabIndex={0} className="mt-10 max-w-2xl overflow-x-auto">
+                    <table className="w-full text-left text-body">
+                      <caption className="caption-bottom pt-4 text-left text-sm text-muted">{text.measures.note}</caption>
+                      <thead>
+                        <tr className="border-b border-line">
+                          {[text.measures.columns.query, text.measures.columns.before, text.measures.columns.after].map(
+                            (column, index) => (
+                              <th
+                                key={column}
+                                scope="col"
+                                className={cn('py-3 font-normal', index > 0 && 'pl-6 text-right whitespace-nowrap')}
+                              >
+                                <Meta as="span">{column}</Meta>
+                              </th>
+                            ),
+                          )}
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {data.measures.map((measure) => (
+                          <tr key={measure.id} className="border-b border-line">
+                            <th scope="row" className="py-4 pr-6 font-normal">
+                              {pick(text.measures.rows, measure.id)}
+                              <span className="mt-1 block font-mono text-label text-muted">{measure.query}</span>
+                            </th>
+                            <td className="py-4 pl-6 text-right whitespace-nowrap text-muted tabular-nums">{measure.before}</td>
+                            <td className="py-4 pl-6 text-right font-medium whitespace-nowrap tabular-nums">{measure.after}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </Section>
             )}

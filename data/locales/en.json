@@ -41,6 +41,7 @@
       "projects": "Projects"
     },
     "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "Auto" },
+    "motion": { "pause": "Pause animations" },
     "locale": { "label": "Language", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
     "shell": {
       "role": "Software Developer, moving into Data Engineering",

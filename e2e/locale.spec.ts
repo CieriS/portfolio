@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectView, gotoView, localeOptionName, LOCALES, pathFor, switchLocale } from './helpers';
+import { expectView, gotoView, localeOptionName, LOCALES, pathFor, switchLocale, pressViewDigit } from './helpers';
 
 const TRIGGER = 'header button[aria-haspopup="listbox"]';
 
@@ -96,7 +96,7 @@ test('Escape and an outside click close the menu without switching', async ({ pa
 
 test('going back across a language switch realigns the URL', async ({ page }) => {
   await gotoView(page, 'en', 'hero');
-  await page.keyboard.press('4');
+  await pressViewDigit(page, 4);
   await expectView(page, 'en', 'projects');
 
   await switchLocale(page, 'fr');
@@ -114,11 +114,11 @@ test('going back across a language switch realigns the URL', async ({ page }) =>
 // slug and pushed a new entry, which erased Forward.
 test('Back then Forward across a language switch keeps every history entry', async ({ page }) => {
   await gotoView(page, 'en', 'hero');
-  await page.keyboard.press('2');
+  await pressViewDigit(page, 2);
   await expectView(page, 'en', 'identity');
   await switchLocale(page, 'it');
   await expectView(page, 'it', 'identity');
-  await page.keyboard.press('3');
+  await pressViewDigit(page, 3);
   await expectView(page, 'it', 'timeline');
   const length = await page.evaluate(() => history.length);
 

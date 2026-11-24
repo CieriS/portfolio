@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectView, gotoView, navLabel, VIEWS } from './helpers';
+import { expectView, gotoView, navLabel, VIEWS, pressViewDigit } from './helpers';
 
 /**
  * The canvas is mounted in the root layout, above every view. Without a boundary a throw
@@ -22,6 +22,6 @@ test('the site survives a WebGL failure and only loses the canvas', async ({ pag
   await expect(page.locator('h1')).toHaveCount(1);
 
   // And navigation still works with no scene behind it.
-  await page.keyboard.press('2');
+  await pressViewDigit(page, 2);
   await expectView(page, 'en', 'identity');
 });

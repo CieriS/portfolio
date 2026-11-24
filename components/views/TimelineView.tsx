@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { EASE_OUT, fade } from '@/components/motion/Reveal';
+import { useStill } from '@/components/motion/useStill';
 import { cn } from '@/lib/cn';
 import { formatDate, pad, pick } from '@/lib/format';
 import { useNow } from '@/lib/hooks';
@@ -16,9 +17,13 @@ const SEGMENT_STAGGER = 0.5;
 type TimelineCopy = PortfolioView['content']['timeline'];
 type ThreadCopy = TimelineCopy['threads'][keyof TimelineCopy['threads']];
 
-/** Isolated so the per-second tick re-renders only this node. */
+/**
+ * Isolated so the per-second tick re-renders only this node. Still (reduced motion or paused,
+ * #143) it moves once a minute: the value stays true without a number changing every second.
+ */
 function Uptime({ thread, days, fallback }: { thread: Thread | undefined; days: string; fallback: string }) {
-  const now = useNow(1_000);
+  const still = useStill();
+  const now = useNow(still ? 60_000 : 1_000);
   if (!thread || now === null) return <>{fallback}</>;
   return <>{formatUptime(activeMs(spansOf(thread, now)), days)}</>;
 }

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { locales } from './content';
-import { expectView, gotoView, LOCALES, navLinkName, pathFor, VIEWS } from './helpers';
+import { expectView, gotoView, LOCALES, navLinkName, pathFor, VIEWS, pressViewDigit } from './helpers';
 
 /** Marks the document so a full page reload can be told apart from a client-side swap. */
 async function markNoReload(page: import('@playwright/test').Page) {
@@ -26,7 +26,7 @@ test('number and arrow shortcuts move between views', async ({ page }) => {
   await gotoView(page, 'en', 'hero');
   await markNoReload(page);
 
-  await page.keyboard.press('4');
+  await pressViewDigit(page, 4);
   await expectView(page, 'en', 'projects');
 
   // The order wraps around, so from the last view ArrowRight lands on the first.
@@ -39,11 +39,25 @@ test('number and arrow shortcuts move between views', async ({ page }) => {
   expect(await stillSamePage(page)).toBe(true);
 });
 
+// #121 (WCAG 2.1.4): a bare digit acting page-wide fires when speech input dictates a number.
+test('a digit pressed outside the view menu does not change view', async ({ page }) => {
+  await gotoView(page, 'en', 'hero');
+  await page.keyboard.press('3');
+  await page.locator('main > section').focus();
+  await page.keyboard.press('2');
+  await page.waitForTimeout(300);
+  await expectView(page, 'en', 'hero');
+
+  // The arrows keep working from anywhere.
+  await page.keyboard.press('ArrowRight');
+  await expectView(page, 'en', 'identity');
+});
+
 test('back and forward retrace the view history', async ({ page }) => {
   await gotoView(page, 'en', 'hero');
-  await page.keyboard.press('2');
+  await pressViewDigit(page, 2);
   await expectView(page, 'en', 'identity');
-  await page.keyboard.press('4');
+  await pressViewDigit(page, 4);
   await expectView(page, 'en', 'projects');
 
   await page.goBack();

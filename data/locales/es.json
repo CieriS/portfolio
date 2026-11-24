@@ -41,6 +41,7 @@
       "projects": "Proyectos"
     },
     "theme": { "label": "Tema", "light": "Claro", "dark": "Oscuro", "system": "Auto" },
+    "motion": { "pause": "Pausar las animaciones" },
     "locale": { "label": "Idioma", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
     "shell": {
       "role": "Software Developer, hacia la ingeniería de datos",

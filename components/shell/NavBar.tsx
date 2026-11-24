@@ -15,7 +15,8 @@ export function NavBar() {
   const shell = useTranslations('shell');
 
   return (
-    <nav aria-label={shell('nav')} className="select-none">
+    // `data-view-keys`: the digit shortcuts act only while focus is in here (#121).
+    <nav aria-label={shell('nav')} data-view-keys className="select-none">
       <ul className="flex items-center gap-3 min-[400px]:gap-4 md:gap-8">
         {VIEW_IDS.map((id, index) => {
           const isActive = id === active;

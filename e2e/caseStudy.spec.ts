@@ -4,7 +4,7 @@ import ariaer from '../data/case-studies/ariaer.json';
 import yourfinance from '../data/case-studies/yourfinance.json';
 import { caseStudyPath, CASE_STUDY_IDS, contactsPath, LOCALES, type CaseStudyId } from '../lib/routes';
 import { locales, shared } from './content';
-import { CASE_STUDY_PAGES, expectView, gotoView, pathFor, switchLocale } from './helpers';
+import { CASE_STUDY_PAGES, expectView, gotoView, pathFor, switchLocale, pressViewDigit } from './helpers';
 
 /**
  * The case studies: prerendered pages below the projects view. yourFinance is private, so its
@@ -226,7 +226,7 @@ test('only projects with a case study link to one', async ({ page }) => {
 test('browser back from the case study returns to the view it was opened from', async ({ page }) => {
   // The view was reached by a keypress, so its history entry was pushed without a navigation.
   await gotoView(page, 'en', 'hero');
-  await page.keyboard.press('4');
+  await pressViewDigit(page, 4);
   await expectView(page, 'en', 'projects');
   await page.getByRole('button', { name: /yourFinance/ }).click();
   await page.locator('#project-yourfinance').getByRole('link', { name: locales.en.projects.labels.caseStudy }).click();
@@ -332,4 +332,22 @@ test.describe('aria-er live results', () => {
     await page.goto(caseStudyPath('en', 'yourfinance'));
     await expect(page.locator('[data-live]')).toHaveCount(0);
   });
+});
+
+// #146: at 320 px the "Checked against ARPAE" table widened `main` to 338 px.
+for (const { locale, id, path } of CASE_STUDY_PAGES) {
+  test(`at 320 px main has no horizontal overflow (${id}, ${locale})`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto(path);
+    const overflow = await page.locator('main').evaluate((el) => el.scrollWidth - el.clientWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
+
+test('a table wider than the screen scrolls on its own and is reachable by keyboard', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto(caseStudyPath('en', 'ariaer'));
+  const region = page.getByRole('region', { name: ariaer.copy.en.measures.title });
+  await expect(region).toHaveAttribute('tabindex', '0');
+  await expect(region.locator('caption')).toHaveText(ariaer.copy.en.measures.note);
 });

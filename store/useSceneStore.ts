@@ -14,19 +14,26 @@ type SceneState = {
   pointer: ScenePointer;
   mode: ViewId;
   palette: ScenePalette;
+  /** The visitor paused the scene and the decorative loops (#142); see `lib/motionPreference.ts`. */
+  paused: boolean;
   setMode: (mode: ViewId) => void;
   setPalette: (palette: ScenePalette) => void;
+  setPaused: (paused: boolean) => void;
 };
 
 export const useSceneStore = create<SceneState>()((set, get) => ({
   pointer: { x: 0, y: 0, active: false, touch: false, snap: false },
   mode: 'hero',
   palette: THEME.dark,
+  paused: false,
   setMode: (mode) => {
     if (get().mode !== mode) set({ mode });
   },
   setPalette: (palette) => {
     if (get().palette !== palette) set({ palette });
+  },
+  setPaused: (paused) => {
+    if (get().paused !== paused) set({ paused });
   },
 }));
 

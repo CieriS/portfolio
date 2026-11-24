@@ -60,7 +60,8 @@ export function ViewFrame({ children, label }: { children: ReactNode; label: str
       initial="enter"
       animate="center"
       exit="exit"
-      className="absolute inset-0 no-scrollbar overflow-y-auto overscroll-contain fade-edges"
+      // On short screens the scroll chains to the shell, so header and menu can scroll away (#141).
+      className="absolute inset-0 no-scrollbar overflow-y-auto overscroll-contain fade-edges short:overscroll-auto"
     >
       {thumb && (
         // Zero-height sticky anchor: the indicator stays put while the content scrolls under it.

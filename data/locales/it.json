@@ -41,6 +41,7 @@
       "projects": "Progetti"
     },
     "theme": { "label": "Tema", "light": "Chiaro", "dark": "Scuro", "system": "Auto" },
+    "motion": { "pause": "Metti in pausa le animazioni" },
     "locale": { "label": "Lingua", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
     "shell": {
       "role": "Software Developer, verso il Data Engineering",

@@ -1,6 +1,11 @@
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
+/*
+ * Short screens: high zoom (1280 × 720 at 200% is 640 × 360) and phones in landscape. There the
+ * fixed header and menu left the view a strip (#141, WCAG 1.4.10), so they scroll away instead.
+ */
+@custom-variant short (@media (max-height: 30rem));
 
 :root {
   /* Paper and ink are mirrored in lib/theme.ts for the scene and the browser chrome. */
@@ -233,6 +238,14 @@ html:not([data-booted]) .intro-line {
 html:not([data-booted]) .intro-fade {
   animation: intro-fade 1.2s var(--ease-expo) both;
   animation-delay: calc(var(--i, 0) * 90ms + 360ms);
+}
+
+/*
+ * The visitor paused the animations (#142, `MotionToggle`): the decorative loops go, as they do
+ * under reduced motion. The entrance animations are left alone: they end on their own.
+ */
+html[data-motion='paused'] :is(.packet-travel, .animate-ping) {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

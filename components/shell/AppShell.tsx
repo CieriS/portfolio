@@ -15,6 +15,7 @@ import type { PortfolioView } from '@/lib/portfolio';
 import { VIEW_IDS, type ViewId } from '@/lib/views';
 import { useViewStore } from '@/store/viewStore';
 import { LocaleSwitch } from './LocaleSwitch';
+import { MotionToggle } from './MotionToggle';
 import { NavBar } from './NavBar';
 import { ThemeToggle } from './ThemeToggle';
 import { useViewNavigation } from './useViewNavigation';
@@ -44,7 +45,8 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="relative z-10 flex h-dvh flex-col">
+      {/* On short screens (#141) the whole shell scrolls: header and menu leave, the view fills the screen. */}
+      <div className="relative z-10 flex h-dvh flex-col short:block short:overflow-y-auto">
         {/* First tab stop: jumps past header and language/theme controls, straight into the view. */}
         <a
           href="#main"
@@ -66,10 +68,11 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
           <div className="flex items-center gap-6">
             <LocaleSwitch locale={locale} onChange={onLocaleChange} />
             <ThemeToggle />
+            <MotionToggle />
           </div>
         </header>
 
-        <main id="main" className="relative min-h-0 flex-1">
+        <main id="main" className="relative min-h-0 flex-1 short:h-dvh">
           <AnimatePresence mode="wait" initial={false}>
             <ViewFrame key={`${active}:${locale}`} label={nav(active)}>
               {RENDER[active](data)}
