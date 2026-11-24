@@ -18,6 +18,7 @@ Le site est disponible en anglais, en italien, en français et en allemand.
 - [Navigation et interactions](#navigation-et-interactions)
 - [Architecture](#architecture)
 - [SEO](#seo)
+- [Lisible par les agents IA](#lisible-par-les-agents-ia)
 - [Accessibilité](#accessibilité)
 - [Sélection du texte](#sélection-du-texte)
 - [Données et contenus](#données-et-contenus)
@@ -249,7 +250,7 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 - **Images Open Graph** en 1200 × 630, générées au build pour chaque langue et chaque vue (`opengraph-image.tsx`, `lib/og.tsx`), avec l'icône de l'ancien site. L'icône est une copie de 56 px (`lib/og-icon.png`, environ 3 Ko), la taille à laquelle elle est dessinée : il faut la régénérer à partir de `app/icon.png` si l'icône change.
 - Les métadonnées et le JSON-LD ont des tests unitaires pour chaque langue et page (`lib/seo.test.ts`, `lib/structuredData.test.ts`) : canonical, hreflang complets, robots (y compris `noindex` sur les aperçus), types du graphe et liens entre nœuds.
 - **JSON-LD** `@graph` (`lib/structuredData.ts`) : `WebSite`, `Person` (avec `alternateName`, `address`, `knowsAbout` et `sameAs` ; `url` est la racine du site dans toutes les langues), `ProfilePage`, `BreadcrumbList` sur les vues internes et `ItemList` de `SoftwareSourceCode` sur la vue des projets.
-- **`sitemap.xml`** avec alternatives hreflang, **`robots.txt`**, **`manifest.webmanifest`**, ainsi qu'un favicon et des icônes dérivés de l'icône de l'ancien site.
+- **`sitemap.xml`** avec alternatives hreflang et un `lastmod` par page (la date de ses données, comme `dateModified`), **`robots.txt`**, **`manifest.webmanifest`**, ainsi qu'un favicon et des icônes dérivés de l'icône de l'ancien site.
 - **Indexation maîtrisée** : seule la production est indexable (voir [Variables d'environnement](#variables-denvironnement)). La balise `robots` est définie par page, pas dans le layout : la 404 ne porte donc que le `noindex` de Next.
 - **Contenu des projets toujours dans le HTML** : les panneaux fermés de l'accordéon restent montés (hauteur nulle, `inert`), donc les textes et le lien vers le dépôt de chaque projet sont dans la page prérendue sans aucune interaction.
 - **Structure des pages** : un seul `h1` par URL, de vrais liens dans la navigation, `rel="me"` sur les profils sociaux, en-tête `X-Powered-By` désactivé.
@@ -272,6 +273,23 @@ Sous la vue Systèmes, il y a une page de plus pour les projets qui ont une étu
 4. Les demandes d'indexation manuelles sont limitées à quelques-unes par jour. Réservez-les aux URL avec la langue (`/en`, `/it`, `/en/systems`, …) : la racine `/` répond par une redirection et n'est jamais indexée comme page.
 
 Avec un domaine personnalisé, préférez une propriété de type « Domaine », validée par DNS.
+
+## Lisible par les agents IA
+
+Les assistants et les agents de code lisent souvent un site avec un outil de fetch, pas avec un navigateur. À côté du HTML et du JSON-LD, le site sert des fichiers écrits pour eux, tous générés au build depuis `data/` par des fonctions pures dans `lib/agents/` (testées avec Vitest) : ils ne peuvent pas diverger des pages.
+
+| Fichier | Ce que c'est | En-têtes |
+| --- | --- | --- |
+| `/llms.txt` | point d'entrée au format [llms.txt](https://llmstxt.org/) : résumé, pages, projets, contacts, autres langues | `text/plain`, indexable en production |
+| `<URL de la page>.md` (`/en.md`, `/it/identita.md`, `/en/systems/yourfinance.md`) | chaque vue et étude de cas dans chaque langue en Markdown, liée depuis sa page par `<link rel="alternate" type="text/markdown">` | `text/markdown`, `noindex` |
+| `/llms-full.txt`, `/<langue>/llms-full.txt` | tout le site en un fichier : les pages Markdown à la suite, aucun texte écrit seulement là (budget 60 Ko) | `text/plain`, `noindex` |
+
+- Les chemins viennent de `lib/routes.ts` via `lib/agents/paths.ts`. `<page>.md` et `/<langue>/llms-full.txt` tomberaient dans les routes des pages : `next.config.ts` réécrit chaque adresse (une règle littérale par fichier) vers les route handlers internes sous `app/agents/`, que `proxy.ts` ignore. Ils ne sont pas dans le sitemap.
+- **Un nouveau champ affiché sur une page doit aussi être rendu en Markdown** : `lib/agents/markdown.test.ts` parcourt chaque texte de la vue et échoue si le Markdown en omet un (les rares exceptions sont listées dans le test avec leur raison).
+- Jamais dans ces fichiers : adresses e-mail, téléphones ou valeurs d'environnement (le CV est « sur demande via le formulaire »), ni lien vers le dépôt d'un projet privé (testé).
+- Le JSON-LD porte `dateModified` (le dernier commit qui a touché les fichiers de données de la page, `lib/lastModified.ts` ; la même date est le `lastmod` du sitemap) et `seeks` sur `Person` (le rôle de `shared.seeks`, que `hero.seeking` de chaque langue doit nommer).
+- Comment vérifier ce que les assistants répondent sur le site, et les résultats : [`docs/ai-agents.md`](docs/ai-agents.md).
+- **`robots.txt`** (`lib/agents/crawlers.ts`, #175) : tous les robots IA sont admis, écrits par groupe (recherche, fetch à la demande d'un utilisateur, entraînement) depuis une seule liste testée ; `/api/` est fermé à tous ; les previews ont `Disallow: /`.
 
 ## Accessibilité
 
@@ -404,6 +422,8 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   │       ├── opengraph-image.tsx  image Open Graph par vue
 │   │       └── [study]/             étude de cas d'un projet (page + image Open Graph)
 │   ├── api/cv/route.ts              téléchargement du CV (seule route dynamique)
+│   ├── llms.txt/route.ts            point d'entrée pour les agents IA
+│   ├── agents/                      pages Markdown et llms-full.txt (atteintes par réécriture)
 │   ├── globals.css                  tokens de couleur, typo et espaces, utilitaires Tailwind, intro CSS
 │   ├── sitemap.ts · robots.ts · manifest.ts
 │   └── favicon.ico · icon.png · apple-icon.png
@@ -425,6 +445,7 @@ TypeScript signale chaque étape oubliée, car toutes ces tables sont typées su
 │   └── locales/                     en.json · it.json · fr.json · de.json : textes, interface, métadonnées SEO
 ├── i18n/             routing.ts (langues) · request.ts (messages next-intl)
 ├── lib/              routes, views, portfolio, timeline, scroll, seo, site, verification, errorCopy, structuredData, theme, og, caseStudy, caseStudyImages, liveResults, dataOrigins, importGraph, sceneField, projects, versions, format, hooks, cn
+│   ├── agents/       paths, markdown, llmsTxt, fullText, render, crawlers (fichiers pour les agents IA)
 │   ├── content/      schema (zod) · validate (contrôles croisés)
 │   └── cv/           service, token, config, document, pdf, mailer, copy, profile, common (CV sur demande)
 ├── store/            viewStore (par instance) · useSceneStore (scène, transitoire)

@@ -71,6 +71,15 @@ test.describe(`${expected.environment} deployment at ${baseURL}`, () => {
     expect(await sitemap.text()).toContain(`<loc>${siteUrl}/${DEFAULT_LOCALE}</loc>`);
   });
 
+  // #172–#174: the files for agents, with an AI user agent so bot protection would show here.
+  for (const path of ['/llms.txt', '/llms-full.txt', '/it/llms-full.txt', `/${DEFAULT_LOCALE}/identity.md`]) {
+    test(`${path} is served to AI agents`, async ({ request }) => {
+      const response = await request.get(path, { headers: { 'User-Agent': 'ClaudeBot/1.0' }, maxRedirects: 0 });
+      expect(response.status()).toBe(200);
+      expect(response.headers()['content-type']).toMatch(path.endsWith('.md') ? /^text\/markdown/ : /^text\/plain/);
+    });
+  }
+
   test('the CV endpoint is up and rejects a forged link', async ({ request }) => {
     // 503 in production would mean the CV variables are missing on Vercel.
     const status = (await request.get('/api/cv?token=forged.token')).status();

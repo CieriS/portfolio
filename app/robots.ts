@@ -1,13 +1,9 @@
 import type { MetadataRoute } from 'next';
-import { absoluteUrl, IS_INDEXABLE, SITE_URL } from '@/lib/site';
+import { buildRobotsRules } from '@/lib/agents/crawlers';
+import { absoluteUrl, IS_INDEXABLE } from '@/lib/site';
 
+// AI crawlers written out by group (#175); preview deployments stay out of search results entirely.
 export default function robots(): MetadataRoute.Robots {
-  // Preview deployments stay out of search results entirely.
-  if (!IS_INDEXABLE) return { rules: [{ userAgent: '*', disallow: '/' }] };
-
-  return {
-    rules: [{ userAgent: '*', allow: '/' }],
-    sitemap: absoluteUrl('/sitemap.xml'),
-    host: SITE_URL,
-  };
+  const rules = buildRobotsRules(IS_INDEXABLE);
+  return IS_INDEXABLE ? { rules, sitemap: absoluteUrl('/sitemap.xml') } : { rules };
 }

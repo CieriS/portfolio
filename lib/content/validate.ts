@@ -6,6 +6,7 @@ import type { SharedData } from './schema';
  */
 export type CopyUnderCheck = {
   ui: { locale: Record<string, string> };
+  hero: { seeking: string };
   timeline: { threads: Record<string, { phases: Record<string, unknown> }> };
   projects: { items: Record<string, { layers: Record<string, string> }> };
 };
@@ -48,6 +49,9 @@ export function findContentIssues(shared: SharedData, contents: Record<string, C
         if (!item.layers[layer.id]) issues.push(`${at(`projects.items.${project.id}.layers`)} has no copy for "${layer.id}"`);
       }
     }
+
+    // One source for the role sought: the JSON-LD names `shared.seeks.role`, the page says the sentence.
+    if (!copy.hero.seeking.includes(shared.seeks.role)) issues.push(`${at('hero.seeking')} does not name "${shared.seeks.role}"`);
 
     issues.push(...findEmphasisIssues(copy, locale));
   }

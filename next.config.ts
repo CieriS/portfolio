@@ -1,6 +1,7 @@
 import { DATA_ORIGINS } from './lib/dataOrigins';
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
+import { agentRewrites } from './lib/agents/paths';
 import { aliasRedirects } from './lib/aliases';
 import { retiredViewRedirects } from './lib/routes';
 import { SITE_URL } from './lib/site';
@@ -80,6 +81,11 @@ const nextConfig: NextConfig = {
       // The other *.vercel.app hosts of this project, so search engines index one copy (#67).
       ...aliasRedirects(SITE_URL),
     ];
+  },
+  // Files for AI agents (#173, #174): `/en/identity.md` and `/it/llms-full.txt` would otherwise
+  // match the page routes `[locale]/[view]`. Before the filesystem, so they win over them.
+  async rewrites() {
+    return { beforeFiles: agentRewrites(), afterFiles: [], fallback: [] };
   },
 };
 

@@ -9,6 +9,7 @@
     { "id": "github", "label": "GitHub", "handle": "@CieriS", "url": "https://github.com/CieriS/" },
     { "id": "instagram", "label": "Instagram", "handle": "@samuelecierii", "url": "https://www.instagram.com/samuelecierii/" }
   ],
+  "seeks": { "role": "Data Engineer" },
   "sponsor": { "label": "GitHub Sponsors", "url": "https://github.com/sponsors/CieriS" },
   "certifications": [
     {

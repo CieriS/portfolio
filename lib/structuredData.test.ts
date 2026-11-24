@@ -87,3 +87,28 @@ describe('buildCaseStudyJsonLd', () => {
     }
   });
 });
+
+describe('dateModified, seeks and lastmod (#176)', () => {
+  const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
+
+  it.each(LOCALES)('%s: every profile page and case study has an ISO dateModified, the same as the sitemap', async (locale) => {
+    const { default: sitemap } = await import('../app/sitemap');
+    const lastmod = new Map(sitemap().map((entry) => [entry.url, entry.lastModified]));
+    for (const view of VIEW_IDS) {
+      const page = byType(buildJsonLd(locale, view), 'ProfilePage')!;
+      expect(page.dateModified).toMatch(ISO_DAY);
+      expect(lastmod.get(absoluteUrl(pathFor(locale, view)))).toBe(page.dateModified);
+    }
+    for (const id of CASE_STUDY_IDS) {
+      const article = byType(buildCaseStudyJsonLd(locale, id), 'TechArticle')!;
+      expect(article.dateModified).toMatch(ISO_DAY);
+      expect(lastmod.get(absoluteUrl(caseStudyPath(locale, id)))).toBe(article.dateModified);
+    }
+  });
+
+  it.each(LOCALES)('%s: seeks names the role of shared.json and says the sentence of the page', (locale) => {
+    const person = byType(buildJsonLd(locale, 'identity'), 'Person')!;
+    const { contents } = getPortfolioBundle();
+    expect(person.seeks).toEqual({ '@type': 'Demand', name: shared.seeks.role, description: contents[locale].hero.seeking });
+  });
+});
