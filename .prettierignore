@@ -8,3 +8,5 @@ tsconfig.tsbuildinfo
 # Hand-aligned tables and trees read better than Prettier's rewrap.
 *.md
 .lighthouseci/
+# Local git worktrees: each one is checked in its own folder.
+.claude/
