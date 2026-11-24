@@ -77,7 +77,9 @@ npm install
 npm run dev
 ```
 
-Le site tourne sur http://localhost:3000. La racine `/` redirige vers `/en` ou `/it` selon la langue du navigateur.
+Le site tourne sur http://localhost:3000. La racine `/` redirige vers l'une des cinq langues (`/en`, `/it`, `/fr`, `/de`, `/es`) selon la langue du navigateur, vers l'anglais si aucune ne correspond.
+
+Avant le premier `npm test`, installez les navigateurs de Playwright : `npx playwright install` (sous Linux `npx playwright install --with-deps`).
 
 Pour le tester sur un smartphone connecté au même réseau, ouvrez l'adresse *Network* affichée par `npm run dev` (par exemple `http://192.168.1.69:3000`). Les hôtes `192.168.*.*`, `10.*` et `*.local` sont déjà autorisés par `allowedDevOrigins` dans `next.config.ts` ; sans cette entrée, la page s'affiche mais ne s'hydrate jamais.
 
@@ -117,11 +119,19 @@ Aucune variable n'est obligatoire : en local, le projet fonctionne sans configur
 
 Les variables du CV sont lues par la route `/api/cv` au démarrage du serveur, pas au build : les pages statiques ne les contiennent jamais. Sans aucune d'elles, le site fonctionne et le formulaire répond « indisponible ».
 
-En local, vous pouvez créer un fichier `.env.local`, déjà ignoré par Git :
+En local, vous pouvez créer un fichier `.env.local`, déjà ignoré par Git, avec les seules variables utiles (valeurs inventées) :
 
 ```bash
 SITE_URL=https://www.example.com
-GOOGLE_SITE_VERIFICATION=votre-jeton
+GOOGLE_SITE_VERIFICATION=example-verification-token
+# CV on request: leave them out and the form answers "not available"
+CV_ADMIN_PASSWORD=at-least-16-characters
+CV_LINK_SECRET=at-least-32-characters-from-openssl-rand
+RESEND_API_KEY=re_example
+CV_MAIL_FROM=Example Name <cv@example.com>
+CV_NOTIFY_EMAIL=owner@example.com
+CV_EMAIL=name@example.com
+CV_PHONE=+00 000 000 0000
 ```
 
 ## Vues et URL
@@ -460,6 +470,22 @@ Les issues et les pull requests sont rédigées en anglais ; les messages de com
 Après chaque déploiement réussi, Vercel le signale à GitHub et `.github/workflows/smoke.yml` lance `npm run test:smoke` sur l'URL déployée, avec le code de ce commit : toutes les pages (200, hydratation sans erreur, canonical, `robots` de l'environnement), la redirection de la racine, la 404, les en-têtes, `robots.txt` et le sitemap, l'endpoint du CV (en production un jeton falsifié doit recevoir 403 : 503 signifie que les variables manquent sur Vercel) et, en production seulement, le 308 des autres alias. Les attentes par environnement sont dans `lib/smoke.ts`. Ce n'est pas un contrôle obligatoire : la production se vérifie après la fusion.
 
 Sinon, depuis le terminal : `npx vercel login`, puis `npx vercel` (prévisualisation) et `npx vercel --prod` (production).
+
+### Revenir en arrière (rollback)
+
+Le merge sur `development` est le déploiement en production, et les smoke tests qui tournent ensuite ne bloquent rien. On revient en arrière quand :
+
+- les smoke tests sur le déploiement de production sont rouges ;
+- la page d'accueil ou `/api/cv` répondent 5xx ;
+- la CSP bloque l'hydratation (page affichée mais rien ne répond, erreurs CSP dans la console).
+
+Étapes :
+
+1. **Instant Rollback sur Vercel** : projet → **Deployments**, le déploiement de production précédent → menu **⋯** → **Instant Rollback** (ou `npx vercel rollback <url-ou-id>`). Le trafic revient au déploiement précédent en quelques secondes, sans rebuild. Avec l'offre Hobby, seul le déploiement de production immédiatement précédent est disponible.
+2. Après un rollback, Vercel n'attribue plus les domaines de production aux nouveaux déploiements : tant qu'il n'est pas annulé, un merge suivant n'arrive pas non plus en production.
+3. **Revert par une PR** : `development` n'accepte pas de push direct, donc `git revert -m 1 <merge-commit>` sur une branche `features/revert-<nom>`, PR vers `development`, merge avec la CI verte.
+4. Quand le déploiement du revert (ou du correctif) est prêt, le promouvoir : **Promote to Production** sur le déploiement, ou `npx vercel promote <url-ou-id>`. La promotion annule le rollback et réactive l'attribution automatique des domaines.
+5. Relancer les smoke tests sur la production : `SMOKE_BASE_URL=https://cieri.vercel.app SMOKE_ENV=production npm run test:smoke`.
 
 ### Build de production en local
 
