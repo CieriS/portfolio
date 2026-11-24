@@ -53,3 +53,13 @@ test('the Markdown files are not in the sitemap', async ({ request }) => {
 test('an unknown Markdown page is a 404', async ({ request }) => {
   expect((await request.get('/en/nope.md')).status()).toBe(404);
 });
+
+test('robots.txt allows the AI crawlers by group and closes /api/ (#175)', async ({ request }) => {
+  const body = await (await request.get('/robots.txt')).text();
+  for (const name of ['OAI-SearchBot', 'Claude-User', 'GPTBot', 'ClaudeBot', 'PerplexityBot']) {
+    expect(body).toMatch(new RegExp(`^User-Agent: ${name}$`, 'm'));
+  }
+  expect(body).toContain('Disallow: /api/');
+  expect(body).not.toMatch(/^Disallow: \/$/m);
+  expect(body).not.toMatch(/^Host:/m);
+});
