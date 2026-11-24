@@ -26,6 +26,16 @@ export function compareVersions(a: string, b: string): number {
 }
 
 /**
+ * The milestone a version pull request belongs to: the lowest open one named as a version, so
+ * the release notes group it under its label instead of "Other" (#120). Null when none is open:
+ * the pull request is still opened, without a milestone.
+ */
+export function nextMilestone(titles: readonly string[]): string | null {
+  const versions = titles.filter((title) => parseVersion(title));
+  return versions.length ? versions.reduce((low, title) => (compareVersions(title, low) < 0 ? title : low)) : null;
+}
+
+/**
  * The highest published version among a repository's releases. Drafts never count; whether
  * pre-releases do is the caller's choice. GitHub's own "latest" skips them, which would hide a
  * project whose only release so far is a pre-release.

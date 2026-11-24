@@ -86,7 +86,7 @@ To try it on a phone on the same network, open the *Network* address printed by 
 | `npm run dev` | Development server with hot reload at http://localhost:3000 |
 | `npm run build` | Production build: prerenders pages, Open Graph images, sitemap and robots |
 | `npm start` | Serves the production build locally |
-| `npm run lint` | ESLint across the project (build output excluded) |
+| `npm run lint` | ESLint across the project (build output and Playwright reports excluded) |
 | `npm run format` | Formats the project with Prettier (`.prettierrc.json`, with Tailwind class sorting) |
 | `npm run format:check` | Checks formatting without writing, as CI does |
 | `npm run typecheck` | Generates route types (`next typegen`) and type-checks with `tsc --noEmit` |
@@ -327,7 +327,7 @@ The accordion link, sitemap, metadata and Open Graph image follow on their own; 
 `version` and `released` of each project in `data/shared.json` follow the projects' own releases, without typing them by hand.
 
 - `.github/workflows/versions.yml` runs every day, and on demand from the Actions tab. `scripts/sync-versions.mjs` reads the latest release of every project that states a version and, when it is newer, rewrites the two lines; the logic is in `lib/versions.ts`, pure and tested.
-- The workflow never writes to `development`: it opens a pull request from the `features/versioni-dei-progetti` branch (or updates the one already open), the checks run as for any other and merging stays a decision.
+- The workflow never writes to `development`: it opens a pull request from the `features/versioni-dei-progetti` branch (or updates the one already open), with the `semver:patch` label and the lowest open milestone (none when no milestone is open), so the release notes do not file it under "Other". The checks run as for any other and merging stays a decision.
 - Pre-releases count; drafts do not. It never goes back: an equal or older version is ignored.
 - If a check fails in that pull request, some copy depends on the version (for example the aria-er entry, which until 1.0.0 must say what is missing): fix the copy in that branch, then merge.
 - A public project is looked up in the repository of its `source.url`. A private one has no address in the data, on purpose: its repository comes from the `VERSION_SOURCES` secret and appears neither in the files nor in the logs; a test fails if the name ends up in a file.
