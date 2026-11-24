@@ -38,6 +38,10 @@ export function HeroView({ data }: ViewProps) {
             <br />
             <span className="text-muted">{copy.transition}</span>
           </p>
+          {/* The first question of a recruiter, answered next to the role (#104). */}
+          <p data-seeking className="text-[15px] leading-snug">
+            {copy.seeking}
+          </p>
           <p className="flex flex-wrap items-center gap-x-8 gap-y-2 select-none">
             <ViewLink view="projects" data-cta="projects" className="group inline-flex min-h-11 items-center gap-4 text-[15px]">
               <span className="link-underline">{copy.cta}</span>

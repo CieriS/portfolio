@@ -6,12 +6,12 @@
       "siteName": "Samuele Cieri",
       "views": {
         "hero": {
-          "title": "Samuele Cieri — Software Developer & Data Engineering",
+          "title": "Samuele Cieri — Software Developer moving into Data Engineering",
           "description": "Samuele Cieri, Software Developer in Bologna moving into Data Engineering: Angular at work, Rust, PostgreSQL and dbt pipelines in personal projects."
         },
         "identity": {
           "title": "Identity & engineering principles",
-          "description": "An instrumental, engineering-first approach to software: measurable objectives, data as ground truth, flat control flow. GitHub and LinkedIn."
+          "description": "How I choose tools, with an example for each principle from yourFinance and aria-er. Looking for a Data Engineer role, full remote. LinkedIn and GitHub."
         },
         "timeline": {
           "title": "Experience & education timeline",
@@ -24,9 +24,9 @@
       }
     },
     "notFound": {
-      "title": "Not found",
-      "body": "This address does not match any view. The process may have moved or never existed.",
-      "cta": "Back to index"
+      "title": "Page not found",
+      "body": "This address does not match any page on the site.",
+      "cta": "Back to home"
     },
     "nav": {
       "hero": "Index",
@@ -43,7 +43,7 @@
     "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "Auto" },
     "locale": { "label": "Language", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
     "shell": {
-      "role": "Software Developer — Data Engineering",
+      "role": "Software Developer, moving into Data Engineering",
       "nav": "Views",
       "prev": "Previous view",
       "next": "Next view",
@@ -80,48 +80,52 @@
   "hero": {
     "role": "Software Developer",
     "transition": "Transitioning to Data Engineering",
-    "lead": "Building the path from interfaces to systems: typed backends, relational storage, and pipelines that move data with intent.",
+    "seeking": "Looking for a Data Engineer role, full remote.",
+    "lead": "From interfaces to systems: typed backends, relational databases and pipelines that load, test and publish data.",
     "detail": "Since 2022 I have been developing at Tas, frontend and full-stack, today with Angular and TypeScript, while studying Computer Engineering at the University of Bologna. My personal projects run on Rust, PostgreSQL and dbt: yourFinance, a personal finance platform, and aria-er, an air-quality data pipeline.",
-    "hint": "Move the cursor — every node is a unit of computation",
+    "hint": "Move the cursor: the dots react as it passes",
     "cta": "See the projects"
   },
   "identity": {
-    "title": "Software is an instrument.",
-    "titleEmphasis": "instrument",
-    "subtitle": "Every language, schema and abstraction is chosen for its measurable contribution to an objective — never by habit or taste.",
+    "title": "How I work, and where to reach me.",
+    "titleEmphasis": "How I work",
+    "subtitle": "I choose languages, schemas and abstractions for what they do for the project, and I can say why for each one.",
     "principlesTitle": "Principles",
     "principles": [
       {
         "title": "Instrumental rationality",
-        "body": "Means are evaluated against ends. What does not move the objective is removed."
+        "body": "I pick a tool for what the project needs. aria-er has no streaming: the sources publish hours late and every question is daily, so a daily batch answers them."
       },
-      { "title": "Engineering before ornament", "body": "Specify, measure, then build. Form is a consequence of constraints." },
+      {
+        "title": "Engineering before ornament",
+        "body": "Measure, then change. In yourFinance EXPLAIN ANALYZE showed two analytics queries growing with the whole history; rewriting the view fixed them, with no new index."
+      },
       {
         "title": "Data as ground truth",
-        "body": "Decisions are traced back to data. A model is only as reliable as its inputs."
+        "body": "aria-er checks every count of legal-limit exceedances against the figures ARPAE publishes; two of those checks changed the code."
       },
       {
         "title": "Flat control flow",
-        "body": "Many small functions, at most two levels of nesting, explicit contracts between them."
+        "body": "Small parts with explicit contracts. The yourFinance API is a workspace of layered crates, each depending only on the ones below, and CI checks that the domain stays free of I/O."
       }
     ],
     "outsideTitle": "Outside work",
     "outside": "I train three times a week, with weighted calisthenics and barbell lifts, and I play acoustic guitar.",
     "contactsTitle": "Contact",
-    "contactsNote": "Repositories and direct channels.",
+    "contactsNote": "For a role or a project, LinkedIn is the fastest way to reach me.",
     "sponsor": "Support my work"
   },
   "timeline": {
-    "title": "Multi-thread execution",
-    "titleEmphasis": "Multi-thread",
-    "subtitle": "Three concurrent processes sharing one clock. None blocks the others.",
+    "title": "Work, university and self-study",
+    "titleEmphasis": "self-study",
+    "subtitle": "What I have done since 2021, on one time axis. University paused from 2023 to late 2024 while I worked full time.",
     "labels": {
       "thread": "Thread",
       "start": "Start",
       "running": "Running",
       "suspended": "Suspended",
       "periods": "Active periods",
-      "uptime": "Uptime",
+      "uptime": "Time at Tas",
       "days": "d",
       "now": "Now"
     },
@@ -142,7 +146,7 @@
           },
           "method": {
             "title": "Method",
-            "body": "Scrum Master of the front-end team since early 2025. Certified ScrumMaster (Scrum Alliance) since November 2025."
+            "body": "Scrum Master of the frontend team since early 2025. Certified ScrumMaster (Scrum Alliance) since November 2025."
           }
         }
       },
@@ -167,7 +171,7 @@
         "phases": {
           "systems": {
             "title": "Systems layer",
-            "body": "Memory ownership, deterministic performance, low-level control with Rust."
+            "body": "Memory ownership, memory safety without a garbage collector, low-level control with Rust."
           },
           "modeling": {
             "title": "Data modeling",
@@ -184,13 +188,13 @@
   "projects": {
     "title": "Systems & architecture",
     "titleEmphasis": "architecture",
-    "subtitle": "Projects built as bridges toward Data Engineering.",
+    "subtitle": "Two projects I built to learn data engineering on real data.",
     "labels": {
       "architecture": "Topology",
-      "bridge": "Data bridge",
+      "bridge": "What it shows for data engineering",
       "highlights": "Engineering decisions",
       "repo": "Repository",
-      "private": "Private source — walkthrough on request",
+      "private": "Private code: demo on request",
       "caseStudy": "Read the case study",
       "version": "Version"
     },

@@ -6,12 +6,12 @@
       "siteName": "Samuele Cieri",
       "views": {
         "hero": {
-          "title": "Samuele Cieri — Software Developer e Data Engineering",
+          "title": "Samuele Cieri — Software Developer verso il Data Engineering",
           "description": "Samuele Cieri, Software Developer a Bologna in transizione verso il Data Engineering: Angular sul lavoro, Rust, PostgreSQL e dbt nei progetti personali."
         },
         "identity": {
           "title": "Identità e principi di ingegneria",
-          "description": "Un approccio strumentale e ingegneristico al software: obiettivi misurabili, dati come verità, flusso di controllo piatto. GitHub e LinkedIn."
+          "description": "Come scelgo gli strumenti, con un esempio per ogni principio da yourFinance e aria-er. Cerco un ruolo da Data Engineer, full remote. LinkedIn e GitHub."
         },
         "timeline": {
           "title": "Esperienza e formazione",
@@ -24,9 +24,9 @@
       }
     },
     "notFound": {
-      "title": "Non trovato",
-      "body": "Questo indirizzo non corrisponde a nessuna vista. Il processo potrebbe essere stato spostato o non essere mai esistito.",
-      "cta": "Torna all'indice"
+      "title": "Pagina non trovata",
+      "body": "Questo indirizzo non corrisponde a nessuna pagina del sito.",
+      "cta": "Torna alla home"
     },
     "nav": {
       "hero": "Indice",
@@ -43,7 +43,7 @@
     "theme": { "label": "Tema", "light": "Chiaro", "dark": "Scuro", "system": "Auto" },
     "locale": { "label": "Lingua", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
     "shell": {
-      "role": "Software Developer — Data Engineering",
+      "role": "Software Developer, verso il Data Engineering",
       "nav": "Viste",
       "prev": "Vista precedente",
       "next": "Vista successiva",
@@ -80,51 +80,52 @@
   "hero": {
     "role": "Software Developer",
     "transition": "In transizione verso il Data Engineering",
-    "lead": "Costruisco il percorso dalle interfacce ai sistemi: backend tipizzati, storage relazionale e pipeline che muovono dati con uno scopo.",
+    "seeking": "Cerco un ruolo da Data Engineer, full remote.",
+    "lead": "Dalle interfacce ai sistemi: backend tipizzati, database relazionali e pipeline che caricano, verificano e pubblicano dati.",
     "detail": "Dal 2022 sviluppo in Tas, frontend e full-stack, oggi con Angular e TypeScript, e studio Ingegneria Informatica all'Università di Bologna. Nei progetti personali uso Rust, PostgreSQL e dbt: yourFinance, piattaforma di finanza personale, e aria-er, pipeline dati sulla qualità dell'aria.",
-    "hint": "Muovi il cursore — ogni nodo è un'unità di calcolo",
+    "hint": "Muovi il cursore: i punti reagiscono al suo passaggio",
     "cta": "Vedi i progetti"
   },
   "identity": {
-    "title": "Il software è uno strumento.",
-    "titleEmphasis": "strumento",
-    "subtitle": "Ogni linguaggio, schema e astrazione è scelto per il suo contributo misurabile a un obiettivo — mai per abitudine o gusto.",
+    "title": "Come lavoro, e dove trovarmi.",
+    "titleEmphasis": "Come lavoro",
+    "subtitle": "Scelgo linguaggi, schemi e astrazioni per quello che fanno per il progetto, e per ognuno so dire perché.",
     "principlesTitle": "Principi",
     "principles": [
       {
         "title": "Razionalità strumentale",
-        "body": "I mezzi sono valutati rispetto ai fini. Ciò che non avvicina l'obiettivo viene rimosso."
+        "body": "Scelgo uno strumento per quello che serve al progetto. aria-er non usa lo streaming: le fonti pubblicano con ore di ritardo e ogni domanda è giornaliera, quindi basta un batch al giorno."
       },
       {
         "title": "Ingegneria prima dell'ornamento",
-        "body": "Specificare, misurare, poi costruire. La forma è una conseguenza dei vincoli."
+        "body": "Prima misuro, poi cambio. In yourFinance EXPLAIN ANALYZE ha mostrato due query di statistica che crescevano con tutto lo storico; le ha sistemate la riscrittura della vista, senza indici nuovi."
       },
       {
         "title": "Il dato come verità",
-        "body": "Le decisioni sono ricondotte ai dati. Un modello è affidabile quanto i suoi input."
+        "body": "aria-er confronta ogni conteggio di superamenti dei limiti di legge con i numeri pubblicati da ARPAE; due di questi confronti hanno cambiato il codice."
       },
       {
         "title": "Flusso di controllo piatto",
-        "body": "Molte funzioni semplici, al massimo due livelli di annidamento, contratti espliciti tra loro."
+        "body": "Parti piccole con contratti espliciti. L'API di yourFinance è un workspace di crate a strati, ognuno dipende solo da quelli sotto, e la CI verifica che il dominio resti senza I/O."
       }
     ],
     "outsideTitle": "Fuori dal lavoro",
     "outside": "Mi alleno tre volte a settimana, con calisthenics zavorrata e bilanciere, e suono la chitarra acustica.",
     "contactsTitle": "Contatti",
-    "contactsNote": "Repository e canali diretti.",
+    "contactsNote": "Per un ruolo o un progetto, LinkedIn è il modo più rapido per raggiungermi.",
     "sponsor": "Sostieni il mio lavoro"
   },
   "timeline": {
-    "title": "Esecuzione multi-thread",
-    "titleEmphasis": "multi-thread",
-    "subtitle": "Tre processi concorrenti che condividono un unico clock. Nessuno blocca gli altri.",
+    "title": "Lavoro, università e studio autonomo",
+    "titleEmphasis": "studio autonomo",
+    "subtitle": "Quello che ho fatto dal 2021, su un unico asse del tempo. L'università è rimasta ferma dal 2023 a fine 2024, mentre lavoravo a tempo pieno.",
     "labels": {
       "thread": "Thread",
       "start": "Inizio",
       "running": "In esecuzione",
       "suspended": "Sospeso",
       "periods": "Periodi attivi",
-      "uptime": "Uptime",
+      "uptime": "Tempo in Tas",
       "days": "g",
       "now": "Ora"
     },
@@ -145,7 +146,7 @@
           },
           "method": {
             "title": "Metodo",
-            "body": "Dall'inizio del 2025 sono Scrum Master del team front-end. Certified ScrumMaster (Scrum Alliance) da novembre 2025."
+            "body": "Dall'inizio del 2025 sono Scrum Master del team frontend. Certified ScrumMaster (Scrum Alliance) da novembre 2025."
           }
         }
       },
@@ -173,7 +174,7 @@
         "phases": {
           "systems": {
             "title": "Livello sistema",
-            "body": "Ownership della memoria, prestazioni deterministiche, controllo a basso livello con Rust."
+            "body": "Ownership della memoria, sicurezza della memoria senza garbage collector, controllo a basso livello con Rust."
           },
           "modeling": {
             "title": "Modellazione dati",
@@ -190,13 +191,13 @@
   "projects": {
     "title": "Sistemi & architettura",
     "titleEmphasis": "architettura",
-    "subtitle": "Progetti costruiti come ponti verso il Data Engineering.",
+    "subtitle": "Due progetti che ho costruito per imparare il data engineering su dati reali.",
     "labels": {
       "architecture": "Topologia",
-      "bridge": "Ponte verso i dati",
+      "bridge": "Cosa mostra di data engineering",
       "highlights": "Scelte di ingegneria",
       "repo": "Repository",
-      "private": "Codice privato — demo su richiesta",
+      "private": "Codice privato: demo su richiesta",
       "caseStudy": "Leggi il caso di studio",
       "version": "Versione"
     },
@@ -223,7 +224,7 @@
       "ariaer": {
         "teaser": "Piattaforma dati sulla qualità dell’aria in Emilia-Romagna.",
         "summary": "Piattaforma dati end-to-end sulla qualità dell’aria in Emilia-Romagna, sugli open data ARPAE arricchiti con il meteo di Open-Meteo: ingestion in Rust verso Parquet partizionato, modelli dbt su DuckDB in locale e BigQuery su GCP, orchestrazione con Dagster. Gira in locale con Docker, dashboard e CI comprese, e gli stessi modelli hanno girato su BigQuery in un vero progetto Google Cloud con risultati identici a DuckDB.",
-        "bridge": "Un progetto di data engineering puro: misure provvisorie riviste dopo la validazione, buchi e formati incoerenti nella sorgente, trasformati in un dataset storicizzato e testato che risponde su superamenti dei limiti di legge, trend degli inquinanti e correlazione con il meteo.",
+        "bridge": "Un progetto di data engineering puro: misure provvisorie riviste dopo la validazione, buchi e formati incoerenti nella fonte, trasformati in un dataset storicizzato e testato che risponde su superamenti dei limiti di legge, trend degli inquinanti e correlazione con il meteo.",
         "highlights": [
           "Ingestion incrementale e idempotente: riprocessamento a finestra mobile e upsert sulla chiave naturale",
           "Modelli dbt a livelli (staging, intermediate, marts) con storico SCD Type 2 delle stazioni",

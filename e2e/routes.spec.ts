@@ -60,6 +60,12 @@ test('an unknown slug returns a localized, non-indexable 404', async ({ page }) 
     .locator('meta[name="robots"]')
     .evaluateAll((tags) => tags.map((tag) => tag.getAttribute('content')));
   expect(directives).toEqual(['noindex']);
+
+  // Plain words: what happened and the way back home (#138).
+  const copy = locales.it.ui.notFound;
+  await expect(page.locator('h1')).toHaveText(copy.title);
+  await expect(page.getByText(copy.body)).toBeVisible();
+  await expect(page.getByRole('link', { name: copy.cta })).toHaveAttribute('href', '/it');
 });
 
 test('a slug from another locale is not a page of its own: it redirects to the right one', async ({ request }) => {

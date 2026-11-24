@@ -6,12 +6,12 @@
       "siteName": "Samuele Cieri",
       "views": {
         "hero": {
-          "title": "Samuele Cieri — Software Developer & Data Engineering",
+          "title": "Samuele Cieri — Software Developer, Richtung Data Engineering",
           "description": "Samuele Cieri, Software Developer in Bologna auf dem Weg ins Data Engineering: Angular im Beruf, Rust, PostgreSQL und dbt in eigenen Projekten."
         },
         "identity": {
           "title": "Identität & Engineering-Prinzipien",
-          "description": "Ein instrumenteller, ingenieurmäßiger Blick auf Software: messbare Ziele, Daten als Referenz, flacher Kontrollfluss. GitHub und LinkedIn."
+          "description": "Wie ich Werkzeuge wähle, mit einem Beispiel pro Prinzip aus yourFinance und aria-er. Ich suche eine Stelle als Data Engineer, remote. LinkedIn und GitHub."
         },
         "timeline": {
           "title": "Berufserfahrung und Ausbildung",
@@ -24,9 +24,9 @@
       }
     },
     "notFound": {
-      "title": "Nicht gefunden",
-      "body": "Diese Adresse entspricht keiner Ansicht. Der Prozess wurde vielleicht verschoben oder hat nie existiert.",
-      "cta": "Zurück zum Index"
+      "title": "Seite nicht gefunden",
+      "body": "Diese Adresse gehört zu keiner Seite der Website.",
+      "cta": "Zur Startseite"
     },
     "nav": {
       "hero": "Index",
@@ -43,7 +43,7 @@
     "theme": { "label": "Design", "light": "Hell", "dark": "Dunkel", "system": "Auto" },
     "locale": { "label": "Sprache", "en": "EN", "it": "IT", "fr": "FR", "de": "DE", "es": "ES" },
     "shell": {
-      "role": "Software Developer — Data Engineering",
+      "role": "Software Developer, Richtung Data Engineering",
       "nav": "Ansichten",
       "prev": "Vorherige Ansicht",
       "next": "Nächste Ansicht",
@@ -80,51 +80,52 @@
   "hero": {
     "role": "Software Developer",
     "transition": "Auf dem Weg ins Data Engineering",
-    "lead": "Ich baue den Weg von Oberflächen zu Systemen: typisierte Backends, relationale Speicherung und Pipelines, die Daten mit klarem Zweck bewegen.",
+    "seeking": "Ich suche eine Stelle als Data Engineer, vollständig remote.",
+    "lead": "Von Oberflächen zu Systemen: typisierte Backends, relationale Datenbanken und Pipelines, die Daten laden, testen und veröffentlichen.",
     "detail": "Seit 2022 entwickle ich bei Tas, Frontend und Full-Stack, heute mit Angular und TypeScript, und studiere Technische Informatik an der Universität Bologna. Meine eigenen Projekte bauen auf Rust, PostgreSQL und dbt: yourFinance, eine Plattform für persönliche Finanzen, und aria-er, eine Datenpipeline zur Luftqualität.",
-    "hint": "Bewege den Cursor — jeder Knoten ist eine Recheneinheit",
+    "hint": "Bewege den Cursor: Die Punkte reagieren darauf",
     "cta": "Zu den Projekten"
   },
   "identity": {
-    "title": "Software ist ein Instrument.",
-    "titleEmphasis": "Instrument",
-    "subtitle": "Jede Sprache, jedes Schema und jede Abstraktion wird nach ihrem messbaren Beitrag zu einem Ziel gewählt — nie aus Gewohnheit oder Vorliebe.",
+    "title": "Wie ich arbeite, und wo du mich erreichst.",
+    "titleEmphasis": "Wie ich arbeite",
+    "subtitle": "Ich wähle Sprachen, Schemas und Abstraktionen danach, was sie für das Projekt leisten, und kann für jede sagen, warum.",
     "principlesTitle": "Prinzipien",
     "principles": [
       {
         "title": "Instrumentelle Rationalität",
-        "body": "Mittel werden an Zielen gemessen. Was das Ziel nicht voranbringt, wird entfernt."
+        "body": "Ich wähle ein Werkzeug nach dem, was das Projekt braucht. aria-er verzichtet auf Streaming: Die Quellen veröffentlichen Stunden später und jede Frage ist täglich, also genügt ein täglicher Batch."
       },
       {
         "title": "Engineering vor Ornament",
-        "body": "Spezifizieren, messen, dann bauen. Die Form folgt aus den Randbedingungen."
+        "body": "Erst messen, dann ändern. In yourFinance zeigte EXPLAIN ANALYZE zwei Statistikabfragen, die mit der ganzen Historie wuchsen; das Umschreiben der View hat sie behoben, ohne neuen Index."
       },
       {
         "title": "Daten als Referenz",
-        "body": "Entscheidungen werden auf Daten zurückgeführt. Ein Modell ist nur so verlässlich wie seine Eingaben."
+        "body": "aria-er vergleicht jede Zahl von Grenzwertüberschreitungen mit den Werten, die ARPAE veröffentlicht; zwei dieser Vergleiche haben den Code verändert."
       },
       {
         "title": "Flacher Kontrollfluss",
-        "body": "Viele kleine Funktionen, höchstens zwei Verschachtelungsebenen, explizite Verträge dazwischen."
+        "body": "Kleine Teile mit expliziten Verträgen. Die API von yourFinance ist ein Workspace aus geschichteten Crates, jedes hängt nur von den darunterliegenden ab, und die CI prüft, dass die Domäne frei von I/O bleibt."
       }
     ],
     "outsideTitle": "Neben der Arbeit",
     "outside": "Ich trainiere dreimal pro Woche, Calisthenics mit Zusatzgewicht und Langhantel, und spiele Akustikgitarre.",
     "contactsTitle": "Kontakt",
-    "contactsNote": "Repositories und direkte Kanäle.",
+    "contactsNote": "Für eine Stelle oder ein Projekt erreichst du mich am schnellsten über LinkedIn.",
     "sponsor": "Meine Arbeit unterstützen"
   },
   "timeline": {
-    "title": "Multi-Thread-Ausführung",
-    "titleEmphasis": "Multi-Thread",
-    "subtitle": "Drei nebenläufige Prozesse mit gemeinsamer Uhr. Keiner blockiert die anderen.",
+    "title": "Arbeit, Studium und Selbststudium",
+    "titleEmphasis": "Selbststudium",
+    "subtitle": "Was ich seit 2021 mache, auf einer gemeinsamen Zeitachse. Das Studium ruhte von 2023 bis Ende 2024, während ich Vollzeit gearbeitet habe.",
     "labels": {
       "thread": "Thread",
       "start": "Start",
       "running": "Läuft",
       "suspended": "Pausiert",
       "periods": "Aktive Zeiträume",
-      "uptime": "Uptime",
+      "uptime": "Zeit bei Tas",
       "days": "T",
       "now": "Jetzt"
     },
@@ -173,7 +174,7 @@
         "phases": {
           "systems": {
             "title": "Systemschicht",
-            "body": "Speicher-Ownership, deterministische Performance, Low-Level-Kontrolle mit Rust."
+            "body": "Speicher-Ownership, Speichersicherheit ohne Garbage Collector, Low-Level-Kontrolle mit Rust."
           },
           "modeling": {
             "title": "Datenmodellierung",
@@ -190,13 +191,13 @@
   "projects": {
     "title": "Systeme & Architektur",
     "titleEmphasis": "Architektur",
-    "subtitle": "Projekte, gebaut als Brücken ins Data Engineering.",
+    "subtitle": "Zwei Projekte, mit denen ich Data Engineering an echten Daten lerne.",
     "labels": {
       "architecture": "Topologie",
-      "bridge": "Brücke zu den Daten",
+      "bridge": "Was es für Data Engineering zeigt",
       "highlights": "Engineering-Entscheidungen",
       "repo": "Repository",
-      "private": "Privater Code — Demo auf Anfrage",
+      "private": "Privater Code: Demo auf Anfrage",
       "caseStudy": "Fallstudie lesen",
       "version": "Version"
     },

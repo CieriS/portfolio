@@ -4,6 +4,7 @@ import en from '@/data/locales/en.json';
 import es from '@/data/locales/es.json';
 import fr from '@/data/locales/fr.json';
 import it_ from '@/data/locales/it.json';
+import errors from '@/data/errors.json';
 import rawShared from '@/data/shared.json';
 import { ProjectSourceSchema, SegmentSchema, SharedSchema, ThreadSchema, type SharedData } from './schema';
 import { findContentIssues, findEmphasisIssues, type CopyUnderCheck } from './validate';
@@ -149,6 +150,96 @@ describe('facts the home repeats by hand', () => {
         expect(item.teaser.length, item.teaser).toBeLessThanOrEqual(80);
         expect(item.summary).not.toContain(item.teaser);
       }
+    },
+  );
+});
+
+describe('plain words, no forced metaphors (#103, #104, #106, #138)', () => {
+  const copies = { en, it: it_, fr, de, es };
+  type Locale = keyof typeof copies;
+  const locales = Object.keys(copies) as Locale[];
+  // Words of the old operating-system voice, per language: none may come back in these strings.
+  const metaphors: Record<Locale, RegExp> = {
+    en: /process|thread|uptime|unit of computation|bridge|running|index\b/i,
+    it: /process|thread|uptime|unità di calcolo|ponte|ponti|esecuzione|indice/i,
+    fr: /processus|thread|uptime|unité de calcul|passerelle|index\b/i,
+    de: /prozess|thread|uptime|recheneinheit|brücke|index\b/i,
+    es: /proceso|hilo|tiempo activo|unidad de cálculo|puente|índice/i,
+  };
+  const plain = (locale: Locale) => {
+    const copy = copies[locale];
+    return [
+      copy.hero.hint,
+      copy.timeline.title,
+      copy.timeline.subtitle,
+      copy.timeline.labels.uptime,
+      copy.projects.subtitle,
+      copy.projects.labels.bridge,
+      copy.ui.notFound.title,
+      copy.ui.notFound.body,
+      copy.ui.notFound.cta,
+      errors[locale].title,
+      errors[locale].body,
+      errors[locale].cta,
+    ];
+  };
+
+  it.each(locales)('%s: the strings rewritten in plain words keep no metaphor', (locale) => {
+    for (const text of plain(locale)) expect(text, text).not.toMatch(metaphors[locale]);
+  });
+
+  it.each(locales)('%s: the timeline says university paused, not that nothing blocked', (locale) => {
+    // The academic lane was suspended for work: "none blocks the others" was false.
+    expect(copies[locale].timeline.subtitle).toMatch(/2023/);
+    expect(copies[locale].timeline.subtitle).toMatch(/2024/);
+  });
+
+  it.each(locales)('%s: the header and the home title present Data Engineering as the direction, not a role', (locale) => {
+    const { shell, meta } = copies[locale].ui;
+    for (const text of [shell.role, meta.views.hero.title]) {
+      expect(text).not.toMatch(/—\s*(Data Engineering|ingeniería de datos)$/);
+      expect(text).not.toMatch(/(&| e | y | and )\s*(Data Engineering|ingeniería de datos)$/);
+    }
+  });
+
+  it.each(locales)('%s: the role sought is stated, full remote', (locale) => {
+    const seeking = copies[locale].hero.seeking;
+    expect(seeking).toContain('Data Engineer');
+    expect(seeking.toLowerCase()).toMatch(/remote|remoto|télétravail/);
+  });
+
+  it('English writes "frontend" as one word and no Oxford comma before the last item', () => {
+    const text = JSON.stringify(en);
+    expect(text).not.toMatch(/front-end/i);
+    expect(en.hero.lead).not.toContain(', and ');
+  });
+});
+
+describe('identity principles backed by evidence (#105, #139)', () => {
+  const copies = { en, it: it_, fr, de, es };
+  type Locale = keyof typeof copies;
+  const absolute: Record<Locale, RegExp> = {
+    en: /\b(never|always|removed)\b/i,
+    it: /\b(mai|sempre|rimosso)\b/i,
+    fr: /\b(jamais|toujours|supprimé)\b/i,
+    de: /\b(nie|immer|entfernt)\b/i,
+    es: /\b(nunca|siempre|elimina)\b/i,
+  };
+
+  it.each(Object.keys(copies) as Locale[])('%s: every principle names the project where it is applied', (locale) => {
+    const { identity } = copies[locale];
+    for (const principle of identity.principles) expect(principle.body, principle.body).toMatch(/yourFinance|aria-er/);
+    for (const text of [identity.subtitle, ...identity.principles.map((p) => p.body)]) {
+      expect(text, text).not.toMatch(absolute[locale]);
+    }
+    // The nesting limit had no fact behind it: it must not come back without one.
+    expect(JSON.stringify(identity.principles)).not.toMatch(/nesting|annidamento|imbrication|verschachtelung|anidación/i);
+  });
+
+  it.each(Object.keys(copies) as Locale[])(
+    '%s: Rust is described by memory safety, not "deterministic performance"',
+    (locale) => {
+      expect(copies[locale].timeline.threads.independent.phases.systems.body).not.toMatch(/determinis|predecible/i);
     },
   );
 });

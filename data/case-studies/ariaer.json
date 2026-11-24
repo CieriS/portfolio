@@ -82,7 +82,7 @@
     "en": {
       "meta": {
         "title": "aria-er — case study",
-        "description": "How aria-er is built: Rust ingestion, dbt on DuckDB and BigQuery, Dagster, and exceedances checked against ARPAE's own figures."
+        "description": "How aria-er is built: Rust ingestion, dbt on DuckDB and BigQuery, Dagster orchestration and exceedances checked against ARPAE's own figures."
       },
       "label": "Case study",
       "title": "The numbers match ARPAE's.",

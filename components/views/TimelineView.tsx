@@ -34,9 +34,9 @@ export function TimelineView({ data }: ViewProps) {
   const clock = now ?? origin;
   const { years, ticks, nowPct, toPct } = buildAxis(origin, clock);
 
-  // The headline uptime tracks the professional thread; any work thread will do as the site grows.
+  // The headline counter tracks the professional thread. Its label names the employer in each
+  // language ("Time at Tas", #103): a new work thread means a new label too.
   const primary = threads.find((thread) => thread.kind === 'work') ?? threads[0];
-  const primaryCopy = primary ? pick(copy.threads, primary.id) : undefined;
 
   // One column per thread on desktop, stacked on mobile. Driven by a CSS variable so the
   // number of threads is a data concern rather than a hardcoded Tailwind class.
@@ -52,9 +52,7 @@ export function TimelineView({ data }: ViewProps) {
         subtitle={copy.subtitle}
         aside={
           <motion.div variants={fade} className="select-none md:text-right">
-            <Meta>
-              {copy.labels.uptime} — {primaryCopy?.label ?? primary?.id}
-            </Meta>
+            <Meta>{copy.labels.uptime}</Meta>
             <p className="mt-3 text-3xl font-light tracking-[-0.03em] tabular-nums md:text-5xl">
               <Uptime thread={primary} days={copy.labels.days} fallback={unknown} />
             </p>

@@ -30,8 +30,8 @@ export function IdentityView({ data }: ViewProps) {
 
   return (
     <div className="px-frame pt-10 pb-28 md:pt-16">
-      {/* The title is the statement's own first sentence, so this view opens like the others
-          without a generic heading in front of the manifesto. */}
+      {/* The title says what the view holds, principles and contacts (#139), so this view opens
+          like the others with one plain heading. */}
       <SectionHead index={2} label={label} title={copy.title} emphasis={copy.titleEmphasis} subtitle={copy.subtitle} />
 
       <div className="mt-24 grid gap-y-10 md:mt-36 md:grid-cols-12 md:gap-x-6">
@@ -62,7 +62,11 @@ export function IdentityView({ data }: ViewProps) {
       <div id={CONTACTS_FRAGMENT} tabIndex={-1} className="mt-24 grid scroll-mt-10 gap-y-8 md:mt-36 md:grid-cols-12 md:gap-x-6">
         <motion.div variants={fade} className="md:col-span-3">
           <Meta as="h2">{copy.contactsTitle}</Meta>
-          <p className="mt-3 max-w-[24ch] text-sm text-muted">{copy.contactsNote}</p>
+          {/* The role sought sits with the contacts too: it is where a recruiter acts on it (#104). */}
+          <p data-seeking className="mt-3 max-w-[28ch] text-[15px] leading-snug">
+            {data.content.hero.seeking}
+          </p>
+          <p className="mt-3 max-w-[28ch] text-sm text-muted">{copy.contactsNote}</p>
         </motion.div>
         {/* What a recruiter wants most comes first: the CV, then LinkedIn (#133). */}
         <motion.ul variants={fade} className="border-b border-line md:col-span-9">
