@@ -72,7 +72,9 @@
       "invalid": "Vérifiez votre saisie et réessayez.",
       "denied": "Mot de passe incorrect.",
       "unavailable": "Indisponible pour le moment : écrivez-moi sur LinkedIn.",
-      "failed": "Une erreur est survenue. Réessayez dans un instant."
+      "failed": "Une erreur est survenue. Réessayez dans un instant.",
+      "notSent": "Je n'ai pas pu envoyer le lien. Écrivez-moi sur {linkedin}.",
+      "tooMany": "Trop de demandes en peu de temps. Réessayez dans quelques minutes."
     }
   },
   "hero": {

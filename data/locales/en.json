@@ -72,7 +72,9 @@
       "invalid": "Check what you typed and try again.",
       "denied": "Wrong password.",
       "unavailable": "Not available right now: write to me on LinkedIn.",
-      "failed": "Something went wrong. Try again in a moment."
+      "failed": "Something went wrong. Try again in a moment.",
+      "notSent": "I could not send the link. Write to me on {linkedin}.",
+      "tooMany": "Too many requests in a short time. Try again in a few minutes."
     }
   },
   "hero": {

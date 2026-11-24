@@ -72,7 +72,9 @@
       "invalid": "Prüfen Sie Ihre Eingabe und versuchen Sie es erneut.",
       "denied": "Falsches Passwort.",
       "unavailable": "Gerade nicht verfügbar: Schreiben Sie mir auf LinkedIn.",
-      "failed": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal."
+      "failed": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+      "notSent": "Ich konnte den Link nicht senden. Schreiben Sie mir auf {linkedin}.",
+      "tooMany": "Zu viele Anfragen in kurzer Zeit. Versuchen Sie es in ein paar Minuten noch einmal."
     }
   },
   "hero": {

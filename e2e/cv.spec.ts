@@ -1,6 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { gotoView } from './helpers';
+import { LOCALES } from '../lib/routes';
+import { locales, shared } from './content';
+import { gotoView, type Locale } from './helpers';
 
 /**
  * The CV download as a visitor meets it. playwright.config.ts gives the server an admin
@@ -9,9 +11,9 @@ import { gotoView } from './helpers';
  */
 const ADMIN_PASSWORD = 'e2e-admin-password-0001';
 
-async function openCvPanel(page: Page) {
-  await gotoView(page, 'en', 'identity');
-  const toggle = page.getByRole('button', { name: /Curriculum/ });
+async function openCvPanel(page: Page, locale: Locale = 'en') {
+  await gotoView(page, locale, 'identity');
+  const toggle = page.getByRole('button', { name: new RegExp(locales[locale].ui.cv.label) });
   await toggle.scrollIntoViewIfNeeded();
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await toggle.click();
@@ -114,6 +116,34 @@ test('without a mail sender the email request says so instead of failing', async
   await page.getByLabel('Email address').fill('visitor@example.com');
   await page.getByRole('button', { name: 'Send link' }).click();
   await expect(page.getByRole('status')).toHaveText('Not available right now: write to me on LinkedIn.');
+});
+
+// #136: the mail provider refusing the message answers 502. Retrying would fail the same way,
+// so the message names another way to write, with a working link, in every language.
+for (const locale of LOCALES) {
+  test(`a refused email points to LinkedIn (${locale})`, async ({ page }) => {
+    const copy = locales[locale].ui.cv;
+    const linkedin = shared.contacts.find((contact) => contact.id === 'linkedin')!;
+    await page.route('**/api/cv', (route) => route.fulfill({ status: 502, json: { status: 'failed' } }));
+    await openCvPanel(page, locale);
+    await page.getByLabel(copy.email).fill('visitor@example.com');
+    await page.getByRole('button', { name: copy.send }).click();
+
+    const status = page.getByRole('status');
+    await expect(status).toHaveText(copy.notSent.replace('{linkedin}', linkedin.label));
+    const link = status.getByRole('link', { name: linkedin.label });
+    await expect(link).toHaveAttribute('href', linkedin.url);
+    await expect(link).toHaveAttribute('target', '_blank');
+  });
+}
+
+// #112: the firewall's rate limit answers 429.
+test('a rate-limited request says to wait', async ({ page }) => {
+  await page.route('**/api/cv', (route) => route.fulfill({ status: 429, body: 'Too Many Requests' }));
+  await openCvPanel(page);
+  await page.getByLabel('Email address').fill('visitor@example.com');
+  await page.getByRole('button', { name: 'Send link' }).click();
+  await expect(page.getByRole('status')).toHaveText(locales.en.ui.cv.tooMany);
 });
 
 test('the open panel has no WCAG A/AA violations', async ({ page }) => {
