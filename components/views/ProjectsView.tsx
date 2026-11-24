@@ -82,6 +82,7 @@ type ProjectRowProps = {
 function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRowProps) {
   const item = pick(copy.items, project.id);
   const panelId = `project-${project.id}`;
+  const teaserId = `project-${project.id}-teaser`;
 
   return (
     <li id={project.id} className="border-t border-line">
@@ -91,7 +92,8 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
           onClick={onToggle}
           aria-expanded={open}
           aria-controls={panelId}
-          className="group grid w-full grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-x-4 py-6 text-left md:grid-cols-12 md:gap-x-6 md:py-9"
+          aria-describedby={item ? teaserId : undefined}
+          className="group grid w-full grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-x-4 pt-6 pb-3 text-left md:grid-cols-12 md:gap-x-6 md:pt-9 md:pb-4"
         >
           <span className="font-mono text-[11px] text-muted tabular-nums md:col-span-3">{pad(index + 1)}</span>
           <span className="text-[clamp(2.25rem,5.6vw,5.5rem)] leading-[0.95] font-medium tracking-[-0.045em] transition-transform duration-700 ease-out-expo group-hover:translate-x-3 md:col-span-6">
@@ -111,6 +113,16 @@ function ProjectRow({ project, index, locale, copy, open, onToggle }: ProjectRow
           </span>
         </button>
       </h2>
+      {/* One line of what the project is, visible while the row is closed, so the list is more than
+          two names (#96). A shorter text than the summary, which opens the panel: nothing is said twice. */}
+      {item && (
+        <p
+          id={teaserId}
+          className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 pb-6 text-[15px] leading-snug text-muted md:grid-cols-12 md:gap-x-6 md:pb-9"
+        >
+          <span className="col-start-2 line-clamp-2 md:col-span-6 md:col-start-4">{item.teaser}</span>
+        </p>
+      )}
 
       {/* Collapsed panels stay mounted, so every project's copy and repository link is in the
           prerendered HTML for crawlers; `inert` keeps them away from focus and assistive tech. */}

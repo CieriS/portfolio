@@ -28,6 +28,32 @@ test('the private source link swaps to the contacts view in place', async ({ pag
   await expect(page.locator('#contacts')).toBeFocused();
 });
 
+for (const locale of LOCALES) {
+  test(`every closed project shows its teaser line, never cut, in ${locale}`, async ({ page }) => {
+    // The narrowest phone of the review: two lines at most, and the clamp must not cut a word (#96).
+    await page.setViewportSize({ width: 375, height: 812 });
+    await gotoView(page, locale, 'projects');
+    for (const project of shared.projects) {
+      const item = locales[locale].projects.items[project.id as keyof (typeof locales)[typeof locale]['projects']['items']];
+      const teaser = page.locator(`#project-${project.id}-teaser`);
+      await expect(teaser).toBeVisible();
+      await expect(teaser).toHaveText(item.teaser);
+      const line = teaser.locator('span');
+      expect(await line.evaluate((el) => el.scrollHeight <= el.clientHeight + 1)).toBe(true);
+      await expect(page.getByRole('button', { name: new RegExp(project.name) })).toHaveAccessibleDescription(item.teaser);
+    }
+  });
+}
+
+test('opening a project does not say the same sentence twice', async ({ page }) => {
+  await gotoView(page, 'en', 'projects');
+  await page.getByRole('button', { name: /aria-er/ }).click();
+  const panel = page.locator('#project-ariaer');
+  await expect(panel.getByText(copy.items.ariaer.summary)).toBeVisible();
+  await expect(page.locator('#project-ariaer-teaser')).toBeVisible();
+  await expect(panel.getByText(copy.items.ariaer.teaser)).toHaveCount(0);
+});
+
 test('only public projects publish a codeRepository in the JSON-LD', async ({ page }) => {
   await page.goto(pathFor('en', 'projects'));
   const raw = await page.locator('script[type="application/ld+json"]').innerHTML();

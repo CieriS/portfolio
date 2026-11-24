@@ -196,6 +196,7 @@
     },
     "items": {
       "yourfinance": {
+        "teaser": "Multi-user personal finance platform, in Rust and PostgreSQL.",
         "summary": "Multi-user personal finance platform: a layered Rust workspace (pure domain, SQLx data layer, Axum API, background worker) over PostgreSQL, serving an Expo app for iOS, Android and web plus a Tauri desktop shell.",
         "bridge": "Integrity enforced in the database: balances maintained only by triggers, row-level security per user, SQL analytics functions for trends and budgets, idempotent imports of third-party exports.",
         "highlights": [
@@ -214,6 +215,7 @@
         }
       },
       "ariaer": {
+        "teaser": "Data platform for air quality in Emilia-Romagna.",
         "summary": "End-to-end data platform for Emilia-Romagna air quality on ARPAE open data, enriched with Open-Meteo weather: Rust ingestion into partitioned Parquet, dbt models on DuckDB locally and BigQuery on GCP, Dagster orchestration. It runs locally with Docker, dashboard and CI included, and the same models ran on BigQuery in a real Google Cloud project with results identical to DuckDB.",
         "bridge": "A pure data engineering project: provisional measurements revised after validation, gaps and inconsistent formats in the source, turned into a historized, tested dataset that answers legal-limit exceedances, pollutant trends and weather correlation.",
         "highlights": [

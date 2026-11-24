@@ -140,4 +140,15 @@ describe('facts the home repeats by hand', () => {
     expect(summary).toContain('Docker');
     expect(summary).toContain('Google Cloud');
   });
+
+  it.each(Object.keys(copies) as Array<keyof typeof copies>)(
+    '%s: each teaser is a short line, not the summary again',
+    (locale) => {
+      for (const item of Object.values(copies[locale].projects.items)) {
+        // At most two lines of a 375 px row (#96), so the clamp never cuts a word.
+        expect(item.teaser.length, item.teaser).toBeLessThanOrEqual(80);
+        expect(item.summary).not.toContain(item.teaser);
+      }
+    },
+  );
 });
