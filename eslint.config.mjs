@@ -5,6 +5,6 @@ import nextTs from 'eslint-config-next/typescript';
 export default defineConfig([
   ...nextVitals,
   ...nextTs,
-  // Playwright's reports and traces are generated output: a retried test writes minified bundles there (#152).
-  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'playwright-report/**', 'test-results/**']),
+  // Generated output: Playwright's reports (a retried test writes minified bundles there, #152) and local git worktrees under .claude/, whose .next builds would otherwise be linted.
+  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'playwright-report/**', 'test-results/**', '.claude/**']),
 ]);
