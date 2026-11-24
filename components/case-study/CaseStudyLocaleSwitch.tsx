@@ -2,6 +2,7 @@
 
 import { LocaleSwitch } from '@/components/shell/LocaleSwitch';
 import type { Locale } from '@/i18n/routing';
+import { localeCookie } from '@/lib/localeCookie';
 import { caseStudyPath, type CaseStudyId } from '@/lib/routes';
 
 /**
@@ -14,7 +15,7 @@ export function CaseStudyLocaleSwitch({ locale, id }: { locale: Locale; id: Case
       locale={locale}
       onChange={(next) => {
         if (next === locale) return;
-        document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000; samesite=lax`;
+        document.cookie = localeCookie(next);
         window.location.assign(caseStudyPath(next, id));
       }}
     />

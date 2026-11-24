@@ -3,6 +3,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { useCallback, useMemo, useState } from 'react';
 import type { Locale } from '@/i18n/routing';
+import { localeCookie } from '@/lib/localeCookie';
 import type { PortfolioBundle, PortfolioView } from '@/lib/portfolio';
 import { documentTitle, pathFor } from '@/lib/views';
 import { markBooted, useViewStoreApi } from '@/store/viewStore';
@@ -27,7 +28,7 @@ export function AppRoot({ shared, contents, initialLocale }: AppRootProps) {
       window.history.replaceState(null, '', pathFor(next, active) + window.location.hash);
       document.documentElement.lang = next;
       document.title = documentTitle(contents[next].ui.meta, active);
-      document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000; samesite=lax`;
+      document.cookie = localeCookie(next);
     },
     [locale, contents, store],
   );
