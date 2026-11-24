@@ -3,6 +3,7 @@ import { routing, type Locale } from '@/i18n/routing';
 import { getPortfolioBundle } from '@/lib/portfolio';
 import { absoluteUrl, IS_INDEXABLE } from '@/lib/site';
 import { getCaseStudy } from '@/lib/caseStudy';
+import { markdownPath } from '@/lib/agents/paths';
 import { caseStudyPath, pathFor, type CaseStudyId, type ViewId } from '@/lib/views';
 
 const OG_LOCALE: Record<Locale, string> = { en: 'en_US', it: 'it_IT', fr: 'fr_FR', de: 'de_DE', es: 'es_ES' };
@@ -35,7 +36,12 @@ export function buildViewMetadata(locale: Locale, view: ViewId): Metadata {
   return {
     title: view === 'hero' ? { absolute: title } : title,
     description,
-    alternates: { canonical: url, languages: languageAlternates(view) },
+    // The Markdown version for agents (#173): `<link rel="alternate" type="text/markdown">`.
+    alternates: {
+      canonical: url,
+      languages: languageAlternates(view),
+      types: { 'text/markdown': absoluteUrl(markdownPath({ locale, view })) },
+    },
     robots: ROBOTS,
     openGraph: {
       type: 'profile',
@@ -69,7 +75,11 @@ export function buildCaseStudyMetadata(locale: Locale, id: CaseStudyId): Metadat
   return {
     title,
     description,
-    alternates: { canonical: url, languages: caseStudyAlternates(id) },
+    alternates: {
+      canonical: url,
+      languages: caseStudyAlternates(id),
+      types: { 'text/markdown': absoluteUrl(markdownPath({ locale, study: id })) },
+    },
     robots: ROBOTS,
     openGraph: {
       type: 'article',

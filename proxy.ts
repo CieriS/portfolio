@@ -21,6 +21,7 @@ export default function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Skip Next internals, Vercel internals and any path with a file extension.
-  matcher: '/((?!api|_next|_vercel|.*\\..*).*)',
+  // Skip the API, the internal routes of the agent files, Next and Vercel internals and any path
+  // with a file extension (`/llms.txt`, `/en/identity.md`): none of them is localized.
+  matcher: '/((?!api|agents|_next|_vercel|.*\\..*).*)',
 };
