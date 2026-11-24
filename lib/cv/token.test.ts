@@ -1,9 +1,16 @@
+import { createHmac } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import { passwordMatches, signLink, verifyLink } from './token';
 
 const SECRET = 'a-test-secret-that-is-long-enough-123456';
 const NOW = Date.parse('2026-10-10T12:00:00Z');
-const claims = { email: 'visitor@example.com', locale: 'it' as const, exp: NOW + 60_000 };
+const claims = { locale: 'it' as const, exp: NOW + 60_000 };
+
+/** A link in the format mailed before #65: the same signature, plus the address in the payload. */
+function oldFormatLink(email: string, secret = SECRET, exp = claims.exp): string {
+  const payload = Buffer.from(JSON.stringify({ email, locale: claims.locale, exp })).toString('base64url');
+  return `${payload}.${createHmac('sha256', secret).update(payload).digest('base64url')}`;
+}
 
 describe('signLink / verifyLink', () => {
   it('round-trips the claims of a fresh token', () => {
@@ -32,7 +39,30 @@ describe('signLink / verifyLink', () => {
 
   it('rejects correctly signed claims of the wrong shape', () => {
     expect(verifyLink(signLink({ ...claims, locale: 'pt' } as never, SECRET), SECRET, NOW)).toBeNull();
-    expect(verifyLink(signLink({ email: 'x@example.com' } as never, SECRET), SECRET, NOW)).toBeNull();
+    expect(verifyLink(signLink({ exp: NOW + 1000 } as never, SECRET), SECRET, NOW)).toBeNull();
+  });
+
+  it('puts only the language and the expiry in the payload, whatever the caller passes', () => {
+    const token = signLink({ ...claims, email: 'visitor@example.com' } as never, SECRET);
+    const payload = Buffer.from(token.split('.')[0]!, 'base64url').toString('utf8');
+    expect(JSON.parse(payload)).toEqual({ locale: 'it', exp: claims.exp });
+    expect(token).not.toContain('visitor');
+  });
+});
+
+describe('links mailed before #65 (the address in the payload)', () => {
+  it('still open until they expire, and the address is not returned', () => {
+    expect(verifyLink(oldFormatLink('visitor@example.com'), SECRET, NOW)).toEqual(claims);
+    expect(verifyLink(oldFormatLink('visitor@example.com'), SECRET, claims.exp)).toBeNull();
+  });
+
+  it('are refused when tampered with or signed with another secret', () => {
+    const [, signature] = oldFormatLink('visitor@example.com').split('.');
+    const forged = Buffer.from(JSON.stringify({ email: 'other@example.com', locale: 'it', exp: claims.exp })).toString(
+      'base64url',
+    );
+    expect(verifyLink(`${forged}.${signature}`, SECRET, NOW)).toBeNull();
+    expect(verifyLink(oldFormatLink('visitor@example.com', `${SECRET}-other`), SECRET, NOW)).toBeNull();
   });
 });
 

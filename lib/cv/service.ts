@@ -61,13 +61,13 @@ export async function requestCv(body: unknown, deps: CvDeps): Promise<CvOutcome>
   // A bot gets the same answer as a person, so it has no reason to try again differently.
   if (request.website) return { kind: 'sent' };
 
-  const token = signLink({ email: request.email, locale: request.locale, exp: deps.now + LINK_HOURS * 3_600_000 }, links.secret);
+  const token = signLink({ locale: request.locale, exp: deps.now + LINK_HOURS * 3_600_000 }, links.secret);
   const copy = cvCopy(request.locale).email;
   const values = { name: deps.name, hours: LINK_HOURS, link: `${deps.siteUrl}/api/cv?token=${token}` };
   try {
     await deps.mailer({ to: request.email, subject: fill(copy.subject, values), text: fill(copy.body, values) });
   } catch (error) {
-    deps.report(error);
+    deps.report(withoutAddress(error, request.email));
     return { kind: 'failed' };
   }
 
@@ -79,7 +79,7 @@ export async function requestCv(body: unknown, deps: CvDeps): Promise<CvOutcome>
         subject: `CV requested by ${request.email}`,
         text: `${request.email} asked for the CV (${request.locale}).`,
       })
-      .catch(deps.report);
+      .catch((error: unknown) => deps.report(withoutAddress(error, request.email)));
   }
   return { kind: 'sent' };
 }
@@ -90,4 +90,16 @@ export function openLink(token: string | null, deps: Pick<CvDeps, 'config' | 'no
   if (!links) return { kind: 'unavailable' };
   const claims = token ? verifyLink(token, links.secret, deps.now) : null;
   return claims ? { kind: 'pdf', locale: claims.locale } : { kind: 'denied' };
+}
+
+/**
+ * What reaches the logs when a delivery fails: the error's message with the requester's address
+ * masked, since a provider's answer may echo the recipient (#65). Only the message is kept;
+ * a stack trace or a nested cause could carry the address in ways this cannot see.
+ */
+export function withoutAddress(error: unknown, email: string): Error {
+  const mask = (text: string) => text.split(email).join('[email]');
+  const masked = new Error(mask(error instanceof Error ? error.message : String(error)));
+  if (error instanceof Error) masked.name = error.name;
+  return masked;
 }

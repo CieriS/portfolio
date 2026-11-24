@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { LINK_HOURS } from './common';
 import type { CvConfig } from './config';
 import type { Mail, Mailer } from './mailer';
-import { openLink, requestCv, type CvDeps } from './service';
+import { openLink, requestCv, withoutAddress, type CvDeps } from './service';
 import { signLink } from './token';
 
 const SECRET = 's'.repeat(32);
@@ -64,6 +64,20 @@ describe('requestCv — email', () => {
     expect(openLink(token, { config: fullConfig, now: NOW + LINK_HOURS * 3_600_000 })).toEqual({ kind: 'denied' });
   });
 
+  // #65: the link ends up in request logs and browser history, so it must not reveal who asked.
+  it('mails a link that does not contain the address in any readable form', async () => {
+    const { sent, deps: d } = deps();
+    await requestCv(request, d);
+    const link = sent[0]!.text.match(/https:\/\/\S+/)![0];
+    const token = new URL(link).searchParams.get('token')!;
+    const payload = Buffer.from(token.split('.')[0]!, 'base64url').toString('utf8');
+    for (const text of [link, decodeURIComponent(link), payload]) {
+      expect(text).not.toContain('visitor@example.com');
+      expect(text).not.toContain('visitor');
+    }
+    expect(JSON.parse(payload)).toEqual({ locale: 'it', exp: NOW + LINK_HOURS * 3_600_000 });
+  });
+
   it('skips the owner notice when none is configured', async () => {
     const { sent, deps: d } = deps({ config: { ...fullConfig, links: { ...fullConfig.links!, notify: null } } });
     await requestCv(request, d);
@@ -80,14 +94,30 @@ describe('requestCv — email', () => {
     const error = new Error('Resend answered 500');
     const { report, deps: d } = deps({ mailer: () => Promise.reject(error) });
     expect(await requestCv(request, d)).toEqual({ kind: 'failed' });
-    expect(report).toHaveBeenCalledWith(error);
+    expect(report).toHaveBeenCalledOnce();
+    expect(String(report.mock.calls[0]![0])).toContain('Resend answered 500');
   });
 
-  it('still succeeds when only the owner notice fails', async () => {
-    const mailer = vi.fn<Mailer>().mockResolvedValueOnce().mockRejectedValueOnce(new Error('notice lost'));
+  // #65: a provider may echo the recipient in its error; the logs must not get the address.
+  it('masks the address in what a failed delivery writes to the logs', async () => {
+    const echo = new Error('Resend answered 422: {"message":"Invalid `to` field: visitor@example.com, visitor@example.com"}');
+    const { report, deps: d } = deps({ mailer: () => Promise.reject(echo) });
+    await requestCv(request, d);
+    const logged = report.mock.calls[0]![0];
+    expect(logged).toBeInstanceOf(Error);
+    expect(String(logged)).not.toContain('visitor@example.com');
+    expect(String(logged)).toContain('Invalid `to` field: [email], [email]');
+  });
+
+  it('still succeeds when only the owner notice fails, and masks the address there too', async () => {
+    const mailer = vi
+      .fn<Mailer>()
+      .mockResolvedValueOnce()
+      .mockRejectedValueOnce(new Error('notice for visitor@example.com lost'));
     const { report, deps: d } = deps({ mailer });
     expect(await requestCv(request, d)).toEqual({ kind: 'sent' });
     expect(report).toHaveBeenCalledOnce();
+    expect(String(report.mock.calls[0]![0])).toBe('Error: notice for [email] lost');
   });
 
   it('is unavailable when email links are not configured', async () => {
@@ -115,8 +145,29 @@ describe('requestCv — invalid input', () => {
   });
 });
 
+describe('withoutAddress', () => {
+  it('keeps the name and message of an Error, masking every occurrence of the address', () => {
+    const error = new TypeError('a@example.com and a@example.com');
+    const masked = withoutAddress(error, 'a@example.com');
+    expect(masked.name).toBe('TypeError');
+    expect(masked.message).toBe('[email] and [email]');
+  });
+
+  it('turns anything thrown into an Error, masked', () => {
+    expect(withoutAddress('failed for a@example.com', 'a@example.com').message).toBe('failed for [email]');
+    expect(withoutAddress(null, 'a@example.com').message).toBe('null');
+  });
+
+  it('drops the stack and cause of the original, which could carry the address', () => {
+    const error = new Error('outer', { cause: new Error('a@example.com') });
+    const masked = withoutAddress(error, 'a@example.com');
+    expect(masked.cause).toBeUndefined();
+    expect(masked.stack ?? '').not.toContain('a@example.com');
+  });
+});
+
 describe('openLink', () => {
-  const token = signLink({ email: 'v@example.com', locale: 'fr', exp: NOW + 1000 }, SECRET);
+  const token = signLink({ locale: 'fr', exp: NOW + 1000 }, SECRET);
 
   it('opens a genuine link', () => {
     expect(openLink(token, { config: fullConfig, now: NOW })).toEqual({ kind: 'pdf', locale: 'fr' });
