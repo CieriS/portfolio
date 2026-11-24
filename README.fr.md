@@ -88,7 +88,7 @@ Pour le tester sur un smartphone connecté au même réseau, ouvrez l'adresse *N
 | `npm run dev` | Serveur de développement avec rechargement à chaud sur http://localhost:3000 |
 | `npm run build` | Build de production : pré-rend les pages, les images Open Graph, le sitemap et robots |
 | `npm start` | Lance le build de production en local |
-| `npm run lint` | ESLint sur l'ensemble du projet (hors fichiers de build) |
+| `npm run lint` | ESLint sur l'ensemble du projet (hors fichiers de build et rapports de Playwright) |
 | `npm run format` | Formate le projet avec Prettier (`.prettierrc.json`, avec tri des classes Tailwind) |
 | `npm run format:check` | Vérifie le formatage sans modifier les fichiers, comme la CI |
 | `npm run typecheck` | Génère les types des routes (`next typegen`) et vérifie les types avec `tsc --noEmit` |
@@ -329,7 +329,7 @@ Le lien dans l'accordéon, le sitemap, les métadonnées et l'image Open Graph s
 `version` et `released` de chaque projet dans `data/shared.json` suivent les versions publiées par les projets eux-mêmes, sans les saisir à la main.
 
 - `.github/workflows/versions.yml` s'exécute chaque jour, et à la demande depuis l'onglet Actions. `scripts/sync-versions.mjs` lit la dernière version publiée de chaque projet qui en déclare une et, si elle est plus récente, réécrit les deux lignes ; la logique est dans `lib/versions.ts`, pure et testée.
-- Le workflow n'écrit jamais sur `development` : il ouvre une pull request depuis la branche `features/versioni-dei-progetti` (ou met à jour celle déjà ouverte), les contrôles s'exécutent comme pour les autres et la fusion reste une décision.
+- Le workflow n'écrit jamais sur `development` : il ouvre une pull request depuis la branche `features/versioni-dei-progetti` (ou met à jour celle déjà ouverte), avec l'étiquette `semver:patch` et le jalon ouvert le plus bas (aucun s'il n'y en a pas d'ouvert), pour que les notes de version ne la classent pas dans « Other ». Les contrôles s'exécutent comme pour les autres et la fusion reste une décision.
 - Les préversions comptent ; les brouillons non. On ne revient jamais en arrière : une version égale ou plus ancienne est ignorée.
 - Si un contrôle échoue dans cette pull request, un texte dépend de la version (par exemple la fiche d'aria-er, qui jusqu'à la 1.0.0 doit dire ce qui manque) : on corrige le texte dans cette branche, puis on fusionne.
 - Un projet public est cherché dans le dépôt de son `source.url`. Un projet privé n'a pas d'adresse dans les données, volontairement : son dépôt vient du secret `VERSION_SOURCES` et n'apparaît ni dans les fichiers ni dans les journaux ; un test échoue si son nom se retrouve dans un fichier.

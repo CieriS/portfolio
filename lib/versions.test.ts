@@ -3,7 +3,15 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { SharedSchema } from './content/schema';
-import { applyVersions, compareVersions, latestRelease, parseVersion, repositoryOf, type Release } from './versions';
+import {
+  applyVersions,
+  compareVersions,
+  latestRelease,
+  nextMilestone,
+  parseVersion,
+  repositoryOf,
+  type Release,
+} from './versions';
 
 const release = (tag_name: string, more: Partial<Release> = {}): Release => ({
   tag_name,
@@ -61,6 +69,22 @@ describe('latestRelease', () => {
       version: '0.1.0',
       released: null,
     });
+  });
+});
+
+describe('nextMilestone', () => {
+  it('picks the lowest version, compared as numbers', () => {
+    expect(nextMilestone(['2.10.0', '2.8.0', '2.7.0', '2.13.0'])).toBe('2.7.0');
+    expect(nextMilestone(['2.10.0', '2.9.0'])).toBe('2.9.0');
+  });
+
+  it('ignores titles that are not a version', () => {
+    expect(nextMilestone(['Backlog', 'v2.8.0', '2.8.0-rc.1'])).toBe('v2.8.0');
+  });
+
+  it('gives null when no open milestone is a version', () => {
+    expect(nextMilestone([])).toBeNull();
+    expect(nextMilestone(['Someday'])).toBeNull();
   });
 });
 

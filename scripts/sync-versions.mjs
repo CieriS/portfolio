@@ -15,7 +15,7 @@
 import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { applyVersions, latestRelease, repositoryOf } from '../lib/versions.ts';
+import { applyVersions, latestRelease, nextMilestone, repositoryOf } from '../lib/versions.ts';
 
 const FILE = new URL('../data/shared.json', import.meta.url);
 const dryRun = process.argv.includes('--dry-run');
@@ -93,7 +93,26 @@ if (changes.length === 0) console.log('Every project is at its latest release.')
 
 if (changes.length > 0 && !dryRun) writeFileSync(FILE, next);
 
+/** Titles of this repository's open milestones; an empty list when they cannot be read, so the pull request still opens. */
+async function openMilestones() {
+  const repository = process.env.GITHUB_REPOSITORY;
+  if (!repository) return [];
+  const response = await fetch(`https://api.github.com/repos/${repository}/milestones?state=open&per_page=100`, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+  if (!response.ok) {
+    console.log(`Open milestones not readable (HTTP ${response.status}): the pull request gets none`);
+    return [];
+  }
+  return (await response.json()).map((milestone) => milestone.title);
+}
+
 if (process.env.GITHUB_OUTPUT) {
+  const milestone = changes.length > 0 ? nextMilestone(await openMilestones()) : null;
   const summary = lines.map((line) => `${line.name} ${line.to}`).join(', ');
   const body = [
     'A newer release was found for the projects below. `data/shared.json` is the only file changed.',
@@ -113,6 +132,7 @@ if (process.env.GITHUB_OUTPUT) {
       `title=Project versions: ${summary}`,
       `message=Versioni dei progetti: ${summary}`,
       `body=${bodyFile}`,
+      `milestone=${milestone ?? ''}`,
       '',
     ].join('\n'),
   );

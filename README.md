@@ -86,7 +86,7 @@ Per provarlo da smartphone sulla stessa rete, apri l'indirizzo *Network* stampat
 | `npm run dev` | Server di sviluppo con hot reload su http://localhost:3000 |
 | `npm run build` | Build di produzione: pre-renderizza pagine, immagini Open Graph, sitemap e robots |
 | `npm start` | Avvia la build di produzione in locale |
-| `npm run lint` | ESLint su tutto il progetto (esclusi gli output di build) |
+| `npm run lint` | ESLint su tutto il progetto (esclusi gli output di build e i report di Playwright) |
 | `npm run format` | Formatta il progetto con Prettier (`.prettierrc.json`, con ordinamento delle classi Tailwind) |
 | `npm run format:check` | Verifica la formattazione senza modificare i file, come in CI |
 | `npm run typecheck` | Genera i tipi delle route (`next typegen`) e verifica i tipi con `tsc --noEmit` |
@@ -327,7 +327,7 @@ Link dall'accordion, sitemap, metadata e immagine Open Graph seguono da soli; Ty
 `version` e `released` di ogni progetto in `data/shared.json` seguono le release dei progetti stessi, senza scriverle a mano.
 
 - `.github/workflows/versions.yml` gira ogni giorno, e a richiesta dalla scheda Actions. `scripts/sync-versions.mjs` legge l'ultima release di ogni progetto che dichiara una versione e, se è più recente, riscrive le due righe; la logica è in `lib/versions.ts`, pura e testata.
-- Il workflow non scrive mai su `development`: apre una pull request dal branch `features/versioni-dei-progetti` (o aggiorna quella già aperta), i controlli girano come per ogni altra e il merge resta una decisione.
+- Il workflow non scrive mai su `development`: apre una pull request dal branch `features/versioni-dei-progetti` (o aggiorna quella già aperta), con l'etichetta `semver:patch` e la milestone aperta più bassa (nessuna, se non ce n'è di aperte), così nelle note di rilascio non finisce in "Other". I controlli girano come per ogni altra e il merge resta una decisione.
 - Contano anche le pre-release; le bozze no. Non si torna mai indietro: una versione uguale o più vecchia viene ignorata.
 - Se nella pull request un controllo fallisce, un testo dipende dalla versione (per esempio la scheda di aria-er, che fino alla 1.0.0 deve dire cosa manca): si corregge il testo in quel branch e poi si unisce.
 - Un progetto pubblico è cercato nel repository del suo `source.url`. Uno privato non ha indirizzo nei dati, di proposito: il suo repository arriva dal secret `VERSION_SOURCES` e non compare né nei file né nei log; un test fallisce se il nome finisce in un file.
