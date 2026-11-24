@@ -333,3 +333,21 @@ test.describe('aria-er live results', () => {
     await expect(page.locator('[data-live]')).toHaveCount(0);
   });
 });
+
+// #146: at 320 px the "Checked against ARPAE" table widened `main` to 338 px.
+for (const { locale, id, path } of CASE_STUDY_PAGES) {
+  test(`at 320 px main has no horizontal overflow (${id}, ${locale})`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto(path);
+    const overflow = await page.locator('main').evaluate((el) => el.scrollWidth - el.clientWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
+
+test('a table wider than the screen scrolls on its own and is reachable by keyboard', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto(caseStudyPath('en', 'ariaer'));
+  const region = page.getByRole('region', { name: ariaer.copy.en.measures.title });
+  await expect(region).toHaveAttribute('tabindex', '0');
+  await expect(region.locator('caption')).toHaveText(ariaer.copy.en.measures.note);
+});
