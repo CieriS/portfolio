@@ -117,7 +117,7 @@ No variable is required: the project works locally without any configuration.
 
 The CV variables are read by the `/api/cv` route when the server starts, not at build time: the static pages never contain them. Without any of them the site works and the form answers "not available".
 
-Locally you can create a `.env.local` file, which Git already ignores, with only the variables you need (invented values):
+Locally, copy `.env.example` to `.env.local` (which Git already ignores) and keep only the variables you need (invented values):
 
 ```bash
 SITE_URL=https://www.example.com

@@ -119,7 +119,7 @@ Aucune variable n'est obligatoire : en local, le projet fonctionne sans configur
 
 Les variables du CV sont lues par la route `/api/cv` au démarrage du serveur, pas au build : les pages statiques ne les contiennent jamais. Sans aucune d'elles, le site fonctionne et le formulaire répond « indisponible ».
 
-En local, vous pouvez créer un fichier `.env.local`, déjà ignoré par Git, avec les seules variables utiles (valeurs inventées) :
+En local, copiez `.env.example` vers `.env.local` (déjà ignoré par Git) et gardez seulement les variables utiles (valeurs inventées) :
 
 ```bash
 SITE_URL=https://www.example.com

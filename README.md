@@ -117,7 +117,7 @@ Nessuna variabile è obbligatoria: in locale il progetto funziona senza configur
 
 Le variabili del CV sono lette dalla route `/api/cv` all'avvio del server, non in build: le pagine statiche non le contengono. Senza nessuna di esse il sito funziona e il modulo risponde "non disponibile".
 
-In locale puoi creare un file `.env.local`, già escluso da Git, con le sole variabili che ti servono (valori inventati):
+In locale copia `.env.example` in `.env.local` (già escluso da Git) e tieni solo le variabili che ti servono (valori inventati):
 
 ```bash
 SITE_URL=https://www.example.com
