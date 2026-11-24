@@ -28,7 +28,7 @@ export function ThemeToggle() {
       data-theme-toggle
       onClick={() => setTheme(next)}
       aria-label={`${t('label')}: ${t(current)}`}
-      className="group flex min-h-11 items-center gap-2.5 text-[13px]"
+      className="group flex min-h-[2.8rem] items-center gap-2.5 text-[13px]"
     >
       <span aria-hidden className="relative size-3.5 overflow-hidden rounded-full border border-ink">
         <span

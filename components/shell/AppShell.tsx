@@ -57,7 +57,7 @@ export function AppShell({ data, locale, onLocaleChange }: AppShellProps) {
         >
           <ViewLink
             view="hero"
-            className="inline-flex min-h-11 items-center text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap select-none"
+            className="inline-flex min-h-[2.8rem] items-center text-[15px] font-medium tracking-[-0.01em] whitespace-nowrap select-none"
           >
             <span className="link-underline">{data.shared.name}</span>
           </ViewLink>
