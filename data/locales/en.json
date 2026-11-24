@@ -11,7 +11,7 @@
         },
         "identity": {
           "title": "Identity & engineering principles",
-          "description": "An instrumental, engineering-first approach to software: measurable objectives, data as ground truth, flat control flow. GitHub and LinkedIn."
+          "description": "How I choose tools, with an example for each principle from yourFinance and aria-er. Looking for a Data Engineer role, full remote. LinkedIn and GitHub."
         },
         "timeline": {
           "title": "Experience & education timeline",
@@ -87,23 +87,26 @@
     "cta": "See the projects"
   },
   "identity": {
-    "title": "Software is an instrument.",
-    "titleEmphasis": "instrument",
-    "subtitle": "Every language, schema and abstraction is chosen for its measurable contribution to an objective — never by habit or taste.",
+    "title": "How I work, and where to reach me.",
+    "titleEmphasis": "How I work",
+    "subtitle": "I choose languages, schemas and abstractions for what they do for the project, and I can say why for each one.",
     "principlesTitle": "Principles",
     "principles": [
       {
         "title": "Instrumental rationality",
-        "body": "Means are evaluated against ends. What does not move the objective is removed."
+        "body": "I pick a tool for what the project needs. aria-er has no streaming: the sources publish hours late and every question is daily, so a daily batch answers them."
       },
-      { "title": "Engineering before ornament", "body": "Specify, measure, then build. Form is a consequence of constraints." },
+      {
+        "title": "Engineering before ornament",
+        "body": "Measure, then change. In yourFinance EXPLAIN ANALYZE showed two analytics queries growing with the whole history; rewriting the view fixed them, with no new index."
+      },
       {
         "title": "Data as ground truth",
-        "body": "Decisions are traced back to data. A model is only as reliable as its inputs."
+        "body": "aria-er checks every count of legal-limit exceedances against the figures ARPAE publishes; two of those checks changed the code."
       },
       {
         "title": "Flat control flow",
-        "body": "Many small functions, at most two levels of nesting, explicit contracts between them."
+        "body": "Small parts with explicit contracts. The yourFinance API is a workspace of layered crates, each depending only on the ones below, and CI checks that the domain stays free of I/O."
       }
     ],
     "outsideTitle": "Outside work",
@@ -168,7 +171,7 @@
         "phases": {
           "systems": {
             "title": "Systems layer",
-            "body": "Memory ownership, deterministic performance, low-level control with Rust."
+            "body": "Memory ownership, memory safety without a garbage collector, low-level control with Rust."
           },
           "modeling": {
             "title": "Data modeling",

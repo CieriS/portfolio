@@ -11,7 +11,7 @@
         },
         "identity": {
           "title": "Identität & Engineering-Prinzipien",
-          "description": "Ein instrumenteller, ingenieurmäßiger Blick auf Software: messbare Ziele, Daten als Referenz, flacher Kontrollfluss. GitHub und LinkedIn."
+          "description": "Wie ich Werkzeuge wähle, mit einem Beispiel pro Prinzip aus yourFinance und aria-er. Ich suche eine Stelle als Data Engineer, remote. LinkedIn und GitHub."
         },
         "timeline": {
           "title": "Berufserfahrung und Ausbildung",
@@ -87,26 +87,26 @@
     "cta": "Zu den Projekten"
   },
   "identity": {
-    "title": "Software ist ein Instrument.",
-    "titleEmphasis": "Instrument",
-    "subtitle": "Jede Sprache, jedes Schema und jede Abstraktion wird nach ihrem messbaren Beitrag zu einem Ziel gewählt — nie aus Gewohnheit oder Vorliebe.",
+    "title": "Wie ich arbeite, und wo du mich erreichst.",
+    "titleEmphasis": "Wie ich arbeite",
+    "subtitle": "Ich wähle Sprachen, Schemas und Abstraktionen danach, was sie für das Projekt leisten, und kann für jede sagen, warum.",
     "principlesTitle": "Prinzipien",
     "principles": [
       {
         "title": "Instrumentelle Rationalität",
-        "body": "Mittel werden an Zielen gemessen. Was das Ziel nicht voranbringt, wird entfernt."
+        "body": "Ich wähle ein Werkzeug nach dem, was das Projekt braucht. aria-er verzichtet auf Streaming: Die Quellen veröffentlichen Stunden später und jede Frage ist täglich, also genügt ein täglicher Batch."
       },
       {
         "title": "Engineering vor Ornament",
-        "body": "Spezifizieren, messen, dann bauen. Die Form folgt aus den Randbedingungen."
+        "body": "Erst messen, dann ändern. In yourFinance zeigte EXPLAIN ANALYZE zwei Statistikabfragen, die mit der ganzen Historie wuchsen; das Umschreiben der View hat sie behoben, ohne neuen Index."
       },
       {
         "title": "Daten als Referenz",
-        "body": "Entscheidungen werden auf Daten zurückgeführt. Ein Modell ist nur so verlässlich wie seine Eingaben."
+        "body": "aria-er vergleicht jede Zahl von Grenzwertüberschreitungen mit den Werten, die ARPAE veröffentlicht; zwei dieser Vergleiche haben den Code verändert."
       },
       {
         "title": "Flacher Kontrollfluss",
-        "body": "Viele kleine Funktionen, höchstens zwei Verschachtelungsebenen, explizite Verträge dazwischen."
+        "body": "Kleine Teile mit expliziten Verträgen. Die API von yourFinance ist ein Workspace aus geschichteten Crates, jedes hängt nur von den darunterliegenden ab, und die CI prüft, dass die Domäne frei von I/O bleibt."
       }
     ],
     "outsideTitle": "Neben der Arbeit",
@@ -174,7 +174,7 @@
         "phases": {
           "systems": {
             "title": "Systemschicht",
-            "body": "Speicher-Ownership, deterministische Performance, Low-Level-Kontrolle mit Rust."
+            "body": "Speicher-Ownership, Speichersicherheit ohne Garbage Collector, Low-Level-Kontrolle mit Rust."
           },
           "modeling": {
             "title": "Datenmodellierung",

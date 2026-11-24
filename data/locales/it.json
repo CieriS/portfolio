@@ -11,7 +11,7 @@
         },
         "identity": {
           "title": "Identità e principi di ingegneria",
-          "description": "Un approccio strumentale e ingegneristico al software: obiettivi misurabili, dati come verità, flusso di controllo piatto. GitHub e LinkedIn."
+          "description": "Come scelgo gli strumenti, con un esempio per ogni principio da yourFinance e aria-er. Cerco un ruolo da Data Engineer, full remote. LinkedIn e GitHub."
         },
         "timeline": {
           "title": "Esperienza e formazione",
@@ -87,26 +87,26 @@
     "cta": "Vedi i progetti"
   },
   "identity": {
-    "title": "Il software è uno strumento.",
-    "titleEmphasis": "strumento",
-    "subtitle": "Ogni linguaggio, schema e astrazione è scelto per il suo contributo misurabile a un obiettivo — mai per abitudine o gusto.",
+    "title": "Come lavoro, e dove trovarmi.",
+    "titleEmphasis": "Come lavoro",
+    "subtitle": "Scelgo linguaggi, schemi e astrazioni per quello che fanno per il progetto, e per ognuno so dire perché.",
     "principlesTitle": "Principi",
     "principles": [
       {
         "title": "Razionalità strumentale",
-        "body": "I mezzi sono valutati rispetto ai fini. Ciò che non avvicina l'obiettivo viene rimosso."
+        "body": "Scelgo uno strumento per quello che serve al progetto. aria-er non usa lo streaming: le fonti pubblicano con ore di ritardo e ogni domanda è giornaliera, quindi basta un batch al giorno."
       },
       {
         "title": "Ingegneria prima dell'ornamento",
-        "body": "Specificare, misurare, poi costruire. La forma è una conseguenza dei vincoli."
+        "body": "Prima misuro, poi cambio. In yourFinance EXPLAIN ANALYZE ha mostrato due query di statistica che crescevano con tutto lo storico; le ha sistemate la riscrittura della vista, senza indici nuovi."
       },
       {
         "title": "Il dato come verità",
-        "body": "Le decisioni sono ricondotte ai dati. Un modello è affidabile quanto i suoi input."
+        "body": "aria-er confronta ogni conteggio di superamenti dei limiti di legge con i numeri pubblicati da ARPAE; due di questi confronti hanno cambiato il codice."
       },
       {
         "title": "Flusso di controllo piatto",
-        "body": "Molte funzioni semplici, al massimo due livelli di annidamento, contratti espliciti tra loro."
+        "body": "Parti piccole con contratti espliciti. L'API di yourFinance è un workspace di crate a strati, ognuno dipende solo da quelli sotto, e la CI verifica che il dominio resti senza I/O."
       }
     ],
     "outsideTitle": "Fuori dal lavoro",
@@ -174,7 +174,7 @@
         "phases": {
           "systems": {
             "title": "Livello sistema",
-            "body": "Ownership della memoria, prestazioni deterministiche, controllo a basso livello con Rust."
+            "body": "Ownership della memoria, sicurezza della memoria senza garbage collector, controllo a basso livello con Rust."
           },
           "modeling": {
             "title": "Modellazione dati",

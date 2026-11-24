@@ -214,3 +214,32 @@ describe('plain words, no forced metaphors (#103, #104, #106, #138)', () => {
     expect(en.hero.lead).not.toContain(', and ');
   });
 });
+
+describe('identity principles backed by evidence (#105, #139)', () => {
+  const copies = { en, it: it_, fr, de, es };
+  type Locale = keyof typeof copies;
+  const absolute: Record<Locale, RegExp> = {
+    en: /\b(never|always|removed)\b/i,
+    it: /\b(mai|sempre|rimosso)\b/i,
+    fr: /\b(jamais|toujours|supprimé)\b/i,
+    de: /\b(nie|immer|entfernt)\b/i,
+    es: /\b(nunca|siempre|elimina)\b/i,
+  };
+
+  it.each(Object.keys(copies) as Locale[])('%s: every principle names the project where it is applied', (locale) => {
+    const { identity } = copies[locale];
+    for (const principle of identity.principles) expect(principle.body, principle.body).toMatch(/yourFinance|aria-er/);
+    for (const text of [identity.subtitle, ...identity.principles.map((p) => p.body)]) {
+      expect(text, text).not.toMatch(absolute[locale]);
+    }
+    // The nesting limit had no fact behind it: it must not come back without one.
+    expect(JSON.stringify(identity.principles)).not.toMatch(/nesting|annidamento|imbrication|verschachtelung|anidación/i);
+  });
+
+  it.each(Object.keys(copies) as Locale[])(
+    '%s: Rust is described by memory safety, not "deterministic performance"',
+    (locale) => {
+      expect(copies[locale].timeline.threads.independent.phases.systems.body).not.toMatch(/determinis|predecible/i);
+    },
+  );
+});

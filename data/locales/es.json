@@ -11,7 +11,7 @@
         },
         "identity": {
           "title": "Identidad y principios de ingeniería",
-          "description": "Un enfoque del software como herramienta: objetivos medibles, los datos como referencia, flujo de control plano. GitHub y LinkedIn."
+          "description": "Cómo elijo las herramientas, con un ejemplo de cada principio en yourFinance y aria-er. Busco un puesto de Data Engineer, en remoto. LinkedIn y GitHub."
         },
         "timeline": {
           "title": "Experiencia y formación",
@@ -87,26 +87,26 @@
     "cta": "Ver los proyectos"
   },
   "identity": {
-    "title": "El software es una herramienta.",
-    "titleEmphasis": "herramienta",
-    "subtitle": "Cada lenguaje, esquema y abstracción se elige por lo que aporta, de forma medible, a un objetivo; nunca por costumbre o por gusto.",
+    "title": "Cómo trabajo, y dónde encontrarme.",
+    "titleEmphasis": "Cómo trabajo",
+    "subtitle": "Elijo lenguajes, esquemas y abstracciones por lo que hacen por el proyecto, y de cada uno sé decir por qué.",
     "principlesTitle": "Principios",
     "principles": [
       {
         "title": "Racionalidad instrumental",
-        "body": "Los medios se valoran según los fines. Lo que no acerca al objetivo se elimina."
+        "body": "Elijo una herramienta por lo que necesita el proyecto. aria-er no usa streaming: las fuentes publican con horas de retraso y cada pregunta es diaria, así que basta un batch al día."
       },
       {
         "title": "Ingeniería antes que adorno",
-        "body": "Especificar, medir y después construir. La forma es una consecuencia de las restricciones."
+        "body": "Primero medir, luego cambiar. En yourFinance, EXPLAIN ANALYZE mostró dos consultas estadísticas que crecían con todo el histórico; reescribir la vista las arregló, sin índices nuevos."
       },
       {
         "title": "Los datos como referencia",
-        "body": "Las decisiones se apoyan en los datos. Un modelo es tan fiable como sus entradas."
+        "body": "aria-er compara cada recuento de superaciones de los límites legales con las cifras que publica ARPAE; dos de esas comparaciones cambiaron el código."
       },
       {
         "title": "Flujo de control plano",
-        "body": "Muchas funciones pequeñas, como mucho dos niveles de anidación y contratos explícitos entre ellas."
+        "body": "Piezas pequeñas con contratos explícitos. La API de yourFinance es un workspace de crates por capas, cada uno depende solo de los de abajo, y la CI comprueba que el dominio siga sin I/O."
       }
     ],
     "outsideTitle": "Fuera del trabajo",
@@ -174,7 +174,7 @@
         "phases": {
           "systems": {
             "title": "Capa de sistemas",
-            "body": "Propiedad de la memoria, rendimiento predecible y control a bajo nivel con Rust."
+            "body": "Propiedad de la memoria, seguridad de memoria sin recolector de basura y control a bajo nivel con Rust."
           },
           "modeling": {
             "title": "Modelado de datos",

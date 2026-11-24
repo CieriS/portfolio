@@ -11,7 +11,7 @@
         },
         "identity": {
           "title": "Identité & principes d'ingénierie",
-          "description": "Une approche instrumentale et ingénieure du logiciel : objectifs mesurables, données comme référence, flux de contrôle plat. GitHub et LinkedIn."
+          "description": "Comment je choisis mes outils, avec un exemple par principe de yourFinance et aria-er. Je cherche un poste de Data Engineer, en télétravail. LinkedIn, GitHub."
         },
         "timeline": {
           "title": "Parcours professionnel et formation",
@@ -87,26 +87,26 @@
     "cta": "Voir les projets"
   },
   "identity": {
-    "title": "Le logiciel est un instrument.",
-    "titleEmphasis": "instrument",
-    "subtitle": "Chaque langage, schéma et abstraction est choisi pour sa contribution mesurable à un objectif — jamais par habitude ou par goût.",
+    "title": "Comment je travaille, et où me joindre.",
+    "titleEmphasis": "Comment je travaille",
+    "subtitle": "Je choisis langages, schémas et abstractions pour ce qu'ils apportent au projet, et je sais dire pourquoi pour chacun.",
     "principlesTitle": "Principes",
     "principles": [
       {
         "title": "Rationalité instrumentale",
-        "body": "Les moyens sont évalués au regard des fins. Ce qui ne fait pas avancer l'objectif est supprimé."
+        "body": "Je choisis un outil pour ce dont le projet a besoin. aria-er n'utilise pas le streaming : les sources publient avec des heures de retard et chaque question est journalière, un batch quotidien suffit donc."
       },
       {
         "title": "L'ingénierie avant l'ornement",
-        "body": "Spécifier, mesurer, puis construire. La forme est une conséquence des contraintes."
+        "body": "Mesurer, puis changer. Dans yourFinance, EXPLAIN ANALYZE a montré deux requêtes statistiques qui grandissaient avec tout l'historique ; réécrire la vue les a corrigées, sans nouvel index."
       },
       {
         "title": "La donnée comme vérité de référence",
-        "body": "Les décisions sont ramenées aux données. Un modèle n'est fiable que si ses entrées le sont."
+        "body": "aria-er compare chaque nombre de dépassements des seuils légaux aux chiffres publiés par l'ARPAE ; deux de ces comparaisons ont changé le code."
       },
       {
         "title": "Flux de contrôle plat",
-        "body": "De nombreuses petites fonctions, au plus deux niveaux d'imbrication, des contrats explicites entre elles."
+        "body": "De petites parties aux contrats explicites. L'API de yourFinance est un workspace de crates en couches, chacune ne dépend que de celles du dessous, et la CI vérifie que le domaine reste sans I/O."
       }
     ],
     "outsideTitle": "En dehors du travail",
@@ -174,7 +174,7 @@
         "phases": {
           "systems": {
             "title": "Couche système",
-            "body": "Ownership de la mémoire, performances déterministes, contrôle bas niveau avec Rust."
+            "body": "Ownership de la mémoire, sûreté mémoire sans ramasse-miettes, contrôle bas niveau avec Rust."
           },
           "modeling": {
             "title": "Modélisation des données",
