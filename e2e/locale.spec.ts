@@ -150,3 +150,27 @@ test('a language switch keeps the project named in the address, with its panel o
   expect(url.hash).toBe('#ariaer');
   await expect(page.getByRole('button', { name: /aria-er/ })).toHaveAttribute('aria-expanded', 'true');
 });
+
+// #130: next-intl wrote NEXT_LOCALE on a plain visit whenever the address language differed from
+// the browser's. Only an explicit choice may set it now.
+test('a plain visit in another language than the browser sets no cookie', async ({ page, request }) => {
+  const response = await request.get(pathFor('it', 'hero'), { headers: { 'accept-language': 'en-US,en;q=0.9' } });
+  expect(response.status()).toBe(200);
+  expect(response.headersArray().filter((header) => header.name.toLowerCase() === 'set-cookie')).toEqual([]);
+
+  await gotoView(page, 'de', 'projects');
+  expect(await page.context().cookies()).toEqual([]);
+});
+
+test('an explicit choice is stored as a cookie and remembered on the next visit to /', async ({ page }) => {
+  await gotoView(page, 'en', 'hero');
+  await switchLocale(page, 'fr');
+
+  const cookie = (await page.context().cookies()).find((c) => c.name === 'NEXT_LOCALE');
+  expect(cookie?.value).toBe('fr');
+  // The suite runs over plain HTTP, so `Secure` is off here (unit test in lib/localeCookie.test.ts).
+  expect(cookie?.sameSite).toBe('Lax');
+
+  await page.goto('/');
+  expect(new URL(page.url()).pathname).toBe(pathFor('fr', 'hero'));
+});
