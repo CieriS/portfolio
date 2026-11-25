@@ -88,6 +88,37 @@ allowed, by group, `/api/` closed).
 | Fetch on a user's request | `ChatGPT-User`, `Claude-User`, `Perplexity-User` (OpenAI and Perplexity say these may ignore robots.txt) | same pages |
 | Model training | `GPTBot`, `ClaudeBot`, `Google-Extended` and `Applebot-Extended` (control tokens, not crawlers), `CCBot` | same pages, [Google](https://developers.google.com/search/docs/crawling-indexing/google-common-crawlers), [Apple](https://support.apple.com/en-us/119829) |
 
-### After 2.13.0 is deployed
+### 2026-11-25 — after 2.13.0 is deployed (merge `613112e`)
 
-To be recorded with the same commands and questions.
+**Raw fetch.** Same result for `GPTBot`, `ClaudeBot` and `PerplexityBot`, no redirect, no bot
+challenge:
+
+| Path | Before | After |
+| --- | --- | --- |
+| `/en`, `/en/identity` | 200 `text/html` | 200 `text/html` |
+| `/robots.txt` | 200, `*` only, `Host:` | 200, AI crawlers by group, `Disallow: /api/`, no `Host:` |
+| `/sitemap.xml` | 200 | 200 |
+| `/llms.txt` | 404 | 200 `text/plain` (2.8 KB) |
+| `/llms-full.txt`, `/it/llms-full.txt` | 404 | 200 `text/plain` (21.8 KB, 22.9 KB) |
+| `/en/identity.md`, `/en/systems/yourfinance.md` | 404 | 200 `text/markdown`, `X-Robots-Tag: noindex` |
+
+`/en/identity` carries `<link rel="alternate" type="text/markdown" href="https://cieri.vercel.app/en/identity.md">`.
+
+**Questions (web fetch, starting from `/en`).** 4 pages fetched again (`/en`, `/en/identity`,
+`/en/execution`, `/en/systems`). All five answers correct, no wrong or invented fact, so no issue
+opened.
+
+| Question | Difference from the baseline |
+| --- | --- |
+| Who is he | same facts, plus the internship → apprenticeship → permanent path and the CSM date |
+| Role sought | same |
+| Projects | same |
+| CV | the "Password" doubt is gone: email address, then "Send link" |
+| Studies | same; dates still read as `DD.MM.YYYY` from the HTML timeline |
+
+**What did not change.** The fetch tool neither noticed nor used `/llms.txt` or the `.md`
+versions: it reads the converted body of a page, and the `rel="alternate"` link sits in `<head>`,
+which it does not see. Agents that look for `llms.txt` on their own, or are pointed to it, get the
+new files; a plain page fetch still reads the HTML, which already answered correctly. Decorative
+text ("Move the cursor…", "Thread A/B/C") still reaches the converted page.
+
